@@ -15,7 +15,7 @@ class MyAppState extends State<MyApp> {
   int _selectedPage = 0;
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Test change from Jahir',
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(hexColor('#03D1BF')),
