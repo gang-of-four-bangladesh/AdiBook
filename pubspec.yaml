@@ -1,5 +1,5 @@
-name: adi_book
-description: A new Flutter project.
+name: flutter_applayout_demo
+description: A new Flutter application.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -17,13 +17,14 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  eva_icons_flutter: ^2.0.0
+  flutter_clean_calendar: ^1.0.1
   flutter:
     sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  eva_icons_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -31,7 +32,7 @@ dev_dependencies:
 
 
 # For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+# following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:

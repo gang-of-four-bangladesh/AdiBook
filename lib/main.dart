@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-
+import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -12,6 +12,50 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  void _handleNewDate(date) {
+    setState(() {
+      _selectedDay = date;
+      _selectedEvents = _events[_selectedDay] ?? [];
+    });
+    print(_selectedEvents);
+  }
+
+  List _selectedEvents;
+  DateTime _selectedDay;
+
+  final Map _events = {
+    DateTime(2019, 7, 1): [
+      {'name': 'Event A', 'isDone': true},
+    ],
+    DateTime(2019, 7, 3): [
+      {'name': 'Event A', 'isDone': true},
+      {'name': 'Event B', 'isDone': true},
+    ],
+    DateTime(2019, 7, 5): [
+      {'name': 'Event A', 'isDone': true},
+      {'name': 'Event B', 'isDone': true},
+    ],
+    DateTime(2019, 7, 24): [
+      {'name': 'Event A', 'isDone': true},
+      {'name': 'Event B', 'isDone': true},
+      {'name': 'Event C', 'isDone': false},
+    ],
+    DateTime(2019, 7, 20): [
+      {'name': 'Event A', 'isDone': true},
+      {'name': 'Event B', 'isDone': true},
+      {'name': 'Event C', 'isDone': false},
+    ],
+    DateTime(2019, 8, 26): [
+      {'name': 'Event A', 'isDone': false},
+    ],
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedEvents = _events[_selectedDay] ?? [];
+  }
+
   int _selectedPage = 0;
   String appbarTitle = "Pupil";
   final moretabList = [
@@ -247,18 +291,23 @@ class MyAppState extends State<MyApp> {
               ),
               Container(
                 child: Center(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    color: Color(hexColor('#03D1BF')),
-                    child: Center(
-                      child: Text(
-                        "Book",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Container(
+                          child: Calendar(
+                              events: _events,
+                              onRangeSelected: (range) =>
+                                  print("Range is ${range.from}, ${range.to}"),
+                              onDateSelected: (date) => _handleNewDate(date),
+                              isExpandable: true,
+                              showTodayIcon: true,
+                              eventDoneColor: Color(hexColor('#03D1BF')),
+                              eventColor: Color(hexColor('#03D1BF'))),
                         ),
-                      ),
+                        _buildEventList()
+                      ],
                     ),
                   ),
                 ),
@@ -405,5 +454,26 @@ class MyAppState extends State<MyApp> {
     selectedPage == 2 ? appbarTitle = "Diary" : null;
     selectedPage == 3 ? appbarTitle = "Your Messages" : null;
     selectedPage == 4 ? appbarTitle = "More" : null;
+  }
+
+  Widget _buildEventList() {
+    return Expanded(
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) => Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1.5, color: Colors.black12),
+                ),
+              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
+              child: ListTile(
+                title: Text(_selectedEvents[index]['name'].toString()),
+                onTap: () {},
+              ),
+            ),
+        itemCount: _selectedEvents.length,
+      ),
+    );
   }
 }
