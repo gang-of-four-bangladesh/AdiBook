@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -108,6 +109,13 @@ class MyAppState extends State<MyApp> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1.5, color: Colors.black12),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0.0, vertical: 0.0),
                       child: ListTile(
                         title: Text('Pipul $index'),
                         onTap: () {},
@@ -317,6 +325,13 @@ class MyAppState extends State<MyApp> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1.5, color: Colors.black12),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0.0, vertical: 0.0),
                       child: ListTile(
                         title: Text("Message $index"),
                         onTap: () {},
@@ -331,6 +346,13 @@ class MyAppState extends State<MyApp> {
                   itemCount: moretabList.length,
                   itemBuilder: (context, index) {
                     return Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1.5, color: Colors.black12),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0.0, vertical: 0.0),
                       child: ListTile(
                         title: Text(moretabList[index]),
                         onTap: () {
@@ -466,7 +488,7 @@ class MyAppState extends State<MyApp> {
                 ),
               ),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
               child: ListTile(
                 title: Text(_selectedEvents[index]['name'].toString()),
                 onTap: () {},
