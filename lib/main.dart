@@ -67,7 +67,7 @@ class MyAppState extends State<MyApp> {
     'Message All Your Pupils',
     'Internal Instructor Chat',
     'Pupil Achieves',
-    'App Version 2.2',
+    'App Version 0.0',
   ];
   Widget build(BuildContext context) {
     return MaterialApp(

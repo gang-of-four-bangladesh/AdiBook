@@ -1,4 +1,4 @@
-package com.example.adi_book;
+package com.gofbd.adibook;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
