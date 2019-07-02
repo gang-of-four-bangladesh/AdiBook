@@ -304,6 +304,48 @@ class MyAppState extends State<MyApp> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Container(
+                          padding: EdgeInsets.only(left:13.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              ButtonTheme(
+                                padding: EdgeInsets.all(8.0),
+                                minWidth: 20.0,
+                                height: 40.0,
+                                child: RaisedButton(color: Color(hexColor('#03D1BF'),),onPressed: () {},
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    "Add Lesson",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(padding: EdgeInsets.all(8.0),),
+                              ButtonTheme(
+                                minWidth: 20.0,
+                                height: 40.0,
+                                child: RaisedButton(color: Color(hexColor('#03D1BF'),),onPressed: () {},
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                    new BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    "Unavailability",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
                           child: Calendar(
                               events: _events,
                               onRangeSelected: (range) =>
