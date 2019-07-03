@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_applayout_demo/login.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
+import 'pupilRegistration.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+  MaterialApp(
+     home: MyApp(),
+      routes: <String,WidgetBuilder>{
+       '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
+       '/login': (BuildContext context) => new login(),
+      },
+  )
+);
 
 class MyApp extends StatefulWidget {
   @override
@@ -87,7 +97,9 @@ class MyAppState extends State<MyApp> {
                   color: Color(
                     hexColor('#03D1BF'),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/login');
+                  },
                   shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(8.0),
                   ),
@@ -271,12 +283,14 @@ class MyAppState extends State<MyApp> {
                             children: <Widget>[
                               ButtonTheme(
                                 minWidth: 310.0,
-                                height: 40.0,
+                                height: 50.0,
                                 child: RaisedButton(
                                   color: Color(
                                     hexColor('#03D1BF'),
                                   ),
-                                  onPressed: () {},
+                                 onPressed: () {
+                                   Navigator.of(context).pushNamed('/pupilRegistration');
+                                 },
                                   shape: new RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(8.0),
@@ -284,7 +298,7 @@ class MyAppState extends State<MyApp> {
                                   child: Text(
                                     "Add",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16.0
                                     ),
                                   ),
                                 ),
@@ -304,7 +318,7 @@ class MyAppState extends State<MyApp> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.only(left:13.0),
+                          padding: EdgeInsets.only(left: 13.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
@@ -312,10 +326,14 @@ class MyAppState extends State<MyApp> {
                                 padding: EdgeInsets.all(8.0),
                                 minWidth: 20.0,
                                 height: 40.0,
-                                child: RaisedButton(color: Color(hexColor('#03D1BF'),),onPressed: () {},
+                                child: RaisedButton(
+                                  color: Color(
+                                    hexColor('#03D1BF'),
+                                  ),
+                                  onPressed: () {},
                                   shape: new RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(8.0),
+                                        new BorderRadius.circular(8.0),
                                   ),
                                   child: Text(
                                     "Add Lesson",
@@ -325,14 +343,20 @@ class MyAppState extends State<MyApp> {
                                   ),
                                 ),
                               ),
-                              Padding(padding: EdgeInsets.all(8.0),),
+                              Padding(
+                                padding: EdgeInsets.all(5.0),
+                              ),
                               ButtonTheme(
                                 minWidth: 20.0,
                                 height: 40.0,
-                                child: RaisedButton(color: Color(hexColor('#03D1BF'),),onPressed: () {},
+                                child: RaisedButton(
+                                  color: Color(
+                                    hexColor('#03D1BF'),
+                                  ),
+                                  onPressed: () {},
                                   shape: new RoundedRectangleBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(8.0),
+                                        new BorderRadius.circular(8.0),
                                   ),
                                   child: Text(
                                     "Unavailability",
@@ -539,5 +563,9 @@ class MyAppState extends State<MyApp> {
         itemCount: _selectedEvents.length,
       ),
     );
+  }
+
+  Future navigateToSubPage(context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => pupilRegistration()));
   }
 }
