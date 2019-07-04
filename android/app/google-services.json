@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "539274504682",
+    "firebase_url": "https://gofbd-adibook.firebaseio.com",
+    "project_id": "gofbd-adibook",
+    "storage_bucket": "gofbd-adibook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539274504682:android:54caf47e30e25808",
+        "android_client_info": {
+          "package_name": "com.gofbd.adibook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539274504682-bjev1s2n8dv1em08m5p8hjkmuqdduf8q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCozd3AmNQy4WYxoxGIHuNfm9HEOEvIYf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539274504682-bjev1s2n8dv1em08m5p8hjkmuqdduf8q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
