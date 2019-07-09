@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_applayout_demo/login.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
+import 'otpCode.dart';
 import 'pupilRegistration.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(
-  MaterialApp(
-     home: MyApp(),
-      routes: <String,WidgetBuilder>{
-       '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
-       '/login': (BuildContext context) => new login(),
-      },
-  )
-);
+Future main() async {
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(MaterialApp(
+    home: MyApp(),
+    routes: <String, WidgetBuilder>{
+      '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
+      '/login': (BuildContext context) => new login(),
+      '/otpCode': (BuildContext context) => new otpCode(),
+    },
+  ));
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -23,6 +27,18 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  bool switchOn_sms = false;
+  bool switchOn_email = false;
+  //final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
+  //final timeFormat = DateFormat("h:mm a");
+  void _smsonSwitchChanged(bool value) {
+    print(switchOn_sms);
+  }
+
+  void _emailonSwitchChanged(bool value) {
+    switchOn_email = value;
+  }
+
   void _handleNewDate(date) {
     setState(() {
       _selectedDay = date;
@@ -239,7 +255,13 @@ class MyAppState extends State<MyApp> {
                             ),
                           ),
                           /*3*/
-                          Switch(value: true, onChanged: null)
+                          Switch(
+                            value: switchOn_sms,
+                            onChanged: _smsonSwitchChanged,
+                            activeColor: Color(
+                              hexColor('#03D1BF'),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -268,9 +290,12 @@ class MyAppState extends State<MyApp> {
                           ),
                           /*3*/
                           Switch(
-                              value: true,
-                              onChanged: null,
-                              activeColor: Colors.cyan[300])
+                            value: switchOn_email,
+                            onChanged: _emailonSwitchChanged,
+                            activeColor: Color(
+                              hexColor('#03D1BF'),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -288,9 +313,10 @@ class MyAppState extends State<MyApp> {
                                   color: Color(
                                     hexColor('#03D1BF'),
                                   ),
-                                 onPressed: () {
-                                   Navigator.of(context).pushNamed('/pupilRegistration');
-                                 },
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/pupilRegistration');
+                                  },
                                   shape: new RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(8.0),
@@ -298,8 +324,9 @@ class MyAppState extends State<MyApp> {
                                   child: Text(
                                     "Add",
                                     style: TextStyle(
-                                      color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16.0
-                                    ),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0),
                                   ),
                                 ),
                               )
@@ -375,6 +402,7 @@ class MyAppState extends State<MyApp> {
                               onRangeSelected: (range) =>
                                   print("Range is ${range.from}, ${range.to}"),
                               onDateSelected: (date) => _handleNewDate(date),
+                              isExpanded: true,
                               isExpandable: true,
                               showTodayIcon: true,
                               eventDoneColor: Color(hexColor('#03D1BF')),
@@ -548,24 +576,24 @@ class MyAppState extends State<MyApp> {
     return Expanded(
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) => Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.5, color: Colors.black12),
-                ),
-              ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-              child: ListTile(
-                title: Text(_selectedEvents[index]['name'].toString()),
-                onTap: () {},
-              ),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(width: 1.5, color: Colors.black12),
             ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+          child: ListTile(
+            title: Text(_selectedEvents[index]['name'].toString()),
+            onTap: () {},
+          ),
+        ),
         itemCount: _selectedEvents.length,
       ),
     );
   }
 
   Future navigateToSubPage(context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => pupilRegistration()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => pupilRegistration()));
   }
 }

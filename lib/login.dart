@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class login extends StatelessWidget {
   @override
@@ -9,35 +10,197 @@ class login extends StatelessWidget {
         backgroundColor: Color(hexColor('#03D1BF')),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 20.0,right: 20.0),
+        padding: EdgeInsets.only(left: 2.0, right: 2.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
               child: Wrap(
                 children: <Widget>[
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(bottom: 5.0),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(8.0)),
-                              hintText: "User Name"),
+                        padding: EdgeInsets.only(bottom: 13.0),
+                        child: Text(
+                          "Please enter phone no",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(hexColor('03D1BF'))
+                          ),
+                          
                         ),
                       ),
                     ],
                   ),
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(bottom: 5.0),
+                        height: 80,
+                        width: 33.7,
+                        padding: EdgeInsets.only(right: 2.0),
                         child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(8.0)),
-                              hintText: "Password"),
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 33.7,
+                        height: 80,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -47,26 +210,60 @@ class login extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                         ButtonTheme(
-                        minWidth: 200.0,
-                        height: 50.0,
-                        child: RaisedButton(
-                          color: Color(
-                            hexColor('#03D1BF'),
-                          ),
-                          onPressed: () {},
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(8.0),
-                          ),
-                          child: Text(
-                            "Login",
-                            style: TextStyle(
-                              color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16.0
+                        ButtonTheme(
+                          minWidth: 200.0,
+                          height: 50.0,
+                          child: RaisedButton(
+                            color: Color(
+                              hexColor('#03D1BF'),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/otpCode');
+                            },
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              "Sent OTP code",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ButtonTheme(
+                          minWidth: 200.0,
+                          height: 50.0,
+                          child: RaisedButton(
+                            color: Color(
+                              hexColor('#03D1BF'),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed('/pupilRegistration');
+                            },
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              "Create Account",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ],
