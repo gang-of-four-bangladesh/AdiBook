@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_applayout_demo/login.dart';
+import 'package:flutter_applayout_demo/login_page.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'pupilRegistration.dart';
 
@@ -8,8 +9,9 @@ void main() => runApp(
   MaterialApp(
      home: MyApp(),
       routes: <String,WidgetBuilder>{
-       '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
-       '/login': (BuildContext context) => new login(),
+       '/pupilRegistration': (BuildContext context) => new PupilRegistration(),
+       '/login': (BuildContext context) => new Login(),
+       '/login_page': (BuildContext context) => new LoginPage(),
       },
   )
 );
@@ -17,7 +19,6 @@ void main() => runApp(
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return MyAppState();
   }
 }
@@ -80,6 +81,7 @@ class MyAppState extends State<MyApp> {
     'App Version 0.0',
   ];
   Widget build(BuildContext context) {
+    var names = ["Kady Whitley","Lara Pike","Tevin Sharma","Korben Ortiz","Willie O'Sullivan","Ellie-Mai Power","Musab Armstrong","Meghan Swanson","Lila Hutchinson","Willem Almond","Kory Palacios"];
     return MaterialApp(
       title: 'Welcome to Flutter',
       home: Scaffold(
@@ -98,13 +100,14 @@ class MyAppState extends State<MyApp> {
                     hexColor('#03D1BF'),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/login');
+                    Navigator.of(context).pushNamed('/login_page');
                   },
                   shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(8.0),
                   ),
+                  
                   child: Text(
-                    "Logout",
+                    "Login",
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
                 ),
@@ -118,7 +121,7 @@ class MyAppState extends State<MyApp> {
             children: <Widget>[
               Container(
                 child: ListView.builder(
-                  itemCount: 10,
+                  itemCount: 11,
                   itemBuilder: (context, index) {
                     return Container(
                       decoration: BoxDecoration(
@@ -129,7 +132,7 @@ class MyAppState extends State<MyApp> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0.0, vertical: 0.0),
                       child: ListTile(
-                        title: Text('Pipul $index'),
+                        title: Text(names[index]),
                         onTap: () {},
                       ),
                     );
@@ -566,6 +569,6 @@ class MyAppState extends State<MyApp> {
   }
 
   Future navigateToSubPage(context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => pupilRegistration()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PupilRegistration()));
   }
 }

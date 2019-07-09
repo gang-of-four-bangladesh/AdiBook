@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class pupilRegistration extends StatelessWidget {
+class PupilRegistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
