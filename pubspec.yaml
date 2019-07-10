@@ -19,6 +19,10 @@ environment:
 dependencies:
   eva_icons_flutter: ^2.0.0
   flutter_clean_calendar: ^1.0.1
+  flutter_datetime_picker: ^1.2.5
+  image_picker: ^0.6.0+15
+  image_cropper: ^1.0.2
+  firebase_auth: ^0.11.1+7
   flutter:
     sdk: flutter
 

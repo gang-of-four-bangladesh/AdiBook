@@ -164,21 +164,7 @@ class MyAppState extends State<MyApp> {
                         children: <Widget>[
                           Column(
                             children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.only(bottom: 5.0),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(
-                                            hexColor('#03D1BF'),
-                                          )),
-                                          borderRadius:
-                                              new BorderRadius.circular(8.0)),
-                                      hintText: "First Name"),
-                                ),
-                              ),
-                            ],
+                             ],
                           ),
                           Column(
                             children: <Widget>[
