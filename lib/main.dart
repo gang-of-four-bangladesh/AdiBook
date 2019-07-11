@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-//import 'package:flutter_applayout_demo/image_upload.dart';
 import 'package:flutter_applayout_demo/login.dart';
+import 'package:flutter_applayout_demo/otpCode.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'pupilRegistration.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:async/async.dart';
 import 'dart:io';
-import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'datetime_picker_formfield.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
 
 Future main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -21,6 +17,7 @@ Future main() async {
     routes: <String, WidgetBuilder>{
       '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
       '/login': (BuildContext context) => new login(),
+      '/otpCode': (BuildContext context) => new otpCode(),
       //'/Image_upload': (BuildContext context) => new Image_upload(),
     },
   ));
@@ -220,6 +217,7 @@ class MyAppState extends State<MyApp> {
                                 child: TextField(
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(12),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(
@@ -240,6 +238,7 @@ class MyAppState extends State<MyApp> {
                                   child: TextField(
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(12),
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Colors.cyan[300]),
@@ -256,6 +255,7 @@ class MyAppState extends State<MyApp> {
                                 child: TextField(
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(12),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.cyan[300]),
@@ -272,6 +272,7 @@ class MyAppState extends State<MyApp> {
                                 padding: EdgeInsets.only(bottom: 5.0),
                                 child: TextField(
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(12),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.cyan[300]),
@@ -298,6 +299,7 @@ class MyAppState extends State<MyApp> {
                               children: [
                                 /*2*/
                                 Container(
+                                  padding: EdgeInsets.all(2),
                                   child: Row(
                                     children: <Widget>[
                                       IconButton(
@@ -328,6 +330,7 @@ class MyAppState extends State<MyApp> {
                     Container(
                       padding: EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Row(
+                        
                         children: [
                           Expanded(
                             /*1*/
@@ -802,7 +805,7 @@ class MyAppState extends State<MyApp> {
     if (picked != null) {
       setState(
         () {
-          date_of_birth = new DateFormat('dd/MM/yyyy').format(picked);
+          date_of_birth = new DateFormat('dd MMM yyyy').format(picked);
         },
       );
     }

@@ -38,8 +38,8 @@ class login extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                        height: 80,
-                        width: 33.7,
+                        height: 60,
+                        width: 30,
                         padding: EdgeInsets.only(right: 2.0),
                         child: TextField(
                           keyboardType: TextInputType.number,
@@ -47,6 +47,7 @@ class login extends StatelessWidget {
                             LengthLimitingTextInputFormatter(1)
                           ],
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -54,14 +55,15 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -69,14 +71,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -84,14 +86,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -99,14 +101,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -114,14 +116,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -129,14 +131,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -144,14 +146,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -159,14 +161,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -174,14 +176,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -189,14 +191,14 @@ class login extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 33.7,
-                        height: 80,
+                        width: 30,
+                         height: 60,
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),

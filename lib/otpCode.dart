@@ -37,15 +37,15 @@ class otpCode extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 80,
-                        width: 36,
+                        height: 70,
+                        width: 30,
                         padding: EdgeInsets.only(right: 2.0),
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -53,15 +53,15 @@ class otpCode extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 36,
-                        height: 80,
+                        width: 30,
+                        height: 70,
                         padding: EdgeInsets.only(right: 2.0),
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -69,15 +69,15 @@ class otpCode extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 36,
-                        height: 80,
+                        width: 30,
+                        height: 70,
                         padding: EdgeInsets.only(right: 2.0),
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
@@ -85,15 +85,15 @@ class otpCode extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 36,
-                        height: 80,
+                        width: 30,
+                        height: 70,
                         padding: EdgeInsets.only(right: 2.0),
                         child: TextField(
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(1)
                           ],
-                          decoration: InputDecoration(
+                          decoration: InputDecoration(contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(8.0),
                             ),
