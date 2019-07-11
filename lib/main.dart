@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+//import 'package:flutter_applayout_demo/image_upload.dart';
 import 'package:flutter_applayout_demo/login.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
-import 'otpCode.dart';
 import 'pupilRegistration.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:async/async.dart';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'datetime_picker_formfield.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 Future main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -13,7 +21,7 @@ Future main() async {
     routes: <String, WidgetBuilder>{
       '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
       '/login': (BuildContext context) => new login(),
-      '/otpCode': (BuildContext context) => new otpCode(),
+      //'/Image_upload': (BuildContext context) => new Image_upload(),
     },
   ));
 }
@@ -27,16 +35,35 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  bool switchOn_sms = false;
-  bool switchOn_email = false;
-  //final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
-  //final timeFormat = DateFormat("h:mm a");
-  void _smsonSwitchChanged(bool value) {
-    print(switchOn_sms);
+  File img;
+  Future image_picker_camera() async {
+    img = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {});
   }
 
-  void _emailonSwitchChanged(bool value) {
-    switchOn_email = value;
+  Future image_picker_gallary() async {
+    img = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {});
+  }
+
+  bool switchOn_eyeTest = false;
+  bool switchOn_theoryRecord = false;
+  bool switchOn_prviouseExp = false;
+  final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
+  final timeFormat = DateFormat("h:mm a");
+  DateTime date;
+  TimeOfDay time;
+
+  void _eyeTestonSwitchChanged(bool value) {
+    print(switchOn_eyeTest);
+  }
+
+  void _theoryRecordonSwitchChanged(bool value) {
+    switchOn_theoryRecord = value;
+  }
+
+  void _prviouseExponSwitchChanged(bool value) {
+    switchOn_prviouseExp = value;
   }
 
   void _handleNewDate(date) {
@@ -156,28 +183,69 @@ class MyAppState extends State<MyApp> {
               Container(
                 child: Center(
                   child: Column(children: <Widget>[
+                    //Picture
+                    Container(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                              width: 200.0,
+                              height: 100.0,
+                              child: Center(
+                                  child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5.0),
+                                child: img == null
+                                    ? Text(
+                                        "No Image",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : Image.file(img),
+                              ))),
+                        ],
+                      ),
+                    ),
+
                     //textBoxSection,
                     Container(
                       padding: EdgeInsets.only(
-                          top: 20.0, left: 20.0, right: 20.0, bottom: 10.0),
+                          top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
                       child: Wrap(
                         children: <Widget>[
                           Column(
                             children: <Widget>[
-                             ],
+                              Container(
+                                padding: EdgeInsets.only(bottom: 5.0),
+                                child: TextField(
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(
+                                              hexColor('#03D1BF'),
+                                            ),
+                                          ),
+                                          borderRadius:
+                                              new BorderRadius.circular(8.0)),
+                                      hintText: "Name"),
+                                ),
+                              ),
+                            ],
                           ),
                           Column(
                             children: <Widget>[
                               Container(
                                   padding: EdgeInsets.only(bottom: 5.0),
                                   child: TextField(
+                                    keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Colors.cyan[300]),
                                             borderRadius:
                                                 BorderRadius.circular(8.0)),
-                                        hintText: "Last Name"),
+                                        hintText: "Address"),
                                   )),
                             ],
                           ),
@@ -186,13 +254,14 @@ class MyAppState extends State<MyApp> {
                               Container(
                                 padding: EdgeInsets.only(bottom: 5.0),
                                 child: TextField(
+                                  keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.cyan[300]),
                                           borderRadius:
                                               BorderRadius.circular(8.0)),
-                                      hintText: "Mobile No"),
+                                      hintText: "Phone"),
                                 ),
                               ),
                             ],
@@ -209,18 +278,55 @@ class MyAppState extends State<MyApp> {
                                           borderRadius:
                                               BorderRadius.circular(8.0)),
                                       fillColor: Colors.greenAccent,
-                                      hintText: "Email"),
+                                      hintText: "License number"),
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
-                    //  smsonOfButtonSection,
+                    //  Date of Birth,
                     Container(
-                      padding: EdgeInsets.only(
-                          top: 2.0, left: 20.0, right: 20.0, bottom: 0.0),
+                      padding: EdgeInsets.only(left: 5.0, right: 20.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                /*2*/
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(Icons.date_range),
+                                        onPressed: () => {_selectDate(context)},
+                                      ),
+                                      Text(
+                                        "Date Of Birth",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          /*3*/
+                          Text(
+                            "${date_of_birth}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    //  Eye test,
+                    Container(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -231,7 +337,7 @@ class MyAppState extends State<MyApp> {
                                 /*2*/
                                 Container(
                                   child: Text(
-                                    'Sent Message via SMS',
+                                    'Eye test',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -242,8 +348,8 @@ class MyAppState extends State<MyApp> {
                           ),
                           /*3*/
                           Switch(
-                            value: switchOn_sms,
-                            onChanged: _smsonSwitchChanged,
+                            value: switchOn_eyeTest,
+                            onChanged: _eyeTestonSwitchChanged,
                             activeColor: Color(
                               hexColor('#03D1BF'),
                             ),
@@ -251,10 +357,9 @@ class MyAppState extends State<MyApp> {
                         ],
                       ),
                     ),
-                    //  emailonOfButtonSection,
+                    //  theory record,
                     Container(
-                      padding: EdgeInsets.only(
-                          bottom: 2.0, left: 20.0, right: 20.0, top: 0.0),
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -265,7 +370,7 @@ class MyAppState extends State<MyApp> {
                                 /*2*/
                                 Container(
                                   child: Text(
-                                    'Sent Message via email',
+                                    'Theory record',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -276,8 +381,8 @@ class MyAppState extends State<MyApp> {
                           ),
                           /*3*/
                           Switch(
-                            value: switchOn_email,
-                            onChanged: _emailonSwitchChanged,
+                            value: switchOn_theoryRecord,
+                            onChanged: _theoryRecordonSwitchChanged,
                             activeColor: Color(
                               hexColor('#03D1BF'),
                             ),
@@ -285,39 +390,109 @@ class MyAppState extends State<MyApp> {
                         ],
                       ),
                     ),
+                    //  Previous driving exp,
+                    Container(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                /*2*/
+                                Container(
+                                  child: Text(
+                                    'Previous driving exp.',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          /*3*/
+                          Switch(
+                            value: switchOn_prviouseExp,
+                            onChanged: _prviouseExponSwitchChanged,
+                            activeColor: Color(
+                              hexColor('#03D1BF'),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
                     //  addButton,
                     Container(
                       padding: EdgeInsets.all(5.0),
-                      child: Column(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              ButtonTheme(
-                                minWidth: 310.0,
-                                height: 50.0,
-                                child: RaisedButton(
-                                  color: Color(
-                                    hexColor('#03D1BF'),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                ButtonTheme(
+                                  minWidth: 100.0,
+                                  height: 30.0,
+                                  child: RaisedButton(
+                                    color: Color(
+                                      hexColor('#03D1BF'),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed('/Image_upload');
+                                    },
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(8.0),
+                                    ),
+                                    child: Text(
+                                      "Add",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed('/pupilRegistration');
-                                  },
-                                  shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(8.0),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              children: <Widget>[
+                                ButtonTheme(
+                                  minWidth: 100.0,
+                                  height: 30.0,
+                                  child: RaisedButton(
+                                    color: Color(
+                                      hexColor('#03D1BF'),
+                                    ),
+                                    onPressed: () {
+                                      dialogBoxPicture(context);
+                                    },
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(8.0),
+                                    ),
+                                    child: Text(
+                                      "Picture",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                  child: Text(
-                                    "Add",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -550,6 +725,42 @@ class MyAppState extends State<MyApp> {
     );
   }
 
+  Future<void> dialogBoxPicture(BuildContext context) {
+     return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Option'),
+          actions: <Widget>[
+            FloatingActionButton(
+              child: Text('Ok'),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+          content: Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: image_picker_camera,
+                ),
+                 SizedBox(width: 5.0,),
+                        IconButton(
+                  icon: Icon(Icons.photo_library),
+                  onPressed: image_picker_gallary,
+                ),
+                      
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   setAppbarTitle(int selectedPage) {
     selectedPage == 0 ? appbarTitle = "Pupil" : null;
     selectedPage == 1 ? appbarTitle = "Add Pupil" : null;
@@ -578,8 +789,22 @@ class MyAppState extends State<MyApp> {
     );
   }
 
-  Future navigateToSubPage(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => pupilRegistration()));
+  DateTime selectedDate = DateTime.now();
+  int getyear = 2019;
+  String date_of_birth = '';
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900, 8),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(
+        () {
+          date_of_birth = new DateFormat('dd/MM/yyyy').format(picked);
+        },
+      );
+    }
   }
 }
