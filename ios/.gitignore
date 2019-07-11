@@ -1,0 +1,3 @@
+!.Podfile
+!/Runner/**/AppDelegate.m
+!/Runner/**/Info.plist
