@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new TextField(
-              controller: _phoneNumberController,
+              controller: _phoneNumberController
             ),
             new TextField(
               controller: _smsCodeController,
