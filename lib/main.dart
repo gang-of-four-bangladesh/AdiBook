@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_applayout_demo/login.dart';
+import 'package:flutter_applayout_demo/login_page.dart';
 import 'package:flutter_applayout_demo/otpCode.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'pupilRegistration.dart';
@@ -9,15 +11,16 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-
 Future main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MaterialApp(
-    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+    home: LoginPage(),
     routes: <String, WidgetBuilder>{
+      '/login': (BuildContext context) => new LoginPage(),
       '/pupilRegistration': (BuildContext context) => new pupilRegistration(),
-      '/login': (BuildContext context) => new login(),
       '/otpCode': (BuildContext context) => new otpCode(),
+      '/main_page': (BuildContext context) => new MyApp()
       //'/Image_upload': (BuildContext context) => new Image_upload(),
     },
   ));
@@ -143,9 +146,15 @@ class MyAppState extends State<MyApp> {
                   shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(8.0),
                   ),
-                  child: Text(
-                    "Logout",
-                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  child: FlatButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushNamed('/login');
+                    },
+                    child: Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.white, fontSize: 18.0),
+                    ),
                   ),
                 ),
               )),
@@ -217,7 +226,7 @@ class MyAppState extends State<MyApp> {
                                 child: TextField(
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(12),
+                                      contentPadding: EdgeInsets.all(12),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(
@@ -238,7 +247,7 @@ class MyAppState extends State<MyApp> {
                                   child: TextField(
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(12),
+                                        contentPadding: EdgeInsets.all(12),
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Colors.cyan[300]),
@@ -255,7 +264,7 @@ class MyAppState extends State<MyApp> {
                                 child: TextField(
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(12),
+                                      contentPadding: EdgeInsets.all(12),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.cyan[300]),
@@ -272,7 +281,7 @@ class MyAppState extends State<MyApp> {
                                 padding: EdgeInsets.only(bottom: 5.0),
                                 child: TextField(
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(12),
+                                      contentPadding: EdgeInsets.all(12),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.cyan[300]),
@@ -330,7 +339,6 @@ class MyAppState extends State<MyApp> {
                     Container(
                       padding: EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Row(
-                        
                         children: [
                           Expanded(
                             /*1*/
@@ -729,7 +737,7 @@ class MyAppState extends State<MyApp> {
   }
 
   Future<void> dialogBoxPicture(BuildContext context) {
-     return showDialog<void>(
+    return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -737,7 +745,7 @@ class MyAppState extends State<MyApp> {
           actions: <Widget>[
             FloatingActionButton(
               child: Text('Ok'),
-              onPressed: (){
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             )
@@ -750,12 +758,13 @@ class MyAppState extends State<MyApp> {
                   icon: Icon(Icons.camera_alt),
                   onPressed: image_picker_camera,
                 ),
-                 SizedBox(width: 5.0,),
-                        IconButton(
+                SizedBox(
+                  width: 5.0,
+                ),
+                IconButton(
                   icon: Icon(Icons.photo_library),
                   onPressed: image_picker_gallary,
                 ),
-                      
               ],
             ),
           ),
