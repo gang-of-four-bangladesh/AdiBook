@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class otpCode extends StatelessWidget {
+class Otp_code extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
