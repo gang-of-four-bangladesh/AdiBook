@@ -12,8 +12,9 @@ Future main() async {
     debugShowCheckedModeBanner: false,
     home: LoginPage(),
     routes: <String, WidgetBuilder>{
-      '/pupilRegistration': (BuildContext context) => new Pupil_registration(),
       '/login': (BuildContext context) => new Login(),
+      '/home': (BuildContext context) => new Home_page(),
+      '/pupil_registration': (BuildContext context) => new Pupil_registration(),
       '/Image_upload': (BuildContext context) => new Image_upload(),
     },
   ));
@@ -22,7 +23,6 @@ Future main() async {
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return MyAppState();
   }
 }

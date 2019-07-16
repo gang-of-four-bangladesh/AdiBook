@@ -1,3 +1,4 @@
 !.Podfile
 !/Runner/**/AppDelegate.m
 !/Runner/**/Info.plist
+!/Runner/**/GoogleService-Info.plist

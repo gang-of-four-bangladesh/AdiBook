@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>539274504682-lkq9mfh86vs2u37uh5dhhovlpmloejkh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.539274504682-lkq9mfh86vs2u37uh5dhhovlpmloejkh</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>539274504682-rua3u43i2tdupl8k0o79r3qgp2vi4dp7.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD1cAdRdcHWgp1_lbSOwn5eOxpoqFTV_Es</string>
+	<key>GCM_SENDER_ID</key>
+	<string>539274504682</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gofbd.adibook</string>
+	<key>PROJECT_ID</key>
+	<string>gofbd-adibook</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gofbd-adibook.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:539274504682:ios:54caf47e30e25808</string>
+	<key>DATABASE_URL</key>
+	<string>https://gofbd-adibook.firebaseio.com</string>
+</dict>
+</plist>

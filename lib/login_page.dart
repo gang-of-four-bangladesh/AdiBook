@@ -165,7 +165,8 @@ class _LoginPageState extends State<LoginPage> {
       var message = 'signed in with phone number successful: user -> $user';
       print(message);
       dialogBox(context, 'Signed status', message);
-      Navigator.of(context).pushNamed('/main_page');
+      
+     Navigator.of(context).pushNamed('/home');
     });
   }
 
@@ -186,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
             'Inside _sendCodeToPhoneNumber: signInWithPhoneNumber auto succeeded.';
         print(message);
         dialogBox(context, 'Signed status', message);
-        Navigator.of(context).pushNamed('/main_page');
+        Navigator.of(context).pushNamed('/home');
       });
     };
 
