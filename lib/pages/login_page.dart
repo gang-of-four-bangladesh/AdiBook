@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../utils/device_info.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -146,6 +147,11 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Sign in using an sms code as input.
   void _signInWithPhoneNumber(String smsCode) async {
+    if (!DeviceInfo.isOnPhysicalDevice) {
+      Navigator.of(context).pushNamed('/home');
+      return;
+    }
+
     if (this._smsCodeController.text.isEmpty) {
       dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
       return;
@@ -165,8 +171,8 @@ class _LoginPageState extends State<LoginPage> {
       var message = 'signed in with phone number successful: user -> $user';
       print(message);
       dialogBox(context, 'Signed status', message);
-      
-     Navigator.of(context).pushNamed('/home');
+
+      Navigator.of(context).pushNamed('/home');
     });
   }
 

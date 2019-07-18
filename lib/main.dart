@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_applayout_demo/home_page.dart';
-import 'package:flutter_applayout_demo/image_upload.dart';
-import 'package:flutter_applayout_demo/login.dart';
-import 'login_page.dart';
-import 'pupil_registration.dart';
 import 'package:flutter/services.dart';
+import 'pages/home_page.dart';
+import 'pages/image_upload.dart';
+import 'pages/login.dart';
+import 'pages/login_page.dart';
+import 'pages/pupil_registration.dart';
 
 Future main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

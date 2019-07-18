@@ -1,12 +1,12 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_applayout_demo/pupil_list_section.dart';
 
 import 'add_pupil_section.dart';
 import 'event_list_section.dart';
 import 'get_color.dart';
 import 'message_list_section.dart';
 import 'more_list_section.dart';
+import 'pupil_list_section.dart';
 
 class Home_page extends StatefulWidget {
   @override
