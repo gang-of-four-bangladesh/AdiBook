@@ -11,15 +11,15 @@ class Instructor {
   static const String UpdatedAtKey = 'updatedAt';
 
   Instructor(
-      {@required iid,
-      @required name,
-      @required phoneNumber,
-      @required licenseNo,
-      address,
-      dateOfBirth,
-      eyeTest = false,
-      theoryRecord = false,
-      previousExperience = false})
+      {@required String iid,
+      @required String name,
+      @required String phoneNumber,
+      @required String licenseNo,
+      String address,
+      DateTime dateOfBirth,
+      bool eyeTest = false,
+      bool theoryRecord = false,
+      bool previousExperience = false})
       : assert(iid != null),
         assert(name != null),
         assert(phoneNumber != null),

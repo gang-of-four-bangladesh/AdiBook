@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_applayout_demo/models/instructor.dart';
 import '../utils/device_info.dart';
+import '../utils/instructor_manager.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -23,6 +25,13 @@ class _LoginPageState extends State<LoginPage> {
     colornew = colornew.replaceAll('#', '');
     int colorint = int.parse(colornew);
     return colorint;
+  }
+
+  _LoginPageState(){
+    if (!DeviceInfo.isOnPhysicalDevice) {
+      this._phoneNumberController.text = "1234567890";
+      this._smsCodeController.text = "654321";
+    }
   }
 
   @override
@@ -147,11 +156,6 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Sign in using an sms code as input.
   void _signInWithPhoneNumber(String smsCode) async {
-    if (!DeviceInfo.isOnPhysicalDevice) {
-      Navigator.of(context).pushNamed('/home');
-      return;
-    }
-
     if (this._smsCodeController.text.isEmpty) {
       dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
       return;
