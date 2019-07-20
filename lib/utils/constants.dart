@@ -1,5 +1,6 @@
-class FirestorePath {
-  static const String UsersCollection = 'users';
+class DatabaseDocumentPath {
+  static const String InstructorCollection = 'instructors';
+  static const String PupilsCollection = 'pupils';
 }
 
 class PagePath {
@@ -8,7 +9,7 @@ class PagePath {
 }
 
 class SharedPreferenceKeys {
-  static const String VerifiedPhoneNumberList = 'VerifiedPhoneNumberList';
+  static const String InstructorId = 'instructor_id';
 }
 
 class EnvironmentStatus {
