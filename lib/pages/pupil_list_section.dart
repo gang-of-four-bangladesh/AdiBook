@@ -13,10 +13,6 @@ class PupilListSection extends StatefulWidget {
 class PupilPistSectionState extends State<PupilListSection> {
   @override
   Widget build(BuildContext context) {
-    new Instructor().get().then((instructor) {
-      var id = new Uuid().v1();
-       new Pupil(id: id).add();
-    });
     return Container(
       child: ListView.builder(
         itemCount: 16,
