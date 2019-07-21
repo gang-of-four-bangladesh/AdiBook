@@ -1,13 +1,15 @@
+import 'package:adibook/pages/common_function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Otp_code extends StatelessWidget {
+CommonClass commonClass = new CommonClass();
+class OtpCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('OTP CODE'),
-        backgroundColor: Color(hexColor('#03D1BF')),
+        backgroundColor: Color(commonClass.hexColor('#03D1BF')),
       ),
       body: Container(
         child: Column(
@@ -26,7 +28,7 @@ class Otp_code extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
-                            color: Color(hexColor('03D1BF'))
+                            color: Color(commonClass.hexColor('03D1BF'))
                           ),
                           
                         ),
@@ -112,7 +114,7 @@ class Otp_code extends StatelessWidget {
                           height: 50.0,
                           child: RaisedButton(
                             color: Color(
-                              hexColor('#03D1BF'),
+                              commonClass.hexColor('#03D1BF'),
                             ),
                             onPressed: () {
                               Navigator.of(context).pushNamed('/otpCode');
@@ -139,12 +141,5 @@ class Otp_code extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  hexColor(String colorhexcode) {
-    String colornew = '0xff' + colorhexcode;
-    colornew = colornew.replaceAll('#', '');
-    int colorint = int.parse(colornew);
-    return colorint;
   }
 }

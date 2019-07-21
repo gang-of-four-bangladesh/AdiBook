@@ -1,14 +1,14 @@
+import 'package:adibook/pages/common_function.dart';
 import 'package:flutter/material.dart';
 
-import 'get_color.dart';
-
+CommonClass commonClass = new CommonClass();
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
-        backgroundColor: Color(hexColor('#03D1BF')),
+        backgroundColor: Color(commonClass.hexColor('#03D1BF')),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -155,7 +155,7 @@ class Login extends StatelessWidget {
                           height: 50.0,
                           child: RaisedButton(
                             color: Color(
-                              hexColor('#03D1BF'),
+                              commonClass.hexColor('#03D1BF'),
                             ),
                             onPressed: () {},
                             shape: new RoundedRectangleBorder(

@@ -1,14 +1,16 @@
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
+import 'package:adibook/pages/common_function.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class Pupil_list_section extends StatefulWidget {
+CommonClass commonClass = new CommonClass();
+class PupilListSection extends StatefulWidget {
   @override
-  Pupil_list_sectionState createState() => Pupil_list_sectionState();
+  PupilPistSectionState createState() => PupilPistSectionState();
 }
 
-class Pupil_list_sectionState extends State<Pupil_list_section> {
+class PupilPistSectionState extends State<PupilListSection> {
   @override
   Widget build(BuildContext context) {
     new Instructor().get().then((instructor) {

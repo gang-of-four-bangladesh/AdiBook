@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/device_info.dart';
 import '../models/instructor.dart';
 import '../utils/instructor_manager.dart';
+import 'package:adibook/pages/common_function.dart';
+
+CommonClass commonClass = new CommonClass();
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -20,22 +23,21 @@ class _LoginPageState extends State<LoginPage> {
   String verificationId;
   SingedBy _signedBy = SingedBy.instructor;
 
-  hexColor(String colorhexcode) {
-    String colornew = '0xff' + colorhexcode;
-    colornew = colornew.replaceAll('#', '');
-    int colorint = int.parse(colornew);
-    return colorint;
-  }
-
   _LoginPageState() {
     if (!DeviceInfo.isOnPhysicalDevice) {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
     }
   }
-
+  bool _enabled = false;
   @override
   Widget build(BuildContext context) {
+    var _onPressed;
+    if (_enabled) {
+      _onPressed = () {
+        print("tap");
+      };
+    }
     var screen_width = MediaQuery.of(context).size.width;
     var screen_height = MediaQuery.of(context).size.height;
     var one_fourth_width = screen_width / 6;
@@ -43,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     return new Scaffold(
       appBar: new AppBar(
         centerTitle: true,
-        backgroundColor: Color(hexColor('#03D1BF')),
+        backgroundColor: Color(commonClass.hexColor('#03D1BF')),
         title: Text("AdiBook"),
       ),
       body: new Center(
@@ -137,15 +139,29 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Align(
-                  alignment: Alignment.centerRight,
-                  child: RaisedButton(
-                    onPressed: () => _onPressLoginButton(),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.green,
-                  ))
+                alignment: Alignment.centerRight,
+                child: RaisedButton(
+                  onPressed: () => _onPressLoginButton(),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  color: Colors.green,
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: _progressBarActive == true
+                    ? new SizedBox(
+                        child: new CircularProgressIndicator(
+                            valueColor: new AlwaysStoppedAnimation(
+                                Color(commonClass.hexColor('#03D1BF'))),
+                            strokeWidth: 5.0),
+                        height: 30.0,
+                        width: 30.0,
+                      )
+                    : new Container(),
+              ),
             ],
           ),
         ),
@@ -181,6 +197,10 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Sends the code to the specified phone number.
   Future<void> _onPressSendOTPCode() async {
+    setState(() {
+      _progressBarActive = true;
+      _enabled = false;
+    });
     if (this._phoneNumberController.text.isEmpty) {
       dialogBox(context, 'Phone number', 'Phone number cannot be empty.');
       return;
@@ -196,6 +216,8 @@ class _LoginPageState extends State<LoginPage> {
             'Inside _sendCodeToPhoneNumber: signInWithPhoneNumber auto succeeded.';
         print(message);
         dialogBox(context, 'Signed status', message);
+        _progressBarActive = false;
+        _enabled = true;
         Navigator.of(context).pushNamed('/home');
       });
     };
@@ -207,8 +229,23 @@ class _LoginPageState extends State<LoginPage> {
             'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
         print(message);
         dialogBox(context, 'Signed status', message);
+        _progressBarActive = false;
+        _enabled = true;
       });
     };
+    progressbar_start() {
+      setState(() {
+        _progressBarActive = true;
+        _enabled = false;
+      });
+    }
+
+    progressbar_stop() {
+      setState(() {
+        _progressBarActive = false;
+        _enabled = false;
+      });
+    }
 
     final PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
@@ -237,6 +274,7 @@ class _LoginPageState extends State<LoginPage> {
         codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
   }
 
+  bool _progressBarActive = false;
   Future<void> dialogBox(BuildContext context, String title, String message) {
     return showDialog<void>(
       context: context,
