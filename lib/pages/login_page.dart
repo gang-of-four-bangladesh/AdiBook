@@ -1,8 +1,7 @@
+import 'package:adibook/models/instructor.dart';
+import 'package:adibook/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../utils/device_info.dart';
-import '../models/instructor.dart';
-import '../utils/instructor_manager.dart';
 import 'package:adibook/pages/common_function.dart';
 
 CommonClass commonClass = new CommonClass();
@@ -29,10 +28,10 @@ class _LoginPageState extends State<LoginPage> {
       this._smsCodeController.text = "654321";
     }
   }
-  bool _enabled = false;
+  bool _enabled = true;
+  var _onPressed;
   @override
   Widget build(BuildContext context) {
-    var _onPressed;
     if (_enabled) {
       _onPressed = () {
         print("tap");
@@ -171,6 +170,11 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Sign in using an sms code as input.
   void _onPressLoginButton() async {
+    setState(() {
+      _onPressed();
+      _progressBarActive = false;
+      _enabled = true;
+    });
     if (this._smsCodeController.text.isEmpty) {
       dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
       return;
@@ -190,7 +194,6 @@ class _LoginPageState extends State<LoginPage> {
       var message = 'signed in with phone number successful: user -> $user';
       print(message);
       dialogBox(context, 'Signed status', message);
-      await new Instructor(id: currentUser.uid).add();
       Navigator.of(context).pushNamed('/home');
     });
   }
@@ -198,6 +201,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Sends the code to the specified phone number.
   Future<void> _onPressSendOTPCode() async {
     setState(() {
+      _onPressed();
       _progressBarActive = true;
       _enabled = false;
     });
@@ -216,36 +220,17 @@ class _LoginPageState extends State<LoginPage> {
             'Inside _sendCodeToPhoneNumber: signInWithPhoneNumber auto succeeded.';
         print(message);
         dialogBox(context, 'Signed status', message);
-        _progressBarActive = false;
-        _enabled = true;
         Navigator.of(context).pushNamed('/home');
       });
     };
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
-      setState(() {
-        var message =
-            'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
-        print(message);
-        dialogBox(context, 'Signed status', message);
-        _progressBarActive = false;
-        _enabled = true;
-      });
+      var message =
+          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
+      print(message);
+      dialogBox(context, 'Signed status', message);
     };
-    progressbar_start() {
-      setState(() {
-        _progressBarActive = true;
-        _enabled = false;
-      });
-    }
-
-    progressbar_stop() {
-      setState(() {
-        _progressBarActive = false;
-        _enabled = false;
-      });
-    }
 
     final PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
@@ -261,6 +246,10 @@ class _LoginPageState extends State<LoginPage> {
       var message = "time out";
       print(message);
       dialogBox(context, 'Signed status', message);
+      setState(() {
+        _progressBarActive = false;
+        _enabled = true;
+      });
     };
     var userPhoneNumber =
         '${_countryCodeController.text}${_phoneNumberController.text}';
