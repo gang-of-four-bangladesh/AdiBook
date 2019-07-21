@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'get_color.dart';
+import 'common_function.dart';
 
-class Image_upload extends StatefulWidget {
+CommonClass commonClass = new CommonClass();
+class ImageUpload extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return Image_uploadState();
+    return ImageUploadState();
   }
 }
 
-class Image_uploadState extends State<Image_upload> {
+class ImageUploadState extends State<ImageUpload> {
   File img;
   Future image_picker_camera() async {
     img = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -28,7 +29,7 @@ class Image_uploadState extends State<Image_upload> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Image Upload'),
-        backgroundColor: Color(hexColor('#03D1BF')),
+        backgroundColor: Color(commonClass.hexColor('#03D1BF')),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -64,7 +65,7 @@ class Image_uploadState extends State<Image_upload> {
                           height: 50.0,
                           child: RaisedButton(
                             color: Color(
-                              hexColor('#03D1BF'),
+                              commonClass.hexColor('#03D1BF'),
                             ),
                             onPressed: () {
                               image_picker_camera();
@@ -94,7 +95,7 @@ class Image_uploadState extends State<Image_upload> {
                           height: 50.0,
                           child: RaisedButton(
                             color: Color(
-                              hexColor('#03D1BF'),
+                              commonClass.hexColor('#03D1BF'),
                             ),
                             onPressed: () {
                               image_picker_gallary();

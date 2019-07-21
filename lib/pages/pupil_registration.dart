@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'get_color.dart';
+import 'common_function.dart';
 
-class Pupil_registration extends StatelessWidget {
+CommonClass commonClass = new CommonClass();
+class PupilRegistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color(hexColor('#03D1BF')),
+          backgroundColor: Color(commonClass.hexColor('#03D1BF')),
           title: Text("Register"),
           actions: <Widget>[
             Container(
@@ -17,7 +18,7 @@ class Pupil_registration extends StatelessWidget {
                 height: 60.0,
                 child: RaisedButton(
                   color: Color(
-                    hexColor('#03D1BF'),
+                    commonClass.hexColor('#03D1BF'),
                   ),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/login');
@@ -182,7 +183,7 @@ class Pupil_registration extends StatelessWidget {
                                   text: 'Terms and Conditions',
                                   style: new TextStyle(fontWeight: FontWeight.bold,
                                     color: Color(
-                                      hexColor('#03D1BF'),
+                                      commonClass.hexColor('#03D1BF'),
                                     ),
                                   ),
                                 )
@@ -211,7 +212,7 @@ class Pupil_registration extends StatelessWidget {
                         height: 50.0,
                         child: RaisedButton(
                           color: Color(
-                            hexColor('#03D1BF'),
+                            commonClass.hexColor('#03D1BF'),
                           ),
                           onPressed: () {},
                           shape: new RoundedRectangleBorder(

@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 
 import 'add_pupil_section.dart';
 import 'event_list_section.dart';
-import 'get_color.dart';
+import 'common_function.dart';
 import 'message_list_section.dart';
 import 'more_list_section.dart';
 import 'pupil_list_section.dart';
 
-class Home_page extends StatefulWidget {
+CommonClass commonClass = new CommonClass();
+class HomePage extends StatefulWidget {
   @override
-  _Home_pageState createState() => _Home_pageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _Home_pageState extends State<Home_page> {
+class _HomePageState extends State<HomePage> {
   int _selectedPage = 0;
   String appbarTitle = "Pupil";
  setAppbarTitle(int selectedPage) {
@@ -28,7 +29,7 @@ class _Home_pageState extends State<Home_page> {
   Widget build(BuildContext context) {
     return Scaffold(
  appBar: AppBar(
-          backgroundColor: Color(hexColor('#03D1BF')),
+          backgroundColor: Color(commonClass.hexColor('#03D1BF')),
           title: Text(appbarTitle),
           actions: <Widget>[
             Container(
@@ -39,7 +40,7 @@ class _Home_pageState extends State<Home_page> {
                 height: 60.0,
                 child: RaisedButton(
                   color: Color(
-                    hexColor('#03D1BF'),
+                    commonClass.hexColor('#03D1BF'),
                   ),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/login');
@@ -60,17 +61,17 @@ class _Home_pageState extends State<Home_page> {
           child: IndexedStack(
             index: _selectedPage,
             children: <Widget>[
-              Pupil_list_section(),
-              Add_pupil_section(),
-              Event_list_section(),
-              Message_list_section(),
-              More_list()
+              PupilListSection(),
+              AddPupilSection(),
+              EventListSection(),
+              MessageListSection(),
+              MoreList()
              ],
           ),
         ),
         bottomNavigationBar: new Theme(
           data: Theme.of(context).copyWith(
-              canvasColor: Color(hexColor('#03D1BF')),
+              canvasColor: Color(commonClass.hexColor('#03D1BF')),
               primaryColor: Colors.red,
               textTheme: Theme.of(context)
                   .textTheme

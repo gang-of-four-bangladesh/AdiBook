@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
+import 'common_function.dart';
 
-import 'get_color.dart';
-
-class Event_list_section extends StatefulWidget {
+CommonClass commonClass = new CommonClass();
+class EventListSection extends StatefulWidget {
   @override
-  Event_list_sectionState createState() => Event_list_sectionState();
+  EventListSectionState createState() => EventListSectionState();
 }
 
-class Event_list_sectionState extends State<Event_list_section> {
+class EventListSectionState extends State<EventListSection> {
   
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class Event_list_sectionState extends State<Event_list_section> {
                       height: 40.0,
                       child: RaisedButton(
                         color: Color(
-                          hexColor('#03D1BF'),
+                          commonClass.hexColor('#03D1BF'),
                         ),
                         onPressed: () {},
                         shape: new RoundedRectangleBorder(
@@ -52,7 +52,7 @@ class Event_list_sectionState extends State<Event_list_section> {
                       height: 40.0,
                       child: RaisedButton(
                         color: Color(
-                          hexColor('#03D1BF'),
+                          commonClass.hexColor('#03D1BF'),
                         ),
                         onPressed: () {},
                         shape: new RoundedRectangleBorder(
@@ -78,8 +78,8 @@ class Event_list_sectionState extends State<Event_list_section> {
                     isExpanded: true,
                     isExpandable: true,
                     showTodayIcon: true,
-                    eventDoneColor: Color(hexColor('#03D1BF')),
-                    eventColor: Color(hexColor('#03D1BF'))),
+                    eventDoneColor: Color(commonClass.hexColor('#03D1BF')),
+                    eventColor: Color(commonClass.hexColor('#03D1BF'))),
               ),
               _buildEventList()
             ],

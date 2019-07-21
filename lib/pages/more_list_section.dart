@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-class More_list extends StatefulWidget {
+import 'common_function.dart';
+
+CommonClass commonClass = new CommonClass();
+class MoreList extends StatefulWidget {
   @override
-  _More_listState createState() => _More_listState();
+  _MoreListState createState() => _MoreListState();
 }
 
-class _More_listState extends State<More_list> {
+class _MoreListState extends State<MoreList> {
   @override
   Widget build(BuildContext context) {
     final moretabList = [

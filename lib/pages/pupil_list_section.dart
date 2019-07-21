@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'common_function.dart';
 
-class Pupil_list_section extends StatefulWidget {
+CommonClass commonClass = new CommonClass();
+class PupilListSection extends StatefulWidget {
   @override
-  Pupil_list_sectionState createState() => Pupil_list_sectionState();
+  PupilPistSectionState createState() => PupilPistSectionState();
 }
 
-class Pupil_list_sectionState extends State<Pupil_list_section> {
+class PupilPistSectionState extends State<PupilListSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
