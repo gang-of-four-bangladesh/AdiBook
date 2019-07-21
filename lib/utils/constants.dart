@@ -1,6 +1,6 @@
 class DatabaseDocumentPath {
   static const String InstructorCollection = 'instructors';
-  static const String PupilsCollection = 'pupils';
+  static const String PupilsCollection = '$InstructorCollection/%s/pupils';
 }
 
 class PagePath {

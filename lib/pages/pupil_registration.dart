@@ -20,7 +20,7 @@ class Pupil_registration extends StatelessWidget {
                     hexColor('#03D1BF'),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/login');
+                    Navigator.of(context).pushNamed('/login_page');
                   },
                   shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(8.0),

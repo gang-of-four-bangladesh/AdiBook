@@ -11,7 +11,7 @@ class InstructorManager {
     FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
     final DocumentReference document = instructorCollection.document(currentUser.uid);
     try {
-      document.setData(instructor.toJson());
+      await document.setData(instructor.toJson());
       print('$instructor created successfully.');
       return true;
     } catch (e) {

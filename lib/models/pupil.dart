@@ -1,33 +1,32 @@
-import 'package:flutter/foundation.dart';
+import 'package:adibook/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sprintf/sprintf.dart';
 
 class Pupil {
-  static const String IdKey = 'pid';
+  static const String IdKey = 'id';
   static const String NameKey = 'nam';
   static const String AddressKey = 'add';
   static const String PhoneNumberKey = 'phn';
   static const String LicenseKey = 'lno';
   static const String DateOfBirthKey = 'dob';
-  static const String EyeTestKey = 'et';
-  static const String TheoryRecordKey = 'tr';
-  static const String PreviousExperiencehKey = 'pe';
-  static const String CreatedAtKey = 'createdAt';
-  static const String UpdatedAtKey = 'updatedAt';
+  static const String EyeTestKey = 'ets';
+  static const String TheoryRecordKey = 'thr';
+  static const String PreviousExperiencehKey = 'pex';
+  static const String CreatedAtKey = 'cat';
+  static const String UpdatedAtKey = 'uat';
 
   Pupil(
-      {@required pid,
-      @required name,
-      @required phoneNumber,
-      @required licenseNo,
+      {id,
+      name,
+      phoneNumber,
+      licenseNo,
       address,
       dateOfBirth,
       eyeTest = false,
       theoryRecord = false,
       previousExperience = false})
-      : assert(pid != null),
-        assert(name != null),
-        assert(phoneNumber != null),
-        assert(licenseNo != null),
-        this.pid = pid,
+      : this.id = id,
         this.name = name,
         this.address = address,
         this.phoneNumber = phoneNumber,
@@ -37,8 +36,8 @@ class Pupil {
         this.theoryRecord = theoryRecord,
         this.previousExperience = previousExperience,
         this.createdAt = DateTime.now().toUtc(),
-        this.updateAt = null;
-  String pid;
+        this.updatedAt = null;
+  String id;
   String name;
   String address;
   String phoneNumber;
@@ -48,11 +47,10 @@ class Pupil {
   bool theoryRecord;
   bool previousExperience;
   DateTime createdAt;
-  DateTime updateAt;
+  DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
-      IdKey: pid,
       NameKey: name,
       AddressKey: address,
       PhoneNumberKey: phoneNumber,
@@ -62,7 +60,71 @@ class Pupil {
       TheoryRecordKey: theoryRecord,
       PreviousExperiencehKey: previousExperience,
       CreatedAtKey: createdAt,
-      UpdatedAtKey: updateAt
+      UpdatedAtKey: updatedAt
     };
+  }
+
+  Future getall() async {
+    var currentUser = await FirebaseAuth.instance.currentUser();
+    var pupilCollectionPath =
+        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
+    return Firestore.instance
+        .collection(pupilCollectionPath)
+        .getDocuments();
+  }
+
+  Future get() async {
+    var currentUser = await FirebaseAuth.instance.currentUser();
+    var pupilCollectionPath =
+        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
+    return Firestore.instance
+        .collection(pupilCollectionPath)
+        .document(this.id)
+        .get();
+  }
+
+  Future add() async {
+    var currentUser = await FirebaseAuth.instance.currentUser();
+    var pupilCollectionPath =
+        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
+    try {
+      Firestore.instance
+          .collection(pupilCollectionPath)
+          .document(this.id)
+          .setData(this.toJson());
+      print('$this created successfully.');
+      return true;
+    } catch (e) {
+      print('user creation failed. $e');
+      return false;
+    }
+  }
+
+  Future update() async {
+    var currentUser = await FirebaseAuth.instance.currentUser();
+    var pupilCollectionPath =
+        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
+    try {
+      this.updatedAt = DateTime.now().toUtc();
+      Firestore.instance
+          .collection(pupilCollectionPath)
+          .document(this.id)
+          .updateData(this.toJson());
+      print('$this created successfully.');
+      return true;
+    } catch (e) {
+      print('user creation failed. $e');
+      return false;
+    }
+  }
+
+  Future delete() async {
+    var currentUser = await FirebaseAuth.instance.currentUser();
+    var pupilCollectionPath =
+        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
+    return Firestore.instance
+        .collection(pupilCollectionPath)
+        .document(this.id)
+        .delete();
   }
 }

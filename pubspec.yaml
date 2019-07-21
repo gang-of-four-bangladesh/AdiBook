@@ -1,5 +1,5 @@
-name: flutter_applayout_demo
-description: A new Flutter application.
+name: adibook
+description: Learn driving
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -28,7 +28,8 @@ dependencies:
   cloud_firestore: ^0.12.7
   uuid: ^2.0.2
   shared_preferences: ^0.5.3+4
-
+  sprintf: ^4.0.2
+  
   flutter:
     sdk: flutter
 

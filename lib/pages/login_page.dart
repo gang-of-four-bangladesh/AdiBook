@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_applayout_demo/models/instructor.dart';
 import '../utils/device_info.dart';
+import '../models/instructor.dart';
 import '../utils/instructor_manager.dart';
 
 class LoginPage extends StatefulWidget {
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     return colorint;
   }
 
-  _LoginPageState(){
+  _LoginPageState() {
     if (!DeviceInfo.isOnPhysicalDevice) {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: new RaisedButton(
-                  onPressed: () => _sendCodeToPhoneNumber(),
+                  onPressed: () => _onPressSendOTPCode(),
                   color: Colors.green,
                   child: Text(
                     "Send OTP Code",
@@ -139,8 +139,7 @@ class _LoginPageState extends State<LoginPage> {
               Align(
                   alignment: Alignment.centerRight,
                   child: RaisedButton(
-                    onPressed: () =>
-                        _signInWithPhoneNumber(_smsCodeController.text),
+                    onPressed: () => _onPressLoginButton(),
                     child: Text(
                       "Login",
                       style: TextStyle(color: Colors.white),
@@ -155,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   /// Sign in using an sms code as input.
-  void _signInWithPhoneNumber(String smsCode) async {
+  void _onPressLoginButton() async {
     if (this._smsCodeController.text.isEmpty) {
       dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
       return;
@@ -165,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
-        verificationId: verificationId, smsCode: smsCode);
+        verificationId: verificationId, smsCode: this._smsCodeController.text);
     await FirebaseAuth.instance
         .signInWithCredential(authCredential)
         .then((FirebaseUser user) async {
@@ -175,13 +174,13 @@ class _LoginPageState extends State<LoginPage> {
       var message = 'signed in with phone number successful: user -> $user';
       print(message);
       dialogBox(context, 'Signed status', message);
-
+      await new Instructor(id: currentUser.uid).add();
       Navigator.of(context).pushNamed('/home');
     });
   }
 
   /// Sends the code to the specified phone number.
-  Future<void> _sendCodeToPhoneNumber() async {
+  Future<void> _onPressSendOTPCode() async {
     if (this._phoneNumberController.text.isEmpty) {
       dialogBox(context, 'Phone number', 'Phone number cannot be empty.');
       return;

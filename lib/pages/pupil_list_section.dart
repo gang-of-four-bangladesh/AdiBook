@@ -1,4 +1,7 @@
+import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/pupil.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class Pupil_list_section extends StatefulWidget {
   @override
@@ -8,6 +11,10 @@ class Pupil_list_section extends StatefulWidget {
 class Pupil_list_sectionState extends State<Pupil_list_section> {
   @override
   Widget build(BuildContext context) {
+    new Instructor().get().then((instructor) {
+      var id = new Uuid().v1();
+       new Pupil(id: id).add();
+    });
     return Container(
       child: ListView.builder(
         itemCount: 16,
@@ -29,5 +36,4 @@ class Pupil_list_sectionState extends State<Pupil_list_section> {
       ),
     );
   }
-
 }
