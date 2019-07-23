@@ -1,4 +1,6 @@
+import 'package:adibook/models/pupil.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'common_function.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
@@ -6,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 CommonClass commonClass = new CommonClass();
+
 class AddPupilSection extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +17,8 @@ class AddPupilSection extends StatefulWidget {
   }
 }
 
+Pupil pupil = new Pupil();
+Uuid uuid = new Uuid();
 class AddPupilSectionstate extends State<AddPupilSection> {
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -45,27 +50,27 @@ class AddPupilSectionstate extends State<AddPupilSection> {
           child: Center(
             child: Column(children: <Widget>[
               //Picture
-              Container(
-                padding: EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                        width: 10.0,
-                        height: 5.0,
-                        child: Center(
-                            child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: img == null
-                              ? Text(
-                                  "No Image",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              : Image.file(img),
-                        ))),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.all(5.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: <Widget>[
+              //       Container(
+              //           width: 10.0,
+              //           height: 5.0,
+              //           child: Center(
+              //               child: ClipRRect(
+              //             borderRadius: BorderRadius.circular(5.0),
+              //             child: img == null
+              //                 ? Text(
+              //                     "No Image",
+              //                     style: TextStyle(fontWeight: FontWeight.bold),
+              //                   )
+              //                 : Image.file(img),
+              //           ))),
+              //     ],
+              //   ),
+              // ),
 
               //textBoxSection,
               Container(
@@ -75,21 +80,23 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        // Container(
-                        //   padding: EdgeInsets.only(bottom: 5.0),
-                        //   child: TextField(
-                        //     keyboardType: TextInputType.text,
-                        //     decoration: InputDecoration(
-                        //         border: OutlineInputBorder(
-                        //             borderSide: BorderSide(
-                        //               color: Color(
-                        //                 commonClass.commonClass.hexColor('#03D1BF'),
-                        //               ),
-                        //             ),
-                        //             borderRadius: new BorderRadius.circular(8.0)),
-                        //         hintText: "Name"),
-                        //   ),
-                        // ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: TextField(
+                            keyboardType: TextInputType.text,
+                            controller: nameController,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(
+                                        commonClass.hexColor('#03D1BF'),
+                                      ),
+                                    ),
+                                    borderRadius:
+                                        new BorderRadius.circular(8.0)),
+                                hintText: "Name"),
+                          ),
+                        ),
                       ],
                     ),
                     Column(
@@ -102,6 +109,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               _address = val;
                             },
                             keyboardType: TextInputType.text,
+                            controller: addressController,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide:
@@ -117,7 +125,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            validator: validateMobile,
+                            controller: phoneController,
                             keyboardType: TextInputType.phone,
                             onSaved: (String val) {
                               _phone = val;
@@ -137,6 +145,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
+                            controller: drivingLicenseController,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide:
@@ -304,7 +313,24 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             minWidth: 100.0,
                             height: 30.0,
                             child: RaisedButton(
-                              onPressed: _validateInputs,
+                              onPressed: () {
+                                print('called');
+                                print('year: '+ date_of_birth.substring(6,10));
+                                print('day: '+date_of_birth.substring(0,2));
+                                print(date_of_birth);
+                                print('month: '+date_of_birth.substring(3,5));
+                                pupil.id = uuid.v4();
+                                pupil.name = nameController.text;
+                                pupil.phoneNumber = phoneController.text;
+                                pupil.address = addressController.text;
+                                pupil.dateOfBirth =
+                                    DateTime.parse(date_of_birth.substring(6,10)+'-'+date_of_birth.substring(3,5)+'-'+date_of_birth.substring(0,2)+' 00:00:00.000');
+                                pupil.eyeTest = switchOn_eyeTest;
+                                pupil.previousExperience = switchOn_prviouseExp;
+                                pupil.theoryRecord = switchOn_theoryRecord;
+                                pupil.add();
+                              },
+                              //onPressed: _validateInputs,
                               color: Color(
                                 commonClass.hexColor('#03D1BF'),
                               ),
@@ -359,24 +385,23 @@ class AddPupilSectionstate extends State<AddPupilSection> {
           ),
         ),
       ),
-    );   
-    
+    );
   }
-   void _validateInputs() {
-     commonClass.getSnackbar("called validation function", context);
-      if (_formKey.currentState.validate()) {
+
+  void _validateInputs() {
+    commonClass.getSnackbar("called validation function", context);
+    if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
-         commonClass.getSnackbar("Valid", context);
-        //_formKey.currentState.save();
-      } else {
-        
-          commonClass.getSnackbar("Invalid", context);
+      commonClass.getSnackbar("Valid", context);
+      //_formKey.currentState.save();
+    } else {
+      commonClass.getSnackbar("Invalid", context);
 //    If all data are not valid then start auto validation.
-        setState(() {
-          //_autoValidate = true;
-        });
-      }
+      setState(() {
+        //_autoValidate = true;
+      });
     }
+  }
 
   File img;
   Future image_picker_camera() async {
@@ -392,6 +417,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   bool switchOn_eyeTest = false;
   bool switchOn_theoryRecord = false;
   bool switchOn_prviouseExp = false;
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController phoneController = new TextEditingController();
+  TextEditingController addressController = new TextEditingController();
+  TextEditingController drivingLicenseController = new TextEditingController();
 
   Future<void> dialogBoxPicture(BuildContext context) {
     return showDialog<void>(
