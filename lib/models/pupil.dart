@@ -1,7 +1,5 @@
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sprintf/sprintf.dart';
 
 class Pupil {
   static const String IdKey = 'id';
@@ -64,32 +62,17 @@ class Pupil {
     };
   }
 
-  Future getall() async {
-    var currentUser = await FirebaseAuth.instance.currentUser();
-    var pupilCollectionPath =
-        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
-    return Firestore.instance
-        .collection(pupilCollectionPath)
-        .getDocuments();
-  }
-
   Future get() async {
-    var currentUser = await FirebaseAuth.instance.currentUser();
-    var pupilCollectionPath =
-        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
     return Firestore.instance
-        .collection(pupilCollectionPath)
+        .collection(FirestorePath.Pupils)
         .document(this.id)
         .get();
   }
 
   Future add() async {
-    var currentUser = await FirebaseAuth.instance.currentUser();
-    var pupilCollectionPath =
-        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
     try {
       Firestore.instance
-          .collection(pupilCollectionPath)
+          .collection(FirestorePath.Pupils)
           .document(this.id)
           .setData(this.toJson());
       print('$this created successfully.');
@@ -101,13 +84,10 @@ class Pupil {
   }
 
   Future update() async {
-    var currentUser = await FirebaseAuth.instance.currentUser();
-    var pupilCollectionPath =
-        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
     try {
       this.updatedAt = DateTime.now().toUtc();
       Firestore.instance
-          .collection(pupilCollectionPath)
+          .collection(FirestorePath.Pupils)
           .document(this.id)
           .updateData(this.toJson());
       print('$this created successfully.');
@@ -119,11 +99,8 @@ class Pupil {
   }
 
   Future delete() async {
-    var currentUser = await FirebaseAuth.instance.currentUser();
-    var pupilCollectionPath =
-        sprintf(DatabaseDocumentPath.PupilsCollection, [currentUser.uid]);
     return Firestore.instance
-        .collection(pupilCollectionPath)
+        .collection(FirestorePath.Pupils)
         .document(this.id)
         .delete();
   }

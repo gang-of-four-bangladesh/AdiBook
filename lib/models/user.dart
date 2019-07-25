@@ -1,64 +1,50 @@
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sprintf/sprintf.dart';
 
-class Instructor {
+class User {
   static const String IdKey = 'id';
   static const String NameKey = 'nam';
-  static const String AddressKey = 'add';
   static const String PhoneNumberKey = 'phn';
-  static const String LicenseKey = 'lno';
-  static const String DateOfBirthKey = 'dob';
+  static const String UserTypeKey = 'utp';
+  static const String IsVerifiedKey = 'isv';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
 
-  Instructor(
+  User(
       {String id,
       String name,
-      String licenseNo,
-      String address,
       String phoneNumber,
-      DateTime dateOfBirth,
-      bool eyeTest = false,
-      bool theoryRecord = false,
-      bool previousExperience = false})
+      UserType userType = UserType.Instructor,
+      bool isVerified = false})
       : this.id = id,
         this.name = name,
-        this.address = address,
         this.phoneNumber = phoneNumber,
-        this.licenseNo = licenseNo,
-        this.dateOfBirth = dateOfBirth,
+        this.userType = userType,
+        this.isVerified = isVerified,
         this.createdAt = DateTime.now().toUtc(),
         this.updatedAt = null;
   String id;
   String name;
-  String address;
   String phoneNumber;
-  String licenseNo;
-  DateTime dateOfBirth;
+  UserType userType;
+  bool isVerified;
   DateTime createdAt;
   DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
       NameKey: name,
-      AddressKey: address,
       PhoneNumberKey: phoneNumber,
-      LicenseKey: licenseNo,
-      DateOfBirthKey: dateOfBirth,
+      UserTypeKey: userType,
+      IsVerifiedKey: isVerified,
       CreatedAtKey: createdAt,
       UpdatedAtKey: updatedAt
     };
   }
 
-  Future getPupils(String instructorId) async {
-    var path = sprintf(FirestorePath.PupilsOfAnInstructor, [instructorId]);
-    return Firestore.instance.collection(path).getDocuments();
-  }
-
   Future<DocumentSnapshot> get() async {
     return Firestore.instance
-        .collection(FirestorePath.Instructor)
+        .collection(FirestorePath.User)
         .document(this.id)
         .get();
   }
@@ -66,7 +52,7 @@ class Instructor {
   Future<bool> add() async {
     try {
       await Firestore.instance
-          .collection(FirestorePath.Instructor)
+          .collection(FirestorePath.User)
           .document(this.id)
           .setData(this.toJson());
       print('$this created successfully.');
@@ -81,7 +67,7 @@ class Instructor {
     try {
       this.updatedAt = DateTime.now().toUtc();
       await Firestore.instance
-          .collection(FirestorePath.Instructor)
+          .collection(FirestorePath.User)
           .document(this.id)
           .updateData(this.toJson());
       print('$this updated successfully.');
@@ -95,7 +81,7 @@ class Instructor {
   Future<bool> delete() async {
     try {
       await Firestore.instance
-          .collection(FirestorePath.Instructor)
+          .collection(FirestorePath.User)
           .document(this.id)
           .delete();
       print('$this deleted successfully.');

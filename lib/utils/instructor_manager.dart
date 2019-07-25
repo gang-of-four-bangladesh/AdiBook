@@ -5,7 +5,7 @@ import '../models/instructor.dart';
 
 class InstructorManager {
   CollectionReference get instructorCollection =>
-      Firestore.instance.collection(DatabaseDocumentPath.InstructorCollection);
+      Firestore.instance.collection(FirestorePath.Instructor);
 
   Future<bool> add(Instructor instructor) async {
     FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();

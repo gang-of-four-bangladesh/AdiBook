@@ -1,4 +1,6 @@
+import 'package:adibook/models/user.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'add_pupil_section.dart';
@@ -44,7 +46,11 @@ class _HomePageState extends State<HomePage> {
                 color: Color(
                   commonClass.hexColor('#03D1BF'),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  var currentUser = await FirebaseAuth.instance.currentUser();
+                  User user = new User(id: currentUser.uid, isVerified: false);
+                  user.update();
+                  FirebaseAuth.instance.signOut();
                   Navigator.of(context).pushNamed('/login');
                 },
                 shape: new RoundedRectangleBorder(

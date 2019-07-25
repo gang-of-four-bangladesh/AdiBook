@@ -1,4 +1,4 @@
-import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/user.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +27,12 @@ class _LoginPageState extends State<LoginPage> {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
     }
+    FirebaseAuth.instance.currentUser().then((user) {
+      if (user != null) {
+        User adiBookUser = new User(id: user.uid);
+        if (adiBookUser.isVerified) Navigator.of(context).pushNamed('/login');
+      }
+    });
   }
   bool _enabled = true;
   var _onPressed;
@@ -194,6 +200,8 @@ class _LoginPageState extends State<LoginPage> {
       var message = 'signed in with phone number successful: user -> $user';
       print(message);
       dialogBox(context, 'Signed status', message);
+      User adiBookUser = new User(id: currentUser.uid, isVerified: true);
+      adiBookUser.add();
       Navigator.of(context).pushNamed('/home');
     });
   }

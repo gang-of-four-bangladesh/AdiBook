@@ -1,6 +1,8 @@
-class DatabaseDocumentPath {
-  static const String InstructorCollection = 'instructors';
-  static const String PupilsCollection = '$InstructorCollection/%s/pupils';
+class FirestorePath {
+  static const String Instructor = 'instructors';
+  static const String Pupils = 'pupils';
+  static const String User = 'users';
+  static const String PupilsOfAnInstructor = '$Instructor/%s/pupils';
 }
 
 class PagePath {
@@ -10,6 +12,7 @@ class PagePath {
 
 class SharedPreferenceKeys {
   static const String InstructorId = 'instructor_id';
+  static const String HasInstructorVerified = 'has_instructor_verified';
 }
 
 class EnvironmentStatus {
@@ -27,3 +30,4 @@ class EnvironmentStatus {
 }
 
 enum RunningMode { Debug, Release, Profile }
+enum UserType { Pupil, Instructor, Admin }

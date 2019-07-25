@@ -5,11 +5,11 @@ import '../models/pupil.dart';
 
 class PupilManager {
   CollectionReference get instructorCollection =>
-      Firestore.instance.collection(DatabaseDocumentPath.InstructorCollection);
+      Firestore.instance.collection(FirestorePath.Instructor);
 
   Future add(Pupil pupil) async {
     FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-    String pupilCollectionPath = "${currentUser.uid}/${DatabaseDocumentPath.PupilsCollection}";
+    String pupilCollectionPath = "${currentUser.uid}/${FirestorePath.Pupils}";
     final DocumentReference document = instructorCollection.document(pupilCollectionPath);
     try {
       document.setData(pupil.toJson());
