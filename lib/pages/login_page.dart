@@ -1,8 +1,10 @@
 import 'package:adibook/models/user.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:adibook/pages/common_function.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 CommonClass commonClass = new CommonClass();
 
@@ -21,18 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _phoneNumberController = TextEditingController();
   String verificationId;
   SingedBy _signedBy = SingedBy.instructor;
+  String _selectedCountry = CountryWisePhoneCode.keys.first;
 
   _LoginPageState() {
     if (!DeviceInfo.isOnPhysicalDevice) {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
     }
-    FirebaseAuth.instance.currentUser().then((user) {
-      if (user != null) {
-        User adiBookUser = new User(id: user.uid);
-        if (adiBookUser.isVerified) Navigator.of(context).pushNamed('/login');
-      }
-    });
   }
   bool _enabled = true;
   var _onPressed;
@@ -73,15 +70,30 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 20,
               ),
-              TextField(
-                //controller: _countryCodeController,
-                readOnly: true,
-                enabled: false,
-                textAlignVertical: TextAlignVertical.bottom,
-                decoration: InputDecoration(
-                  hintText: "United Kingdom (+44)",
-                  hintStyle: TextStyle(color: Colors.green),
-                ),
+              // TextField(
+              //   //controller: _countryCodeController,
+              //   readOnly: true,
+              //   enabled: false,
+              //   textAlignVertical: TextAlignVertical.bottom,
+              //   decoration: InputDecoration(
+              //     hintText: "United Kingdom (+44)",
+              //     hintStyle: TextStyle(color: Colors.green),
+              //   ),
+              // ),
+              DropdownButton<String>(
+                items: CountryWisePhoneCode.keys.map((String country) {
+                  return new DropdownMenuItem<String>(
+                    value: country,
+                    child: new Text(country),
+                  );
+                }).toList(),
+                onChanged: (String value) {
+                  setState(() {
+                    _selectedCountry = value;
+                    print(_selectedCountry);
+                  });
+                },
+                value: _selectedCountry,
               ),
               TextField(
                 controller: _phoneNumberController,
@@ -202,6 +214,13 @@ class _LoginPageState extends State<LoginPage> {
       dialogBox(context, 'Signed status', message);
       User adiBookUser = new User(id: currentUser.uid, isVerified: true);
       adiBookUser.add();
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setBool(SharedPreferenceKeys.HasInstructorVerifiedKey, true);
+      var docSnap = await adiBookUser.get();
+      print(docSnap[User.IsVerifiedKey]);
+      if (docSnap[User.IsVerifiedKey]) {
+        print("This is already bool");
+      }
       Navigator.of(context).pushNamed('/home');
     });
   }
@@ -260,7 +279,9 @@ class _LoginPageState extends State<LoginPage> {
       });
     };
     var userPhoneNumber =
-        '${_countryCodeController.text}${_phoneNumberController.text}';
+        '${CountryWisePhoneCode[_selectedCountry]}${_phoneNumberController.text}';
+    //var userPhoneNumber =
+    //    '${_countryCodeController.text}${_phoneNumberController.text}';
     print(userPhoneNumber);
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: userPhoneNumber,

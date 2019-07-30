@@ -31,15 +31,29 @@ class User {
   DateTime createdAt;
   DateTime updatedAt;
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> _toJson() {
     return {
       NameKey: name,
       PhoneNumberKey: phoneNumber,
-      UserTypeKey: userType,
+      UserTypeKey: userType.index,
       IsVerifiedKey: isVerified,
       CreatedAtKey: createdAt,
       UpdatedAtKey: updatedAt
     };
+  }
+
+  Future<void> _snapshotToUser(DocumentSnapshot snapshot) async {
+    this.id = snapshot[User.IdKey];
+    this.name = snapshot[User.NameKey];
+    this.phoneNumber = snapshot[User.PhoneNumberKey];
+    this.isVerified = snapshot[User.IsVerifiedKey];
+    this.createdAt = snapshot[User.CreatedAtKey];
+    this.updatedAt = snapshot[User.UpdatedAtKey];
+  }
+
+  Future<User> getUser() async {
+    await _snapshotToUser(await this.get());
+    return this;
   }
 
   Future<DocumentSnapshot> get() async {
@@ -54,7 +68,7 @@ class User {
       await Firestore.instance
           .collection(FirestorePath.User)
           .document(this.id)
-          .setData(this.toJson());
+          .setData(this._toJson());
       print('$this created successfully.');
       return true;
     } catch (e) {
@@ -69,7 +83,7 @@ class User {
       await Firestore.instance
           .collection(FirestorePath.User)
           .document(this.id)
-          .updateData(this.toJson());
+          .updateData(this._toJson());
       print('$this updated successfully.');
       return true;
     } catch (e) {

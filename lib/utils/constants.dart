@@ -5,14 +5,17 @@ class FirestorePath {
   static const String PupilsOfAnInstructor = '$Instructor/%s/pupils';
 }
 
-class PagePath {
+class PageRoutes {
   static const String HomePage = '/home';
   static const String LoginPage = '/login';
+  static const String PupilRegistrationPage = '/pupil_registration';
+  static const String ImageUploadPage = '/image_upload';
 }
 
 class SharedPreferenceKeys {
-  static const String InstructorId = 'instructor_id';
-  static const String HasInstructorVerified = 'has_instructor_verified';
+  static const String InstructorIdKey = 'instructor_id_key';
+  static const String HasInstructorVerifiedKey = 'has_instructor_verified_key';
+  static const String LoggedInUserIdKey = 'last_logged_in_user_id_key';
 }
 
 class EnvironmentStatus {
@@ -28,6 +31,11 @@ class EnvironmentStatus {
     return inDebugMode;
   }
 }
+
+const Map<String, String> CountryWisePhoneCode = {
+  "United Kingdom (+44)": "+44",
+  "Bangladesh (+880)": "+880"
+};
 
 enum RunningMode { Debug, Release, Profile }
 enum UserType { Pupil, Instructor, Admin }

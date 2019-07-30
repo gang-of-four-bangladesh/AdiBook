@@ -29,6 +29,7 @@ dependencies:
   uuid: ^2.0.2
   shared_preferences: ^0.5.3+4
   sprintf: ^4.0.2
+  path_provider: ^1.2.0
   
   flutter:
     sdk: flutter
