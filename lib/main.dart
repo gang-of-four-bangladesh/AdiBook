@@ -3,6 +3,7 @@ import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
 import 'package:adibook/utils/constants.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
@@ -42,7 +43,16 @@ Future _setupLogger() async {
 Future _save(String message) async {
   final directory = await getApplicationDocumentsDirectory();
   print(directory);
-  final file = File('${directory.path}/my_file.txt');
+  var fileName = 'my_file.txt';
+  var filePath = '${directory.path}/$fileName';
+  final file = File(filePath);
   await file.writeAsString(message);
+  final StorageReference storageRef = FirebaseStorage.instance.ref().child(fileName);
+  storageRef.putFile(
+    File(filePath),
+    StorageMetadata(
+      contentType: 'text/plain',
+    ),
+  );
   print('saved');
 }
