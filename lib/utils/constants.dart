@@ -10,6 +10,7 @@ class PageRoutes {
   static const String LoginPage = '/login';
   static const String PupilRegistrationPage = '/pupil_registration';
   static const String ImageUploadPage = '/image_upload';
+  static const String PupilActivity = '/pupil_activity';
 }
 
 class SharedPreferenceKeys {

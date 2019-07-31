@@ -59,13 +59,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                     trailing: Icon(Icons.person),
                     title: Text(document["nam"]),
                     onTap: () {
-                      Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PupilActivity(nam: document["nam"]),
-                ),
-              );
-                      //Navigator.of(context).pushNamed('/pupil_activity');
+                      Navigator.of(context).pushNamed('/pupil_activity');
                       //commonClass.getSnackbar(document["nam"], context);
                     },
                   );
