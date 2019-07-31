@@ -3,32 +3,30 @@ import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
 import 'package:adibook/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:intl/intl.dart';
 
 Future main() async {
+  Logger _logger = Logger('main method');
   await _setupLogger();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Widget _defaultPage = LoginPage();
 
-  var preferences = await SharedPreferences.getInstance();
-  var keyExists =
-      preferences.containsKey(SharedPreferenceKeys.LoggedInUserIdKey);
-  if (keyExists) {
-    var userId = preferences.getString(SharedPreferenceKeys.LoggedInUserIdKey);
-    var adiBookUser = await User(id: userId).getUser();
-    if (adiBookUser.isVerified) {
-      _defaultPage = HomePage();
-    }
+  var currentUser = await FirebaseAuth.instance.currentUser();
+  _logger.info('FirebaseAuth.instance.currentUser()? $currentUser');
+  if (currentUser != null) {
+    _logger.info('Logged in user $currentUser');
+    _defaultPage = HomePage();
   }
   runApp(AdiBookApp(_defaultPage));
-  Logger _logger = Logger('main method');
-  _logger.info('Application launched successfully. This is a logger message');
+  _logger.info(
+      'Application launched successfully with default page set as ${_defaultPage.runtimeType.toString()}. This is a logger message');
 }
 
 Future _setupLogger() async {
@@ -40,19 +38,22 @@ Future _setupLogger() async {
   });
 }
 
+StringBuffer _stringBuffer = StringBuffer();
 Future _save(String message) async {
+  _stringBuffer.writeln(message);
   final directory = await getApplicationDocumentsDirectory();
   print(directory);
-  var fileName = 'my_file.txt';
+  var fileName =
+      "${DateFormat('yyyyMMddH').format(DateTime.now().toUtc())}_log.txt";
   var filePath = '${directory.path}/$fileName';
   final file = File(filePath);
-  await file.writeAsString(message);
-  final StorageReference storageRef = FirebaseStorage.instance.ref().child(fileName);
+  await file.writeAsString(_stringBuffer.toString());
+  final StorageReference storageRef =
+      FirebaseStorage.instance.ref().child('/logs').child(fileName);
   storageRef.putFile(
     File(filePath),
     StorageMetadata(
       contentType: 'text/plain',
     ),
   );
-  print('saved');
 }

@@ -1,10 +1,9 @@
-import 'package:adibook/models/user.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:adibook/pages/common_function.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logging/logging.dart';
 
 CommonClass commonClass = new CommonClass();
 
@@ -24,12 +23,14 @@ class _LoginPageState extends State<LoginPage> {
   String verificationId;
   SingedBy _signedBy = SingedBy.instructor;
   String _selectedCountry = CountryWisePhoneCode.keys.first;
+  Logger _logger;
 
   _LoginPageState() {
     if (!DeviceInfo.isOnPhysicalDevice) {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
     }
+    _logger = new Logger(this.runtimeType.toString());
   }
   bool _enabled = true;
   var _onPressed;
@@ -90,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                 onChanged: (String value) {
                   setState(() {
                     _selectedCountry = value;
-                    print(_selectedCountry);
                   });
                 },
                 value: _selectedCountry,
@@ -203,26 +203,17 @@ class _LoginPageState extends State<LoginPage> {
     }
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: this._smsCodeController.text);
-    await FirebaseAuth.instance
-        .signInWithCredential(authCredential)
-        .then((FirebaseUser user) async {
-      final FirebaseUser currentUser =
-          await FirebaseAuth.instance.currentUser();
-      assert(user.uid == currentUser.uid);
-      var message = 'signed in with phone number successful: user -> $user';
-      print(message);
-      dialogBox(context, 'Signed status', message);
-      User adiBookUser = new User(id: currentUser.uid, isVerified: true);
-      adiBookUser.add();
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setBool(SharedPreferenceKeys.HasInstructorVerifiedKey, true);
-      var docSnap = await adiBookUser.get();
-      print(docSnap[User.IsVerifiedKey]);
-      if (docSnap[User.IsVerifiedKey]) {
-        print("This is already bool");
-      }
-      Navigator.of(context).pushNamed('/home');
-    });
+    await _signInUser(authCredential);
+    Navigator.of(context).pushNamed(PageRoutes.HomePage);
+  }
+
+  Future<void> _signInUser(AuthCredential authCredential) async {
+    var user = await FirebaseAuth.instance.signInWithCredential(authCredential);
+    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    assert(user.uid == currentUser.uid);
+    var message =
+        'signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
+    _logger.fine(message);
   }
 
   /// Sends the code to the specified phone number.
@@ -241,38 +232,38 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     final PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential authCredential) {
-      setState(() {
-        var message =
-            'Inside _sendCodeToPhoneNumber: signInWithPhoneNumber auto succeeded.';
-        print(message);
-        dialogBox(context, 'Signed status', message);
-        Navigator.of(context).pushNamed('/home');
-      });
+        (AuthCredential authCredential) async {
+      var user =
+          await FirebaseAuth.instance.signInWithCredential(authCredential);
+      final FirebaseUser currentUser =
+          await FirebaseAuth.instance.currentUser();
+      assert(user.uid == currentUser.uid);
+      var message =
+          'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
+      _logger.fine(message);
+      Navigator.of(context).pushNamed(PageRoutes.HomePage);
     };
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
       var message =
-          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
-      print(message);
-      dialogBox(context, 'Signed status', message);
+          'PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}';
+      this._logger.shout(message);
     };
 
     final PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
       this.verificationId = verificationId;
-      var message = "code sent to " + _phoneNumberController.text;
-      print(message);
-      dialogBox(context, 'Signed status', message);
+      var message =
+          "PhoneCodeSent. code sent to " + _phoneNumberController.text;
+      this._logger.fine(message);
     };
 
     final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
       this.verificationId = verificationId;
-      var message = "time out";
-      print(message);
-      dialogBox(context, 'Signed status', message);
+      var message = "PhoneCodeAutoRetrievalTimeout. time out";
+      this._logger.shout(message);
       setState(() {
         _progressBarActive = false;
         _enabled = true;
@@ -280,9 +271,8 @@ class _LoginPageState extends State<LoginPage> {
     };
     var userPhoneNumber =
         '${CountryWisePhoneCode[_selectedCountry]}${_phoneNumberController.text}';
-    //var userPhoneNumber =
-    //    '${_countryCodeController.text}${_phoneNumberController.text}';
-    print(userPhoneNumber);
+    this._logger.info(
+        'User provided country code $_selectedCountry, User entered phone number ${_phoneNumberController.text}.');
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: userPhoneNumber,
         timeout: const Duration(seconds: 5),
