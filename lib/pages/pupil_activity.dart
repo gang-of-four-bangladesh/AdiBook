@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'common_function.dart';
 
 CommonClass commonClass = new CommonClass();
-List<String> pupilActivityListFirst = [
+List pupilActivityListFirst = [
   "Add a Lesson",
   "Progress Planner",
   "Lesson Card",
   "Report Card",
   "Payments",
+  "",
   "Call",
   "Sent Message",
   "Details",
   "Reset Password",
   "Archive"
 ];
-List<String> pupilActivityListSecond = [];
 
 class PupilActivity extends StatelessWidget {
   PupilActivity({this.nam});
@@ -39,15 +39,21 @@ class PupilActivity extends StatelessWidget {
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-                child: ListTile(
-                  title: 
-                  //index == 4 ?SizedBox(height: 5,):null,
-                  Text(pupilActivityListFirst[index]),
-                  onTap: () {},
-                ),
+                child: index == 5
+                    ? ListTile(
+                        title: Text(nam.toString().toUpperCase() + " PROFILE",
+                            style: TextStyle(color: Colors.grey)),
+                      )
+                    : ListTile(
+                        title: Text(pupilActivityListFirst[index]),
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.grey[300],
+                        ),
+                        onTap: () {},
+                      ),
               );
             },
-            //separatorBuilder: (BuildContext context, int index) => const Divider(),
           ),
         ));
   }
