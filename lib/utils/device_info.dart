@@ -5,8 +5,8 @@ import 'package:device_info/device_info.dart';
 class DeviceInfo {
   static final DeviceInfoPlugin _deviceInfoPlugin = new DeviceInfoPlugin();
   static Map<String, dynamic> _deviceData;
-  DeviceInfo() {
-    _initPlatformState();
+  static Future<void> initializeDeviceState() async{
+    await _initPlatformState();
   }
   static bool get isOnPhysicalDevice {
     return _deviceData != null && _deviceData['isPhysicalDevice'];
@@ -15,9 +15,9 @@ class DeviceInfo {
   static Future<Null> _initPlatformState() async {
     try {
       if (Platform.isAndroid) {
-        _deviceData = _readAndroidBuildData(await _deviceInfoPlugin.androidInfo);
+        _deviceData = await _readAndroidBuildData(await _deviceInfoPlugin.androidInfo);
       } else if (Platform.isIOS) {
-        _deviceData = _readIosDeviceInfo(await _deviceInfoPlugin.iosInfo);
+        _deviceData = await _readIosDeviceInfo(await _deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
       _deviceData = <String, dynamic>{
@@ -26,7 +26,7 @@ class DeviceInfo {
     }
   }
 
-  static Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+  static Future<Map<String, dynamic>> _readAndroidBuildData(AndroidDeviceInfo build) async {
     return <String, dynamic>{
       'version.securityPatch': build.version.securityPatch,
       'version.sdkInt': build.version.sdkInt,
@@ -56,7 +56,7 @@ class DeviceInfo {
     };
   }
 
-  static Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+  static Future<Map<String, dynamic>> _readIosDeviceInfo(IosDeviceInfo data) async{
     return <String, dynamic>{
       'name': data.name,
       'systemName': data.systemName,
