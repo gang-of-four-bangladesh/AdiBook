@@ -1,22 +1,20 @@
 import 'package:adibook/models/user.dart';
-import 'package:adibook/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserManager {
   static Future<String> get currentUserId async {
-    var preferences = await SharedPreferences.getInstance();
-    return preferences.getString(SharedPreferenceKeys.LoggedInUserIdKey);
+    var user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return null;
+    return user.uid;
   }
 
   static Future<User> get currentUser async {
-    return new User(id: await UserManager.currentUserId);
+    var userId = await currentUserId;
+    if (userId == null) return null;
+    return User(id: userId).getUser();
   }
 
-  static Future<bool> logout() async {
-    var user = await UserManager.currentUser;
-    user.isVerified = false;
-    user.update();
-    var preferences = await SharedPreferences.getInstance();
-    return preferences.remove(SharedPreferenceKeys.LoggedInUserIdKey);
+  static Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 }

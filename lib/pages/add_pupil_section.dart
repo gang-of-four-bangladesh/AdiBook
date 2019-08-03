@@ -1,5 +1,7 @@
 import 'package:adibook/models/pupil.dart';
+import 'package:adibook/utils/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 import 'common_function.dart';
 import 'package:adibook/pages/validation.dart';
@@ -19,6 +21,7 @@ class AddPupilSection extends StatefulWidget {
 
 Pupil pupil = new Pupil();
 Uuid uuid = new Uuid();
+
 class AddPupilSectionstate extends State<AddPupilSection> {
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -27,6 +30,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   String _address;
   @override
   Widget build(BuildContext context) {
+    Logger _logger = Logger(this.runtimeType.toString());
+    _logger.shout(
+        'Is Running On Physical Device? ${DeviceInfo.isOnPhysicalDevice}');
     final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
     final timeFormat = DateFormat("h:mm a");
     Validations validations = new Validations();
@@ -315,16 +321,23 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             child: RaisedButton(
                               onPressed: () {
                                 print('called');
-                                print('year: '+ date_of_birth.substring(6,10));
-                                print('day: '+date_of_birth.substring(0,2));
+                                print(
+                                    'year: ' + date_of_birth.substring(6, 10));
+                                print('day: ' + date_of_birth.substring(0, 2));
                                 print(date_of_birth);
-                                print('month: '+date_of_birth.substring(3,5));
+                                print(
+                                    'month: ' + date_of_birth.substring(3, 5));
                                 pupil.id = uuid.v4();
                                 pupil.name = nameController.text;
                                 pupil.phoneNumber = phoneController.text;
                                 pupil.address = addressController.text;
-                                pupil.dateOfBirth =
-                                    DateTime.parse(date_of_birth.substring(6,10)+'-'+date_of_birth.substring(3,5)+'-'+date_of_birth.substring(0,2)+' 00:00:00.000');
+                                pupil.dateOfBirth = DateTime.parse(
+                                    date_of_birth.substring(6, 10) +
+                                        '-' +
+                                        date_of_birth.substring(3, 5) +
+                                        '-' +
+                                        date_of_birth.substring(0, 2) +
+                                        ' 00:00:00.000');
                                 pupil.eyeTest = switchOn_eyeTest;
                                 pupil.previousExperience = switchOn_prviouseExp;
                                 pupil.theoryRecord = switchOn_theoryRecord;

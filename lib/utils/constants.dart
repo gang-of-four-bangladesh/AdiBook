@@ -5,6 +5,11 @@ class FirestorePath {
   static const String PupilsOfAnInstructor = '$Instructor/%s/pupils';
 }
 
+class StoragePath {
+  static const String LogsFolder = '/logs';
+  static const String UserLogsFolder = '$LogsFolder/%s';
+}
+
 class PageRoutes {
   static const String HomePage = '/home';
   static const String LoginPage = '/login';
@@ -17,6 +22,7 @@ class SharedPreferenceKeys {
   static const String InstructorIdKey = 'instructor_id_key';
   static const String HasInstructorVerifiedKey = 'has_instructor_verified_key';
   static const String LoggedInUserIdKey = 'last_logged_in_user_id_key';
+  static const String LogFileLastUploadedAtKey = 'log_file_last_uploaded_at_key';
 }
 
 class EnvironmentStatus {
