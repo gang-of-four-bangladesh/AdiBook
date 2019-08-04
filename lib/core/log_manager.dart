@@ -66,7 +66,8 @@ class StorageLogWriter implements LogWriter {
     print('Last Uploaded at: $lastUploadDateTime');
     var lastUploadedAt = DateTime.parse(lastUploadDateTime);
     var difference = DateTime.now().difference(lastUploadedAt).inSeconds;
-    print("lastUploadedAt:$lastUploadedAt, currentTime:${DateTime.now()}, Duration: $difference");
+    print(
+        "lastUploadedAt:$lastUploadedAt, currentTime:${DateTime.now()}, Duration: $difference");
     if (difference >= 59) {
       print("It's time for upload log to firebase storage.");
       return true;
@@ -80,8 +81,20 @@ class StorageLogWriter implements LogWriter {
     var sharedPref = await SharedPreferences.getInstance();
     final StorageReference storageRef =
         FirebaseStorage.instance.ref().child(folderPath).child(sourceFile);
-    sharedPref.setString(SharedPreferenceKeys.LogFileLastUploadedAtKey, DateTime.now().toString());
+    sharedPref.setString(SharedPreferenceKeys.LogFileLastUploadedAtKey,
+        DateTime.now().toString());
     storageRef.putFile(file, StorageMetadata(contentType: 'text/plain'));
+    await _deleteFileIfSizeExits(file);
+  }
+
+  Future<void> _deleteFileIfSizeExits(File file) async {
+    var fileSize = await file.length() / (1024 * 1024); //MB
+    print('Log file size in disk $fileSize KB.');
+    if (fileSize >= 1) //Greater than or equal 1 MB
+    {
+      print('Deleting log file.');
+      await file.delete();
+    }
   }
 }
 
