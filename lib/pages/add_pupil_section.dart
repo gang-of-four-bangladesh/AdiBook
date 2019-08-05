@@ -1,5 +1,9 @@
+import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/device_info.dart';
+import 'package:adibook/utils/pupil_manager.dart';
+import 'package:adibook/utils/user_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
@@ -28,6 +32,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   bool _autoValidate;
   String _phone;
   String _address;
+  var pupilManager = new PupilManager();
   @override
   Widget build(BuildContext context) {
     Logger _logger = Logger(this.runtimeType.toString());
@@ -319,7 +324,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             minWidth: 100.0,
                             height: 30.0,
                             child: RaisedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 print('called');
                                 print(
                                     'year: ' + date_of_birth.substring(6, 10));
@@ -341,7 +346,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 pupil.eyeTest = switchOn_eyeTest;
                                 pupil.previousExperience = switchOn_prviouseExp;
                                 pupil.theoryRecord = switchOn_theoryRecord;
-                                pupil.add();
+                                await pupil.add();
+                                var instructor = await Instructor(id: await UserManager.currentUserId).getInstructor();
+                                await pupilManager.tagPupil(pupil, instructor);
+                                await pupilManager.tagInstructor(pupil, instructor);
                               },
                               //onPressed: _validateInputs,
                               color: Color(

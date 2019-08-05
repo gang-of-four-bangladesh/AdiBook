@@ -1,5 +1,6 @@
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
+import 'package:adibook/utils/user_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:adibook/pages/common_function.dart';
@@ -203,17 +204,19 @@ class _LoginPageState extends State<LoginPage> {
     }
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: this._smsCodeController.text);
-    await _signInUser(authCredential);
+    var user = await _signInUser(authCredential);
+    await UserManager.createUser(id: user.uid, userType: UserType.Instructor);
     Navigator.of(context).pushNamed(PageRoutes.HomePage);
   }
 
-  Future<void> _signInUser(AuthCredential authCredential) async {
+  Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
     var user = await FirebaseAuth.instance.signInWithCredential(authCredential);
     final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
     assert(user.uid == currentUser.uid);
     var message =
         'signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
     _logger.fine(message);
+    return currentUser;
   }
 
   /// Sends the code to the specified phone number.

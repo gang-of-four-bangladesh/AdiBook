@@ -1,3 +1,4 @@
+import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sprintf/sprintf.dart';
@@ -51,14 +52,31 @@ class Instructor {
     };
   }
 
+  Future<void> _snapshotToInstructor(DocumentSnapshot snapshot) async {
+    print('org:${snapshot[Instructor.CreatedAtKey]} coverted:${snapshot[Instructor.CreatedAtKey].toDate()}, id: ${snapshot.documentID}');
+    this.id = snapshot.documentID;
+    this.name = snapshot[Instructor.NameKey];
+    this.address = snapshot[Instructor.AddressKey];
+    this.phoneNumber = snapshot[Instructor.PhoneNumberKey];
+    this.licenseNo = snapshot[Instructor.LicenseKey];
+    this.dateOfBirth = TypeConversion.timeStampToDateTime(snapshot[Instructor.DateOfBirthKey]);
+    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[Instructor.CreatedAtKey]);
+    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[Instructor.UpdatedAtKey]);
+  }
+
+  Future<Instructor> getInstructor() async {
+    await _snapshotToInstructor(await this.get());
+    return this;
+  }
+
   Future getPupils(String instructorId) async {
-    var path = sprintf(FirestorePath.PupilsOfAnInstructor, [instructorId]);
+    var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [instructorId]);
     return Firestore.instance.collection(path).getDocuments();
   }
 
   Future<DocumentSnapshot> get() async {
     return Firestore.instance
-        .collection(FirestorePath.Instructor)
+        .collection(FirestorePath.InstructorCollection)
         .document(this.id)
         .get();
   }
@@ -66,7 +84,7 @@ class Instructor {
   Future<bool> add() async {
     try {
       await Firestore.instance
-          .collection(FirestorePath.Instructor)
+          .collection(FirestorePath.InstructorCollection)
           .document(this.id)
           .setData(this.toJson());
       print('$this created successfully.');
@@ -81,7 +99,7 @@ class Instructor {
     try {
       this.updatedAt = DateTime.now().toUtc();
       await Firestore.instance
-          .collection(FirestorePath.Instructor)
+          .collection(FirestorePath.InstructorCollection)
           .document(this.id)
           .updateData(this.toJson());
       print('$this updated successfully.');
@@ -95,7 +113,7 @@ class Instructor {
   Future<bool> delete() async {
     try {
       await Firestore.instance
-          .collection(FirestorePath.Instructor)
+          .collection(FirestorePath.InstructorCollection)
           .document(this.id)
           .delete();
       print('$this deleted successfully.');

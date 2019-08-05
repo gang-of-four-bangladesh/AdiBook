@@ -1,23 +1,42 @@
+import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/pupil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logging/logging.dart';
+import 'package:sprintf/sprintf.dart';
 import 'constants.dart';
-import '../models/pupil.dart';
 
 class PupilManager {
-  CollectionReference get instructorCollection =>
-      Firestore.instance.collection(FirestorePath.Instructor);
+  static const String PupilReferenceTaggedAtKey = 'pRef';
+  static const String InstructorReferenceTaggedAtKey = 'iRef';
+  Future<void> tagPupil(Pupil pupil, Instructor instructor) async {
+    var _logger = Logger(this.runtimeType.toString());
+    var ref = Firestore.instance
+        .collection(FirestorePath.InstructorCollection)
+        .document(pupil.id);
+    var path =
+        sprintf(FirestorePath.PupilsOfAnInstructorCollection, [instructor.id]);
+    var data = {
+      PupilReferenceTaggedAtKey: ref,
+      Pupil.NameKey: pupil.name,
+    };
+    await Firestore.instance.collection(path).document(pupil.id).setData(data);
+    _logger.fine('pupil ${pupil.id} tagged to instructor ${instructor.id}.');
+  }
 
-  Future add(Pupil pupil) async {
-    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-    String pupilCollectionPath = "${currentUser.uid}/${FirestorePath.Pupils}";
-    final DocumentReference document = instructorCollection.document(pupilCollectionPath);
-    try {
-      document.setData(pupil.toJson());
-      print('$pupil created successfully.');
-      return true;
-    } catch (e) {
-      print('user creation failed. $e');
-      return false;
-    }
+  Future<void> tagInstructor(Pupil pupil, Instructor instructor) async {
+    var _logger = Logger(this.runtimeType.toString());
+    var ref = Firestore.instance
+        .collection(FirestorePath.InstructorCollection)
+        .document(instructor.id);
+    var path = sprintf(FirestorePath.InstructorsOfAPupilColection, [pupil.id]);
+    var data = {
+      InstructorReferenceTaggedAtKey: ref,
+      Instructor.NameKey: instructor.name,
+    };
+    await Firestore.instance
+        .collection(path)
+        .document(instructor.id)
+        .setData(data);
+    _logger.fine('instructor ${instructor.id} tagged to pupil ${pupil.id}.');
   }
 }

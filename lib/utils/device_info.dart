@@ -5,6 +5,7 @@ import 'package:device_info/device_info.dart';
 class DeviceInfo {
   static final DeviceInfoPlugin _deviceInfoPlugin = new DeviceInfoPlugin();
   static Map<String, dynamic> _deviceData;
+  DeviceInfo._();
   static Future<void> initializeDeviceState() async{
     await _initPlatformState();
   }

@@ -1,3 +1,4 @@
+import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,22 +44,25 @@ class User {
   }
 
   Future<void> _snapshotToUser(DocumentSnapshot snapshot) async {
-    this.id = snapshot[User.IdKey];
+    this.id = snapshot.documentID;
     this.name = snapshot[User.NameKey];
     this.phoneNumber = snapshot[User.PhoneNumberKey];
+    this.userType = snapshot[User.UserTypeKey];
     this.isVerified = snapshot[User.IsVerifiedKey];
-    this.createdAt = snapshot[User.CreatedAtKey];
-    this.updatedAt = snapshot[User.UpdatedAtKey];
+    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
+    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);
   }
 
   Future<User> getUser() async {
-    await _snapshotToUser(await this.get());
+    var userSanp = await this.get();
+    if (!userSanp.exists) return null;
+    await _snapshotToUser(userSanp);
     return this;
   }
 
   Future<DocumentSnapshot> get() async {
     return Firestore.instance
-        .collection(FirestorePath.User)
+        .collection(FirestorePath.UserCollection)
         .document(this.id)
         .get();
   }
@@ -66,7 +70,7 @@ class User {
   Future<bool> add() async {
     try {
       await Firestore.instance
-          .collection(FirestorePath.User)
+          .collection(FirestorePath.UserCollection)
           .document(this.id)
           .setData(this._toJson());
       print('$this created successfully.');
@@ -81,7 +85,7 @@ class User {
     try {
       this.updatedAt = DateTime.now().toUtc();
       await Firestore.instance
-          .collection(FirestorePath.User)
+          .collection(FirestorePath.UserCollection)
           .document(this.id)
           .updateData(this._toJson());
       print('$this updated successfully.');
@@ -95,7 +99,7 @@ class User {
   Future<bool> delete() async {
     try {
       await Firestore.instance
-          .collection(FirestorePath.User)
+          .collection(FirestorePath.UserCollection)
           .document(this.id)
           .delete();
       print('$this deleted successfully.');

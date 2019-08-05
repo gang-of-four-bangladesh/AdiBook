@@ -1,8 +1,9 @@
 class FirestorePath {
-  static const String Instructor = 'instructors';
-  static const String Pupils = 'pupils';
-  static const String User = 'users';
-  static const String PupilsOfAnInstructor = '$Instructor/%s/pupils';
+  static const String InstructorCollection = 'instructors';
+  static const String UserCollection = 'users';
+  static const String PupilCollection = 'pupils';
+  static const String PupilsOfAnInstructorCollection = '$InstructorCollection/%s/$PupilCollection';
+  static const String InstructorsOfAPupilColection = '$PupilCollection/%s/$InstructorCollection';
 }
 
 class StoragePath {

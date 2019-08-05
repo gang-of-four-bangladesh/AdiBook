@@ -1,3 +1,5 @@
+import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/models/instructor.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -62,9 +64,28 @@ class Pupil {
     };
   }
 
+  Future<void> _snapshotToPupil(DocumentSnapshot snapshot) async {
+    this.id = snapshot.documentID;
+    this.name = snapshot[Pupil.NameKey];
+    this.address = snapshot[Pupil.AddressKey];
+    this.phoneNumber = snapshot[Pupil.PhoneNumberKey];
+    this.licenseNo = snapshot[Pupil.LicenseKey];
+    this.dateOfBirth = TypeConversion.timeStampToDateTime(snapshot[Pupil.DateOfBirthKey]);
+    this.eyeTest = snapshot[Pupil.EyeTestKey];
+    this.theoryRecord = snapshot[Pupil.TheoryRecordKey];
+    this.previousExperience = snapshot[Pupil.PreviousExperiencehKey];
+    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[Pupil.CreatedAtKey]);
+    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
+  }
+
+  Future<Pupil> getPupil() async {
+    await _snapshotToPupil(await this.get());
+    return this;
+  }
+
   Future get() async {
     return Firestore.instance
-        .collection(FirestorePath.Pupils)
+        .collection(FirestorePath.PupilCollection)
         .document(this.id)
         .get();
   }
@@ -72,7 +93,7 @@ class Pupil {
   Future add() async {
     try {
       Firestore.instance
-          .collection(FirestorePath.Pupils)
+          .collection(FirestorePath.PupilCollection)
           .document(this.id)
           .setData(this.toJson());
       print('$this created successfully.');
@@ -87,7 +108,7 @@ class Pupil {
     try {
       this.updatedAt = DateTime.now().toUtc();
       Firestore.instance
-          .collection(FirestorePath.Pupils)
+          .collection(FirestorePath.PupilCollection)
           .document(this.id)
           .updateData(this.toJson());
       print('$this created successfully.');
@@ -100,7 +121,7 @@ class Pupil {
 
   Future delete() async {
     return Firestore.instance
-        .collection(FirestorePath.Pupils)
+        .collection(FirestorePath.PupilCollection)
         .document(this.id)
         .delete();
   }
