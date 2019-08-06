@@ -47,7 +47,7 @@ class User {
     this.id = snapshot.documentID;
     this.name = snapshot[User.NameKey];
     this.phoneNumber = snapshot[User.PhoneNumberKey];
-    this.userType = snapshot[User.UserTypeKey];
+    this.userType = UserType.values[snapshot[User.UserTypeKey]];
     this.isVerified = snapshot[User.IsVerifiedKey];
     this.createdAt = TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
     this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);

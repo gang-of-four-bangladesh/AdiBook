@@ -3,6 +3,7 @@ import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/add_pupil_section.dart';
 import 'package:adibook/pages/common_function.dart';
 import 'package:adibook/pages/pupil_activity.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/user_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,10 +19,17 @@ class PupilListSection extends StatefulWidget {
 }
 
 class PupilPistSectionState extends State<PupilListSection> {
+  String instructorId;
+  @override
+  void initState() async {
+    super.initState();
+    this.instructorId = await UserManager.currentUserId;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('pupils').snapshots(),
+      stream: Instructor(id: instructorId).getPupils().asStream(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {

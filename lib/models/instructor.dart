@@ -69,8 +69,8 @@ class Instructor {
     return this;
   }
 
-  Future getPupils(String instructorId) async {
-    var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [instructorId]);
+  Future<QuerySnapshot> getPupils() async {
+    var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [this.id]);
     return Firestore.instance.collection(path).getDocuments();
   }
 
