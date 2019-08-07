@@ -3,9 +3,7 @@ import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:adibook/utils/pupil_manager.dart';
 import 'package:adibook/utils/user_manager.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 import 'common_function.dart';
 import 'package:adibook/pages/validation.dart';
@@ -18,7 +16,6 @@ CommonClass commonClass = new CommonClass();
 class AddPupilSection extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return AddPupilSectionstate();
   }
 }
@@ -35,9 +32,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   var pupilManager = new PupilManager();
   @override
   Widget build(BuildContext context) {
-    Logger _logger = Logger(this.runtimeType.toString());
-    _logger.shout(
-        'Is Running On Physical Device? ${DeviceInfo.isOnPhysicalDevice}');
     final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
     final timeFormat = DateFormat("h:mm a");
     Validations validations = new Validations();

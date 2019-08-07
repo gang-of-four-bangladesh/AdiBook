@@ -1,17 +1,9 @@
 import 'package:adibook/models/instructor.dart';
-import 'package:adibook/models/pupil.dart';
-import 'package:adibook/pages/add_pupil_section.dart';
-import 'package:adibook/pages/common_function.dart';
 import 'package:adibook/pages/pupil_activity.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/user_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter/cupertino.dart';
-
-CommonClass commonClass = new CommonClass();
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -19,18 +11,26 @@ class PupilListSection extends StatefulWidget {
 }
 
 class PupilPistSectionState extends State<PupilListSection> {
-  String instructorId;
+  Stream<QuerySnapshot> _querySnapshot;
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    this.instructorId = await UserManager.currentUserId;
+    _loadPupilsData();
+  }
+
+  void _loadPupilsData() async {
+    var instructorId = await UserManager.currentUserId;
+    setState(() {
+      _querySnapshot = Instructor(id: instructorId).getPupils().asStream();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Instructor(id: instructorId).getPupils().asStream(),
+      stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.data == null) return new Text('Please wait..');
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
