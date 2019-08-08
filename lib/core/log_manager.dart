@@ -89,7 +89,7 @@ class StorageLogWriter implements LogWriter {
 
   Future<void> _deleteFileIfSizeExits(File file) async {
     var fileSize = await file.length() / (1024 * 1024); //MB
-    print('Log file size in disk $fileSize KB.');
+    print('Log file size in disk $fileSize MB.');
     if (fileSize >= 1) //Greater than or equal 1 MB
     {
       print('Deleting log file.');

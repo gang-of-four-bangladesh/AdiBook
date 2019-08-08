@@ -1,7 +1,10 @@
 import 'package:adibook/app.dart';
 import 'package:adibook/core/log_manager.dart';
+import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
+import 'package:adibook/pages/pupil_home_page.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,8 @@ import 'package:logging/logging.dart';
 
 Future main() async {
   await DeviceInfo.initializeDeviceState();
-  var logWriter = DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
+  var logWriter =
+      DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
   await LoggerSetup.setupLogger(logWriter: logWriter);
   var _logger = Logger('main');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -20,7 +24,10 @@ Future main() async {
   _logger.info('FirebaseAuth.instance.currentUser()? $currentUser');
   if (currentUser != null) {
     _logger.info('Logged in user $currentUser');
-    _defaultPage = HomePage();
+    var adiBookUser = await User(id: currentUser.uid).getUser();
+    _defaultPage = adiBookUser.userType == UserType.Instructor
+        ? HomePage()
+        : PupilHomePage();
   }
   runApp(AdiBookApp(_defaultPage));
   _logger.info(

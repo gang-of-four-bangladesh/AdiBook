@@ -1,4 +1,3 @@
-import 'package:adibook/models/user.dart';
 import 'package:adibook/utils/user_manager.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +8,13 @@ import 'message_list_section.dart';
 import 'more_list_section.dart';
 import 'pupil_list_section.dart';
 
-CommonClass commonClass = new CommonClass();
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  CommonClass commonClass = new CommonClass();
   int _selectedPage = 0;
   String appbarTitle = "Pupil";
   setAppbarTitle(int selectedPage) {

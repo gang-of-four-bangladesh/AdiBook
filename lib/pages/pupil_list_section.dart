@@ -4,6 +4,7 @@ import 'package:adibook/utils/user_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logging/logging.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -27,19 +28,21 @@ class PupilPistSectionState extends State<PupilListSection> {
 
   @override
   Widget build(BuildContext context) {
+    Logger _logger = Logger(this.runtimeType.toString());
+    _logger.fine('Loading pupils listing page.');
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data == null) return new Text('Please wait..');
-        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        if (snapshot.data == null) return Text('Please wait..');
+        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return new Text('Loading...');
+            return Text('Loading...');
           default:
-            return new ListView(
+            return ListView(
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
-                  return new ListTile(
+                  return ListTile(
                     trailing: Icon(Icons.person),
                     title: Text(document["nam"]),
                     onTap: () {

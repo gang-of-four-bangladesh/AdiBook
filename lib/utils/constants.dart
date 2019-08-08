@@ -17,6 +17,7 @@ class PageRoutes {
   static const String PupilRegistrationPage = '/pupil_registration';
   static const String ImageUploadPage = '/image_upload';
   static const String PupilActivity = '/pupil_activity';
+  static const String PupilHomePage = '/pupil_home_page';
 }
 
 class SharedPreferenceKeys {
