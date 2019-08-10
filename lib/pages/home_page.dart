@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                   commonClass.hexColor('#03D1BF'),
                 ),
                 onPressed: () async {
-                  await UserManager.logout();
+                  await UserManager().logout();
                   Navigator.of(context).pop();
                 },
                 shape: new RoundedRectangleBorder(

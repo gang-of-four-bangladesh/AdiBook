@@ -35,7 +35,7 @@ class ConsoleLogWriter implements LogWriter {
 class StorageLogWriter implements LogWriter {
   @override
   writeLog(String message) async {
-    var currentUserId = await UserManager.currentUserId;
+    var currentUserId = await UserManager().currentUserId;
     if (currentUserId == null) currentUserId = 'anonymous';
     var currentDate = DateFormat('yyyyMMdd').format(DateTime.now().toUtc());
     var fileName = "${currentDate}_$currentUserId.txt";

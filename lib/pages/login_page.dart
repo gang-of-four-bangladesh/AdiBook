@@ -1,3 +1,4 @@
+import 'package:adibook/models/user.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:adibook/utils/user_manager.dart';
@@ -193,9 +194,11 @@ class _LoginPageState extends State<LoginPage> {
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: this._smsCodeController.text);
     var user = await _signInUser(authCredential);
-    await UserManager.createUser(id: user.uid, userType: this._selectedUserType);
-    _logger.fine('User ${user.uid} created in firestore Users collection.');
-    Navigator.of(context).pushNamed(PageRoutes.HomePage);
+    await UserManager()
+        .createUser(id: user.uid, userType: this._selectedUserType);
+    await User(id: user.uid, userType: this._selectedUserType).update();
+    Navigator.of(context)
+        .pushNamed(UserManager().landingPagePathOnUserType(this._selectedUserType));
   }
 
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
@@ -233,9 +236,11 @@ class _LoginPageState extends State<LoginPage> {
       var message =
           'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
       _logger.fine(message);
-      await UserManager.createUser(id: user.uid, userType: this._selectedUserType);
-      _logger.fine('User ${user.uid} created in firestore Users collection.');
-      Navigator.of(context).pushNamed(PageRoutes.HomePage);
+      await UserManager()
+          .createUser(id: user.uid, userType: this._selectedUserType);
+      await User(id: user.uid, userType: this._selectedUserType).update();
+      Navigator.of(context)
+          .pushNamed(UserManager().landingPagePathOnUserType(this._selectedUserType));
     };
 
     final PhoneVerificationFailed verificationFailed =

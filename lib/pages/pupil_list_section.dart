@@ -20,7 +20,7 @@ class PupilPistSectionState extends State<PupilListSection> {
   }
 
   void _loadPupilsData() async {
-    var instructorId = await UserManager.currentUserId;
+    var instructorId = await UserManager().currentUserId;
     setState(() {
       _querySnapshot = Instructor(id: instructorId).getPupils().asStream();
     });

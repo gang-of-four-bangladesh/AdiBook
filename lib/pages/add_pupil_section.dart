@@ -1,6 +1,5 @@
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
-import 'package:adibook/utils/device_info.dart';
 import 'package:adibook/utils/pupil_manager.dart';
 import 'package:adibook/utils/user_manager.dart';
 import 'package:flutter/material.dart';
@@ -341,7 +340,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 pupil.previousExperience = switchOn_prviouseExp;
                                 pupil.theoryRecord = switchOn_theoryRecord;
                                 await pupil.add();
-                                var instructor = await Instructor(id: await UserManager.currentUserId).getInstructor();
+                                var instructor = await Instructor(id: await UserManager().currentUserId).getInstructor();
                                 await pupilManager.tagPupil(pupil, instructor);
                                 await pupilManager.tagInstructor(pupil, instructor);
                               },
