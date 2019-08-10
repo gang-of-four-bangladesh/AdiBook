@@ -2,8 +2,13 @@ class FirestorePath {
   static const String InstructorCollection = 'instructors';
   static const String UserCollection = 'users';
   static const String PupilCollection = 'pupils';
-  static const String PupilsOfAnInstructorCollection = '$InstructorCollection/%s/$PupilCollection';
-  static const String InstructorsOfAPupilColection = '$PupilCollection/%s/$InstructorCollection';
+  static const String LessionCollection = 'lessons';
+  static const String PupilsOfAnInstructorCollection =
+      '$InstructorCollection/%s/$PupilCollection';
+  static const String InstructorsOfAPupilColection =
+      '$PupilCollection/%s/$InstructorCollection';
+  static const String LessonsOfAPupilColection =
+      '$PupilCollection/%s/$LessionCollection';
 }
 
 class StoragePath {
@@ -24,7 +29,8 @@ class SharedPreferenceKeys {
   static const String InstructorIdKey = 'instructor_id_key';
   static const String HasInstructorVerifiedKey = 'has_instructor_verified_key';
   static const String LoggedInUserIdKey = 'last_logged_in_user_id_key';
-  static const String LogFileLastUploadedAtKey = 'log_file_last_uploaded_at_key';
+  static const String LogFileLastUploadedAtKey =
+      'log_file_last_uploaded_at_key';
 }
 
 class EnvironmentStatus {
@@ -46,5 +52,25 @@ const Map<String, String> CountryWisePhoneCode = {
   "Bangladesh (+880)": "+880"
 };
 
-enum RunningMode { Debug, Release, Profile }
-enum UserType { Pupil, Instructor, Admin }
+enum RunningMode {
+  Debug,
+  Release,
+  Profile,
+}
+enum UserType {
+  Pupil,
+  Instructor,
+  Admin,
+}
+enum VehicleType {
+  Manual,
+  Automatic,
+}
+enum LessionType {
+  Lession,
+  DrivingTest,
+  MockTest,
+  PassPlus,
+  Refresher,
+  Motorway
+}
