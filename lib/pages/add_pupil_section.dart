@@ -26,9 +26,12 @@ Uuid uuid = new Uuid();
 class AddPupilSectionstate extends State<AddPupilSection> {
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate;
+  bool _autoValidate = false;
+  String _name;
   String _phone;
   String _address;
+  String _drivingLicensce;
+
   var pupilManager = new PupilManager();
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     DateTime date;
     TimeOfDay time;
     void _eyeTestonSwitchChanged(bool value) {
-      print(switchOn_eyeTest);
+      switchOn_eyeTest = value;
     }
 
     void _theoryRecordonSwitchChanged(bool value) {
@@ -49,34 +52,26 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       switchOn_prviouseExp = value;
     }
 
+    void _makeEmpty() {
+      setState(() {
+        nameController.text = '';
+        addressController.text = '';
+        phoneController.text = '';
+        drivingLicenseController = null;
+        date_of_birth = '';
+        switchOn_eyeTest = false;
+        switchOn_theoryRecord = false;
+        switchOn_prviouseExp = false;
+      });
+    }
+
     return SingleChildScrollView(
       child: Container(
         child: Form(
+          key: _formKey,
+          autovalidate: _autoValidate,
           child: Center(
             child: Column(children: <Widget>[
-              //Picture
-              // Container(
-              //   padding: EdgeInsets.all(5.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     children: <Widget>[
-              //       Container(
-              //           width: 10.0,
-              //           height: 5.0,
-              //           child: Center(
-              //               child: ClipRRect(
-              //             borderRadius: BorderRadius.circular(5.0),
-              //             child: img == null
-              //                 ? Text(
-              //                     "No Image",
-              //                     style: TextStyle(fontWeight: FontWeight.bold),
-              //                   )
-              //                 : Image.file(img),
-              //           ))),
-              //     ],
-              //   ),
-              // ),
-
               //textBoxSection,
               Container(
                 padding: EdgeInsets.only(
@@ -87,10 +82,16 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextField(
+                          child: TextFormField(
                             keyboardType: TextInputType.text,
                             controller: nameController,
+                            validator: validations.validateText,
+                            onSaved: (String value) {
+                              _name = value;
+                            },
                             decoration: InputDecoration(
+                                suffixIcon:
+                                    Icon(Icons.star, color: Colors.red[600]),
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(
@@ -109,7 +110,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            validator: validateName,
                             onSaved: (String val) {
                               _address = val;
                             },
@@ -151,7 +151,13 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
                             controller: drivingLicenseController,
+                            validator: validations.validateText,
+                            onSaved: (String value) {
+                              _drivingLicensce = value;
+                            },
                             decoration: InputDecoration(
+                                suffixIcon:
+                                    Icon(Icons.star, color: Colors.red[600]),
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.cyan[300]),
@@ -227,7 +233,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     /*3*/
                     Switch(
                       value: switchOn_eyeTest,
-                      onChanged: _eyeTestonSwitchChanged,
+                      onChanged: (val) =>
+                          setState(() => switchOn_eyeTest = val),
                       activeColor: Color(
                         commonClass.hexColor('#03D1BF'),
                       ),
@@ -260,7 +267,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     /*3*/
                     Switch(
                       value: switchOn_theoryRecord,
-                      onChanged: _theoryRecordonSwitchChanged,
+                      onChanged: (val) =>
+                          setState(() => switchOn_theoryRecord = val),
                       activeColor: Color(
                         commonClass.hexColor('#03D1BF'),
                       ),
@@ -293,7 +301,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     /*3*/
                     Switch(
                       value: switchOn_prviouseExp,
-                      onChanged: _prviouseExponSwitchChanged,
+                      onChanged: (val) =>
+                          setState(() => switchOn_prviouseExp = val),
                       activeColor: Color(
                         commonClass.hexColor('#03D1BF'),
                       ),
@@ -315,42 +324,57 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           ButtonTheme(
-                            minWidth: 100.0,
-                            height: 30.0,
+                            minWidth: 180.0,
+                            height: 50.0,
                             child: RaisedButton(
-                              onPressed: () async {
-                                print('called');
-                                print(
-                                    'year: ' + date_of_birth.substring(6, 10));
-                                print('day: ' + date_of_birth.substring(0, 2));
-                                print(date_of_birth);
-                                print(
-                                    'month: ' + date_of_birth.substring(3, 5));
-                                pupil.id = uuid.v4();
-                                pupil.name = nameController.text;
-                                pupil.phoneNumber = phoneController.text;
-                                pupil.address = addressController.text;
-                                pupil.dateOfBirth = DateTime.parse(
-                                    date_of_birth.substring(6, 10) +
-                                        '-' +
-                                        date_of_birth.substring(3, 5) +
-                                        '-' +
-                                        date_of_birth.substring(0, 2) +
-                                        ' 00:00:00.000');
-                                pupil.eyeTest = switchOn_eyeTest;
-                                pupil.previousExperience = switchOn_prviouseExp;
-                                pupil.theoryRecord = switchOn_theoryRecord;
-                                await pupil.add();
-                                var instructor = await Instructor(id: await UserManager.currentUserId).getInstructor();
-                                await pupilManager.tagPupil(pupil, instructor);
-                                await pupilManager.tagInstructor(pupil, instructor);
-                              },
+                              onPressed: _validateInputs,
+                              // == true
+                              //     ? () async {
+                              //         print('called');
+                              //         print('year: ' +
+                              //             date_of_birth.substring(6, 10));
+                              //         print('day: ' +
+                              //             date_of_birth.substring(0, 2));
+                              //         print(date_of_birth);
+                              //         print('month: ' +
+                              //             date_of_birth.substring(3, 5));
+                              //         pupil.id = uuid.v4();
+                              //         pupil.name = nameController.text;
+                              //         pupil.phoneNumber = phoneController.text;
+                              //         pupil.address = addressController.text;
+                              //         pupil.dateOfBirth = DateTime.parse(
+                              //             date_of_birth.substring(6, 10) +
+                              //                 '-' +
+                              //                 date_of_birth.substring(3, 5) +
+                              //                 '-' +
+                              //                 date_of_birth.substring(0, 2) +
+                              //                 ' 00:00:00.000');
+                              //         pupil.eyeTest = switchOn_eyeTest;
+                              //         pupil.previousExperience =
+                              //             switchOn_prviouseExp;
+                              //         pupil.theoryRecord =
+                              //             switchOn_theoryRecord;
+                              //         await pupil.add();
+                              //         var instructor = await Instructor(
+                              //                 id: await UserManager
+                              //                     .currentUserId)
+                              //             .getInstructor();
+                              //         await pupilManager.tagPupil(
+                              //             pupil, instructor);
+                              //         await pupilManager.tagInstructor(
+                              //             pupil, instructor);
+                              //         _makeEmpty();
+                              //         commonClass.getSnackbar(
+                              //             "Data save successfully", context);
+                              //       }
+                              //     : commonClass.getSnackbar(
+                              //         "data failed to save !!!", context),
                               //onPressed: _validateInputs,
                               color: Color(
                                 commonClass.hexColor('#03D1BF'),
                               ),
                               child: Text(
-                                "Add",
+                                "Save",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -358,35 +382,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               ),
                               shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      child: Column(
-                        children: <Widget>[
-                          ButtonTheme(
-                            minWidth: 100.0,
-                            height: 30.0,
-                            child: RaisedButton(
-                              color: Color(
-                                commonClass.hexColor('#03D1BF'),
-                              ),
-                              onPressed: () {
-                                dialogBoxPicture(context);
-                              },
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(8.0),
-                              ),
-                              child: Text(
-                                "Picture",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
                               ),
                             ),
                           )
@@ -403,18 +398,17 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     );
   }
 
-  void _validateInputs() {
+  bool _validateInputs() {
     commonClass.getSnackbar("called validation function", context);
     if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
       commonClass.getSnackbar("Valid", context);
+      return true;
       //_formKey.currentState.save();
     } else {
       commonClass.getSnackbar("Invalid", context);
 //    If all data are not valid then start auto validation.
-      setState(() {
-        //_autoValidate = true;
-      });
+      return false;
     }
   }
 
@@ -480,7 +474,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: date_of_birth == ''
+          ? selectedDate
+          : DateTime.parse(date_of_birth.substring(6, 10) +
+              '-' +
+              date_of_birth.substring(3, 5) +
+              '-' +
+              date_of_birth.substring(0, 2) +
+              ' 00:00:00.000'),
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
@@ -492,29 +493,4 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       );
     }
   }
-}
-
-String validateName(String value) {
-  if (value.length < 3)
-    return 'Name must be more than 2 charater';
-  else
-    return null;
-}
-
-String validateMobile(String value) {
-// Indian Mobile number are of 10 digit only
-  if (value.length != 10)
-    return 'Mobile Number must be of 10 digit';
-  else
-    return null;
-}
-
-String validateEmail(String value) {
-  Pattern pattern =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regex = new RegExp(pattern);
-  if (!regex.hasMatch(value))
-    return 'Enter Valid Email';
-  else
-    return null;
 }
