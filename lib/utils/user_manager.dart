@@ -1,7 +1,7 @@
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/models/user.dart';
-import 'package:adibook/pages/home_page.dart';
+import 'package:adibook/pages/instructor_home_page.dart';
 import 'package:adibook/pages/pupil_home_page.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +19,11 @@ class UserManager {
     var userId = await currentUserId;
     if (userId == null) return null;
     return User(id: userId).getUser();
+  }
+
+  Future<UserType> get currentUserType async {
+    var user = await currentUser;
+    return user.userType;
   }
 
   Future<void> logout() async {
@@ -57,6 +62,6 @@ class UserManager {
   Widget landingPageOnUserType(UserType userType) {
     return userType == UserType.Pupil
         ? PupilHomePage()
-        : HomePage();
+        : InstructorHomePage();
   }
 }

@@ -17,7 +17,7 @@ Future main() async {
   var _logger = Logger('main');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Widget _defaultPage = LoginPage();
-
+  
   var currentUser = await FirebaseAuth.instance.currentUser();
   _logger.info('FirebaseAuth.instance.currentUser()? $currentUser');
   if (currentUser != null) {

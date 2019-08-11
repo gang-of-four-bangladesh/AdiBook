@@ -1,13 +1,11 @@
-import 'package:adibook/pages/common_function.dart';
 import 'package:flutter/material.dart';
 
-class MessageListSection extends StatefulWidget {
+class AccountSection extends StatefulWidget {
   @override
-  _MessagelistsectionState createState() => _MessagelistsectionState();
+  _AccountSectionState createState() => _AccountSectionState();
 }
 
-class _MessagelistsectionState extends State<MessageListSection> {
-  CommonClass commonClass = new CommonClass();
+class _AccountSectionState extends State<AccountSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +25,6 @@ class _MessagelistsectionState extends State<MessageListSection> {
             ),
           );
         },
-        //separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
