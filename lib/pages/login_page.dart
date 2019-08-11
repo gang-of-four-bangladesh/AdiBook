@@ -1,3 +1,4 @@
+import 'package:adibook/models/user.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:adibook/utils/user_manager.dart';
@@ -15,16 +16,14 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-enum SingedBy { instructor, pupil }
-
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _countryCodeController = TextEditingController();
   TextEditingController _smsCodeController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   String verificationId;
-  SingedBy _signedBy = SingedBy.instructor;
   String _selectedCountry = CountryWisePhoneCode.keys.first;
   Logger _logger;
+  UserType _selectedUserType = UserType.Instructor;
 
   _LoginPageState() {
     if (!DeviceInfo.isOnPhysicalDevice) {
@@ -42,9 +41,8 @@ class _LoginPageState extends State<LoginPage> {
         print("tap");
       };
     }
-    var screen_width = MediaQuery.of(context).size.width;
-    var screen_height = MediaQuery.of(context).size.height;
-    var one_fourth_width = screen_width / 6;
+    var _screenWidth = MediaQuery.of(context).size.width;
+    var _oneFourthWidth = _screenWidth / 6;
     this._countryCodeController.text = "+44";
     return new Scaffold(
       appBar: new AppBar(
@@ -55,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
       body: new Center(
         child: Padding(
           padding: EdgeInsets.only(
-            left: one_fourth_width,
-            right: one_fourth_width,
+            left: _oneFourthWidth,
+            right: _oneFourthWidth,
             top: 20,
           ),
           child: new Column(
@@ -72,21 +70,34 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 20,
               ),
-              // TextField(
-              //   //controller: _countryCodeController,
-              //   readOnly: true,
-              //   enabled: false,
-              //   textAlignVertical: TextAlignVertical.bottom,
-              //   decoration: InputDecoration(
-              //     hintText: "United Kingdom (+44)",
-              //     hintStyle: TextStyle(color: Colors.green),
-              //   ),
-              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Radio(
+                    value: UserType.Instructor,
+                    groupValue: _selectedUserType,
+                    onChanged: _onUserTypeSelected,
+                  ),
+                  Text(
+                    'Instructor',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  Radio(
+                    value: UserType.Pupil,
+                    groupValue: _selectedUserType,
+                    onChanged: _onUserTypeSelected,
+                  ),
+                  Text(
+                    'Pupil',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
+              ),
               DropdownButton<String>(
                 items: CountryWisePhoneCode.keys.map((String country) {
-                  return new DropdownMenuItem<String>(
+                  return DropdownMenuItem<String>(
                     value: country,
-                    child: new Text(country),
+                    child: Text(country),
                   );
                 }).toList(),
                 onChanged: (String value) {
@@ -117,35 +128,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              // Align(
-              //   alignment: Alignment.centerRight,
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     children: <Widget>[
-              //       RadioListTile<SingedBy>(
-              //         title: const Text('Instructor'),
-              //         value: SingedBy.instructor,
-              //         groupValue: _signedBy,
-              //         onChanged: (SingedBy value) {
-              //           setState(() {
-              //             _signedBy = value;
-              //           });
-              //         },
-              //       ),
-              //       RadioListTile<SingedBy>(
-              //         title: const Text('Pupil'),
-              //         value: SingedBy.pupil,
-              //         groupValue: _signedBy,
-              //         onChanged: (SingedBy value) {
-              //           setState(() {
-              //             _signedBy = value;
-              //           });
-              //         },
-              //       ),
-              //     ],
-              //   ),
-              // ),
               TextField(
                 controller: _smsCodeController,
                 keyboardType: TextInputType.number,
@@ -187,6 +169,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Future _onUserTypeSelected(value) async {
+    setState(() {
+      this._selectedUserType = value;
+      _logger.info('User type $value selected.');
+    });
+  }
+
   /// Sign in using an sms code as input.
   void _onPressLoginButton() async {
     setState(() {
@@ -205,8 +194,11 @@ class _LoginPageState extends State<LoginPage> {
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: this._smsCodeController.text);
     var user = await _signInUser(authCredential);
-    await UserManager.createUser(id: user.uid, userType: UserType.Instructor);
-    Navigator.of(context).pushNamed(PageRoutes.HomePage);
+    await UserManager()
+        .createUser(id: user.uid, userType: this._selectedUserType);
+    await User(id: user.uid, userType: this._selectedUserType).update();
+    Navigator.of(context)
+        .pushNamed(UserManager().landingPagePathOnUserType(this._selectedUserType));
   }
 
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
@@ -244,7 +236,11 @@ class _LoginPageState extends State<LoginPage> {
       var message =
           'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
       _logger.fine(message);
-      Navigator.of(context).pushNamed(PageRoutes.HomePage);
+      await UserManager()
+          .createUser(id: user.uid, userType: this._selectedUserType);
+      await User(id: user.uid, userType: this._selectedUserType).update();
+      Navigator.of(context)
+          .pushNamed(UserManager().landingPagePathOnUserType(this._selectedUserType));
     };
 
     final PhoneVerificationFailed verificationFailed =

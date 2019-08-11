@@ -1,5 +1,4 @@
 import 'package:adibook/core/type_conversion.dart';
-import 'package:adibook/models/instructor.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

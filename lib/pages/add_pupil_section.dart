@@ -1,8 +1,5 @@
-import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
-import 'package:adibook/utils/device_info.dart';
 import 'package:adibook/utils/pupil_manager.dart';
-import 'package:adibook/utils/user_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'common_function.dart';
@@ -10,8 +7,6 @@ import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
-CommonClass commonClass = new CommonClass();
 
 class AddPupilSection extends StatefulWidget {
   @override
@@ -22,6 +17,7 @@ class AddPupilSection extends StatefulWidget {
 
 Pupil pupil = new Pupil();
 Uuid uuid = new Uuid();
+CommonClass commonClass = new CommonClass();
 
 class AddPupilSectionstate extends State<AddPupilSection> {
   // _formKey and _autoValidate
@@ -35,16 +31,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   var pupilManager = new PupilManager();
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
-    final timeFormat = DateFormat("h:mm a");
     Validations validations = new Validations();
-    DateTime date;
-    TimeOfDay time;
-    void _eyeTestonSwitchChanged(bool value) {
+    Future _eyeTestonSwitchChanged(bool value) async {
       switchOn_eyeTest = value;
     }
 
-    void _theoryRecordonSwitchChanged(bool value) {
+    Future _theoryRecordonSwitchChanged(bool value) async {
       switchOn_theoryRecord = value;
     }
 

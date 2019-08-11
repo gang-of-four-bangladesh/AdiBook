@@ -35,7 +35,7 @@ class ConsoleLogWriter implements LogWriter {
 class StorageLogWriter implements LogWriter {
   @override
   writeLog(String message) async {
-    var currentUserId = await UserManager.currentUserId;
+    var currentUserId = await UserManager().currentUserId;
     if (currentUserId == null) currentUserId = 'anonymous';
     var currentDate = DateFormat('yyyyMMdd').format(DateTime.now().toUtc());
     var fileName = "${currentDate}_$currentUserId.txt";
@@ -89,7 +89,7 @@ class StorageLogWriter implements LogWriter {
 
   Future<void> _deleteFileIfSizeExits(File file) async {
     var fileSize = await file.length() / (1024 * 1024); //MB
-    print('Log file size in disk $fileSize KB.');
+    print('Log file size in disk $fileSize MB.');
     if (fileSize >= 1) //Greater than or equal 1 MB
     {
       print('Deleting log file.');
