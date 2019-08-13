@@ -1,5 +1,6 @@
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/image_upload.dart';
+import 'package:adibook/pages/instructor/progress_planner.dart';
 import 'package:adibook/pages/instructor/pupil_activity.dart';
 import 'package:adibook/pages/login_page.dart';
 import 'package:adibook/pages/pupil_registration.dart';
@@ -22,6 +23,7 @@ class AdiBookApp extends StatelessWidget {
             PupilRegistration(),
         PageRoutes.ImageUploadPage: (BuildContext context) => ImageUpload(),
         PageRoutes.PupilActivity: (BuildContext context) => PupilActivity(),
+        PageRoutes.ProgressPlannerPage: (BuildContext context) => ProgressPlanner(),
       },
     );
   }

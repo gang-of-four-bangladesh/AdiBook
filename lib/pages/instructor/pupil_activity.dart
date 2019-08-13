@@ -1,4 +1,5 @@
 import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 List pupilActivityListFirst = [
@@ -50,7 +51,10 @@ class PupilActivity extends StatelessWidget {
                           Icons.keyboard_arrow_right,
                           color: Colors.grey[300],
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(PageRoutes.ProgressPlannerPage);
+                        },
                       ),
               );
             },
