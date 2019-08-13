@@ -197,8 +197,7 @@ class _LoginPageState extends State<LoginPage> {
     await UserManager()
         .createUser(id: user.uid, userType: this._selectedUserType);
     await User(id: user.uid, userType: this._selectedUserType).update();
-    Navigator.of(context)
-        .pushNamed(UserManager().landingPagePathOnUserType(this._selectedUserType));
+    Navigator.of(context).pushNamed(PageRoutes.HomePage);
   }
 
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
@@ -239,8 +238,7 @@ class _LoginPageState extends State<LoginPage> {
       await UserManager()
           .createUser(id: user.uid, userType: this._selectedUserType);
       await User(id: user.uid, userType: this._selectedUserType).update();
-      Navigator.of(context)
-          .pushNamed(UserManager().landingPagePathOnUserType(this._selectedUserType));
+      Navigator.of(context).pushNamed(PageRoutes.HomePage);
     };
 
     final PhoneVerificationFailed verificationFailed =
@@ -271,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
     var userPhoneNumber =
         '${CountryWisePhoneCode[_selectedCountry]}${_phoneNumberController.text}';
     this._logger.info(
-        'User provided country code $_selectedCountry, User entered phone number ${_phoneNumberController.text}.');
+        'User provided country code $_selectedCountry, User entered phone number ${_phoneNumberController.text}, selected user type ${this._selectedUserType}.');
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: userPhoneNumber,
         timeout: const Duration(seconds: 5),

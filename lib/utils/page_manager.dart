@@ -8,30 +8,43 @@ import 'package:adibook/pages/pupil/me_section.dart';
 import 'package:adibook/pages/pupil/resources_section.dart';
 import 'package:adibook/pages/pupil_list_section.dart';
 import 'package:adibook/utils/constants.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class PageManager {
   List<WidgetConfiguration> get instructorWidgetsConfiguration {
-    return this._widgetList.where((w) => w.availableFor == UserType.Instructor).toList();
+    return this
+        ._widgetList
+        .where((w) => w.availableFor == UserType.Instructor)
+        .toList();
   }
 
   List<WidgetConfiguration> get pupilWidgetsConfiguration {
-    return this._widgetList.where((w) => w.availableFor == UserType.Pupil).toList();
+    return this
+        ._widgetList
+        .where((w) => w.availableFor == UserType.Pupil)
+        .toList();
   }
 
-  List<WidgetConfiguration> getWidgetsConfigurationByUserType(UserType userType) {
+  List<WidgetConfiguration> getWidgetsConfigurationByUserType(
+      UserType userType) {
     if (userType == UserType.Instructor)
       return this.instructorWidgetsConfiguration;
-    if (userType == UserType.Pupil)
-      return this.instructorWidgetsConfiguration;
+    if (userType == UserType.Pupil) return this.pupilWidgetsConfiguration;
     return [];
   }
 
   List<Widget> getWidgetsByUserType(UserType userType) {
     if (userType == UserType.Instructor)
-      return this.instructorWidgetsConfiguration.map((f) => f.widget).toList();
+      return this
+          .instructorWidgetsConfiguration
+          .map((f) => f.sectionWidget)
+          .toList();
     if (userType == UserType.Pupil)
-      return this.instructorWidgetsConfiguration.map((f) => f.widget).toList();
+      return this
+          .instructorWidgetsConfiguration
+          .map((f) => f.sectionWidget)
+          .toList();
     return [];
   }
 
@@ -41,63 +54,72 @@ class PageManager {
       appBarTitle: 'Pupil',
       bottomNavTitle: 'Pupil',
       availableFor: UserType.Instructor,
-      widget: PupilListSection(),
+      sectionWidget: PupilListSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 1,
       appBarTitle: 'Add Pupil',
       bottomNavTitle: 'Add Pupil',
       availableFor: UserType.Instructor,
-      widget: AddPupilSection(),
+      sectionWidget: AddPupilSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 2,
       appBarTitle: 'Diary',
       bottomNavTitle: 'Diary',
       availableFor: UserType.Instructor,
-      widget: EventListSection(),
+      sectionWidget: EventListSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 3,
       appBarTitle: 'Your Messages',
       bottomNavTitle: 'Messages',
       availableFor: UserType.Instructor,
-      widget: MessageListSection(),
+      sectionWidget: MessageListSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 4,
       appBarTitle: 'More',
       bottomNavTitle: 'More',
       availableFor: UserType.Instructor,
-      widget: MoreList(),
+      sectionWidget: MoreList(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 0,
       appBarTitle: 'Me',
       bottomNavTitle: 'Me',
       availableFor: UserType.Pupil,
-      widget: MeSection(),
+      sectionWidget: MeSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 1,
       appBarTitle: 'Ability',
       bottomNavTitle: 'Ability',
       availableFor: UserType.Pupil,
-      widget: AbilitySection(),
+      sectionWidget: AbilitySection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 2,
       appBarTitle: 'Resources',
       bottomNavTitle: 'Resources',
       availableFor: UserType.Pupil,
-      widget: ResourcesSection(),
+      sectionWidget: ResourcesSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 3,
       appBarTitle: 'Account',
       bottomNavTitle: 'Account',
       availableFor: UserType.Pupil,
-      widget: AccountSection(),
+      sectionWidget: AccountSection(),
+      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
     ),
   ];
 }
@@ -108,15 +130,18 @@ class WidgetConfiguration {
       String appBarTitle,
       String bottomNavTitle,
       UserType availableFor,
-      Widget widget})
+      Widget sectionWidget,
+      Icon bottomNavIcon})
       : this.index = index,
         this.appBartitle = appBarTitle,
         this.bottomNavTitle = bottomNavTitle,
         this.availableFor = availableFor,
-        this.widget = widget;
+        this.sectionWidget = sectionWidget,
+        this.bottomNavIcon = bottomNavIcon;
   int index;
   String appBartitle;
   String bottomNavTitle;
   UserType availableFor;
-  Widget widget;
+  Widget sectionWidget;
+  Icon bottomNavIcon;
 }

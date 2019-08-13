@@ -1,11 +1,8 @@
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/models/user.dart';
-import 'package:adibook/pages/instructor_home_page.dart';
-import 'package:adibook/pages/pupil_home_page.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
 class UserManager {
@@ -30,20 +27,24 @@ class UserManager {
     await FirebaseAuth.instance.signOut();
   }
 
-  Future<bool> userExists(String id) async {
-    var user = await User(id: id).getUser();
-    if (user == null) return false;
-    if (user.userType == UserType.Instructor &&
-        await Instructor(id: id).getInstructor() == null) return false;
-    if (user.userType == UserType.Pupil &&
-        await Pupil(id: id).getPupil() == null) return false;
+  Future<bool> userExists(String id, UserType userType) async {
+    var user = await User(id: id).get();
+    if (user.data == null) return false;
+    if (userType == UserType.Instructor) {
+      var instructor = await Instructor(id: id).get();
+      if (instructor.data == null) return false;
+    }
+    if (userType == UserType.Pupil) {
+      var pupil = await Pupil(id: id).get();
+      if (pupil == null) return false;
+    }
     return true;
   }
 
   Future<void> createUser(
       {String id, UserType userType = UserType.Instructor}) async {
     Logger _logger = Logger('UserManager=>createUser');
-    if (!await userExists(id)) {
+    if (!await userExists(id, userType)) {
       await User(id: id, userType: userType).add();
       userType == UserType.Instructor
           ? await Instructor(id: id).add()
@@ -51,17 +52,5 @@ class UserManager {
       _logger.info('User of type $userType with $id created.');
     }
     _logger.info('User creation skipped. User $id already exits.');
-  }
-
-  String landingPagePathOnUserType(UserType userType) {
-    return userType == UserType.Pupil
-        ? PageRoutes.PupilHomePage
-        : PageRoutes.HomePage;
-  }
-
-  Widget landingPageOnUserType(UserType userType) {
-    return userType == UserType.Pupil
-        ? PupilHomePage()
-        : InstructorHomePage();
   }
 }
