@@ -82,7 +82,7 @@ class Pupil {
     return this;
   }
 
-  Future get() async {
+  Future<DocumentSnapshot> get() async {
     return Firestore.instance
         .collection(FirestorePath.PupilCollection)
         .document(this.id)

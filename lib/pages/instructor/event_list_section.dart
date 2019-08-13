@@ -1,14 +1,14 @@
+import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
-import 'common_function.dart';
 
-CommonClass commonClass = new CommonClass();
 class EventListSection extends StatefulWidget {
   @override
   EventListSectionState createState() => EventListSectionState();
 }
 
 class EventListSectionState extends State<EventListSection> {
+CommonClass commonClass = new CommonClass();
   
   @override
   Widget build(BuildContext context) {

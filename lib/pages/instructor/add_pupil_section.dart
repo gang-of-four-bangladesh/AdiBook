@@ -1,8 +1,8 @@
 import 'package:adibook/models/pupil.dart';
+import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/pupil_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'common_function.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -15,11 +15,10 @@ class AddPupilSection extends StatefulWidget {
   }
 }
 
-Pupil pupil = new Pupil();
-Uuid uuid = new Uuid();
-CommonClass commonClass = new CommonClass();
-
 class AddPupilSectionstate extends State<AddPupilSection> {
+  Pupil pupil = new Pupil();
+  Uuid uuid = new Uuid();
+  CommonClass commonClass = new CommonClass();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;

@@ -1,13 +1,13 @@
-import 'package:adibook/pages/common_function.dart';
+import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
-CommonClass commonClass = new CommonClass();
 class MoreList extends StatefulWidget {
   @override
   _MoreListState createState() => _MoreListState();
 }
 
 class _MoreListState extends State<MoreList> {
+  CommonClass commonClass = new CommonClass();
   @override
   Widget build(BuildContext context) {
     final moretabList = [

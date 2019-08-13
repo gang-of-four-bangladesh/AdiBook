@@ -1,13 +1,11 @@
 import 'package:adibook/models/user.dart';
+import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:adibook/utils/user_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:adibook/pages/common_function.dart';
 import 'package:logging/logging.dart';
-
-CommonClass commonClass = new CommonClass();
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -17,6 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  CommonClass commonClass = new CommonClass();
   TextEditingController _countryCodeController = TextEditingController();
   TextEditingController _smsCodeController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();

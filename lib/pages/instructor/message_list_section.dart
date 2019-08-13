@@ -1,4 +1,4 @@
-import 'package:adibook/pages/common_function.dart';
+import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class MessageListSection extends StatefulWidget {

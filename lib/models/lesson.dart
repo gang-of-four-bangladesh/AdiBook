@@ -3,6 +3,7 @@ import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
 class Lesson {
@@ -90,11 +91,16 @@ class Lesson {
   }
 
   Future<Lesson> getLession() async {
-    await _snapshotToLession(await this.get());
+    var lession = await this.get();
+    if (!lession.exists) {
+      Logger('lession').shout('Lession id ${this.id} for pupil ${this.pupilId} does not exits!');
+      return null;
+    }
+    await _snapshotToLession(lession);
     return this;
   }
 
-  Future get() async {
+  Future<DocumentSnapshot> get() async {
     var path = sprintf(FirestorePath.LessonsOfAPupilColection, [this.pupilId]);
     return Firestore.instance.collection(path).document(this.id).get();
   }

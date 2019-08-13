@@ -1,12 +1,12 @@
-import 'package:adibook/pages/add_pupil_section.dart';
-import 'package:adibook/pages/event_list_section.dart';
-import 'package:adibook/pages/message_list_section.dart';
-import 'package:adibook/pages/more_list_section.dart';
+import 'package:adibook/pages/instructor/add_pupil_section.dart';
+import 'package:adibook/pages/instructor/event_list_section.dart';
+import 'package:adibook/pages/instructor/message_list_section.dart';
+import 'package:adibook/pages/instructor/more_list_section.dart';
+import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/ability_section.dart';
 import 'package:adibook/pages/pupil/account_section.dart';
 import 'package:adibook/pages/pupil/me_section.dart';
 import 'package:adibook/pages/pupil/resources_section.dart';
-import 'package:adibook/pages/pupil_list_section.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';

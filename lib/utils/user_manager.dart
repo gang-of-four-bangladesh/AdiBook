@@ -29,14 +29,14 @@ class UserManager {
 
   Future<bool> userExists(String id, UserType userType) async {
     var user = await User(id: id).get();
-    if (user.data == null) return false;
+    if (!user.exists) return false;
     if (userType == UserType.Instructor) {
       var instructor = await Instructor(id: id).get();
-      if (instructor.data == null) return false;
+      return instructor.exists;
     }
     if (userType == UserType.Pupil) {
       var pupil = await Pupil(id: id).get();
-      if (pupil == null) return false;
+      return pupil.exists;
     }
     return true;
   }

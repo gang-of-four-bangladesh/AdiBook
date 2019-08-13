@@ -1,7 +1,6 @@
+import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
-import 'common_function.dart';
 
-CommonClass commonClass = new CommonClass();
 List pupilActivityListFirst = [
   "Add a Lesson",
   "Progress Planner",
@@ -18,6 +17,7 @@ List pupilActivityListFirst = [
 
 class PupilActivity extends StatelessWidget {
   PupilActivity({this.nam});
+  CommonClass commonClass = new CommonClass();
   final nam;
   @override
   Widget build(BuildContext context) {

@@ -1,18 +1,17 @@
+import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'common_function.dart';
 
-CommonClass commonClass = new CommonClass();
 class ImageUpload extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return ImageUploadState();
   }
 }
 
 class ImageUploadState extends State<ImageUpload> {
+CommonClass commonClass = new CommonClass();
   File img;
   Future image_picker_camera() async {
     img = await ImagePicker.pickImage(source: ImageSource.camera);

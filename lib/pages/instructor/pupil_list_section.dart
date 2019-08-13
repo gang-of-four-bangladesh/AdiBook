@@ -1,5 +1,5 @@
 import 'package:adibook/models/instructor.dart';
-import 'package:adibook/pages/pupil_activity.dart';
+import 'package:adibook/pages/instructor/pupil_activity.dart';
 import 'package:adibook/utils/user_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
