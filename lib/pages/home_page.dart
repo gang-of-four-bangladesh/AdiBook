@@ -112,30 +112,30 @@ class _HomePageState extends State<HomePage> {
             ),
           ))
         });
-    if (items.length == 0) {
-      items = [
-        BottomNavigationBarItem(
-          icon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
-          title: Text(
-            "test 1",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 12.0),
-          ),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
-          title: Text(
-            "test 2",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 12.0),
-          ),
-        )
-      ];
-    }
+    // if (items.length == 0) {
+    //   items = [
+    //     BottomNavigationBarItem(
+    //       icon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+    //       title: Text(
+    //         "test 1",
+    //         style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //             color: Colors.white,
+    //             fontSize: 12.0),
+    //       ),
+    //     ),
+    //     BottomNavigationBarItem(
+    //       icon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+    //       title: Text(
+    //         "test 2",
+    //         style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //             color: Colors.white,
+    //             fontSize: 12.0),
+    //       ),
+    //     )
+    //   ];
+    // }
     this._logger.info('selected bottomm navigation bars $items');
     return items;
   }

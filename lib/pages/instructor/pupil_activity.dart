@@ -1,3 +1,4 @@
+import 'package:adibook/pages/instructor/add_lesson_section.dart';
 import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
@@ -51,8 +52,14 @@ class PupilActivity extends StatelessWidget {
                           color: Colors.black,
                         ),
                         onTap: () {
-                          // Navigator.of(context)
-                          //     .pushNamed(PageRoutes.ProgressPlannerPage);
+                          if(index == 0)
+                         Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddLesson(),
+                        ),
+                      );
                         },
                       ),
               );
