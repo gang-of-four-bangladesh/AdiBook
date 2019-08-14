@@ -10,6 +10,7 @@ import 'package:adibook/pages/pupil/resources_section.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PageManager {
   List<WidgetConfiguration> get instructorWidgetsConfiguration {
@@ -55,7 +56,7 @@ class PageManager {
       bottomNavTitle: 'Pupil',
       availableFor: UserType.Instructor,
       sectionWidget: PupilListSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(EvaIcons.person, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 1,
@@ -63,7 +64,7 @@ class PageManager {
       bottomNavTitle: 'Add Pupil',
       availableFor: UserType.Instructor,
       sectionWidget: AddPupilSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(EvaIcons.plus, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 2,
@@ -71,7 +72,7 @@ class PageManager {
       bottomNavTitle: 'Diary',
       availableFor: UserType.Instructor,
       sectionWidget: EventListSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(EvaIcons.book, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 3,
@@ -79,7 +80,7 @@ class PageManager {
       bottomNavTitle: 'Messages',
       availableFor: UserType.Instructor,
       sectionWidget: MessageListSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(EvaIcons.bell, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 4,
@@ -95,7 +96,7 @@ class PageManager {
       bottomNavTitle: 'Me',
       availableFor: UserType.Pupil,
       sectionWidget: MeSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(FontAwesomeIcons.user, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 1,
@@ -103,7 +104,7 @@ class PageManager {
       bottomNavTitle: 'Ability',
       availableFor: UserType.Pupil,
       sectionWidget: AbilitySection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(Icons.settings_applications, color: Colors.white),
     ),
     WidgetConfiguration(
       index: 2,
@@ -111,7 +112,10 @@ class PageManager {
       bottomNavTitle: 'Resources',
       availableFor: UserType.Pupil,
       sectionWidget: ResourcesSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(
+        FontAwesomeIcons.graduationCap,
+        color: Colors.white,
+      ),
     ),
     WidgetConfiguration(
       index: 3,
@@ -119,7 +123,7 @@ class PageManager {
       bottomNavTitle: 'Account',
       availableFor: UserType.Pupil,
       sectionWidget: AccountSection(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      bottomNavIcon: Icon(Icons.account_circle, color: Colors.white),
     ),
   ];
 }

@@ -25,10 +25,10 @@ class _LoginPageState extends State<LoginPage> {
   UserType _selectedUserType = UserType.Instructor;
 
   _LoginPageState() {
-    if (!DeviceInfo.isOnPhysicalDevice) {
+  //  if (!DeviceInfo.isOnPhysicalDevice) {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
-    }
+  //  }
     _logger = new Logger(this.runtimeType.toString());
   }
   bool _enabled = true;

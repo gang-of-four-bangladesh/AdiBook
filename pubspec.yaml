@@ -31,6 +31,7 @@ dependencies:
   sprintf: ^4.0.2
   path_provider: ^1.2.0
   firebase_storage: ^3.0.4
+  font_awesome_flutter: ^8.5.0
   
   flutter:
     sdk: flutter
