@@ -49,11 +49,11 @@ class PupilActivity extends StatelessWidget {
                         title: Text(pupilActivityListFirst[index]),
                         trailing: Icon(
                           Icons.keyboard_arrow_right,
-                          color: Colors.grey[300],
+                          color: Colors.black,
                         ),
                         onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(PageRoutes.ProgressPlannerPage);
+                          // Navigator.of(context)
+                          //     .pushNamed(PageRoutes.ProgressPlannerPage);
                         },
                       ),
               );
