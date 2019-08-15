@@ -22,7 +22,7 @@ class User {
         this.phoneNumber = phoneNumber,
         this.userType = userType,
         this.isVerified = isVerified,
-        this.createdAt = DateTime.now().toUtc(),
+        this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
@@ -49,8 +49,10 @@ class User {
     this.phoneNumber = snapshot[User.PhoneNumberKey];
     this.userType = UserType.values[snapshot[User.UserTypeKey]];
     this.isVerified = snapshot[User.IsVerifiedKey];
-    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
-    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);
+    this.createdAt =
+        TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
+    this.updatedAt =
+        TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);
   }
 
   Future<User> getUser() async {
@@ -69,6 +71,7 @@ class User {
 
   Future<bool> add() async {
     try {
+      this.createdAt = DateTime.now().toUtc();
       await Firestore.instance
           .collection(FirestorePath.UserCollection)
           .document(this.id)

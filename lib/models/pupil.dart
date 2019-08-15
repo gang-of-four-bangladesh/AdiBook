@@ -34,7 +34,7 @@ class Pupil {
         this.eyeTest = eyeTest,
         this.theoryRecord = theoryRecord,
         this.previousExperience = previousExperience,
-        this.createdAt = DateTime.now().toUtc(),
+        this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
@@ -91,6 +91,7 @@ class Pupil {
 
   Future add() async {
     try {
+      this.createdAt = DateTime.now().toUtc();
       Firestore.instance
           .collection(FirestorePath.PupilCollection)
           .document(this.id)

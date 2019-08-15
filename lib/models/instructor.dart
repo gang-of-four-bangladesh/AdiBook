@@ -1,6 +1,7 @@
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
 class Instructor {
@@ -29,7 +30,7 @@ class Instructor {
         this.phoneNumber = phoneNumber,
         this.licenseNo = licenseNo,
         this.dateOfBirth = dateOfBirth,
-        this.createdAt = DateTime.now().toUtc(),
+        this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
@@ -53,19 +54,28 @@ class Instructor {
   }
 
   Future<void> _snapshotToInstructor(DocumentSnapshot snapshot) async {
-    print('org:${snapshot[Instructor.CreatedAtKey]} coverted:${snapshot[Instructor.CreatedAtKey].toDate()}, id: ${snapshot.documentID}');
+    print(
+        'org:${snapshot[Instructor.CreatedAtKey]} coverted:${snapshot[Instructor.CreatedAtKey].toDate()}, id: ${snapshot.documentID}');
     this.id = snapshot.documentID;
     this.name = snapshot[Instructor.NameKey];
     this.address = snapshot[Instructor.AddressKey];
     this.phoneNumber = snapshot[Instructor.PhoneNumberKey];
     this.licenseNo = snapshot[Instructor.LicenseKey];
-    this.dateOfBirth = TypeConversion.timeStampToDateTime(snapshot[Instructor.DateOfBirthKey]);
-    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[Instructor.CreatedAtKey]);
-    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[Instructor.UpdatedAtKey]);
+    this.dateOfBirth =
+        TypeConversion.timeStampToDateTime(snapshot[Instructor.DateOfBirthKey]);
+    this.createdAt =
+        TypeConversion.timeStampToDateTime(snapshot[Instructor.CreatedAtKey]);
+    this.updatedAt =
+        TypeConversion.timeStampToDateTime(snapshot[Instructor.UpdatedAtKey]);
   }
 
   Future<Instructor> getInstructor() async {
-    await _snapshotToInstructor(await this.get());
+    var snapshot = await this.get();
+    if (!snapshot.exists) {
+      Logger('instructor').shout('Instructor id ${this.id} does not exits!');
+      return null;
+    }
+    await _snapshotToInstructor(snapshot);
     return this;
   }
 
@@ -83,6 +93,7 @@ class Instructor {
 
   Future<bool> add() async {
     try {
+      this.createdAt = DateTime.now().toUtc();
       await Firestore.instance
           .collection(FirestorePath.InstructorCollection)
           .document(this.id)

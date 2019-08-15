@@ -42,7 +42,9 @@ class Lesson {
         this.lessionType = lessionType,
         this.diaryNotes = diaryNotes,
         this.reportCard = reportCard,
-        this.hasAcknowledged = hasAcknowledged;
+        this.hasAcknowledged = hasAcknowledged,
+        this.createdAt = null,
+        this.updatedAt = null;
 
   String id;
   String pupilId;
@@ -93,7 +95,8 @@ class Lesson {
   Future<Lesson> getLession() async {
     var lession = await this.get();
     if (!lession.exists) {
-      Logger('lession').shout('Lession id ${this.id} for pupil ${this.pupilId} does not exits!');
+      Logger('lession').shout(
+          'Lession id ${this.id} for pupil ${this.pupilId} does not exits!');
       return null;
     }
     await _snapshotToLession(lession);
@@ -109,6 +112,7 @@ class Lesson {
     try {
       var path =
           sprintf(FirestorePath.LessonsOfAPupilColection, [this.pupilId]);
+      this.createdAt = DateTime.now().toUtc();
       Firestore.instance
           .collection(path)
           .document(this.id)

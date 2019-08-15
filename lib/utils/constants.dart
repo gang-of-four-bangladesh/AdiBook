@@ -26,7 +26,6 @@ class PageRoutes {
   static const String PupilActivity = '/pupil_activity';
   static const String PupilHomePage = '/pupil_home_page';
   static const String ProgressPlannerPage = '/progress_planner';
-  static const String PupilActivityHome = '/pupil_activity_home';
 }
 
 class SharedPreferenceKeys {
@@ -52,7 +51,7 @@ class EnvironmentStatus {
 }
 
 class AppTheme {
-  static Color appThemeColor = Colors.blueAccent.withOpacity(0.2);
+  static Color appThemeColor = Colors.lightBlueAccent.withRed(3).withGreen(209).withBlue(191);
 }
 
 const Map<String, String> CountryWisePhoneCode = {

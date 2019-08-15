@@ -2,6 +2,8 @@ import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/event_list_section.dart';
 import 'package:adibook/pages/instructor/message_list_section.dart';
 import 'package:adibook/pages/instructor/more_list_section.dart';
+import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
+import 'package:adibook/pages/instructor/pupil_activities/progress_planner.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/ability_section.dart';
 import 'package:adibook/pages/pupil/account_section.dart';
@@ -148,6 +150,24 @@ class PageManager {
       sectionWidget: AccountSection(),
       bottomNavIcon: Icon(Icons.account_circle, color: Colors.white),
       sectionType: SectionType.PupilActivity,
+    ),
+    WidgetConfiguration(
+      index: 0,
+      appBarTitle: 'Add Lesson',
+      bottomNavTitle: 'Add Lesson',
+      availableFor: UserType.Instructor,
+      sectionWidget: AddLesson(),
+      bottomNavIcon: Icon(Icons.book, color: Colors.white),
+      sectionType: SectionType.InstructorActivityForPupil,
+    ),
+    WidgetConfiguration(
+      index: 0,
+      appBarTitle: 'Progress Planner',
+      bottomNavTitle: 'Progress Planner',
+      availableFor: UserType.Instructor,
+      sectionWidget: ProgressPlanner(),
+      bottomNavIcon: Icon(Icons.book, color: Colors.white),
+      sectionType: SectionType.InstructorActivityForPupil,
     ),
   ];
 }
