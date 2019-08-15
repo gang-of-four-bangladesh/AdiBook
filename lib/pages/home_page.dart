@@ -1,6 +1,6 @@
+import 'package:adibook/core/page_manager.dart';
+import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/utils/constants.dart';
-import 'package:adibook/utils/page_manager.dart';
-import 'package:adibook/utils/user_manager.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';

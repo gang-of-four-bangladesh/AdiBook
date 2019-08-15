@@ -1,9 +1,8 @@
+import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/constants.dart';
-import 'package:adibook/utils/device_info.dart';
-import 'package:adibook/utils/user_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
