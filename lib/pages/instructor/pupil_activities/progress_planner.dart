@@ -17,22 +17,34 @@ class _ProgressPlannerState extends State<ProgressPlanner> {
       child: Row(
         children: <Widget>[
           SizedBox(
-            child: Center(
-                child: Checkbox(
-              onChanged: (value) => {},
-              value: false,
-            )),
-            height: 20.0,
-            width: 40.0,
+            child: Text('Subject'),
+            height: 50.0,
+            width: 100.0,
           ),
           SizedBox(
-            child: Center(
-                child: Checkbox(
-              onChanged: (value) => {},
-              value: false,
-            )),
-            height: 20.0,
-            width: 40.0,
+            child: Text('Introduced'),
+            height: 50.0,
+            width: 50.0,
+          ),
+          SizedBox(
+            child: Text('Talk Through'),
+            height: 50.0,
+            width: 50.0,
+          ),
+          SizedBox(
+            child: Text('Prompted'),
+            height: 50.0,
+            width: 50.0,
+          ),
+          SizedBox(
+            child: Text('Rarely Prompted'),
+            height: 50.0,
+            width: 50.0,
+          ),
+          SizedBox(
+            child: Text('Independent'),
+            height: 50.0,
+            width: 50.0,
           )
         ],
       ),
