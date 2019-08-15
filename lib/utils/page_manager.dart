@@ -12,6 +12,31 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+class WidgetConfiguration {
+  WidgetConfiguration(
+      {int index,
+      String appBarTitle,
+      String bottomNavTitle,
+      UserType availableFor,
+      Widget sectionWidget,
+      Icon bottomNavIcon,
+      SectionType sectionType})
+      : this.index = index,
+        this.appBartitle = appBarTitle,
+        this.bottomNavTitle = bottomNavTitle,
+        this.availableFor = availableFor,
+        this.sectionWidget = sectionWidget,
+        this.bottomNavIcon = bottomNavIcon,
+        this.sectionType = sectionType;
+  int index;
+  String appBartitle;
+  String bottomNavTitle;
+  UserType availableFor;
+  Widget sectionWidget;
+  Icon bottomNavIcon;
+  SectionType sectionType;
+}
+
 class PageManager {
   List<WidgetConfiguration> get instructorWidgetsConfiguration {
     return this
@@ -27,26 +52,19 @@ class PageManager {
         .toList();
   }
 
-  List<WidgetConfiguration> getWidgetsConfigurationByUserType(
-      UserType userType) {
-    if (userType == UserType.Instructor)
-      return this.instructorWidgetsConfiguration;
-    if (userType == UserType.Pupil) return this.pupilWidgetsConfiguration;
-    return [];
+  List<Widget> getWidgets(UserType userType, SectionType sectionType) {
+    return this
+        .getWidgetConfigurations(userType, sectionType)
+        .map((f) => f.sectionWidget)
+        .toList();
   }
 
-  List<Widget> getWidgetsByUserType(UserType userType) {
-    if (userType == UserType.Instructor)
-      return this
-          .instructorWidgetsConfiguration
-          .map((f) => f.sectionWidget)
-          .toList();
-    if (userType == UserType.Pupil)
-      return this
-          .instructorWidgetsConfiguration
-          .map((f) => f.sectionWidget)
-          .toList();
-    return [];
+  List<WidgetConfiguration> getWidgetConfigurations(
+      UserType userType, SectionType sectionType) {
+    return this
+        ._widgetList
+        .where((w) => w.availableFor == userType && w.sectionType == sectionType)
+        .toList();
   }
 
   List<WidgetConfiguration> _widgetList = [
@@ -57,6 +75,7 @@ class PageManager {
       availableFor: UserType.Instructor,
       sectionWidget: PupilListSection(),
       bottomNavIcon: Icon(EvaIcons.person, color: Colors.white),
+      sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
       index: 1,
@@ -65,6 +84,7 @@ class PageManager {
       availableFor: UserType.Instructor,
       sectionWidget: AddPupilSection(),
       bottomNavIcon: Icon(EvaIcons.plus, color: Colors.white),
+      sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
       index: 2,
@@ -73,6 +93,7 @@ class PageManager {
       availableFor: UserType.Instructor,
       sectionWidget: EventListSection(),
       bottomNavIcon: Icon(EvaIcons.book, color: Colors.white),
+      sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
       index: 3,
@@ -81,6 +102,7 @@ class PageManager {
       availableFor: UserType.Instructor,
       sectionWidget: MessageListSection(),
       bottomNavIcon: Icon(EvaIcons.bell, color: Colors.white),
+      sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
       index: 4,
@@ -89,6 +111,7 @@ class PageManager {
       availableFor: UserType.Instructor,
       sectionWidget: MoreList(),
       bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
       index: 0,
@@ -97,6 +120,7 @@ class PageManager {
       availableFor: UserType.Pupil,
       sectionWidget: MeSection(),
       bottomNavIcon: Icon(FontAwesomeIcons.user, color: Colors.white),
+      sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(
       index: 1,
@@ -105,6 +129,7 @@ class PageManager {
       availableFor: UserType.Pupil,
       sectionWidget: AbilitySection(),
       bottomNavIcon: Icon(Icons.settings_applications, color: Colors.white),
+      sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(
       index: 2,
@@ -112,10 +137,8 @@ class PageManager {
       bottomNavTitle: 'Resources',
       availableFor: UserType.Pupil,
       sectionWidget: ResourcesSection(),
-      bottomNavIcon: Icon(
-        FontAwesomeIcons.graduationCap,
-        color: Colors.white,
-      ),
+      bottomNavIcon: Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
+      sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(
       index: 3,
@@ -124,28 +147,7 @@ class PageManager {
       availableFor: UserType.Pupil,
       sectionWidget: AccountSection(),
       bottomNavIcon: Icon(Icons.account_circle, color: Colors.white),
+      sectionType: SectionType.PupilActivity,
     ),
   ];
-}
-
-class WidgetConfiguration {
-  WidgetConfiguration(
-      {int index,
-      String appBarTitle,
-      String bottomNavTitle,
-      UserType availableFor,
-      Widget sectionWidget,
-      Icon bottomNavIcon})
-      : this.index = index,
-        this.appBartitle = appBarTitle,
-        this.bottomNavTitle = bottomNavTitle,
-        this.availableFor = availableFor,
-        this.sectionWidget = sectionWidget,
-        this.bottomNavIcon = bottomNavIcon;
-  int index;
-  String appBartitle;
-  String bottomNavTitle;
-  UserType availableFor;
-  Widget sectionWidget;
-  Icon bottomNavIcon;
 }

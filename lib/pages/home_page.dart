@@ -1,4 +1,3 @@
-import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/page_manager.dart';
 import 'package:adibook/utils/user_manager.dart';
@@ -7,30 +6,82 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 class HomePage extends StatefulWidget {
+  final SectionType sectionType;
+  final UserType userType;
+  HomePage({this.userType, this.sectionType});
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() =>
+      _HomePageState(userType: this.userType, sectionType: this.sectionType);
 }
 
 class _HomePageState extends State<HomePage> {
-  var _userType = UserType.Instructor;
+  final SectionType sectionType;
+  final UserType userType;
+  _HomePageState({this.userType, this.sectionType});
+
+  Logger _logger = Logger('HomePage');
+  int _selectedPage;
+  String _appbarTitle;
   List<WidgetConfiguration> _widgetsConfiguration = [];
-  Logger _logger = Logger('homepage');
-  int _selectedPage = 0;
-  String _appbarTitle = "Pupil";
+  List<BottomNavigationBarItem> _bottomNavBarItems = [
+    BottomNavigationBarItem(
+      icon: Icon(
+        EvaIcons.loaderOutline,
+        color: AppTheme.appThemeColor,
+        size: 0.0,
+      ),
+      title: Text(
+        "Loading..",
+        style: TextStyle(
+          fontWeight: FontWeight.w100,
+          color: AppTheme.appThemeColor,
+          fontSize: 1.0,
+        ),
+      ),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(EvaIcons.loaderOutline, color: Colors.white),
+      title: Text(
+        "Loading..",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          fontSize: 12.0,
+        ),
+      ),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        EvaIcons.loaderOutline,
+        color: AppTheme.appThemeColor,
+        size: 0.0,
+      ),
+      title: Text(
+        "Loading..",
+        style: TextStyle(
+          fontWeight: FontWeight.w100,
+          color: AppTheme.appThemeColor,
+          fontSize: 1.0,
+        ),
+      ),
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
-    _loadWidgetConfigurations();
+    _initialize();
   }
 
-  Future _loadWidgetConfigurations() async {
-    this._userType = await UserManager().currentUserType;
+  void _initialize() {
     setState(() {
-      this._widgetsConfiguration =
-          PageManager().getWidgetsConfigurationByUserType(this._userType);
+      _selectedPage = 0;
+      this._widgetsConfiguration = PageManager()
+          .getWidgetConfigurations(this.userType, this.sectionType);
       this._logger.info(
-          'selected widgets for usertype ${this._userType} are ${this._widgetsConfiguration.map((f) => f.appBartitle)}');
+          'selected widgets for usertype ${this.userType} and section type ${this.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBartitle)}');
+      _appbarTitle = this._widgetsConfiguration[_selectedPage].appBartitle;
+      this._getBottomNavBarItems();
     });
   }
 
@@ -39,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(CommonClass().hexColor('#03D1BF')),
+        backgroundColor: AppTheme.appThemeColor,
         title: Text(_appbarTitle),
         actions: <Widget>[
           Container(
@@ -49,9 +100,7 @@ class _HomePageState extends State<HomePage> {
               minWidth: 100.0,
               height: 60.0,
               child: RaisedButton(
-                color: Color(
-                  CommonClass().hexColor('#03D1BF'),
-                ),
+                color: AppTheme.appThemeColor,
                 onPressed: () async {
                   await UserManager().logout();
                   Navigator.of(context).pop();
@@ -76,7 +125,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: new Theme(
         data: Theme.of(context).copyWith(
-            canvasColor: Color(CommonClass().hexColor('#03D1BF')),
+            canvasColor: AppTheme.appThemeColor,
             primaryColor: Colors.red,
             textTheme: Theme.of(context)
                 .textTheme
@@ -92,51 +141,28 @@ class _HomePageState extends State<HomePage> {
                   'selected page index $_selectedPage and app bar title $_appbarTitle');
             });
           },
-          items: _buildBottomNavigationBarItems(),
+          items: this._bottomNavBarItems.toList(),
         ),
       ),
     );
   }
 
-  List<BottomNavigationBarItem> _buildBottomNavigationBarItems() {
-    List<BottomNavigationBarItem> items = [];
-    this._widgetsConfiguration.forEach((f) => {
-          items.add(BottomNavigationBarItem(
-            icon: f.bottomNavIcon,
-            title: Text(
-              f.bottomNavTitle,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 12.0),
-            ),
-          ))
-        });
-    // if (items.length == 0) {
-    //   items = [
-    //     BottomNavigationBarItem(
-    //       icon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
-    //       title: Text(
-    //         "test 1",
-    //         style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //             color: Colors.white,
-    //             fontSize: 12.0),
-    //       ),
-    //     ),
-    //     BottomNavigationBarItem(
-    //       icon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
-    //       title: Text(
-    //         "test 2",
-    //         style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //             color: Colors.white,
-    //             fontSize: 12.0),
-    //       ),
-    //     )
-    //   ];
-    // }
-    this._logger.info('selected bottomm navigation bars $items');
-    return items;
+  void _getBottomNavBarItems() {
+    this._bottomNavBarItems.clear();
+    this._widgetsConfiguration.forEach(
+          (f) => this._bottomNavBarItems.add(
+                BottomNavigationBarItem(
+                  icon: f.bottomNavIcon,
+                  title: Text(
+                    f.bottomNavTitle,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 12.0),
+                  ),
+                ),
+              ),
+        );
+    _logger.info('${this._bottomNavBarItems.length} bottomm navigation bars');
   }
 }

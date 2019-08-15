@@ -1,4 +1,5 @@
 import 'package:adibook/models/user.dart';
+import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
@@ -25,10 +26,10 @@ class _LoginPageState extends State<LoginPage> {
   UserType _selectedUserType = UserType.Instructor;
 
   _LoginPageState() {
-  //  if (!DeviceInfo.isOnPhysicalDevice) {
-      this._phoneNumberController.text = "1234567890";
-      this._smsCodeController.text = "654321";
-  //  }
+    //  if (!DeviceInfo.isOnPhysicalDevice) {
+    this._phoneNumberController.text = "1234567890";
+    this._smsCodeController.text = "654321";
+    //  }
     _logger = new Logger(this.runtimeType.toString());
   }
   bool _enabled = true;
@@ -46,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
     return new Scaffold(
       appBar: new AppBar(
         centerTitle: true,
-        backgroundColor: Color(commonClass.hexColor('#03D1BF')),
+        backgroundColor: AppTheme.appThemeColor,
         title: Text("AdiBook"),
       ),
       body: new Center(
@@ -196,7 +197,15 @@ class _LoginPageState extends State<LoginPage> {
     await UserManager()
         .createUser(id: user.uid, userType: this._selectedUserType);
     await User(id: user.uid, userType: this._selectedUserType).update();
-    Navigator.of(context).pushNamed(PageRoutes.HomePage);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(
+          userType: this._selectedUserType,
+          sectionType: defaultSectionType(this._selectedUserType),
+        ),
+      ),
+    );
   }
 
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
@@ -237,7 +246,15 @@ class _LoginPageState extends State<LoginPage> {
       await UserManager()
           .createUser(id: user.uid, userType: this._selectedUserType);
       await User(id: user.uid, userType: this._selectedUserType).update();
-      Navigator.of(context).pushNamed(PageRoutes.HomePage);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            userType: this._selectedUserType,
+            sectionType: defaultSectionType(this._selectedUserType),
+          ),
+        ),
+      );
     };
 
     final PhoneVerificationFailed verificationFailed =
