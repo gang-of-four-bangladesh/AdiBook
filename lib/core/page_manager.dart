@@ -65,7 +65,8 @@ class PageManager {
       UserType userType, SectionType sectionType) {
     return this
         ._widgetList
-        .where((w) => w.availableFor == userType && w.sectionType == sectionType)
+        .where(
+            (w) => w.availableFor == userType && w.sectionType == sectionType)
         .toList();
   }
 
@@ -156,7 +157,9 @@ class PageManager {
       appBarTitle: 'Add Lesson',
       bottomNavTitle: 'Add Lesson',
       availableFor: UserType.Instructor,
-      sectionWidget: AddLesson(),
+      sectionWidget: AddLesson(
+        additionalData: {},
+      ),
       bottomNavIcon: Icon(Icons.book, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),

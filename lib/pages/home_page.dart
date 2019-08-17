@@ -1,3 +1,4 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/utils/constants.dart';
@@ -8,17 +9,17 @@ import 'package:logging/logging.dart';
 class HomePage extends StatefulWidget {
   final SectionType sectionType;
   final UserType userType;
-  HomePage({this.userType, this.sectionType});
+  final Map<String, dynamic> contextInfo;
+  HomePage({
+    this.userType,
+    this.sectionType,
+    this.contextInfo,
+  });
   @override
-  _HomePageState createState() =>
-      _HomePageState(userType: this.userType, sectionType: this.sectionType);
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final SectionType sectionType;
-  final UserType userType;
-  _HomePageState({this.userType, this.sectionType});
-
   Logger _logger = Logger('HomePage');
   int _selectedPage;
   String _appbarTitle;
@@ -74,12 +75,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initialize() {
+    appData.contextualInfo = this.widget.contextInfo;
     setState(() {
       _selectedPage = 0;
-      this._widgetsConfiguration = PageManager()
-          .getWidgetConfigurations(this.userType, this.sectionType);
+      this._widgetsConfiguration = PageManager().getWidgetConfigurations(
+          this.widget.userType, this.widget.sectionType);
       this._logger.info(
-          'selected widgets for usertype ${this.userType} and section type ${this.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBartitle)}');
+          'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBartitle)}');
       _appbarTitle = this._widgetsConfiguration[_selectedPage].appBartitle;
       this._getBottomNavBarItems();
     });
