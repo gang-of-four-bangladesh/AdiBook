@@ -3,7 +3,6 @@ import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  static const String IdKey = 'id';
   static const String NameKey = 'nam';
   static const String PhoneNumberKey = 'phn';
   static const String UserTypeKey = 'utp';
@@ -12,17 +11,12 @@ class User {
   static const String UpdatedAtKey = 'uat';
 
   User(
-      {String id,
-      String name,
-      String phoneNumber,
-      UserType userType = UserType.Instructor,
-      bool isVerified = false})
-      : this.id = id,
-        this.name = name,
-        this.phoneNumber = phoneNumber,
-        this.userType = userType,
-        this.isVerified = isVerified,
-        this.createdAt = DateTime.now().toUtc(),
+      {this.id,
+      this.name,
+      this.phoneNumber,
+      this.userType = UserType.Instructor,
+      this.isVerified = false})
+      : this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
@@ -49,8 +43,10 @@ class User {
     this.phoneNumber = snapshot[User.PhoneNumberKey];
     this.userType = UserType.values[snapshot[User.UserTypeKey]];
     this.isVerified = snapshot[User.IsVerifiedKey];
-    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
-    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);
+    this.createdAt =
+        TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
+    this.updatedAt =
+        TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);
   }
 
   Future<User> getUser() async {
@@ -69,6 +65,7 @@ class User {
 
   Future<bool> add() async {
     try {
+      this.createdAt = DateTime.now().toUtc();
       await Firestore.instance
           .collection(FirestorePath.UserCollection)
           .document(this.id)

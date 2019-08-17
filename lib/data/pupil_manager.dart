@@ -1,9 +1,9 @@
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
-import 'constants.dart';
 
 class PupilManager {
   static const String PupilReferenceTaggedAtKey = 'pRef';
@@ -11,7 +11,7 @@ class PupilManager {
   Future<void> tagPupil(Pupil pupil, Instructor instructor) async {
     var _logger = Logger(this.runtimeType.toString());
     var ref = Firestore.instance
-        .collection(FirestorePath.InstructorCollection)
+        .collection(FirestorePath.PupilCollection)
         .document(pupil.id);
     var path =
         sprintf(FirestorePath.PupilsOfAnInstructorCollection, [instructor.id]);

@@ -1,6 +1,6 @@
+import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/common_function.dart';
-import 'package:adibook/utils/pupil_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:adibook/pages/validation.dart';
