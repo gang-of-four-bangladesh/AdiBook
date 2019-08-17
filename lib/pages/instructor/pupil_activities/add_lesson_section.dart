@@ -1,11 +1,11 @@
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/models/pupil.dart';
+import 'package:adibook/pages/validation.dart';
 import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
-import '../validation.dart';
 
 class AddLesson extends StatefulWidget {
   @override
@@ -364,22 +364,22 @@ class _AddLessonState extends State<AddLesson> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () {
-                                  Uuid uuid = new Uuid();
-                                  Lesson lesson =
-                                      new Lesson(pupilId: Pupil.IdKey);
-                                  lesson.lessionDate = DateTime.parse(
-                                      date_of_lesson.substring(6, 10) +
-                                          '-' +
-                                          date_of_lesson.substring(3, 5) +
-                                          '-' +
-                                          date_of_lesson.substring(0, 2) +
-                                          ' 00:00:00.000');
-                                  lesson.lessionDuration = int.tryParse(
-                                      lessonDurationController.text);
-                                  lesson.pickupLocation =
-                                      pickUpLocationController.text;
-                                  lesson.dropOffLocation =
-                                      dropOffLocationController.text;
+                                  // Uuid uuid = new Uuid();
+                                  // Lesson lesson =
+                                  //     new Lesson(pupilId: Pupil.IdKey);
+                                  // lesson.lessionDate = DateTime.parse(
+                                  //     date_of_lesson.substring(6, 10) +
+                                  //         '-' +
+                                  //         date_of_lesson.substring(3, 5) +
+                                  //         '-' +
+                                  //         date_of_lesson.substring(0, 2) +
+                                  //         ' 00:00:00.000');
+                                  // lesson.lessionDuration = int.tryParse(
+                                  //     lessonDurationController.text);
+                                  // lesson.pickupLocation =
+                                  //     pickUpLocationController.text;
+                                  // lesson.dropOffLocation =
+                                  //     dropOffLocationController.text;
                                 },
                                 //onPressed: () {},
                                 //onPressed: _validateInputs,
