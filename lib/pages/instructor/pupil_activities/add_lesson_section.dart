@@ -17,52 +17,45 @@ class _AddLessonState extends State<AddLesson> {
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  String _lessonDuration;
-  String _pickupLocation;
-  String _dropOffLocation;
-  bool switchOn_diaryNotes = false;
-  bool switchOn_hasKnoledge = false;
-  bool switchOn_prviouseExp = false;
+  String _diaryNotes;
+  String _reportCard;
+  bool switchOn_hasKnoledge;
   TextEditingController lessonDurationController = new TextEditingController();
-  TextEditingController dropOffLocationController = new TextEditingController();
-  TextEditingController pickUpLocationController = new TextEditingController();
-  TextEditingController drivingLicenseController = new TextEditingController();
- 
-  LessionType _selectedlessionType = LessionType.Lession;
-  VehicleType _selectedVehicleType = VehicleType.Manual;
+  TextEditingController diaryNotesController = new TextEditingController();
+  TextEditingController reportCardController = new TextEditingController();
+  TripLocation _selectedPickupLocation;
+  TripLocation _selectedDropOffLocation;
+  LessionType _selectedlessionType;
+  VehicleType _selectedVehicleType;
+@override
+void initState() {
+    super.initState();
+    _selectedPickupLocation= TripLocation.Home;
+    _selectedDropOffLocation= TripLocation.Home;
+    _selectedVehicleType = VehicleType.None;
+    _selectedlessionType = LessionType.None;
+    switchOn_hasKnoledge = false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Validations validations = new Validations();
-    Future _eyeTestonSwitchChanged(bool value) async {
-      switchOn_diaryNotes = value;
-    }
+    Validations validations = Validations();
 
     Future _theoryRecordonSwitchChanged(bool value) async {
       switchOn_hasKnoledge = value;
     }
 
-    void _prviouseExponSwitchChanged(bool value) {
-      switchOn_prviouseExp = value;
-    }
-
     void _makeEmpty() {
       setState(() {
         lessonDurationController.text = '';
-        pickUpLocationController.text = '';
-        dropOffLocationController.text = '';
-        drivingLicenseController = null;
+        diaryNotesController.text = '';
+        reportCardController.text = '';
         date_of_lesson = '';
-        switchOn_diaryNotes = false;
         switchOn_hasKnoledge = false;
-        switchOn_prviouseExp = false;
       });
     }
 
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(CommonClass().hexColor('#03D1BF')),
-          title: Text('Add a Lesson')),
       body: SingleChildScrollView(
         child: Container(
           child: Form(
@@ -125,7 +118,7 @@ class _AddLessonState extends State<AddLesson> {
                               controller: lessonDurationController,
                               validator: validations.validateText,
                               onSaved: (String value) {
-                                _lessonDuration = value;
+                                _diaryNotes = value;
                               },
                               decoration: InputDecoration(
                                   suffixIcon:
@@ -138,7 +131,53 @@ class _AddLessonState extends State<AddLesson> {
                                       ),
                                       borderRadius:
                                           new BorderRadius.circular(8.0)),
-                                  hintText: "Lesson Duration"),
+                                  hintText: "Lesson Duration(Minutes)"),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          //  Pickup TripLocation,
+                          Container(
+                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  /*1*/
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      /*2*/
+                                      Container(
+                                        child: Text(
+                                          'Pickup Location',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                /*3*/
+                                DropdownButton<TripLocation>(
+                                    value:_selectedPickupLocation,
+                                    onChanged: (TripLocation location) {
+                                      setState(() {
+                                        _selectedPickupLocation = location;
+                                        print(_selectedPickupLocation);
+                                      });
+                                    },
+                                    items: TripLocation.values
+                                        .map((TripLocation location) {
+                                      return new DropdownMenuItem<TripLocation>(
+                                          value: location,
+                                          child: new Text(enumValueToString(
+                                              location.toString())));
+                                    }).toList())
+                              ],
                             ),
                           ),
                         ],
@@ -146,39 +185,44 @@ class _AddLessonState extends State<AddLesson> {
                       Column(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: TextFormField(
-                              onSaved: (String val) {
-                                _pickupLocation = val;
-                              },
-                              keyboardType: TextInputType.text,
-                              controller: pickUpLocationController,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.cyan[300]),
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  hintText: "Pickup Location"),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: TextFormField(
-                              controller: dropOffLocationController,
-                              keyboardType: TextInputType.phone,
-                              onSaved: (String val) {
-                                _dropOffLocation = val;
-                              },
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.cyan[300]),
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  hintText: "Dropoff Location"),
+                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  /*1*/
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      /*2*/
+                                      Container(
+                                        child: Text(
+                                          'DropOff Location',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                /*3*/
+                                DropdownButton<TripLocation>(
+                                    value: _selectedDropOffLocation,
+                                    onChanged: (TripLocation location) {
+                                      setState(() {
+                                        _selectedDropOffLocation = location;
+                                        print(_selectedDropOffLocation);
+                                      });
+                                    },
+                                    items: TripLocation.values
+                                        .map((TripLocation location) {
+                                      return new DropdownMenuItem<TripLocation>(
+                                          value: location,
+                                          child: new Text(enumValueToString(
+                                              location.toString())));
+                                    }).toList())
+                              ],
                             ),
                           ),
                         ],
@@ -210,19 +254,20 @@ class _AddLessonState extends State<AddLesson> {
                                 ),
                                 /*3*/
                                 DropdownButton<VehicleType>(
-                                    value: VehicleType.Manual,
+                                    value: _selectedVehicleType,
                                     onChanged: (VehicleType vehicleType) {
                                       setState(() {
-                                       _selectedVehicleType = vehicleType;
-                                       print(_selectedVehicleType);
+                                        _selectedVehicleType = vehicleType;
+                                        print(_selectedVehicleType);
                                       });
                                     },
                                     items: VehicleType.values
                                         .map((VehicleType classType) {
                                       return new DropdownMenuItem<VehicleType>(
                                           value: classType,
-                                          child: new Text(enumValueToString(classType.toString())));
-                                    }).toList())
+                                          child: new Text(enumValueToString(
+                                              classType.toString())));
+                                    }).toList()),
                               ],
                             ),
                           ),
@@ -255,21 +300,61 @@ class _AddLessonState extends State<AddLesson> {
                                 ),
                                 /*3*/
                                 DropdownButton<LessionType>(
-                                    value: LessionType.Lession,
+                                    value: _selectedlessionType,
                                     onChanged: (LessionType lessionType) {
                                       setState(() {
-                                      _selectedlessionType = lessionType;
-                                       print(_selectedlessionType);
+                                        _selectedlessionType = lessionType;
+                                        print(_selectedlessionType);
                                       });
                                     },
                                     items: LessionType.values
                                         .map((LessionType lessionType) {
                                       return new DropdownMenuItem<LessionType>(
                                           value: lessionType,
-                                          child:
-                                              new Text(enumValueToString(lessionType.toString())));
+                                          child: new Text(enumValueToString(
+                                              lessionType.toString())));
                                     }).toList())
                               ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(bottom: 5.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: diaryNotesController,
+                              validator: validations.validateText,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(
+                                          commonClass.hexColor('#03D1BF'),
+                                        ),
+                                      ),
+                                      borderRadius:
+                                          new BorderRadius.circular(8.0)),
+                                  hintText: "Diary Notes(Optional)"),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(bottom: 5.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.multiline,
+                              controller: reportCardController,
+                              validator: validations.validateText,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(
+                                          commonClass.hexColor('#03D1BF'),
+                                        ),
+                                      ),
+                                      borderRadius:
+                                          new BorderRadius.circular(8.0)),
+                                  hintText: "Report Card(Optional)"),
                             ),
                           ),
                         ],
@@ -277,41 +362,7 @@ class _AddLessonState extends State<AddLesson> {
                     ],
                   ),
                 ),
-
                 //  Eye test,
-                Container(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        /*1*/
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /*2*/
-                            Container(
-                              child: Text(
-                                'Diary Notes',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /*3*/
-                      Switch(
-                        value: switchOn_diaryNotes,
-                        onChanged: (val) =>
-                            setState(() => switchOn_diaryNotes = val),
-                        activeColor: Color(
-                          commonClass.hexColor('#03D1BF'),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
                 //  theory record,
                 Container(
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -363,23 +414,32 @@ class _AddLessonState extends State<AddLesson> {
                               minWidth: 180.0,
                               height: 50.0,
                               child: RaisedButton(
-                                onPressed: () {
-                                  // Uuid uuid = new Uuid();
-                                  // Lesson lesson =
-                                  //     new Lesson(pupilId: Pupil.IdKey);
-                                  // lesson.lessionDate = DateTime.parse(
-                                  //     date_of_lesson.substring(6, 10) +
-                                  //         '-' +
-                                  //         date_of_lesson.substring(3, 5) +
-                                  //         '-' +
-                                  //         date_of_lesson.substring(0, 2) +
-                                  //         ' 00:00:00.000');
-                                  // lesson.lessionDuration = int.tryParse(
-                                  //     lessonDurationController.text);
-                                  // lesson.pickupLocation =
-                                  //     pickUpLocationController.text;
-                                  // lesson.dropOffLocation =
-                                  //     dropOffLocationController.text;
+                                onPressed: () async{
+                                  Uuid lessonid = new Uuid();
+                                  Lesson lesson = new Lesson(
+                                      pupilId: "320a5c3f-15b6-4c9b-8328-42450dc630f",
+                                      instructorId: "8qiL8dB7IpNAxheY5SrYjYekTiP2");
+                                  lesson.id = lessonid.v4();
+                                  lesson.lessionDate = DateTime.parse(
+                                      date_of_lesson.substring(6, 10) +
+                                          '-' +                                          
+                                          date_of_lesson.substring(0, 2) +
+                                          '-' +
+                                          date_of_lesson.substring(3, 5) +
+                                          ' 00:00:00.000');
+                                  lesson.lessionDuration = int.parse(
+                                      lessonDurationController.text);
+                                  lesson.pickupLocation =
+                                      _selectedPickupLocation;
+                                  lesson.dropOffLocation =
+                                      _selectedDropOffLocation;
+                                  lesson.vehicleType = _selectedVehicleType;
+                                  lesson.lessionType = _selectedlessionType;
+                                  lesson.diaryNotes = diaryNotesController.text;
+                                  lesson.reportCard = reportCardController.text;
+                                  lesson.hasAcknowledged = switchOn_hasKnoledge;
+                                  await 
+                                  lesson.add();
                                 },
                                 //onPressed: () {},
                                 //onPressed: _validateInputs,
@@ -454,9 +514,10 @@ class _AddLessonState extends State<AddLesson> {
     );
   }
 
-
   String enumValueToString(String enumvalue) {
-    return enumvalue.toString().substring(enumvalue.toString().indexOf('.')+1);
+    return enumvalue
+        .toString()
+        .substring(enumvalue.toString().indexOf('.') + 1);
   }
 
   DateTime selectedDate = DateTime.now();

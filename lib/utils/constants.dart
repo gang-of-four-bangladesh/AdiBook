@@ -116,6 +116,13 @@ enum UserType {
   Instructor,
   Admin,
 }
+
+enum TripLocation{
+  Home,
+  Work,
+  School,
+  College
+}
 enum VehicleType {
   None,
   Manual,

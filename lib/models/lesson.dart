@@ -40,8 +40,8 @@ class Lesson {
   String instructorId;
   DateTime lessionDate;
   int lessionDuration;
-  String pickupLocation;
-  String dropOffLocation;
+  TripLocation pickupLocation;
+  TripLocation dropOffLocation;
   VehicleType vehicleType;
   LessionType lessionType;
   String diaryNotes;
