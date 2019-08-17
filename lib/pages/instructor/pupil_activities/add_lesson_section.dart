@@ -1,3 +1,4 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/validation.dart';
@@ -8,11 +9,17 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 class AddLesson extends StatefulWidget {
+
+  Map<String,dynamic> additionalData;
+  AddLesson({@required this.additionalData});
+
   @override
   _AddLessonState createState() => _AddLessonState();
 }
 
 class _AddLessonState extends State<AddLesson> {
+  final Map<String,dynamic> additionalData;
+  _AddLessonState({this.additionalData});
   CommonClass commonClass = new CommonClass();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

@@ -1,5 +1,6 @@
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,11 +51,14 @@ class PupilPistSectionState extends State<PupilListSection> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => HomePage(
-                                  sectionType:
-                                      SectionType.InstructorActivityForPupil,
-                                  userType: UserType.Instructor,
-                                )),
+                          builder: (context) => HomePage(
+                            sectionType: SectionType.InstructorActivityForPupil,
+                            userType: UserType.Instructor,
+                            contextInfo: {
+                              DataSharingKeys.PupilIdKey: document.documentID
+                            },
+                          ),
+                        ),
                       );
                     },
                   );

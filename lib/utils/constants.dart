@@ -39,6 +39,12 @@ class SharedPreferenceKeys {
       'log_file_last_uploaded_at_key';
 }
 
+class DataSharingKeys {
+  static const String PupilIdKey = 'pupil_id_key';
+  static const String InstructorIdKey = 'instructor_id_key';
+  static const String UserTypeKey = 'user_type';
+}
+
 class EnvironmentStatus {
   static RunningMode get applicationRunMode {
     if (bool.fromEnvironment("dart.vm.product")) return RunningMode.Release;

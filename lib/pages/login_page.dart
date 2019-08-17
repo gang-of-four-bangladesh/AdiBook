@@ -202,6 +202,13 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => HomePage(
           userType: this._selectedUserType,
           sectionType: defaultSectionType(this._selectedUserType),
+          contextInfo: {
+            DataSharingKeys.PupilIdKey:
+                this._selectedUserType == UserType.Pupil ? user.uid : null,
+            DataSharingKeys.InstructorIdKey:
+                this._selectedUserType == UserType.Instructor ? user.uid : null,
+            DataSharingKeys.UserTypeKey: this._selectedUserType,
+          },
         ),
       ),
     );
@@ -251,6 +258,15 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context) => HomePage(
             userType: this._selectedUserType,
             sectionType: defaultSectionType(this._selectedUserType),
+            contextInfo: {
+              DataSharingKeys.PupilIdKey:
+                  this._selectedUserType == UserType.Pupil ? user.uid : null,
+              DataSharingKeys.InstructorIdKey:
+                  this._selectedUserType == UserType.Instructor
+                      ? user.uid
+                      : null,
+              DataSharingKeys.UserTypeKey: this._selectedUserType,
+            },
           ),
         ),
       );
