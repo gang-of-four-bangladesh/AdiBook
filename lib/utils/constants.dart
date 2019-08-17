@@ -5,12 +5,15 @@ class FirestorePath {
   static const String UserCollection = 'users';
   static const String PupilCollection = 'pupils';
   static const String LessionCollection = 'lessons';
+  static const String ProgressPlanCollection = 'progress_plan';
   static const String PupilsOfAnInstructorCollection =
       '$InstructorCollection/%s/$PupilCollection';
   static const String InstructorsOfAPupilColection =
       '$PupilCollection/%s/$InstructorCollection';
   static const String LessonsOfAPupilColection =
-      '$PupilCollection/%s/$LessionCollection';
+      '$PupilCollection/%s/$InstructorCollection/%s/$LessionCollection';
+  static const String ProgressPlanOfAPupilColection =
+      '$PupilCollection/%s/$InstructorCollection/%s/$ProgressPlanCollection';
 }
 
 class StoragePath {

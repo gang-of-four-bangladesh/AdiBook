@@ -7,7 +7,6 @@ import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
 class Lesson {
-  static const String IdKey = 'id';
   static const String LessonDateKey = 'ldt';
   static const String LessonDurationKey = 'ldu';
   static const String PickUpLocationKey = 'pul';
@@ -21,33 +20,24 @@ class Lesson {
   static const String UpdatedAtKey = 'uat';
 
   Lesson(
-      {@required String pupilId,
-      String id,
-      DateTime lessionDate,
-      int lessionDuration,
-      String pickupLocation,
-      String dropOffLocation,
-      VehicleType vehicleType,
-      LessionType lessionType,
-      String diaryNotes,
-      String reportCard,
-      bool hasAcknowledged = false})
-      : this.pupilId = pupilId,
-        this.id = id,
-        this.lessionDate = lessionDate,
-        this.lessionDuration = lessionDuration,
-        this.pickupLocation = pickupLocation,
-        this.dropOffLocation = dropOffLocation,
-        this.vehicleType = vehicleType,
-        this.lessionType = lessionType,
-        this.diaryNotes = diaryNotes,
-        this.reportCard = reportCard,
-        this.hasAcknowledged = hasAcknowledged,
-        this.createdAt = null,
+      {@required this.pupilId,
+      @required this.instructorId,
+      this.id,
+      this.lessionDate,
+      this.lessionDuration,
+      this.pickupLocation,
+      this.dropOffLocation,
+      this.vehicleType,
+      this.lessionType,
+      this.diaryNotes,
+      this.reportCard,
+      this.hasAcknowledged = false})
+      : this.createdAt = null,
         this.updatedAt = null;
 
   String id;
   String pupilId;
+  String instructorId;
   DateTime lessionDate;
   int lessionDuration;
   String pickupLocation;
@@ -96,7 +86,7 @@ class Lesson {
     var lession = await this.get();
     if (!lession.exists) {
       Logger('lession').shout(
-          'Lession id ${this.id} for pupil ${this.pupilId} does not exits!');
+          'Lession id ${this.id} for pupil ${this.pupilId} and instructor ${this.instructorId} does not exits!');
       return null;
     }
     await _snapshotToLession(lession);
@@ -104,14 +94,15 @@ class Lesson {
   }
 
   Future<DocumentSnapshot> get() async {
-    var path = sprintf(FirestorePath.LessonsOfAPupilColection, [this.pupilId]);
+    var path = sprintf(FirestorePath.LessonsOfAPupilColection,
+        [this.pupilId, this.instructorId]);
     return Firestore.instance.collection(path).document(this.id).get();
   }
 
   Future add() async {
     try {
-      var path =
-          sprintf(FirestorePath.LessonsOfAPupilColection, [this.pupilId]);
+      var path = sprintf(FirestorePath.LessonsOfAPupilColection,
+          [this.pupilId, this.instructorId]);
       this.createdAt = DateTime.now().toUtc();
       Firestore.instance
           .collection(path)
@@ -127,8 +118,8 @@ class Lesson {
 
   Future update() async {
     try {
-      var path =
-          sprintf(FirestorePath.LessonsOfAPupilColection, [this.pupilId]);
+      var path = sprintf(FirestorePath.LessonsOfAPupilColection,
+          [this.pupilId, this.instructorId]);
       this.updatedAt = DateTime.now().toUtc();
       Firestore.instance
           .collection(path)
@@ -143,7 +134,8 @@ class Lesson {
   }
 
   Future delete() async {
-    var path = sprintf(FirestorePath.LessonsOfAPupilColection, [this.pupilId]);
+    var path = sprintf(FirestorePath.LessonsOfAPupilColection,
+        [this.pupilId, this.instructorId]);
     return Firestore.instance.collection(path).document(this.id).delete();
   }
 }

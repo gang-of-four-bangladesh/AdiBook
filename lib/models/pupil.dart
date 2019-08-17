@@ -3,7 +3,6 @@ import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Pupil {
-  static const String IdKey = 'id';
   static const String NameKey = 'nam';
   static const String AddressKey = 'add';
   static const String PhoneNumberKey = 'phn';
@@ -16,25 +15,16 @@ class Pupil {
   static const String UpdatedAtKey = 'uat';
 
   Pupil(
-      {id,
-      name,
-      phoneNumber,
-      licenseNo,
-      address,
-      dateOfBirth,
-      eyeTest = false,
-      theoryRecord = false,
-      previousExperience = false})
-      : this.id = id,
-        this.name = name,
-        this.address = address,
-        this.phoneNumber = phoneNumber,
-        this.licenseNo = licenseNo,
-        this.dateOfBirth = dateOfBirth,
-        this.eyeTest = eyeTest,
-        this.theoryRecord = theoryRecord,
-        this.previousExperience = previousExperience,
-        this.createdAt = null,
+      {this.id,
+      this.name,
+      this.phoneNumber,
+      this.licenseNo,
+      this.address,
+      this.dateOfBirth,
+      this.eyeTest = false,
+      this.theoryRecord = false,
+      this.previousExperience = false})
+      : this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
@@ -69,12 +59,15 @@ class Pupil {
     this.address = snapshot[Pupil.AddressKey];
     this.phoneNumber = snapshot[Pupil.PhoneNumberKey];
     this.licenseNo = snapshot[Pupil.LicenseKey];
-    this.dateOfBirth = TypeConversion.timeStampToDateTime(snapshot[Pupil.DateOfBirthKey]);
+    this.dateOfBirth =
+        TypeConversion.timeStampToDateTime(snapshot[Pupil.DateOfBirthKey]);
     this.eyeTest = snapshot[Pupil.EyeTestKey];
     this.theoryRecord = snapshot[Pupil.TheoryRecordKey];
     this.previousExperience = snapshot[Pupil.PreviousExperiencehKey];
-    this.createdAt = TypeConversion.timeStampToDateTime(snapshot[Pupil.CreatedAtKey]);
-    this.updatedAt = TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
+    this.createdAt =
+        TypeConversion.timeStampToDateTime(snapshot[Pupil.CreatedAtKey]);
+    this.updatedAt =
+        TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
   }
 
   Future<Pupil> getPupil() async {

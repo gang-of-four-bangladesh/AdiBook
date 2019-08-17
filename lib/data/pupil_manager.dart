@@ -11,7 +11,7 @@ class PupilManager {
   Future<void> tagPupil(Pupil pupil, Instructor instructor) async {
     var _logger = Logger(this.runtimeType.toString());
     var ref = Firestore.instance
-        .collection(FirestorePath.InstructorCollection)
+        .collection(FirestorePath.PupilCollection)
         .document(pupil.id);
     var path =
         sprintf(FirestorePath.PupilsOfAnInstructorCollection, [instructor.id]);

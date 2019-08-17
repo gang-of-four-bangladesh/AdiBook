@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
 class Instructor {
-  static const String IdKey = 'id';
   static const String NameKey = 'nam';
   static const String AddressKey = 'add';
   static const String PhoneNumberKey = 'phn';
@@ -15,22 +14,13 @@ class Instructor {
   static const String UpdatedAtKey = 'uat';
 
   Instructor(
-      {String id,
-      String name,
-      String licenseNo,
-      String address,
-      String phoneNumber,
-      DateTime dateOfBirth,
-      bool eyeTest = false,
-      bool theoryRecord = false,
-      bool previousExperience = false})
-      : this.id = id,
-        this.name = name,
-        this.address = address,
-        this.phoneNumber = phoneNumber,
-        this.licenseNo = licenseNo,
-        this.dateOfBirth = dateOfBirth,
-        this.createdAt = null,
+      {this.id,
+      this.name,
+      this.licenseNo,
+      this.address,
+      this.phoneNumber,
+      this.dateOfBirth})
+      : this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
