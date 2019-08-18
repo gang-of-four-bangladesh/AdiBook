@@ -1,3 +1,4 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/models/user.dart';
@@ -52,5 +53,29 @@ class UserManager {
       _logger.info('User of type $userType with $id created.');
     }
     _logger.info('User creation skipped. User $id already exits.');
+  }
+
+  Future<void> updateAppDataByUser(User adiBookUser) async {
+    Logger _logger = Logger('UserManager=>updateAppDataByUser');
+    appData.userType = adiBookUser.userType;
+    switch (adiBookUser.userType) {
+      case UserType.Instructor:
+        appData.instructorId = adiBookUser.id;
+        break;
+      case UserType.Pupil:
+        appData.pupilId = adiBookUser.id;
+        break;
+      case UserType.Admin:
+        appData.adminId = adiBookUser.id;
+        break;
+      default:
+        break;
+    }
+    _logger.info('updated app data information $appData');
+  }
+
+  Future<void> updateAppDataByUserId(String userId) async {
+    var adiBookUser = await User(id: userId).getUser();
+    updateAppDataByUser(adiBookUser);
   }
 }

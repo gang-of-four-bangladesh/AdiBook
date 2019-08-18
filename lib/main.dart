@@ -1,9 +1,10 @@
 import 'package:adibook/app.dart';
 import 'package:adibook/core/log_manager.dart';
+import 'package:adibook/core/page_manager.dart';
+import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:adibook/utils/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,14 @@ Future main() async {
   var currentUser = await FirebaseAuth.instance.currentUser();
   _logger.info('FirebaseAuth.instance.currentUser()? $currentUser');
   if (currentUser != null) {
-    var adiBookUser = await User(id: currentUser.uid).getUser();
+    var adiBookUser = await User(id: currentUser.phoneNumber).getUser();
     _logger.info(
         'Logged in user $adiBookUser, user name ${adiBookUser.name} as ${adiBookUser.userType}');
     _defaultPage = HomePage(
       userType: adiBookUser.userType,
-      sectionType: defaultSectionType(adiBookUser.userType),
+      sectionType: PageManager().defaultSectionType(adiBookUser.userType),
     );
+    await UserManager().updateAppDataByUser(adiBookUser);
   }
   runApp(AdiBookApp(_defaultPage));
   _logger.info(

@@ -76,13 +76,14 @@ class _HomePageState extends State<HomePage> {
 
   void _initialize() {
     appData.contextualInfo = this.widget.contextInfo;
+    this._logger.info('Contextual information ${this.widget.contextInfo}, app data information $appData');
     setState(() {
       _selectedPage = 0;
       this._widgetsConfiguration = PageManager().getWidgetConfigurations(
           this.widget.userType, this.widget.sectionType);
       this._logger.info(
-          'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBartitle)}');
-      _appbarTitle = this._widgetsConfiguration[_selectedPage].appBartitle;
+          'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBarTitle)}');
+      _appbarTitle = this._widgetsConfiguration[_selectedPage].appBarTitle;
       this._getBottomNavBarItems();
     });
   }
@@ -138,7 +139,7 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               _selectedPage = index;
               _appbarTitle =
-                  this._widgetsConfiguration[_selectedPage].appBartitle;
+                  this._widgetsConfiguration[_selectedPage].appBarTitle;
               this._logger.info(
                   'selected page index $_selectedPage and app bar title $_appbarTitle');
             });

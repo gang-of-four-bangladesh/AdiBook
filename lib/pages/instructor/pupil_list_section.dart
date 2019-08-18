@@ -1,3 +1,4 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
@@ -22,9 +23,8 @@ class PupilPistSectionState extends State<PupilListSection> {
   }
 
   void _loadPupilsData() async {
-    var instructorId = await UserManager().currentUserId;
     setState(() {
-      _querySnapshot = Instructor(id: instructorId).getPupils().asStream();
+      _querySnapshot = Instructor(id: appData.instructorId).getPupils().asStream();
     });
   }
 
@@ -48,6 +48,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                     trailing: Icon(Icons.person),
                     title: Text(document["nam"]),
                     onTap: () {
+                      appData.pupilId = document.documentID;
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -9,8 +9,7 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 class AddLesson extends StatefulWidget {
-
-  Map<String,dynamic> additionalData;
+  Map<String, dynamic> additionalData;
   AddLesson({@required this.additionalData});
 
   @override
@@ -18,7 +17,7 @@ class AddLesson extends StatefulWidget {
 }
 
 class _AddLessonState extends State<AddLesson> {
-  final Map<String,dynamic> additionalData;
+  final Map<String, dynamic> additionalData;
   _AddLessonState({this.additionalData});
   CommonClass commonClass = new CommonClass();
   // _formKey and _autoValidate
@@ -34,11 +33,11 @@ class _AddLessonState extends State<AddLesson> {
   TripLocation _selectedDropOffLocation;
   LessionType _selectedlessionType;
   VehicleType _selectedVehicleType;
-@override
-void initState() {
+  @override
+  void initState() {
     super.initState();
-    _selectedPickupLocation= TripLocation.Home;
-    _selectedDropOffLocation= TripLocation.Home;
+    _selectedPickupLocation = TripLocation.Home;
+    _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.None;
     _selectedlessionType = LessionType.None;
     switchOn_hasKnoledge = false;
@@ -170,7 +169,7 @@ void initState() {
                                 ),
                                 /*3*/
                                 DropdownButton<TripLocation>(
-                                    value:_selectedPickupLocation,
+                                    value: _selectedPickupLocation,
                                     onChanged: (TripLocation location) {
                                       setState(() {
                                         _selectedPickupLocation = location;
@@ -397,9 +396,7 @@ void initState() {
                         value: switchOn_hasKnoledge,
                         onChanged: (val) =>
                             setState(() => switchOn_hasKnoledge = val),
-                        activeColor: Color(
-                          commonClass.hexColor('#03D1BF'),
-                        ),
+                        activeColor: AppTheme.appThemeColor,
                       )
                     ],
                   ),
@@ -421,32 +418,30 @@ void initState() {
                               minWidth: 180.0,
                               height: 50.0,
                               child: RaisedButton(
-                                onPressed: () async{
-                                  Uuid lessonid = new Uuid();
-                                  Lesson lesson = new Lesson(
-                                      pupilId: "320a5c3f-15b6-4c9b-8328-42450dc630f",
-                                      instructorId: "8qiL8dB7IpNAxheY5SrYjYekTiP2");
-                                  lesson.id = lessonid.v4();
-                                  lesson.lessionDate = DateTime.parse(
+                                onPressed: () async {
+                                  var _lessionDate = DateTime.parse(
                                       date_of_lesson.substring(6, 10) +
-                                          '-' +                                          
+                                          '-' +
                                           date_of_lesson.substring(0, 2) +
                                           '-' +
                                           date_of_lesson.substring(3, 5) +
                                           ' 00:00:00.000');
-                                  lesson.lessionDuration = int.parse(
-                                      lessonDurationController.text);
-                                  lesson.pickupLocation =
-                                      _selectedPickupLocation;
-                                  lesson.dropOffLocation =
-                                      _selectedDropOffLocation;
-                                  lesson.vehicleType = _selectedVehicleType;
-                                  lesson.lessionType = _selectedlessionType;
-                                  lesson.diaryNotes = diaryNotesController.text;
-                                  lesson.reportCard = reportCardController.text;
-                                  lesson.hasAcknowledged = switchOn_hasKnoledge;
-                                  await 
-                                  lesson.add();
+                                  var _lessionDuration =
+                                      int.parse(lessonDurationController.text);
+                                  Lesson lesson = new Lesson(
+                                    pupilId: appData.pupilId,
+                                    instructorId: appData.instructorId,
+                                    vehicleType: _selectedVehicleType,
+                                    lessionType: _selectedlessionType,
+                                    diaryNotes: diaryNotesController.text,
+                                    reportCard: reportCardController.text,
+                                    hasAcknowledged: switchOn_hasKnoledge,
+                                    pickupLocation: _selectedPickupLocation,
+                                    dropOffLocation: _selectedDropOffLocation,
+                                    lessionDate: _lessionDate,
+                                    lessionDuration: _lessionDuration,
+                                  );
+                                  await lesson.add();
                                 },
                                 //onPressed: () {},
                                 //onPressed: _validateInputs,

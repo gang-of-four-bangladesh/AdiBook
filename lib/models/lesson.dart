@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:uuid/uuid.dart';
 
 class Lesson {
   static const String LessonDateKey = 'ldt';
@@ -54,10 +55,10 @@ class Lesson {
     return {
       LessonDateKey: lessionDate,
       LessonDurationKey: lessionDuration,
-      PickUpLocationKey: pickupLocation,
-      DropOffLocationKey: dropOffLocation,
-      VehicleTypeKey: vehicleType,
-      LessionTypeKey: lessionType,
+      PickUpLocationKey: pickupLocation.index,
+      DropOffLocationKey: dropOffLocation.index,
+      VehicleTypeKey: vehicleType.index,
+      LessionTypeKey: lessionType.index,
       DiaryNotesKey: diaryNotes,
       ReportCardKey: reportCard,
       HasAcknowledgedKey: hasAcknowledged,
@@ -103,6 +104,8 @@ class Lesson {
     try {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
+      Logger('lessons->add').info(path);
+      this.id = Uuid().v1();
       this.createdAt = DateTime.now().toUtc();
       Firestore.instance
           .collection(path)

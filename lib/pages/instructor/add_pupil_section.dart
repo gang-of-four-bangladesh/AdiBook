@@ -1,4 +1,7 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/data/pupil_manager.dart';
+import 'package:adibook/data/user_manager.dart';
+import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
@@ -41,19 +44,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
     void _prviouseExponSwitchChanged(bool value) {
       switchOn_prviouseExp = value;
-    }
-
-    void _makeEmpty() {
-      setState(() {
-        nameController.text = '';
-        addressController.text = '';
-        phoneController.text = '';
-        drivingLicenseController = null;
-        date_of_birth = '';
-        switchOn_eyeTest = false;
-        switchOn_theoryRecord = false;
-        switchOn_prviouseExp = false;
-      });
     }
 
     return SingleChildScrollView(
@@ -318,52 +308,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             minWidth: 180.0,
                             height: 50.0,
                             child: RaisedButton(
-                              onPressed: _validateInputs,
-                              // == true
-                              //     ? () async {
-                              //         print('called');
-                              //         print('year: ' +
-                              //             date_of_birth.substring(6, 10));
-                              //         print('day: ' +
-                              //             date_of_birth.substring(0, 2));
-                              //         print(date_of_birth);
-                              //         print('month: ' +
-                              //             date_of_birth.substring(3, 5));
-                              //         pupil.id = uuid.v4();
-                              //         pupil.name = nameController.text;
-                              //         pupil.phoneNumber = phoneController.text;
-                              //         pupil.address = addressController.text;
-                              //         pupil.dateOfBirth = DateTime.parse(
-                              //             date_of_birth.substring(6, 10) +
-                              //                 '-' +
-                              //                 date_of_birth.substring(3, 5) +
-                              //                 '-' +
-                              //                 date_of_birth.substring(0, 2) +
-                              //                 ' 00:00:00.000');
-                              //         pupil.eyeTest = switchOn_eyeTest;
-                              //         pupil.previousExperience =
-                              //             switchOn_prviouseExp;
-                              //         pupil.theoryRecord =
-                              //             switchOn_theoryRecord;
-                              //         await pupil.add();
-                              //         var instructor = await Instructor(
-                              //                 id: await UserManager
-                              //                     .currentUserId)
-                              //             .getInstructor();
-                              //         await pupilManager.tagPupil(
-                              //             pupil, instructor);
-                              //         await pupilManager.tagInstructor(
-                              //             pupil, instructor);
-                              //         _makeEmpty();
-                              //         commonClass.getSnackbar(
-                              //             "Data save successfully", context);
-                              //       }
-                              //     : commonClass.getSnackbar(
-                              //         "data failed to save !!!", context),
-                              //onPressed: _validateInputs,
-                              color: Color(
-                                commonClass.hexColor('#03D1BF'),
-                              ),
+                              onPressed: () async {
+                                _validateInputs();
+                                await _saveData();
+                              },
                               child: Text(
                                 "Save",
                                 style: TextStyle(
@@ -401,6 +349,46 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 //    If all data are not valid then start auto validation.
       return false;
     }
+  }
+
+  void _makeEmpty() {
+    setState(() {
+      nameController.text = '';
+      addressController.text = '';
+      phoneController.text = '';
+      drivingLicenseController = null;
+      date_of_birth = '';
+      switchOn_eyeTest = false;
+      switchOn_theoryRecord = false;
+      switchOn_prviouseExp = false;
+    });
+  }
+
+  Future<void> _saveData() async {
+    print('called');
+    print('year: ' + date_of_birth.substring(6, 10));
+    print('day: ' + date_of_birth.substring(0, 2));
+    print(date_of_birth);
+    print('month: ' + date_of_birth.substring(3, 5));
+    pupil.id = phoneController.text;
+    pupil.name = nameController.text;
+    pupil.phoneNumber = phoneController.text;
+    pupil.address = addressController.text;
+    pupil.dateOfBirth = DateTime.parse(date_of_birth.substring(6, 10) +
+        '-' +
+        date_of_birth.substring(3, 5) +
+        '-' +
+        date_of_birth.substring(0, 2) +
+        ' 00:00:00.000');
+    pupil.eyeTest = switchOn_eyeTest;
+    pupil.previousExperience = switchOn_prviouseExp;
+    pupil.theoryRecord = switchOn_theoryRecord;
+    await pupil.add();
+    var instructor = await Instructor(id: appData.instructorId).getInstructor();
+    await pupilManager.tagPupil(pupil, instructor);
+    await pupilManager.tagInstructor(pupil, instructor);
+    _makeEmpty();
+    commonClass.getSnackbar("Data save successfully", context);
   }
 
   File img;

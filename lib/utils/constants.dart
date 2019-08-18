@@ -68,48 +68,6 @@ const Map<String, String> CountryWisePhoneCode = {
   "Bangladesh (+880)": "+880"
 };
 
-SectionType defaultSectionType(UserType userType) {
-  return _getUsersSectionsConfig()
-      .firstWhere((f) => f.userType == userType && f.isDefault)
-      .sectionType;
-}
-
-List<_UsersSectionType> _getUsersSectionsConfig() {
-  return [
-    _UsersSectionType(
-      userType: UserType.Admin,
-      sectionType: SectionType.AdminActivity,
-      isDefault: true,
-    ),
-    _UsersSectionType(
-      userType: UserType.Instructor,
-      sectionType: SectionType.InstructorActivity,
-      isDefault: true,
-    ),
-    _UsersSectionType(
-      userType: UserType.Instructor,
-      sectionType: SectionType.InstructorActivityForPupil,
-      isDefault: false,
-    ),
-    _UsersSectionType(
-      userType: UserType.Pupil,
-      sectionType: SectionType.PupilActivity,
-      isDefault: true,
-    )
-  ];
-}
-
-class _UsersSectionType {
-  _UsersSectionType({
-    this.userType,
-    this.sectionType,
-    this.isDefault,
-  });
-  UserType userType;
-  SectionType sectionType;
-  bool isDefault;
-}
-
 enum RunningMode {
   None,
   Debug,

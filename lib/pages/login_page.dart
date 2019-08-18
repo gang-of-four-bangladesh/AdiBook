@@ -1,7 +1,7 @@
+import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
-import 'package:adibook/utils/common_function.dart';
 import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  CommonClass commonClass = new CommonClass();
+  PageManager _pageManager = PageManager();
   TextEditingController _countryCodeController = TextEditingController();
   TextEditingController _smsCodeController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                     ? new SizedBox(
                         child: new CircularProgressIndicator(
                             valueColor: new AlwaysStoppedAnimation(
-                                Color(commonClass.hexColor('#03D1BF'))),
+                                AppTheme.appThemeColor),
                             strokeWidth: 5.0),
                         height: 30.0,
                         width: 30.0,
@@ -194,21 +194,15 @@ class _LoginPageState extends State<LoginPage> {
         verificationId: verificationId, smsCode: this._smsCodeController.text);
     var user = await _signInUser(authCredential);
     await UserManager()
-        .createUser(id: user.uid, userType: this._selectedUserType);
-    await User(id: user.uid, userType: this._selectedUserType).update();
+        .createUser(id: user.phoneNumber, userType: this._selectedUserType);
+    await User(id: user.phoneNumber, userType: this._selectedUserType).update();
+    await UserManager().updateAppDataByUserId(user.phoneNumber);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => HomePage(
           userType: this._selectedUserType,
-          sectionType: defaultSectionType(this._selectedUserType),
-          contextInfo: {
-            DataSharingKeys.PupilIdKey:
-                this._selectedUserType == UserType.Pupil ? user.uid : null,
-            DataSharingKeys.InstructorIdKey:
-                this._selectedUserType == UserType.Instructor ? user.uid : null,
-            DataSharingKeys.UserTypeKey: this._selectedUserType,
-          },
+          sectionType: _pageManager.defaultSectionType(this._selectedUserType),
         ),
       ),
     );
@@ -252,21 +246,14 @@ class _LoginPageState extends State<LoginPage> {
       await UserManager()
           .createUser(id: user.uid, userType: this._selectedUserType);
       await User(id: user.uid, userType: this._selectedUserType).update();
+      await UserManager().updateAppDataByUserId(user.phoneNumber);
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
             userType: this._selectedUserType,
-            sectionType: defaultSectionType(this._selectedUserType),
-            contextInfo: {
-              DataSharingKeys.PupilIdKey:
-                  this._selectedUserType == UserType.Pupil ? user.uid : null,
-              DataSharingKeys.InstructorIdKey:
-                  this._selectedUserType == UserType.Instructor
-                      ? user.uid
-                      : null,
-              DataSharingKeys.UserTypeKey: this._selectedUserType,
-            },
+            sectionType:
+                _pageManager.defaultSectionType(this._selectedUserType),
           ),
         ),
       );

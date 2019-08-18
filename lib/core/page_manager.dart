@@ -16,22 +16,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WidgetConfiguration {
   WidgetConfiguration(
-      {int index,
-      String appBarTitle,
-      String bottomNavTitle,
-      UserType availableFor,
-      Widget sectionWidget,
-      Icon bottomNavIcon,
-      SectionType sectionType})
-      : this.index = index,
-        this.appBartitle = appBarTitle,
-        this.bottomNavTitle = bottomNavTitle,
-        this.availableFor = availableFor,
-        this.sectionWidget = sectionWidget,
-        this.bottomNavIcon = bottomNavIcon,
-        this.sectionType = sectionType;
+      {this.index,
+      this.appBarTitle,
+      this.bottomNavTitle,
+      this.availableFor,
+      this.sectionWidget,
+      this.bottomNavIcon,
+      this.sectionType});
   int index;
-  String appBartitle;
+  String appBarTitle;
   String bottomNavTitle;
   UserType availableFor;
   Widget sectionWidget;
@@ -173,4 +166,46 @@ class PageManager {
       sectionType: SectionType.InstructorActivityForPupil,
     ),
   ];
+
+  SectionType defaultSectionType(UserType userType) {
+    return _getUsersSectionsConfig()
+        .firstWhere((f) => f.userType == userType && f.isDefault)
+        .sectionType;
+  }
+
+  List<_UsersSectionType> _getUsersSectionsConfig() {
+    return [
+      _UsersSectionType(
+        userType: UserType.Admin,
+        sectionType: SectionType.AdminActivity,
+        isDefault: true,
+      ),
+      _UsersSectionType(
+        userType: UserType.Instructor,
+        sectionType: SectionType.InstructorActivity,
+        isDefault: true,
+      ),
+      _UsersSectionType(
+        userType: UserType.Instructor,
+        sectionType: SectionType.InstructorActivityForPupil,
+        isDefault: false,
+      ),
+      _UsersSectionType(
+        userType: UserType.Pupil,
+        sectionType: SectionType.PupilActivity,
+        isDefault: true,
+      )
+    ];
+  }
+}
+
+class _UsersSectionType {
+  _UsersSectionType({
+    this.userType,
+    this.sectionType,
+    this.isDefault,
+  });
+  UserType userType;
+  SectionType sectionType;
+  bool isDefault;
 }
