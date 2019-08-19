@@ -1,4 +1,5 @@
 import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class PupilRegistration extends StatelessWidget {
@@ -7,7 +8,7 @@ CommonClass commonClass = new CommonClass();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color(commonClass.hexColor('#03D1BF')),
+          backgroundColor: AppTheme.appThemeColor,
           title: Text("Register"),
           actions: <Widget>[
             Container(
@@ -17,9 +18,7 @@ CommonClass commonClass = new CommonClass();
                 minWidth: 100.0,
                 height: 60.0,
                 child: RaisedButton(
-                  color: Color(
-                    commonClass.hexColor('#03D1BF'),
-                  ),
+                  color: AppTheme.appThemeColor,
                   onPressed: () {
                     Navigator.of(context).pushNamed('/login_page');
                   },
@@ -182,11 +181,9 @@ CommonClass commonClass = new CommonClass();
                                 new TextSpan(
                                   text: 'Terms and Conditions',
                                   style: new TextStyle(fontWeight: FontWeight.bold,
-                                    color: Color(
-                                      commonClass.hexColor('#03D1BF'),
+                                    color: AppTheme.appThemeColor,
                                     ),
                                   ),
-                                )
                               ],
                             ),
                           ),
@@ -211,9 +208,7 @@ CommonClass commonClass = new CommonClass();
                         minWidth: 310.0,
                         height: 50.0,
                         child: RaisedButton(
-                          color: Color(
-                            commonClass.hexColor('#03D1BF'),
-                          ),
+                          color: AppTheme.appThemeColor,
                           onPressed: () {},
                           shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(8.0),

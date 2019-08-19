@@ -1,4 +1,5 @@
 import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -28,7 +29,7 @@ CommonClass commonClass = new CommonClass();
     return Scaffold(
       appBar: AppBar(
         title: Text('Image Upload'),
-        backgroundColor: Color(commonClass.hexColor('#03D1BF')),
+        backgroundColor: AppTheme.appThemeColor,
       ),
       body: Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -63,9 +64,7 @@ CommonClass commonClass = new CommonClass();
                           minWidth: 200.0,
                           height: 50.0,
                           child: RaisedButton(
-                            color: Color(
-                              commonClass.hexColor('#03D1BF'),
-                            ),
+                            color: AppTheme.appThemeColor,
                             onPressed: () {
                               image_picker_camera();
                             },
@@ -93,9 +92,7 @@ CommonClass commonClass = new CommonClass();
                           minWidth: 200.0,
                           height: 50.0,
                           child: RaisedButton(
-                            color: Color(
-                              commonClass.hexColor('#03D1BF'),
-                            ),
+                            color: AppTheme.appThemeColor,
                             onPressed: () {
                               image_picker_gallary();
                             },

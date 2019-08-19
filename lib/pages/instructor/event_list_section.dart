@@ -1,4 +1,5 @@
 import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 
@@ -29,9 +30,7 @@ CommonClass commonClass = new CommonClass();
                       minWidth: 20.0,
                       height: 40.0,
                       child: RaisedButton(
-                        color: Color(
-                          commonClass.hexColor('#03D1BF'),
-                        ),
+                        color: AppTheme.appThemeColor,
                         onPressed: () {},
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(8.0),
@@ -51,9 +50,7 @@ CommonClass commonClass = new CommonClass();
                       minWidth: 20.0,
                       height: 40.0,
                       child: RaisedButton(
-                        color: Color(
-                          commonClass.hexColor('#03D1BF'),
-                        ),
+                        color: AppTheme.appThemeColor,
                         onPressed: () {},
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(8.0),
@@ -78,8 +75,8 @@ CommonClass commonClass = new CommonClass();
                     isExpanded: true,
                     isExpandable: true,
                     showTodayIcon: true,
-                    eventDoneColor: Color(commonClass.hexColor('#03D1BF')),
-                    eventColor: Color(commonClass.hexColor('#03D1BF'))),
+                    eventDoneColor: AppTheme.appThemeColor,
+                    eventColor: AppTheme.appThemeColor),
               ),
               _buildEventList()
             ],

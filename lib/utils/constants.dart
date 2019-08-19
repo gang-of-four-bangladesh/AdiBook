@@ -68,6 +68,11 @@ const Map<String, String> CountryWisePhoneCode = {
   "Bangladesh (+880)": "+880"
 };
 
+const Map<String, String> CountryWisePhoneCode2 = {
+  "UK (+44)": "+44",
+  "BD (+880)": "+880"
+};
+
 enum RunningMode {
   None,
   Debug,

@@ -4,6 +4,7 @@ import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:adibook/pages/validation.dart';
@@ -19,8 +20,7 @@ class AddPupilSection extends StatefulWidget {
 }
 
 class AddPupilSectionstate extends State<AddPupilSection> {
-  Pupil pupil = new Pupil();
-  Uuid uuid = new Uuid();
+  String _selectedCountry = CountryWisePhoneCode2.keys.first;
   CommonClass commonClass = new CommonClass();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -31,6 +31,22 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   String _drivingLicensce;
 
   var pupilManager = new PupilManager();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nameController.text = '';
+    addressController.text = '';
+    phoneController.text = '';
+    drivingLicenseController.text = '';
+    date_of_birth = '';
+    _show_date = '';
+    switchOn_eyeTest = false;
+    switchOn_theoryRecord = false;
+    switchOn_prviouseExp = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     Validations validations = new Validations();
@@ -75,10 +91,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                     Icon(Icons.star, color: Colors.red[600]),
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(
-                                        commonClass.hexColor('#03D1BF'),
-                                      ),
-                                    ),
+                                        color: AppTheme.appThemeColor),
                                     borderRadius:
                                         new BorderRadius.circular(8.0)),
                                 hintText: "Name"),
@@ -108,20 +121,57 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     Column(
                       children: <Widget>[
+                        //  Driving Type,
                         Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            controller: phoneController,
-                            keyboardType: TextInputType.phone,
-                            onSaved: (String val) {
-                              _phone = val;
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
-                                hintText: "Phone"),
+                          padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  /*2*/
+                                  DropdownButton<String>(
+                                    items: CountryWisePhoneCode2.keys
+                                        .map((String country) {
+                                      return DropdownMenuItem<String>(
+                                        value: country,
+                                        child: Text(country),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String value) {
+                                      setState(() {
+                                        _selectedCountry = value;
+                                      });
+                                    },
+                                    value: _selectedCountry,
+                                  ),
+                                ],
+                              ),
+                              /*3*/
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      left: 2.0, right: 2.0, bottom: 5.0),
+                                  child: TextFormField(
+                                    controller: phoneController,
+                                    keyboardType: TextInputType.phone,
+                                    validator: validations.validatePhoneNumber,
+                                    onSaved: (String val) {
+                                      _phone = val;
+                                    },
+                                    decoration: InputDecoration(
+                                        suffixIcon: Icon(Icons.star,
+                                            color: Colors.red[600]),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.cyan[300]),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        hintText: "Phone"),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ],
@@ -132,7 +182,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
                             controller: drivingLicenseController,
-                            validator: validations.validateText,
+                            validator: validations.validateRequired,
                             onSaved: (String value) {
                               _drivingLicensce = value;
                             },
@@ -182,7 +232,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Text(
-                      "${date_of_birth}",
+                      "${_show_date}",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -213,13 +263,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                      value: switchOn_eyeTest,
-                      onChanged: (val) =>
-                          setState(() => switchOn_eyeTest = val),
-                      activeColor: Color(
-                        commonClass.hexColor('#03D1BF'),
-                      ),
-                    )
+                        value: switchOn_eyeTest,
+                        onChanged: (val) =>
+                            setState(() => switchOn_eyeTest = val),
+                        activeColor: AppTheme.appThemeColor)
                   ],
                 ),
               ),
@@ -247,13 +294,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                      value: switchOn_theoryRecord,
-                      onChanged: (val) =>
-                          setState(() => switchOn_theoryRecord = val),
-                      activeColor: Color(
-                        commonClass.hexColor('#03D1BF'),
-                      ),
-                    )
+                        value: switchOn_theoryRecord,
+                        onChanged: (val) =>
+                            setState(() => switchOn_theoryRecord = val),
+                        activeColor: AppTheme.appThemeColor)
                   ],
                 ),
               ),
@@ -281,13 +325,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                      value: switchOn_prviouseExp,
-                      onChanged: (val) =>
-                          setState(() => switchOn_prviouseExp = val),
-                      activeColor: Color(
-                        commonClass.hexColor('#03D1BF'),
-                      ),
-                    )
+                        value: switchOn_prviouseExp,
+                        onChanged: (val) =>
+                            setState(() => switchOn_prviouseExp = val),
+                        activeColor: AppTheme.appThemeColor)
                   ],
                 ),
               ),
@@ -309,9 +350,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             height: 50.0,
                             child: RaisedButton(
                               onPressed: () async {
-                                _validateInputs();
-                                await _saveData();
+                                if (_validateInputs() == true)
+                                  await _saveData();
                               },
+                              color: AppTheme.appThemeColor,
                               child: Text(
                                 "Save",
                                 style: TextStyle(
@@ -338,14 +380,15 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   }
 
   bool _validateInputs() {
-    commonClass.getSnackbar("called validation function", context);
     if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
-      commonClass.getSnackbar("Valid", context);
+      if (date_of_birth == '') {
+        commonClass.getSnackbar('Date of Birth is Required', context);
+        return false;
+      }
       return true;
       //_formKey.currentState.save();
     } else {
-      commonClass.getSnackbar("Invalid", context);
 //    If all data are not valid then start auto validation.
       return false;
     }
@@ -356,8 +399,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       nameController.text = '';
       addressController.text = '';
       phoneController.text = '';
-      drivingLicenseController = null;
+      drivingLicenseController.text = '';
       date_of_birth = '';
+      _show_date = '';
       switchOn_eyeTest = false;
       switchOn_theoryRecord = false;
       switchOn_prviouseExp = false;
@@ -365,14 +409,16 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   }
 
   Future<void> _saveData() async {
+    Pupil pupil = new Pupil();
     print('called');
     print('year: ' + date_of_birth.substring(6, 10));
     print('day: ' + date_of_birth.substring(0, 2));
     print(date_of_birth);
     print('month: ' + date_of_birth.substring(3, 5));
-    pupil.id = phoneController.text;
+    pupil.id =
+        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
     pupil.name = nameController.text;
-    pupil.phoneNumber = phoneController.text;
+    pupil.phoneNumber = '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
     pupil.address = addressController.text;
     pupil.dateOfBirth = DateTime.parse(date_of_birth.substring(6, 10) +
         '-' +
@@ -383,12 +429,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.eyeTest = switchOn_eyeTest;
     pupil.previousExperience = switchOn_prviouseExp;
     pupil.theoryRecord = switchOn_theoryRecord;
-    await pupil.add();
+    var result = await pupil.add();
     var instructor = await Instructor(id: appData.instructorId).getInstructor();
     await pupilManager.tagPupil(pupil, instructor);
     await pupilManager.tagInstructor(pupil, instructor);
+    result == true
+        ? commonClass.getSnackbar('Pupil created successfully.', context)
+        : commonClass.getSnackbar('Pupil creation failed.', context);
     _makeEmpty();
-    commonClass.getSnackbar("Data save successfully", context);
   }
 
   File img;
@@ -450,6 +498,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   DateTime selectedDate = DateTime.now();
   int getyear = 2019;
   String date_of_birth = '';
+  String _show_date ='';
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -468,6 +517,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       setState(
         () {
           date_of_birth = new DateFormat('dd/MM/yyyy').format(picked);
+          _show_date = new DateFormat('MMM-dd-yyyy').format(picked);
         },
       );
     }

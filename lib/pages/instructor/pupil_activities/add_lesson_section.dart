@@ -23,6 +23,7 @@ class _AddLessonState extends State<AddLesson> {
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
+  String _lessonDuration;
   String _diaryNotes;
   String _reportCard;
   bool switchOn_hasKnoledge;
@@ -53,10 +54,15 @@ class _AddLessonState extends State<AddLesson> {
 
     void _makeEmpty() {
       setState(() {
+        _selectedPickupLocation = TripLocation.Home;
+        _selectedDropOffLocation = TripLocation.Home;
+        _selectedVehicleType = VehicleType.None;
+        _selectedlessionType = LessionType.None;
         lessonDurationController.text = '';
         diaryNotesController.text = '';
         reportCardController.text = '';
         date_of_lesson = '';
+        _show_date='';
         switchOn_hasKnoledge = false;
       });
     }
@@ -110,7 +116,7 @@ class _AddLessonState extends State<AddLesson> {
                                 ),
                                 /*3*/
                                 Text(
-                                  "${date_of_lesson}",
+                                  "${_show_date}",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -122,19 +128,16 @@ class _AddLessonState extends State<AddLesson> {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: lessonDurationController,
-                              validator: validations.validateText,
-                              onSaved: (String value) {
-                                _diaryNotes = value;
+                              validator: validations.validateNumber,
+                                onSaved: (String value) {
+                                _lessonDuration = value;
                               },
                               decoration: InputDecoration(
                                   suffixIcon:
                                       Icon(Icons.star, color: Colors.red[600]),
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(
-                                          commonClass.hexColor('#03D1BF'),
-                                        ),
-                                      ),
+                                          color: AppTheme.appThemeColor),
                                       borderRadius:
                                           new BorderRadius.circular(8.0)),
                                   hintText: "Lesson Duration(Minutes)"),
@@ -332,14 +335,10 @@ class _AddLessonState extends State<AddLesson> {
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               controller: diaryNotesController,
-                              validator: validations.validateText,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(
-                                          commonClass.hexColor('#03D1BF'),
-                                        ),
-                                      ),
+                                          color: AppTheme.appThemeColor),
                                       borderRadius:
                                           new BorderRadius.circular(8.0)),
                                   hintText: "Diary Notes(Optional)"),
@@ -350,14 +349,10 @@ class _AddLessonState extends State<AddLesson> {
                             child: TextFormField(
                               keyboardType: TextInputType.multiline,
                               controller: reportCardController,
-                              validator: validations.validateText,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(
-                                          commonClass.hexColor('#03D1BF'),
-                                        ),
-                                      ),
+                                          color: AppTheme.appThemeColor),
                                       borderRadius:
                                           new BorderRadius.circular(8.0)),
                                   hintText: "Report Card(Optional)"),
@@ -419,77 +414,10 @@ class _AddLessonState extends State<AddLesson> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  var _lessionDate = DateTime.parse(
-                                      date_of_lesson.substring(6, 10) +
-                                          '-' +
-                                          date_of_lesson.substring(0, 2) +
-                                          '-' +
-                                          date_of_lesson.substring(3, 5) +
-                                          ' 00:00:00.000');
-                                  var _lessionDuration =
-                                      int.parse(lessonDurationController.text);
-                                  Lesson lesson = new Lesson(
-                                    pupilId: appData.pupilId,
-                                    instructorId: appData.instructorId,
-                                    vehicleType: _selectedVehicleType,
-                                    lessionType: _selectedlessionType,
-                                    diaryNotes: diaryNotesController.text,
-                                    reportCard: reportCardController.text,
-                                    hasAcknowledged: switchOn_hasKnoledge,
-                                    pickupLocation: _selectedPickupLocation,
-                                    dropOffLocation: _selectedDropOffLocation,
-                                    lessionDate: _lessionDate,
-                                    lessionDuration: _lessionDuration,
-                                  );
-                                  await lesson.add();
+                                  if (_validateInputs() == true)
+                                    await _saveData();
                                 },
-                                //onPressed: () {},
-                                //onPressed: _validateInputs,
-                                // == true
-                                //     ? () async {
-                                //         print('called');
-                                //         print('year: ' +
-                                //             date_of_lesson.substring(6, 10));
-                                //         print('day: ' +
-                                //             date_of_lesson.substring(0, 2));
-                                //         print(date_of_lesson);
-                                //         print('month: ' +
-                                //             date_of_lesson.substring(3, 5));
-                                //         pupil.id = uuid.v4();
-                                //         pupil.name = nameController.text;
-                                //         pupil.phoneNumber = dropOffLocationController.text;
-                                //         pupil.address = pickUpLocationController.text;
-                                //         pupil.dateOfBirth = DateTime.parse(
-                                //             date_of_lesson.substring(6, 10) +
-                                //                 '-' +
-                                //                 date_of_lesson.substring(3, 5) +
-                                //                 '-' +
-                                //                 date_of_lesson.substring(0, 2) +
-                                //                 ' 00:00:00.000');
-                                //         pupil.eyeTest = switchOn_diaryNotes;
-                                //         pupil.previousExperience =
-                                //             switchOn_prviouseExp;
-                                //         pupil.theoryRecord =
-                                //             switchOn_hasKnoledge;
-                                //         await pupil.add();
-                                //         var instructor = await Instructor(
-                                //                 id: await UserManager
-                                //                     .currentUserId)
-                                //             .getInstructor();
-                                //         await pupilManager.tagPupil(
-                                //             pupil, instructor);
-                                //         await pupilManager.tagInstructor(
-                                //             pupil, instructor);
-                                //         _makeEmpty();
-                                //         commonClass.getSnackbar(
-                                //             "Data save successfully", context);
-                                //       }
-                                //     : commonClass.getSnackbar(
-                                //         "data failed to save !!!", context),
-                                //onPressed: _validateInputs,
-                                color: Color(
-                                  commonClass.hexColor('#03D1BF'),
-                                ),
+                                color: AppTheme.appThemeColor,
                                 child: Text(
                                   "Save",
                                   style: TextStyle(
@@ -516,6 +444,63 @@ class _AddLessonState extends State<AddLesson> {
     );
   }
 
+  Future<void> _saveData() async {
+    var _lessionDate = DateTime.parse(date_of_lesson.substring(6, 10) +
+        '-' +
+        date_of_lesson.substring(0, 2) +
+        '-' +
+        date_of_lesson.substring(3, 5) +
+        ' 00:00:00.000');
+    var _lessionDuration = int.parse(lessonDurationController.text);
+    Lesson lesson = new Lesson(
+      pupilId: appData.pupilId,
+      instructorId: appData.instructorId,
+      vehicleType: _selectedVehicleType,
+      lessionType: _selectedlessionType,
+      diaryNotes: diaryNotesController.text,
+      reportCard: reportCardController.text,
+      hasAcknowledged: switchOn_hasKnoledge,
+      pickupLocation: _selectedPickupLocation,
+      dropOffLocation: _selectedDropOffLocation,
+      lessionDate: _lessionDate,
+      lessionDuration: _lessionDuration,
+    );
+    await lesson.add() == true
+        ? commonClass.getSnackbar('Lesson created successfully.', context)
+        : commonClass.getSnackbar('Lesson creation failed.', context);
+    _makeEmpty();
+  }
+
+  void _makeEmpty() {
+    setState(() {
+      lessonDurationController.text = '';
+      diaryNotesController.text = '';
+      reportCardController.text = '';
+      date_of_lesson = '';
+      _show_date = '';
+      _selectedPickupLocation = TripLocation.Home;
+      _selectedDropOffLocation = TripLocation.Home;
+      _selectedVehicleType = VehicleType.None;
+      _selectedlessionType = LessionType.None;
+      switchOn_hasKnoledge = false;
+    });
+  }
+
+  bool _validateInputs() {
+    if (_formKey.currentState.validate()) {
+//    If all data are correct then save data to out variables
+      if (date_of_lesson == '') {
+        commonClass.getSnackbar('Date of Lesson is Required', context);
+        return false;
+      }
+      return true;
+      //_formKey.currentState.save();
+    } else {
+//    If all data are not valid then start auto validation.
+      return false;
+    }
+  }
+
   String enumValueToString(String enumvalue) {
     return enumvalue
         .toString()
@@ -525,6 +510,7 @@ class _AddLessonState extends State<AddLesson> {
   DateTime selectedDate = DateTime.now();
   int getyear = 2019;
   String date_of_lesson = '';
+  String _show_date = '';
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -543,6 +529,8 @@ class _AddLessonState extends State<AddLesson> {
       setState(
         () {
           date_of_lesson = new DateFormat('dd/MM/yyyy').format(picked);
+          _show_date = new DateFormat('MMM-dd-yyyy').format(picked);
+
         },
       );
     }

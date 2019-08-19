@@ -112,6 +112,7 @@ class Lesson {
           .document(this.id)
           .setData(this.toJson());
       print('$this created successfully.');
+      
       return true;
     } catch (e) {
       print('lesson creation failed. $e');
