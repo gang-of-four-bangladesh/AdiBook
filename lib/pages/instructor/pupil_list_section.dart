@@ -1,9 +1,7 @@
 import 'package:adibook/core/app_data.dart';
-import 'package:adibook/data/user_manager.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/instructor.dart';
-import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/home_page.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,5 +1,5 @@
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
@@ -10,13 +10,13 @@ class User {
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
 
-  User(
-      {this.id,
-      this.name,
-      this.phoneNumber,
-      this.userType = UserType.Instructor,
-      this.isVerified = false})
-      : this.createdAt = null,
+  User({
+    this.id,
+    this.name,
+    this.phoneNumber,
+    this.userType = UserType.Instructor,
+    this.isVerified = false,
+  })  : this.createdAt = null,
         this.updatedAt = null;
   String id;
   String name;
@@ -33,7 +33,7 @@ class User {
       UserTypeKey: userType.index,
       IsVerifiedKey: isVerified,
       CreatedAtKey: createdAt,
-      UpdatedAtKey: updatedAt
+      UpdatedAtKey: updatedAt,
     };
   }
 

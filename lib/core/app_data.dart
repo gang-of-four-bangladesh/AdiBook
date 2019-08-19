@@ -1,4 +1,6 @@
-import 'package:adibook/utils/constants.dart';
+
+
+import 'package:adibook/core/constants.dart';
 
 class AppData {
   static final AppData _appData = new AppData._internal();

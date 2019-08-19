@@ -1,6 +1,6 @@
 import 'dart:core';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';

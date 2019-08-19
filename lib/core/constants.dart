@@ -113,3 +113,13 @@ enum SectionType {
   PupilActivity,
   AdminActivity
 }
+
+enum PupilProgresStep {
+  None,
+  Introduced,
+  TalkThrough,
+  Prompted,
+  RarelyPrompted,
+  Independent
+}
+

@@ -1,24 +1,23 @@
-import 'package:adibook/utils/constants.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sprintf/sprintf.dart';
 
 class ProgressPlan {
-  static const String IntroducedKey = 'intr';
-  static const String TalkThroughKey = 'tkth';
-  static const String PromptedKey = 'prmt';
-  static const String RarelyPromptedKey = 'rmprt';
-  static const String IndependentKey = 'indp';
+  static const String StatusKey = 'sts';
+  static const String CreatedAtKey = 'cat';
+  static const String UpdatedAtKey = 'uat';
 
   ProgressPlan({
     this.id,
     this.pupilId,
     this.instructorId,
+    this.status = PupilProgresStep.None,
   })  : this.createdAt = null,
         this.updatedAt = null;
   String id;
   String instructorId;
   String pupilId;
-  _ProgressLevel status;
+  PupilProgresStep status;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -28,8 +27,9 @@ class ProgressPlan {
     return Firestore.instance.collection(path).document(this.id).get();
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> _toJson() {
     return {
+      StatusKey: this.status,
     };
   }
 
@@ -41,26 +41,43 @@ class ProgressPlan {
       Firestore.instance
           .collection(path)
           .document(this.id)
-          .setData(this.toJson());
+          .setData(this._toJson());
       print('$this created successfully.');
       return true;
     } catch (e) {
-      print('user creation failed. $e');
+      print('progress plan creation failed. $e');
       return false;
     }
   }
-}
 
-class _ProgressLevel {
-  _ProgressDetails introduced;
-  _ProgressDetails talkThrough;
-  _ProgressDetails propmted;
-  _ProgressDetails rarelyPrompted;
-  _ProgressDetails independent;
-}
+  Future<bool> update() async {
+    try {
+      var path = sprintf(FirestorePath.ProgressPlanOfAPupilColection,
+          [this.pupilId, this.instructorId]);
+      this.updatedAt = DateTime.now().toUtc();
+      await Firestore.instance
+          .collection(path)
+          .document(this.id)
+          .updateData(this._toJson());
+      print('$this updated successfully.');
+      return true;
+    } catch (e) {
+      print('progress plan update failed. $e');
+      return false;
+    }
+  }
 
-class _ProgressDetails {
-  String level;
-  bool levelStatus;
-  DateTime updatedAt;
+  Future<bool> delete() async {
+    try {
+      await Firestore.instance
+          .collection(FirestorePath.UserCollection)
+          .document(this.id)
+          .delete();
+      print('$this deleted successfully.');
+      return true;
+    } catch (e) {
+      print('user deletion failed. $e');
+      return false;
+    }
+  }
 }

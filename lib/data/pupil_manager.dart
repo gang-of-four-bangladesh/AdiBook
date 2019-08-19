@@ -1,6 +1,6 @@
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';

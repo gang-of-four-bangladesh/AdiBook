@@ -1,25 +1,18 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/lesson.dart';
-import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:adibook/utils/common_function.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
-class AddLesson extends StatefulWidget {
-  Map<String, dynamic> additionalData;
-  AddLesson({@required this.additionalData});
-
+class AddLessonSection extends StatefulWidget {
   @override
-  _AddLessonState createState() => _AddLessonState();
+  _AddLessonSectionState createState() => _AddLessonSectionState();
 }
 
-class _AddLessonState extends State<AddLesson> {
-  final Map<String, dynamic> additionalData;
-  _AddLessonState({this.additionalData});
-  CommonClass commonClass = new CommonClass();
+class _AddLessonSectionState extends State<AddLessonSection> {
+  CommonClass commonClass = CommonClass();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
@@ -62,7 +55,7 @@ class _AddLessonState extends State<AddLesson> {
         diaryNotesController.text = '';
         reportCardController.text = '';
         date_of_lesson = '';
-        _show_date='';
+        _show_date = '';
         switchOn_hasKnoledge = false;
       });
     }
@@ -129,7 +122,7 @@ class _AddLessonState extends State<AddLesson> {
                               keyboardType: TextInputType.number,
                               controller: lessonDurationController,
                               validator: validations.validateNumber,
-                                onSaved: (String value) {
+                              onSaved: (String value) {
                                 _lessonDuration = value;
                               },
                               decoration: InputDecoration(
@@ -530,7 +523,6 @@ class _AddLessonState extends State<AddLesson> {
         () {
           date_of_lesson = new DateFormat('dd/MM/yyyy').format(picked);
           _show_date = new DateFormat('MMM-dd-yyyy').format(picked);
-
         },
       );
     }

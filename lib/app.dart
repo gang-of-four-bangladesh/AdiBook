@@ -1,8 +1,8 @@
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/image_upload.dart';
 import 'package:adibook/pages/login_page.dart';
 import 'package:adibook/pages/pupil/pupil_registration.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class AdiBookApp extends StatelessWidget {

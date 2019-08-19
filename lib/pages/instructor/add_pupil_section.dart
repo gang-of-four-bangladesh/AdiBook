@@ -1,12 +1,10 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/data/pupil_manager.dart';
-import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/common_function.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';

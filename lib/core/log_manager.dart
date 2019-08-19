@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:adibook/utils/constants.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
