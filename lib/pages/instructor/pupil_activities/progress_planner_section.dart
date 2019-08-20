@@ -1,5 +1,6 @@
 import 'package:adibook/data/progress_plan_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProgressPlannerSection extends StatefulWidget {
   ProgressPlannerSection({Key key}) : super(key: key);
@@ -27,13 +28,24 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
               ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-            child: ListTile(
-              title: Column(
-                children: <Widget>[
-                  Text(_progressPlans[index]),
-                ],
-              ),
-              onTap: () {},
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Text(_progressPlans[index]),
+                      )
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                SizedBox(width: 10),
+              ],
             ),
           );
         },

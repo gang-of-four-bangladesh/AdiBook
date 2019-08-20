@@ -94,7 +94,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                             IconButton(
                                               icon: Icon(Icons.date_range),
                                               onPressed: () =>
-                                                  {_selectDate(context)},
+                                                  _selectDate(context),
                                             ),
                                             Text(
                                               "Lesson Date",
@@ -109,7 +109,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 ),
                                 /*3*/
                                 Text(
-                                  "${_show_date}",
+                                  "$_show_date",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -521,7 +521,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   }
 
   Future<Null> _selectDate(BuildContext context) async {
-    date_of_lesson ="";
+    date_of_lesson = "";
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: date_of_lesson == ''
