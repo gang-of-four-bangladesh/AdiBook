@@ -4,6 +4,7 @@ import 'package:adibook/pages/instructor/event_list_section.dart';
 import 'package:adibook/pages/instructor/message_list_section.dart';
 import 'package:adibook/pages/instructor/more_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
+import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/ability_section.dart';
@@ -147,22 +148,32 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 0,
+      appBarTitle: 'Lesson List',
+      bottomNavTitle: 'Lessons',
+      availableFor: UserType.Instructor,
+      sectionWidget: LessonListSection(),
+      bottomNavIcon: Icon(Icons.list, color: Colors.white),
+      sectionType: SectionType.InstructorActivityForPupil,
+    ),
+    WidgetConfiguration(
+      index: 1,
       appBarTitle: 'Add Lesson',
       bottomNavTitle: 'Add Lesson',
       availableFor: UserType.Instructor,
       sectionWidget: AddLessonSection(),
-      bottomNavIcon: Icon(Icons.book, color: Colors.white),
+      bottomNavIcon: Icon(FontAwesomeIcons.plus, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),
     WidgetConfiguration(
-      index: 0,
+      index: 2,
       appBarTitle: 'Progress Planner',
       bottomNavTitle: 'Progress Planner',
       availableFor: UserType.Instructor,
       sectionWidget: ProgressPlannerSection(),
-      bottomNavIcon: Icon(Icons.book, color: Colors.white),
+      bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),
+    
   ];
 
   SectionType defaultSectionType(UserType userType) {

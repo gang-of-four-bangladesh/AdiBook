@@ -14,7 +14,8 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
 
   @override
   Widget build(BuildContext context) {
-    var _progressPlans = ProgressPlanManager.defaultProjectPlans.values.toList();
+    var _progressPlans =
+        ProgressPlanManager.defaultProjectPlans.values.toList();
     return Container(
       child: ListView.builder(
         itemCount: _progressPlans.length,
@@ -27,10 +28,12 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             child: ListTile(
-              title: Text(_progressPlans[index]),
-              onTap: () {
-
-              },
+              title: Column(
+                children: <Widget>[
+                  Text(_progressPlans[index]),
+                ],
+              ),
+              onTap: () {},
             ),
           );
         },

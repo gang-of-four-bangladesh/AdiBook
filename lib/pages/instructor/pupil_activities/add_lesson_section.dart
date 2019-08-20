@@ -504,7 +504,24 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   int getyear = 2019;
   String date_of_lesson = '';
   String _show_date = '';
+  TimeOfDay _show_time = new TimeOfDay.now();
+
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay picked =
+        await showTimePicker(context: context, initialTime: _show_time);
+    if (picked != null && picked != _show_time) {
+      print('Time selected: ${_show_time.toString()}');
+      setState(
+        () {
+          _show_time = picked;
+          print(_show_time);
+        },
+      );
+    }
+  }
+
   Future<Null> _selectDate(BuildContext context) async {
+    date_of_lesson ="";
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: date_of_lesson == ''
@@ -514,15 +531,16 @@ class _AddLessonSectionState extends State<AddLessonSection> {
               date_of_lesson.substring(3, 5) +
               '-' +
               date_of_lesson.substring(0, 2) +
-              ' 00:00:00.000'),
+              _show_time.toString()),
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
     if (picked != null) {
+      _selectTime(context);
       setState(
         () {
           date_of_lesson = new DateFormat('dd/MM/yyyy').format(picked);
-          _show_date = new DateFormat('MMM-dd-yyyy').format(picked);
+          _show_date = new DateFormat('MMM-dd-yyyy HH:mm').format(picked);
         },
       );
     }
