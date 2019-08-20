@@ -1,3 +1,4 @@
+import 'package:adibook/data/progress_plan_manager.dart';
 import 'package:flutter/material.dart';
 
 class ProgressPlannerSection extends StatefulWidget {
@@ -13,9 +14,10 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
 
   @override
   Widget build(BuildContext context) {
+    var _progressPlans = ProgressPlanManager.defaultProjectPlans.values.toList();
     return Container(
       child: ListView.builder(
-        itemCount: [].length,
+        itemCount: _progressPlans.length,
         itemBuilder: (context, index) {
           return Container(
             decoration: BoxDecoration(
@@ -25,8 +27,10 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             child: ListTile(
-              title: Text([][index]),
-              onTap: () {},
+              title: Text(_progressPlans[index]),
+              onTap: () {
+
+              },
             ),
           );
         },

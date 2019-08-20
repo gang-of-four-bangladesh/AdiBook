@@ -2,6 +2,7 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -38,5 +39,12 @@ class PupilManager {
         .document(instructor.id)
         .setData(data);
     _logger.fine('instructor ${instructor.id} tagged to pupil ${pupil.id}.');
+  }
+
+  Future<QuerySnapshot> getLessions(
+      {@required String instructorId, @required String pupilId}) async {
+    var path = sprintf(
+        FirestorePath.LessonsOfAPupilColection, [pupilId, instructorId]);
+    return Firestore.instance.collection(path).getDocuments();
   }
 }
