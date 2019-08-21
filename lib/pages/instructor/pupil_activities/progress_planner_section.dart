@@ -1,6 +1,6 @@
 import 'package:adibook/data/progress_plan_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProgressPlannerSection extends StatefulWidget {
   ProgressPlannerSection({Key key}) : super(key: key);
@@ -12,6 +12,8 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
   void initState() {
     super.initState();
   }
+
+  double _rating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +33,44 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
             child: Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        title: Text(_progressPlans[index]),
-                      )
-                    ],
+                  child: ListTile(
+                    title: Text(
+                      _progressPlans[index],
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-                Icon(
-                  Icons.star,
-                  color: Colors.amber,
+                SmoothStarRating(
+                  allowHalfRating: false,
+                  onRatingChanged: (v) {
+                    setState(() {
+                      _rating = v;
+                      print('Rating changed for index $index to $_rating');
+                    });
+                  },
+                  starCount: 5,
+                  rating: _rating,
+                  size: 35.0,
+                  color: Colors.green,
+                  borderColor: Colors.green,
+                  spacing: 0.0,
                 ),
-                SizedBox(width: 10),
+                // RatingBar(
+                //   initialRating: 5,
+                //   direction: Axis.horizontal,
+                //   itemCount: 5,
+                //   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                //   itemBuilder: (context, _) => Icon(
+                //     Icons.star,
+                //     color: Colors.amber,
+                //   ),
+                //   onRatingUpdate: (rating) {
+                //     print(rating);
+                //   },
+                // ),
               ],
             ),
           );

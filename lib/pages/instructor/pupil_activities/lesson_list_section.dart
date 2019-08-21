@@ -1,6 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/data/pupil_manager.dart';
+import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,8 @@ class LessonListSectionState extends State<LessonListSection> {
 
   void _loadLessonsData() async {
     setState(() {
-      PupilManager pupilManager = new PupilManager();
-      _querySnapshot = pupilManager
-          .getLessions(
-              instructorId: appData.instructorId, pupilId: appData.pupilId)
-          .asStream();
-          print(_querySnapshot);
+      print('Lesson listing instructor id ${appData.instructorId}, pupil id ${appData.pupilId}');
+      _querySnapshot = PupilManager().getLessions(instructorId: appData.instructorId, pupilId: appData.pupilId).asStream();
     });
   }
 
@@ -49,22 +46,7 @@ class LessonListSectionState extends State<LessonListSection> {
                 (DocumentSnapshot document) {
                   return ListTile(
                     trailing: Icon(Icons.person),
-                    title: Text(document["nam"]),
-                    onTap: () {
-                      appData.pupilId = document.documentID;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(
-                            sectionType: SectionType.InstructorActivityForPupil,
-                            userType: UserType.Instructor,
-                            contextInfo: {
-                              DataSharingKeys.PupilIdKey: document.documentID
-                            },
-                          ),
-                        ),
-                      );
-                    },
+                    title: Text(document[Lesson.DiaryNotesKey])
                   );
                 },
               ).toList(),

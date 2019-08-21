@@ -41,10 +41,15 @@ class PupilManager {
     _logger.fine('instructor ${instructor.id} tagged to pupil ${pupil.id}.');
   }
 
-  Future<QuerySnapshot> getLessions(
-      {@required String instructorId, @required String pupilId}) async {
-    var path = sprintf(
-        FirestorePath.LessonsOfAPupilColection, [pupilId, instructorId]);
+  Future<QuerySnapshot> getLessions({
+    @required String instructorId,
+    @required String pupilId,
+  }) async {
+    var path = sprintf(FirestorePath.LessonsOfAPupilColection, [
+      pupilId,
+      instructorId,
+    ]);
+    print('Lessons path $path');
     return Firestore.instance.collection(path).getDocuments();
   }
 }
