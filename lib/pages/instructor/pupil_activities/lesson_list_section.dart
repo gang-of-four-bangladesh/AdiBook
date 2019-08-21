@@ -1,5 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,12 @@ class LessonListSectionState extends State<LessonListSection> {
 
   void _loadLessonsData() async {
     setState(() {
-      //_querySnapshot = Lesson(instructorId: appData.instructorId,pupilId: appData.pupilId).getLession().asStream();
+      PupilManager pupilManager = new PupilManager();
+      _querySnapshot = pupilManager
+          .getLessions(
+              instructorId: appData.instructorId, pupilId: appData.pupilId)
+          .asStream();
+          print(_querySnapshot);
     });
   }
 
