@@ -1,5 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommonClass {
   hexColor(String colorhexcode) {
@@ -22,4 +23,15 @@ class CommonClass {
       ),
     );
   }
+
+  String convertTimeStampToStringDate(String _stamp,String DateFormate) {
+    _stamp = _stamp.toString().substring(_stamp.toString().indexOf('=') + 1);
+    _stamp = _stamp.split(',').first;
+    //String date = '1515348000';
+    print(_stamp);
+    String dateWithT = _stamp.substring(0, 8) + 'T' + _stamp.substring(8);
+    DateTime dateTime = DateTime.parse(dateWithT);
+    var format = new DateFormat(DateFormate);
+    return format.format(dateTime);
+  }   
 }
