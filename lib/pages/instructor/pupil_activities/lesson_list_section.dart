@@ -35,7 +35,7 @@ class LessonListSectionState extends State<LessonListSection> {
   @override
   Widget build(BuildContext context) {
     Logger _logger = Logger(this.runtimeType.toString());
-    _logger.fine('Loading pupils listing page.');
+    _logger.fine('Loading pupil lessons listing page.');
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

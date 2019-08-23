@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedPage;
   String _appbarTitle;
   List<WidgetConfiguration> _widgetsConfiguration = [];
+  List<Widget> _widgets = [];
   List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
       icon: Icon(
@@ -76,11 +77,14 @@ class _HomePageState extends State<HomePage> {
 
   void _initialize() {
     appData.contextualInfo = this.widget.contextInfo;
-    this._logger.info('Contextual information ${this.widget.contextInfo}, app data information $appData');
+    this._logger.info(
+        'Contextual information ${this.widget.contextInfo}, app data information $appData');
     setState(() {
       _selectedPage = 0;
       this._widgetsConfiguration = PageManager().getWidgetConfigurations(
           this.widget.userType, this.widget.sectionType);
+      this._widgets =
+          _widgetsConfiguration.map((f) => f.sectionWidget).toList();
       this._logger.info(
           'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBarTitle)}');
       _appbarTitle = this._widgetsConfiguration[_selectedPage].appBarTitle;
@@ -123,7 +127,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: IndexedStack(
           index: _selectedPage,
-          children: _widgetsConfiguration.map((f) => f.sectionWidget).toList(),
+          children: this._widgets,
         ),
       ),
       bottomNavigationBar: new Theme(
