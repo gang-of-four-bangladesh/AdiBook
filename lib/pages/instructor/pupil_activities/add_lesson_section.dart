@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:adibook/utils/common_function.dart';
@@ -45,12 +46,22 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   void openFileExplorer() async {
     try {
       _path = null;
+      CommonClass commonClass = CommonClass();
+
       if (_multiPick) {
         _paths = await FilePicker.getMultiFilePath(
             type: _pickType, fileExtension: _extension);
       } else {
         _path = await FilePicker.getFilePath(
             type: _pickType, fileExtension: _extension);
+        setState(() {
+          if (_path.toString().split('.').last != 'pdf') {
+            _path = null;
+            commonClass.getSnackbar('Only pdf File allowed', context);
+            return;
+          }
+          _path = _path;
+        });
       }
     } catch (e) {
       print("Unsupported operation" + e.toString());
@@ -555,6 +566,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   }
 
   Future<void> _saveData() async {
+    StorageUpload storageUpload = StorageUpload();
     var _lessionDate = DateTime.parse(date_of_lesson.substring(6, 10) +
         '-' +
         date_of_lesson.substring(0, 2) +
@@ -575,6 +587,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessionDate: _lessionDate,
       lessionDuration: _lessionDuration,
     );
+    if (_path != null) storageUpload.uploadLessonFile(_path);
     await lesson.add() == true
         ? commonClass.getSnackbar('Lesson created successfully.', context)
         : commonClass.getSnackbar('Lesson creation failed.', context);
