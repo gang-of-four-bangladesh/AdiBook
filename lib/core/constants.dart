@@ -5,14 +5,14 @@ class FirestorePath {
   static const String UserCollection = 'users';
   static const String PupilCollection = 'pupils';
   static const String LessionCollection = 'lessons';
-  static const String ProgressPlanCollection = 'progress_plan';
+  static const String ProgressPlanCollection = 'progress';
   static const String PupilsOfAnInstructorCollection =
       '$InstructorCollection/%s/$PupilCollection';
   static const String InstructorsOfAPupilColection =
       '$PupilCollection/%s/$InstructorCollection';
   static const String LessonsOfAPupilColection =
       '$PupilCollection/%s/$InstructorCollection/%s/$LessionCollection';
-  static const String ProgressPlanOfAPupilColection =
+  static const String ProgressPlanDocumentPath =
       '$PupilCollection/%s/$InstructorCollection/%s/$ProgressPlanCollection';
 }
 
@@ -114,7 +114,7 @@ enum SectionType {
   AdminActivity
 }
 
-enum PupilProgresStep {
+enum ProgressSubjectStatus {
   None,
   Introduced,
   TalkThrough,

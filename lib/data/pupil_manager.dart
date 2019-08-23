@@ -1,5 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/progress_plan.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,12 @@ class PupilManager {
         .collection(path)
         .document(instructor.id)
         .setData(data);
+    await Firestore.instance
+        .collection(path)
+        .document(instructor.id)
+        .collection(FirestorePath.ProgressPlanCollection)
+        .document(ProgressPlan.ProgressPlanKey)
+        .setData({ProgressPlan.CreatedAtKey: DateTime.now().toUtc()});
     _logger.fine('instructor ${instructor.id} tagged to pupil ${pupil.id}.');
   }
 

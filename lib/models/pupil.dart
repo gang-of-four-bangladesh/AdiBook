@@ -1,6 +1,7 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logging/logging.dart';
 
 class Pupil {
   static const String NameKey = 'nam';
@@ -71,7 +72,12 @@ class Pupil {
   }
 
   Future<Pupil> getPupil() async {
-    await _snapshotToPupil(await this.get());
+    var pupil = await this.get();
+    if (!pupil.exists) {
+      Logger('models->pupil').shout('${this.id} pupil does not exists.');
+      return null;
+    }
+    await _snapshotToPupil(pupil);
     return this;
   }
 

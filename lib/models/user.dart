@@ -1,6 +1,7 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logging/logging.dart';
 
 class User {
   static const String NameKey = 'nam';
@@ -51,7 +52,10 @@ class User {
 
   Future<User> getUser() async {
     var userSanp = await this.get();
-    if (!userSanp.exists) return null;
+    if (!userSanp.exists) {
+      Logger('models->user').shout('${this.id} user does not exists.');
+      return null;
+    }
     await _snapshotToUser(userSanp);
     return this;
   }
