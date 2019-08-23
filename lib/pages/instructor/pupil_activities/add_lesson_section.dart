@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:adibook/utils/common_function.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class AddLessonSection extends StatefulWidget {
   @override
@@ -27,6 +32,86 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TripLocation _selectedDropOffLocation;
   LessionType _selectedlessionType;
   VehicleType _selectedVehicleType;
+
+  //File Upload
+  String _path;
+  Map<String, String> _paths;
+  String _extension;
+  FileType _pickType;
+  bool _multiPick = false;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  List<StorageUploadTask> _tasks = <StorageUploadTask>[];
+
+  void openFileExplorer() async {
+    try {
+      _path = null;
+      if (_multiPick) {
+        _paths = await FilePicker.getMultiFilePath(
+            type: _pickType, fileExtension: _extension);
+      } else {
+        _path = await FilePicker.getFilePath(
+            type: _pickType, fileExtension: _extension);
+      }
+    } catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    if (!mounted) return;
+  }
+
+  uploadToFirebase() {
+    if (_multiPick) {
+      _paths.forEach((fileName, filePath) => {upload(fileName, filePath)});
+    } else {
+      String fileName = _path.split('/').last;
+      String filePath = _path;
+      upload(fileName, filePath);
+    }
+  }
+
+  upload(fileName, filePath) {
+    _extension = fileName.toString().split('.').last;
+    StorageReference storageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+    final StorageUploadTask uploadTask = storageRef.putFile(
+      File(filePath),
+      StorageMetadata(
+        contentType: '$_pickType/$_extension',
+      ),
+    );
+    setState(() {
+      _tasks.add(uploadTask);
+    });
+  }
+
+  Future<void> downloadFile(StorageReference ref) async {
+    final String url = await ref.getDownloadURL();
+    final http.Response downloadData = await http.get(url);
+    final Directory systemTempDir = Directory.systemTemp;
+    final File tempFile = File('${systemTempDir.path}/tmp.jpg');
+    if (tempFile.existsSync()) {
+      await tempFile.delete();
+    }
+    await tempFile.create();
+    final StorageFileDownloadTask task = ref.writeToFile(tempFile);
+    final int byteCount = (await task.future).totalByteCount;
+    var bodyBytes = downloadData.bodyBytes;
+    final String name = await ref.getName();
+    final String path = await ref.getPath();
+    print(
+      'Success!\nDownloaded $name \nUrl: $url'
+      '\npath: $path \nBytes Count :: $byteCount',
+    );
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.white,
+        content: Image.memory(
+          bodyBytes,
+          fit: BoxFit.fill,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +120,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedVehicleType = VehicleType.None;
     _selectedlessionType = LessionType.None;
     switchOn_hasKnoledge = false;
+    _pickType = FileType.ANY;
   }
 
   @override
@@ -356,7 +442,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                     ],
                   ),
                 ),
-                //  Eye test,
                 //  theory record,
                 Container(
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -385,6 +470,38 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                         onChanged: (val) =>
                             setState(() => switchOn_hasKnoledge = val),
                         activeColor: AppTheme.appThemeColor,
+                      )
+                    ],
+                  ),
+                ),
+                //  file Upload,
+                Container(
+                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        /*1*/
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /*2*/
+                            Container(
+                              child: Text(
+                                'File Upload',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      /*3*/
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.fileUpload),
+                        onPressed: () {
+                          openFileExplorer();
+                        },
                       )
                     ],
                   ),
@@ -545,4 +662,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       );
     }
   }
+
+  File file;
 }

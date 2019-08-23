@@ -9,7 +9,7 @@ import 'package:adibook/pages/instructor/pupil_activities/progress_planner_secti
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/ability_section.dart';
 import 'package:adibook/pages/pupil/account_section.dart';
-import 'package:adibook/pages/pupil/me_section.dart';
+import 'package:adibook/pages/pupil/pupil_registration.dart';
 import 'package:adibook/pages/pupil/resources_section.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -112,10 +112,10 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 0,
-      appBarTitle: 'Me',
-      bottomNavTitle: 'Me',
+      appBarTitle: 'Profile',
+      bottomNavTitle: 'Profile',
       availableFor: UserType.Pupil,
-      sectionWidget: MeSection(),
+      sectionWidget: PupilRegistration(),
       bottomNavIcon: Icon(FontAwesomeIcons.user, color: Colors.white),
       sectionType: SectionType.PupilActivity,
     ),

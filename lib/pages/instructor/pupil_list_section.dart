@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
+import 'package:adibook/utils/common_function.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -33,7 +34,8 @@ class PupilPistSectionState extends State<PupilListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data == null) return Text('Please wait..');
+        CommonClass commonClass = CommonClass();
+        if (snapshot.data == null) return commonClass.getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

@@ -1,11 +1,13 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
+import 'package:adibook/utils/common_function.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/utils/common_function.dart';
+import 'package:intl/intl.dart';
 
 class LessonListSection extends StatefulWidget {
   @override
@@ -13,7 +15,6 @@ class LessonListSection extends StatefulWidget {
 }
 
 class LessonListSectionState extends State<LessonListSection> {
-  CommonClass commonClass = new CommonClass();
   Stream<QuerySnapshot> _querySnapshot;
   @override
   void initState() {
@@ -39,7 +40,10 @@ class LessonListSectionState extends State<LessonListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data == null) return Text('Please wait..');
+        CommonClass commonClass = new CommonClass();
+        TypeConversion typeConversion = TypeConversion();
+        var format = DateFormat("EEEE dd MMMM @ HH:mm");
+        if (snapshot.data == null) return commonClass.getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -55,9 +59,10 @@ class LessonListSectionState extends State<LessonListSection> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          commonClass.convertTimeStampToStringDate(
-                              document["ldt"].toString(),
-                              'EEEE dd MMMM @ HH:mm'),
+                          (format
+                              .format(TypeConversion.timeStampToDateTime(
+                                  document["ldt"]))
+                              .toString()),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),

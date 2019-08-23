@@ -24,14 +24,18 @@ class CommonClass {
     );
   }
 
-  String convertTimeStampToStringDate(String _stamp,String DateFormate) {
-    _stamp = _stamp.toString().substring(_stamp.toString().indexOf('=') + 1);
-    _stamp = _stamp.split(',').first;
-    //String date = '1515348000';
-    print(_stamp);
-    String dateWithT = _stamp.substring(0, 8) + 'T' + _stamp.substring(8);
-    DateTime dateTime = DateTime.parse(dateWithT);
-    var format = new DateFormat(DateFormate);
-    return format.format(dateTime);
-  }   
+ Widget getProgressBar() {
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.appThemeColor),
+          ),
+        ],
+      ),
+    );
+  }
 }
