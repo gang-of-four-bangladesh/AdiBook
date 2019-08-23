@@ -19,6 +19,8 @@ class FirestorePath {
 class StoragePath {
   static const String LogsFolder = '/logs';
   static const String UserLogsFolder = '$LogsFolder/%s';
+  static const String AppDocumentsFolder = '/app_docs';
+  static const String LessonsFolder = '$AppDocumentsFolder/lessons';
 }
 
 class PageRoutes {
