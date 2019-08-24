@@ -62,7 +62,8 @@ class EnvironmentStatus {
 }
 
 class AppTheme {
-  static Color appThemeColor = Colors.lightBlueAccent.withRed(3).withGreen(209).withBlue(191);
+  static Color appThemeColor =
+      Colors.lightBlueAccent.withRed(3).withGreen(209).withBlue(191);
 }
 
 const Map<String, String> CountryWisePhoneCode = {
@@ -88,11 +89,12 @@ enum UserType {
   Admin,
 }
 
-enum TripLocation{
+enum TripLocation {
+  None,
   Home,
   Work,
   School,
-  College
+  College,
 }
 enum VehicleType {
   None,
@@ -124,4 +126,3 @@ enum ProgressSubjectStatus {
   RarelyPrompted,
   Independent
 }
-
