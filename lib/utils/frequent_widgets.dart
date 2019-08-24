@@ -2,21 +2,28 @@ import 'package:adibook/core/constants.dart';
 import 'package:flutter/material.dart';
 
 class FrequentWidgets {
-  getSnackbar(String message, BuildContext context) {
+  getSnackbar({
+    String message,
+    BuildContext context,
+    int duration = 1,
+  }) {
     Scaffold.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(seconds: 1),
+        duration: Duration(seconds: duration),
         content: Text(
           message,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.green,
       ),
     );
   }
 
- Widget getProgressBar() {
+  Widget getProgressBar() {
     return Container(
       margin: EdgeInsets.all(20),
       child: Row(
@@ -32,22 +39,22 @@ class FrequentWidgets {
   }
 
   Future<void> dialogBox(BuildContext context, String title, String message) {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

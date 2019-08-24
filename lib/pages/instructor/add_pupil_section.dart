@@ -39,7 +39,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   @override
   Widget build(BuildContext context) {
     Validations validations = new Validations();
-    
+
     return SingleChildScrollView(
       child: Container(
         child: Form(
@@ -349,7 +349,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     if (_formKey.currentState.validate()) {
       //If all data are correct then save data to out variables
       if (dateOfBirth == '') {
-        frequentWidgets.getSnackbar('Date of Birth is Required', context);
+        frequentWidgets.getSnackbar(
+          message: 'Date of Birth is Required',
+          context: context,
+        );
         return false;
       }
       return true;
@@ -395,8 +398,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     await pupilManager.tagPupil(pupil, instructor);
     await pupilManager.tagInstructor(pupil, instructor);
     result == true
-        ? frequentWidgets.getSnackbar('Pupil created successfully.', context)
-        : frequentWidgets.getSnackbar('Pupil creation failed.', context);
+        ? frequentWidgets.getSnackbar(
+            message: 'Pupil created successfully.',
+            context: context,
+          )
+        : frequentWidgets.getSnackbar(
+            message: 'Pupil creation failed.',
+            context: context,
+          );
     _makeEmpty();
   }
 

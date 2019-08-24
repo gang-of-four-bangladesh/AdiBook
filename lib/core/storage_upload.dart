@@ -8,7 +8,7 @@ class StorageUpload {
   Logger _logger = Logger('stograge_upload');
   Future<String> uploadLessonFile(String filePath) async {
     this._logger.info('Uploading lessons file $filePath');
-    if (filePath.isEmpty) return null;
+    if (filePath == null) return null;
     var filename = basename(filePath);
     StorageReference _storageRef = FirebaseStorage.instance
         .ref()

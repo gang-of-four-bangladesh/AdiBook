@@ -344,7 +344,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                       ),
                     ],
                   ),
-                ),//  file Upload,
+                ), //  file Upload,
                 Container(
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
                   child: Row(
@@ -458,8 +458,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessionDuration: _lessionDuration,
     );
     await lesson.add()
-        ? _frequentWidgets.getSnackbar('Lesson created successfully.', context)
-        : _frequentWidgets.getSnackbar('Lesson creation failed.', context);
+        ? _frequentWidgets.getSnackbar(
+            message: 'Lesson created successfully.',
+            context: context,
+          )
+        : _frequentWidgets.getSnackbar(
+            message: 'Lesson creation failed.',
+            context: context,
+          );
     _makeEmpty();
   }
 
@@ -478,7 +484,10 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   bool _validateInputs() {
     if (_lessonDate == null) {
-      _frequentWidgets.getSnackbar('Date of Lesson is Required', context);
+      _frequentWidgets.getSnackbar(
+        message: 'Date of Lesson is Required',
+        context: context,
+      );
       return false;
     }
     return _formKey.currentState.validate();
@@ -505,8 +514,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     if (_lessonTime == null) _lessonTime = TimeOfDay.now();
     this._logger.info('Selected lesson time $_lessonTime');
     setState(() {
-      _lessonDate = DateTime(_lessonDate.year, _lessonDate.month, _lessonDate.day,
-          _lessonTime.hour, _lessonTime.minute);
+      _lessonDate = DateTime(_lessonDate.year, _lessonDate.month,
+          _lessonDate.day, _lessonTime.hour, _lessonTime.minute);
     });
     this._logger.info('Selected date time for lesson $_lessonDate');
   }
