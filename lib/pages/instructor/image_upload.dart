@@ -1,5 +1,4 @@
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -12,14 +11,13 @@ class ImageUpload extends StatefulWidget {
 }
 
 class ImageUploadState extends State<ImageUpload> {
-CommonClass commonClass = new CommonClass();
   File img;
-  Future image_picker_camera() async {
+  Future imagePickerCamera() async {
     img = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {});
   }
 
-  Future image_picker_gallary() async {
+  Future imagePickerGallary() async {
     img = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {});
   }
@@ -66,7 +64,7 @@ CommonClass commonClass = new CommonClass();
                           child: RaisedButton(
                             color: AppTheme.appThemeColor,
                             onPressed: () {
-                              image_picker_camera();
+                              imagePickerCamera();
                             },
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(8.0),
@@ -94,7 +92,7 @@ CommonClass commonClass = new CommonClass();
                           child: RaisedButton(
                             color: AppTheme.appThemeColor,
                             onPressed: () {
-                              image_picker_gallary();
+                              imagePickerGallary();
                             },
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(8.0),

@@ -1,4 +1,3 @@
-import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class MoreList extends StatefulWidget {
@@ -7,7 +6,6 @@ class MoreList extends StatefulWidget {
 }
 
 class _MoreListState extends State<MoreList> {
-  CommonClass commonClass = new CommonClass();
   @override
   Widget build(BuildContext context) {
     final moretabList = [
@@ -20,25 +18,6 @@ class _MoreListState extends State<MoreList> {
       'Pupil Achieves',
       'App Version 0.0',
     ];
-    Future<void> dialogBox(BuildContext context, String title, String message) {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
 
     return Container(
       child: ListView.builder(
@@ -53,12 +32,6 @@ class _MoreListState extends State<MoreList> {
             padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             child: ListTile(
               title: Text(moretabList[index]),
-              onTap: () {
-                index == 7
-                    ? dialogBox(context, 'No Update Available',
-                        'Your version is up to date')
-                    : null;
-              },
             ),
           );
         },

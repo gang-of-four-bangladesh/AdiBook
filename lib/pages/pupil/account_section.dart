@@ -1,4 +1,3 @@
-import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 List pupilActivityListFirst = [
@@ -17,7 +16,6 @@ class AccountSection extends StatefulWidget {
 }
 
 class _AccountSectionState extends State<AccountSection> {
-  CommonClass commonClass = new CommonClass();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

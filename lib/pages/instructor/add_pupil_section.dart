@@ -3,7 +3,7 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
-import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
@@ -19,47 +19,27 @@ class AddPupilSection extends StatefulWidget {
 
 class AddPupilSectionstate extends State<AddPupilSection> {
   String _selectedCountry = CountryWisePhoneCode2.keys.first;
-  CommonClass commonClass = new CommonClass();
+  FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  String _name;
-  String _phone;
-  String _address;
-  String _drivingLicensce;
 
   var pupilManager = new PupilManager();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    nameController.text = '';
-    addressController.text = '';
-    phoneController.text = '';
-    drivingLicenseController.text = '';
-    date_of_birth = '';
-    _show_date = '';
-    switchOn_eyeTest = false;
-    switchOn_theoryRecord = false;
-    switchOn_prviouseExp = false;
+    dateOfBirth = '';
+    showDate = '';
+    switchOnEyeTest = false;
+    switchOnTheoryRecord = false;
+    switchOnPreviousExp = false;
   }
 
   @override
   Widget build(BuildContext context) {
     Validations validations = new Validations();
-    Future _eyeTestonSwitchChanged(bool value) async {
-      switchOn_eyeTest = value;
-    }
-
-    Future _theoryRecordonSwitchChanged(bool value) async {
-      switchOn_theoryRecord = value;
-    }
-
-    void _prviouseExponSwitchChanged(bool value) {
-      switchOn_prviouseExp = value;
-    }
-
+    
     return SingleChildScrollView(
       child: Container(
         child: Form(
@@ -81,9 +61,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: nameController,
                             validator: validations.validateText,
-                            onSaved: (String value) {
-                              _name = value;
-                            },
                             decoration: InputDecoration(
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
@@ -102,9 +79,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            onSaved: (String val) {
-                              _address = val;
-                            },
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
@@ -154,9 +128,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                     controller: phoneController,
                                     keyboardType: TextInputType.phone,
                                     validator: validations.validatePhoneNumber,
-                                    onSaved: (String val) {
-                                      _phone = val;
-                                    },
                                     decoration: InputDecoration(
                                         suffixIcon: Icon(Icons.star,
                                             color: Colors.red[600]),
@@ -181,9 +152,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           child: TextFormField(
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
-                            onSaved: (String value) {
-                              _drivingLicensce = value;
-                            },
                             decoration: InputDecoration(
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
@@ -216,7 +184,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               children: <Widget>[
                                 IconButton(
                                   icon: Icon(Icons.date_range),
-                                  onPressed: () => {_selectDate(context)},
+                                  onPressed: () => _selectDate(context),
                                 ),
                                 Text(
                                   "Date Of Birth",
@@ -230,7 +198,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Text(
-                      "${_show_date}",
+                      "$showDate",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -261,9 +229,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: switchOn_eyeTest,
+                        value: switchOnEyeTest,
                         onChanged: (val) =>
-                            setState(() => switchOn_eyeTest = val),
+                            setState(() => switchOnEyeTest = val),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -292,9 +260,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: switchOn_theoryRecord,
+                        value: switchOnTheoryRecord,
                         onChanged: (val) =>
-                            setState(() => switchOn_theoryRecord = val),
+                            setState(() => switchOnTheoryRecord = val),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -323,9 +291,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: switchOn_prviouseExp,
+                        value: switchOnPreviousExp,
                         onChanged: (val) =>
-                            setState(() => switchOn_prviouseExp = val),
+                            setState(() => switchOnPreviousExp = val),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -379,15 +347,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   bool _validateInputs() {
     if (_formKey.currentState.validate()) {
-//    If all data are correct then save data to out variables
-      if (date_of_birth == '') {
-        commonClass.getSnackbar('Date of Birth is Required', context);
+      //If all data are correct then save data to out variables
+      if (dateOfBirth == '') {
+        frequentWidgets.getSnackbar('Date of Birth is Required', context);
         return false;
       }
       return true;
-      //_formKey.currentState.save();
     } else {
-//    If all data are not valid then start auto validation.
+      //If all data are not valid then start auto validation.
       return false;
     }
   }
@@ -398,59 +365,55 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       addressController.text = '';
       phoneController.text = '';
       drivingLicenseController.text = '';
-      date_of_birth = '';
-      _show_date = '';
-      switchOn_eyeTest = false;
-      switchOn_theoryRecord = false;
-      switchOn_prviouseExp = false;
+      dateOfBirth = '';
+      showDate = '';
+      switchOnEyeTest = false;
+      switchOnTheoryRecord = false;
+      switchOnPreviousExp = false;
     });
   }
 
   Future<void> _saveData() async {
     Pupil pupil = new Pupil();
-    print('called');
-    print('year: ' + date_of_birth.substring(6, 10));
-    print('day: ' + date_of_birth.substring(0, 2));
-    print(date_of_birth);
-    print('month: ' + date_of_birth.substring(3, 5));
     pupil.id =
         '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
     pupil.name = nameController.text;
-    pupil.phoneNumber = '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
+    pupil.phoneNumber =
+        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
     pupil.address = addressController.text;
-    pupil.dateOfBirth = DateTime.parse(date_of_birth.substring(6, 10) +
+    pupil.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
         '-' +
-        date_of_birth.substring(3, 5) +
+        dateOfBirth.substring(3, 5) +
         '-' +
-        date_of_birth.substring(0, 2) +
+        dateOfBirth.substring(0, 2) +
         ' 00:00:00.000');
-    pupil.eyeTest = switchOn_eyeTest;
-    pupil.previousExperience = switchOn_prviouseExp;
-    pupil.theoryRecord = switchOn_theoryRecord;
+    pupil.eyeTest = switchOnEyeTest;
+    pupil.previousExperience = switchOnPreviousExp;
+    pupil.theoryRecord = switchOnTheoryRecord;
     var result = await pupil.add();
     var instructor = await Instructor(id: appData.instructorId).getInstructor();
     await pupilManager.tagPupil(pupil, instructor);
     await pupilManager.tagInstructor(pupil, instructor);
     result == true
-        ? commonClass.getSnackbar('Pupil created successfully.', context)
-        : commonClass.getSnackbar('Pupil creation failed.', context);
+        ? frequentWidgets.getSnackbar('Pupil created successfully.', context)
+        : frequentWidgets.getSnackbar('Pupil creation failed.', context);
     _makeEmpty();
   }
 
   File img;
-  Future image_picker_camera() async {
+  Future imagePickerCamera() async {
     img = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {});
   }
 
-  Future image_picker_gallary() async {
+  Future imagePickerGallary() async {
     img = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {});
   }
 
-  bool switchOn_eyeTest = false;
-  bool switchOn_theoryRecord = false;
-  bool switchOn_prviouseExp = false;
+  bool switchOnEyeTest = false;
+  bool switchOnTheoryRecord = false;
+  bool switchOnPreviousExp = false;
   TextEditingController nameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
@@ -476,14 +439,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.camera_alt),
-                  onPressed: image_picker_camera,
+                  onPressed: imagePickerCamera,
                 ),
                 SizedBox(
                   width: 5.0,
                 ),
                 IconButton(
                   icon: Icon(Icons.photo_library),
-                  onPressed: image_picker_gallary,
+                  onPressed: imagePickerGallary,
                 ),
               ],
             ),
@@ -495,18 +458,18 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   DateTime selectedDate = DateTime.now();
   int getyear = 2019;
-  String date_of_birth = '';
-  String _show_date ='';
+  String dateOfBirth = '';
+  String showDate = '';
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: date_of_birth == ''
+      initialDate: dateOfBirth == ''
           ? selectedDate
-          : DateTime.parse(date_of_birth.substring(6, 10) +
+          : DateTime.parse(dateOfBirth.substring(6, 10) +
               '-' +
-              date_of_birth.substring(3, 5) +
+              dateOfBirth.substring(3, 5) +
               '-' +
-              date_of_birth.substring(0, 2) +
+              dateOfBirth.substring(0, 2) +
               ' 00:00:00.000'),
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
@@ -514,8 +477,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     if (picked != null) {
       setState(
         () {
-          date_of_birth = new DateFormat('dd/MM/yyyy').format(picked);
-          _show_date = new DateFormat('MMM-dd-yyyy').format(picked);
+          dateOfBirth = new DateFormat('dd/MM/yyyy').format(picked);
+          showDate = new DateFormat('MMM-dd-yyyy').format(picked);
         },
       );
     }

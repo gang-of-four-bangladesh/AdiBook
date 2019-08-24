@@ -15,8 +15,8 @@ class Lesson {
   static const String VehicleTypeKey = 'vtp';
   static const String LessionTypeKey = 'ltp';
   static const String DiaryNotesKey = 'dnt';
-  static const String ReportCardKey = 'rcd';  
-  static const String DocumentDownloadUrl ='docurl';
+  static const String ReportCardKey = 'rcd';
+  static const String DocumentDownloadUrl = 'url';
   static const String HasAcknowledgedKey = 'ack';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
@@ -64,7 +64,7 @@ class Lesson {
       LessionTypeKey: lessionType.index,
       DiaryNotesKey: diaryNotes,
       ReportCardKey: reportCard,
-      DocumentDownloadUrl:documentDownloadUrl,
+      DocumentDownloadUrl: documentDownloadUrl,
       HasAcknowledgedKey: hasAcknowledged,
       CreatedAtKey: createdAt,
       UpdatedAtKey: updatedAt
@@ -117,7 +117,7 @@ class Lesson {
           .document(this.id)
           .setData(this.toJson());
       print('$this created successfully.');
-      
+
       return true;
     } catch (e) {
       print('lesson creation failed. $e');

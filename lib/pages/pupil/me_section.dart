@@ -1,4 +1,3 @@
-import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 List pupilActivityListFirst = [
   "My Lessons List",
@@ -9,7 +8,6 @@ class MeSection extends StatefulWidget {
 }
 
 class _MeSectionState extends State<MeSection> {
-   CommonClass commonClass = new CommonClass();
   @override
     Widget build(BuildContext context) {
     return Scaffold(

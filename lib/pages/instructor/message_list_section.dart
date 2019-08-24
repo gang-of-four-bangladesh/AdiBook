@@ -1,4 +1,3 @@
-import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class MessageListSection extends StatefulWidget {
@@ -7,7 +6,6 @@ class MessageListSection extends StatefulWidget {
 }
 
 class _MessagelistsectionState extends State<MessageListSection> {
-  CommonClass commonClass = new CommonClass();
   @override
   Widget build(BuildContext context) {
     return Container(

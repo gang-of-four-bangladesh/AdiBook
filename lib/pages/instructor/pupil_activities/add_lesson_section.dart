@@ -1,16 +1,14 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/validation.dart';
-import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 
 class AddLessonSection extends StatefulWidget {
   @override
@@ -18,14 +16,10 @@ class AddLessonSection extends StatefulWidget {
 }
 
 class _AddLessonSectionState extends State<AddLessonSection> {
-  CommonClass commonClass = CommonClass();
-  // _formKey and _autoValidate
+  FrequentWidgets frequentWidgets = FrequentWidgets();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  String _lessonDuration;
-  String _diaryNotes;
-  String _reportCard;
-  bool switchOn_hasKnoledge;
+  bool switchOnHasKnoledge;
   TextEditingController lessonDurationController = new TextEditingController();
   TextEditingController diaryNotesController = new TextEditingController();
   TextEditingController reportCardController = new TextEditingController();
@@ -33,28 +27,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TripLocation _selectedDropOffLocation;
   LessionType _selectedlessionType;
   VehicleType _selectedVehicleType;
-
-  //File Upload
-  String _path;
-  Map<String, String> _paths;
-  String _extension;
-  FileType _pickType;
-
-  void openFileExplorer() async {
-    _path = null;
-    CommonClass commonClass = CommonClass();
-    _path = await FilePicker.getFilePath(
-        type: _pickType, fileExtension: _extension);
-    setState(() {
-      if (_path.toString().split('.').last != 'pdf') {
-        _path = null;
-        commonClass.getSnackbar('Only pdf File allowed', context);
-        return;
-      }
-      _path = _path;
-    });
-    if (!mounted) return;
-  }
+  String _attachedDocPath;
 
   @override
   void initState() {
@@ -63,34 +36,12 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.None;
     _selectedlessionType = LessionType.None;
-    switchOn_hasKnoledge = false;
-    _pickType = FileType.ANY;
+    switchOnHasKnoledge = false;
   }
 
   @override
   Widget build(BuildContext context) {
     Validations validations = Validations();
-
-    Future _theoryRecordonSwitchChanged(bool value) async {
-      switchOn_hasKnoledge = value;
-    }
-
-    void _makeEmpty() {
-      setState(() {
-        _selectedPickupLocation = TripLocation.Home;
-        _selectedDropOffLocation = TripLocation.Home;
-        _selectedVehicleType = VehicleType.None;
-        _selectedlessionType = LessionType.None;
-        lessonDurationController.text = '';
-        diaryNotesController.text = '';
-        reportCardController.text = '';
-        date_of_lesson = '';
-        _show_date = '';
-        switchOn_hasKnoledge = false;
-        _path = null;
-      });
-    }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -140,7 +91,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 ),
                                 /*3*/
                                 Text(
-                                  "$_show_date",
+                                  "$showDate",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -153,9 +104,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               keyboardType: TextInputType.number,
                               controller: lessonDurationController,
                               validator: validations.validateNumber,
-                              onSaved: (String value) {
-                                _lessonDuration = value;
-                              },
                               decoration: InputDecoration(
                                   suffixIcon:
                                       Icon(Icons.star, color: Colors.red[600]),
@@ -411,9 +359,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                       ),
                       /*3*/
                       Switch(
-                        value: switchOn_hasKnoledge,
+                        value: switchOnHasKnoledge,
                         onChanged: (val) =>
-                            setState(() => switchOn_hasKnoledge = val),
+                            setState(() => switchOnHasKnoledge = val),
                         activeColor: AppTheme.appThemeColor,
                       )
                     ],
@@ -443,7 +391,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                       ),
                       /*3*/
                       IconButton(
-                        icon: _path == null
+                        icon: this._attachedDocPath == null
                             ? Icon(
                                 FontAwesomeIcons.solidFilePdf,
                                 color: AppTheme.appThemeColor,
@@ -452,8 +400,12 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 FontAwesomeIcons.solidCheckSquare,
                                 color: AppTheme.appThemeColor,
                               ),
-                        onPressed: () {
-                          openFileExplorer();
+                        onPressed: () async {
+                          var _path = await FilePicker.getFilePath(
+                              type: FileType.CUSTOM, fileExtension: "pdf");
+                          setState(() {
+                            this._attachedDocPath = _path;
+                          });
                         },
                       )
                     ],
@@ -477,8 +429,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (_validateInputs() == true)
-                                    await _saveData();
+                                  if (_validateInputs()) await _saveData();
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
@@ -509,14 +460,16 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
-    var _lessionDate = DateTime.parse(date_of_lesson.substring(6, 10) +
+    Logger _logger = Logger('lessons->datasave');
+    var _lessionDate = DateTime.parse(dateOfLesson.substring(6, 10) +
         '-' +
-        date_of_lesson.substring(0, 2) +
+        dateOfLesson.substring(0, 2) +
         '-' +
-        date_of_lesson.substring(3, 5) +
+        dateOfLesson.substring(3, 5) +
         ' 00:00:00.000');
-        
-    var documentDownloadUrl = _path != null ? await storageUpload.uploadLessonFile(_path): null;
+
+    var documentDownloadUrl = await storageUpload.uploadLessonFile(this._attachedDocPath);
+    _logger.info('Download url $documentDownloadUrl;');
     var _lessionDuration = int.parse(lessonDurationController.text);
     print(_lessionDuration);
     Lesson lesson = new Lesson(
@@ -527,15 +480,15 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       diaryNotes: diaryNotesController.text,
       reportCard: reportCardController.text,
       documentDownloadUrl: documentDownloadUrl,
-      hasAcknowledged: switchOn_hasKnoledge,
+      hasAcknowledged: switchOnHasKnoledge,
       pickupLocation: _selectedPickupLocation,
       dropOffLocation: _selectedDropOffLocation,
       lessionDate: _lessionDate,
       lessionDuration: _lessionDuration,
     );
-    await lesson.add() == true
-        ? commonClass.getSnackbar('Lesson created successfully.', context)
-        : commonClass.getSnackbar('Lesson creation failed.', context);
+    await lesson.add()
+        ? frequentWidgets.getSnackbar('Lesson created successfully.', context)
+        : frequentWidgets.getSnackbar('Lesson creation failed.', context);
     _makeEmpty();
   }
 
@@ -544,22 +497,22 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessonDurationController.text = '';
       diaryNotesController.text = '';
       reportCardController.text = '';
-      date_of_lesson = '';
-      _show_date = '';
+      dateOfLesson = '';
+      showDate = '';
       _selectedPickupLocation = TripLocation.Home;
       _selectedDropOffLocation = TripLocation.Home;
       _selectedVehicleType = VehicleType.None;
       _selectedlessionType = LessionType.None;
-      switchOn_hasKnoledge = false;
-      _path = null;
+      switchOnHasKnoledge = false;
+      _attachedDocPath = null;
     });
   }
 
   bool _validateInputs() {
     if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
-      if (date_of_lesson == '') {
-        commonClass.getSnackbar('Date of Lesson is Required', context);
+      if (dateOfLesson == '') {
+        frequentWidgets.getSnackbar('Date of Lesson is Required', context);
         return false;
       }
       return true;
@@ -578,42 +531,42 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   DateTime selectedDate = DateTime.now();
   int getyear = 2019;
-  String date_of_lesson = '';
-  String _show_date = '';
-  TimeOfDay _show_time = new TimeOfDay.now();
+  String dateOfLesson = '';
+  String showDate = '';
+  TimeOfDay showTime = new TimeOfDay.now();
 
   Future<Null> _selectTime(BuildContext context) async {
     final TimeOfDay picked =
-        await showTimePicker(context: context, initialTime: _show_time);
-    if (picked != null && picked != _show_time) {
-      print('Time selected: ${_show_time.toString()}');
+        await showTimePicker(context: context, initialTime: showTime);
+    if (picked != null && picked != showTime) {
+      print('Time selected: ${showTime.toString()}');
       setState(
         () {
-          DateTime.parse(date_of_lesson.substring(6, 10) +
+          DateTime.parse(dateOfLesson.substring(6, 10) +
               '-' +
-              date_of_lesson.substring(3, 5) +
+              dateOfLesson.substring(3, 5) +
               '-' +
-              date_of_lesson.substring(0, 2) +
-              _show_time.toString());
+              dateOfLesson.substring(0, 2) +
+              showTime.toString());
           if (picked != null) {}
-          print(_show_time);
+          print(showTime);
         },
       );
     }
   }
 
   Future<Null> _selectDate(BuildContext context) async {
-    date_of_lesson = "";
+    dateOfLesson = "";
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: date_of_lesson == ''
+      initialDate: dateOfLesson == ''
           ? selectedDate
-          : DateTime.parse(date_of_lesson.substring(6, 10) +
+          : DateTime.parse(dateOfLesson.substring(6, 10) +
               '-' +
-              date_of_lesson.substring(3, 5) +
+              dateOfLesson.substring(3, 5) +
               '-' +
-              date_of_lesson.substring(0, 2) +
-              _show_time.toString() +
+              dateOfLesson.substring(0, 2) +
+              showTime.toString() +
               ':00.000'),
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
@@ -622,8 +575,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       _selectTime(context);
       setState(
         () {
-          date_of_lesson = new DateFormat('dd/MM/yyyy').format(picked);
-          _show_date = new DateFormat('MMM-dd-yyyy HH:mm').format(picked);
+          dateOfLesson = new DateFormat('dd/MM/yyyy').format(picked);
+          showDate = new DateFormat('MMM-dd-yyyy HH:mm').format(picked);
         },
       );
     }

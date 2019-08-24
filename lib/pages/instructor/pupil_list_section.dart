@@ -2,11 +2,11 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/pages/home_page.dart';
+import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
-import 'package:adibook/utils/common_function.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -34,8 +34,7 @@ class PupilPistSectionState extends State<PupilListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        CommonClass commonClass = CommonClass();
-        if (snapshot.data == null) return commonClass.getProgressBar();
+        if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

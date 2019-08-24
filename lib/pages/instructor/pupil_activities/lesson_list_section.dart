@@ -1,7 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
-import 'package:adibook/utils/common_function.dart';
+import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,10 +40,8 @@ class LessonListSectionState extends State<LessonListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        CommonClass commonClass = new CommonClass();
-        TypeConversion typeConversion = TypeConversion();
         var format = DateFormat("EEEE dd MMMM @ HH:mm");
-        if (snapshot.data == null) return commonClass.getProgressBar();
+        if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

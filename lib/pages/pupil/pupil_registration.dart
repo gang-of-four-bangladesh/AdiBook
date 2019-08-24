@@ -1,5 +1,4 @@
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/utils/common_function.dart';
 import 'package:flutter/material.dart';
 
 class PupilRegistration extends StatefulWidget {
