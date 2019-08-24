@@ -23,7 +23,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TextEditingController _reportCardController;
   FrequentWidgets _frequentWidgets;
   bool _autoValidate = false;
-  bool switchOnHasKnoledge;
   TripLocation _selectedPickupLocation;
   TripLocation _selectedDropOffLocation;
   LessionType _selectedlessionType;
@@ -49,7 +48,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.None;
     _selectedlessionType = LessionType.None;
-    switchOnHasKnoledge = false;
   }
 
   @override
@@ -346,40 +344,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                       ),
                     ],
                   ),
-                ),
-                //  theory record,
-                Container(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        /*1*/
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /*2*/
-                            Container(
-                              child: Text(
-                                'Has Knowledge',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /*3*/
-                      Switch(
-                        value: switchOnHasKnoledge,
-                        onChanged: (val) =>
-                            setState(() => switchOnHasKnoledge = val),
-                        activeColor: AppTheme.appThemeColor,
-                      )
-                    ],
-                  ),
-                ),
-                //  file Upload,
+                ),//  file Upload,
                 Container(
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
                   child: Row(
@@ -487,7 +452,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       diaryNotes: this._diaryNotesController.text,
       reportCard: this._reportCardController.text,
       documentDownloadUrl: documentDownloadUrl,
-      hasAcknowledged: switchOnHasKnoledge,
       pickupLocation: this._selectedPickupLocation,
       dropOffLocation: this._selectedDropOffLocation,
       lessionDate: this._lessonDate,
@@ -508,7 +472,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       _selectedDropOffLocation = TripLocation.None;
       _selectedVehicleType = VehicleType.None;
       _selectedlessionType = LessionType.None;
-      switchOnHasKnoledge = false;
       _attachedDocPath = null;
     });
   }

@@ -9,9 +9,9 @@ class FrequentWidgets {
         content: Text(
           message,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppTheme.appThemeColor.withOpacity(0.5),
+        backgroundColor: Colors.green,
       ),
     );
   }
