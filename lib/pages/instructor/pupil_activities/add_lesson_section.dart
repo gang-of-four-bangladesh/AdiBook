@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
@@ -514,7 +515,10 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         '-' +
         date_of_lesson.substring(3, 5) +
         ' 00:00:00.000');
+        
+    var documentDownloadUrl = _path != null ? await storageUpload.uploadLessonFile(_path): null;
     var _lessionDuration = int.parse(lessonDurationController.text);
+    print(_lessionDuration);
     Lesson lesson = new Lesson(
       pupilId: appData.pupilId,
       instructorId: appData.instructorId,
@@ -522,13 +526,13 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessionType: _selectedlessionType,
       diaryNotes: diaryNotesController.text,
       reportCard: reportCardController.text,
+      documentDownloadUrl: documentDownloadUrl,
       hasAcknowledged: switchOn_hasKnoledge,
       pickupLocation: _selectedPickupLocation,
       dropOffLocation: _selectedDropOffLocation,
       lessionDate: _lessionDate,
       lessionDuration: _lessionDuration,
     );
-    if (_path != null) storageUpload.uploadLessonFile(_path);
     await lesson.add() == true
         ? commonClass.getSnackbar('Lesson created successfully.', context)
         : commonClass.getSnackbar('Lesson creation failed.', context);
@@ -585,7 +589,13 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       print('Time selected: ${_show_time.toString()}');
       setState(
         () {
-          _show_time = picked;
+          DateTime.parse(date_of_lesson.substring(6, 10) +
+              '-' +
+              date_of_lesson.substring(3, 5) +
+              '-' +
+              date_of_lesson.substring(0, 2) +
+              _show_time.toString());
+          if (picked != null) {}
           print(_show_time);
         },
       );
@@ -603,7 +613,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
               date_of_lesson.substring(3, 5) +
               '-' +
               date_of_lesson.substring(0, 2) +
-              _show_time.toString()),
+              _show_time.toString() +
+              ':00.000'),
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
@@ -617,6 +628,4 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       );
     }
   }
-
-  File file;
 }

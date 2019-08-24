@@ -15,7 +15,8 @@ class Lesson {
   static const String VehicleTypeKey = 'vtp';
   static const String LessionTypeKey = 'ltp';
   static const String DiaryNotesKey = 'dnt';
-  static const String ReportCardKey = 'rcd';
+  static const String ReportCardKey = 'rcd';  
+  static const String DocumentDownloadUrl ='docurl';
   static const String HasAcknowledgedKey = 'ack';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
@@ -32,6 +33,7 @@ class Lesson {
       this.lessionType,
       this.diaryNotes,
       this.reportCard,
+      this.documentDownloadUrl,
       this.hasAcknowledged = false})
       : this.createdAt = null,
         this.updatedAt = null;
@@ -47,6 +49,7 @@ class Lesson {
   LessionType lessionType;
   String diaryNotes;
   String reportCard;
+  String documentDownloadUrl;
   bool hasAcknowledged;
   DateTime createdAt;
   DateTime updatedAt;
@@ -61,6 +64,7 @@ class Lesson {
       LessionTypeKey: lessionType.index,
       DiaryNotesKey: diaryNotes,
       ReportCardKey: reportCard,
+      DocumentDownloadUrl:documentDownloadUrl,
       HasAcknowledgedKey: hasAcknowledged,
       CreatedAtKey: createdAt,
       UpdatedAtKey: updatedAt
@@ -77,6 +81,7 @@ class Lesson {
     this.lessionType = LessionType.values[snapshot[Lesson.LessionTypeKey]];
     this.diaryNotes = snapshot[Lesson.DiaryNotesKey];
     this.reportCard = snapshot[Lesson.ReportCardKey];
+    this.documentDownloadUrl = snapshot[Lesson.DocumentDownloadUrl];
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[Lesson.CreatedAtKey]);
     this.updatedAt =
