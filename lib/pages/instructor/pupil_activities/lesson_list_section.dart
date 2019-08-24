@@ -53,7 +53,7 @@ class LessonListSectionState extends State<LessonListSection> {
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
                   return Container(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +95,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                     .toString()),
                             style: TextStyle(fontSize: 16)),
                         SizedBox(
-                          height: 5,
+                          height: 1,
                         ),
                         Text(document["dnt"].toString(),
                             style: TextStyle(fontSize: 14)),
