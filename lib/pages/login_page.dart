@@ -39,153 +39,154 @@ class _LoginPageState extends State<LoginPage> {
     var _oneFourthWidth = _screenWidth / 6;
     this._countryCodeController.text = "+44";
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppTheme.appThemeColor,
-        title: Text("AdiBook"),
-      ),
-      body: Builder(
-        builder: (BuildContext _context) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: _oneFourthWidth,
-                right: _oneFourthWidth,
-                top: 20,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Logo",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: AppTheme.appThemeColor,
+          title: Text("AdiBook"),
+        ),
+        body: SingleChildScrollView(
+          child: Builder(
+            builder: (BuildContext _context) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: _oneFourthWidth,
+                    right: _oneFourthWidth,
+                    top: 20,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  child: Column(
                     children: <Widget>[
-                      Radio(
-                        value: UserType.Instructor,
-                        groupValue: _selectedUserType,
-                        onChanged: _onUserTypeSelected,
-                      ),
                       Text(
-                        'Instructor',
-                        style: TextStyle(fontSize: 16.0),
+                        "Logo",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
-                      Radio(
-                        value: UserType.Pupil,
-                        groupValue: _selectedUserType,
-                        onChanged: _onUserTypeSelected,
+                      SizedBox(
+                        height: 20,
                       ),
-                      Text(
-                        'Pupil',
-                        style: TextStyle(fontSize: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Radio(
+                            value: UserType.Instructor,
+                            groupValue: _selectedUserType,
+                            onChanged: _onUserTypeSelected,
+                          ),
+                          Text(
+                            'Instructor',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          Radio(
+                            value: UserType.Pupil,
+                            groupValue: _selectedUserType,
+                            onChanged: _onUserTypeSelected,
+                          ),
+                          Text(
+                            'Pupil',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ],
+                      ),
+                      DropdownButton<String>(
+                        items: CountryWisePhoneCode.keys.map((String country) {
+                          return DropdownMenuItem<String>(
+                            value: country,
+                            child: Text(country),
+                          );
+                        }).toList(),
+                        onChanged: (String value) {
+                          setState(() {
+                            _selectedCountry = value;
+                          });
+                        },
+                        value: _selectedCountry,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        child: Text(
+                          "Please enter your phone number and press Send OTP Code button.\nA sms will be sent with OTP code.",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      TextField(
+                        controller: _phoneNumberController,
+                        keyboardType: TextInputType.number,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        maxLength: 11,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.grey),
+                          hintText: "Your Phone Number",
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: RaisedButton(
+                          onPressed: () {
+                            _onPressSendOTPCode(_context);
+                          },
+                          color: Colors.green,
+                          child: Text(
+                            "Send OTP Code",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      TextField(
+                        controller: _smsCodeController,
+                        keyboardType: TextInputType.number,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        maxLength: 6,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.grey),
+                          hintText: "Enter OTP Code",
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: RaisedButton(
+                          onPressed: _onPressLoginButton,
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: Colors.green,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: _showProgressBar == true
+                            ? SizedBox(
+                                child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                        AppTheme.appThemeColor),
+                                    strokeWidth: 5.0),
+                                height: 30.0,
+                                width: 30.0,
+                              )
+                            : Container(),
                       ),
                     ],
                   ),
-                  DropdownButton<String>(
-                    items: CountryWisePhoneCode.keys.map((String country) {
-                      return DropdownMenuItem<String>(
-                        value: country,
-                        child: Text(country),
-                      );
-                    }).toList(),
-                    onChanged: (String value) {
-                      setState(() {
-                        _selectedCountry = value;
-                      });
-                    },
-                    value: _selectedCountry,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1.0,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    child: Text(
-                      "Please enter your phone number and press Send OTP Code button.\nA sms will be sent with OTP code.",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  TextField(
-                    controller: _phoneNumberController,
-                    keyboardType: TextInputType.number,
-                    textAlignVertical: TextAlignVertical.bottom,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.grey),
-                      hintText: "Your Phone Number",
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: RaisedButton(
-                      onPressed: () {
-                        _onPressSendOTPCode(_context);
-                      },
-                      color: Colors.green,
-                      child: Text(
-                        "Send OTP Code",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  TextField(
-                    controller: _smsCodeController,
-                    keyboardType: TextInputType.number,
-                    textAlignVertical: TextAlignVertical.bottom,
-                    maxLength: 6,
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.grey),
-                      hintText: "Enter OTP Code",
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: RaisedButton(
-                      onPressed: _onPressLoginButton,
-                      child: Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.green,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: _showProgressBar == true
-                        ? SizedBox(
-                            child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(
-                                    AppTheme.appThemeColor),
-                                strokeWidth: 5.0),
-                            height: 30.0,
-                            width: 30.0,
-                          )
-                        : Container(),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+                ),
+              );
+            },
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+        ));
   }
 
   Future _onUserTypeSelected(value) async {
@@ -292,7 +293,8 @@ class _LoginPageState extends State<LoginPage> {
       await _displayProgressBar(false);
       this.verificationId = verificationId;
       FrequentWidgets().getSnackbar(
-        message: 'OTP code sent to phone number ${this._phoneNumberController.text}.',
+        message:
+            'OTP code sent to phone number ${this._phoneNumberController.text}.',
         context: _context,
         duration: 5,
       );
@@ -306,7 +308,8 @@ class _LoginPageState extends State<LoginPage> {
       await _displayProgressBar(false);
       this.verificationId = verificationId;
       FrequentWidgets().getSnackbar(
-        message: 'OTP code auto retrieval failed. Please enter the OTP code sent by sms.',
+        message:
+            'OTP code auto retrieval failed. Please enter the OTP code sent by sms.',
         context: _context,
         duration: 5,
       );
