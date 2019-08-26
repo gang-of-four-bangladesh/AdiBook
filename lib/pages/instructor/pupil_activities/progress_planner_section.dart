@@ -34,69 +34,193 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
         child: Column(
       children: <Widget>[
         Container(
-          height: 70.0,
-          color: Colors.green,
+          padding: EdgeInsets.all(5.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.green,
+              width: 1.0,
+              style: BorderStyle.solid,
+            ),
+            borderRadius: BorderRadius.circular(12.0),
+            color: Colors.grey.withOpacity(0.3),
+          ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "1. Introduced",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        "Introduced",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "     2. Talk Through",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        "Talk Through",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        "Prompted",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "3. Prompted",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "      4. Rarely Prompted",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        "Rarely Prompted",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        "Independent",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    "5. Independent",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                   Text(
-                    "",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  )
-                ],
-              ),
-            
             ],
           ),
         ),
