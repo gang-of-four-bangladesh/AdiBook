@@ -110,7 +110,11 @@ class _HomePageState extends State<HomePage> {
                 color: AppTheme.appThemeColor,
                 onPressed: () async {
                   await UserManager().logout();
-                  Navigator.of(context).pop();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    PageRoutes.LoginPage,
+                    (r) => false,
+                  );
                 },
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(8.0),

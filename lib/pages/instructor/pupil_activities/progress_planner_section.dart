@@ -45,7 +45,7 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
             color: Colors.grey.withOpacity(0.3),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -134,18 +134,6 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text(
-                        "",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
                       Icon(
                         Icons.star,
                         size: 20.0,
@@ -211,6 +199,46 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                       ),
                       Text(
                         "Independent",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star_border,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star_border,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star_border,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star_border,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      Icon(
+                        Icons.star_border,
+                        size: 20.0,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        "No Attempt",
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
