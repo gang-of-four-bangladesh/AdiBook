@@ -9,8 +9,11 @@ import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 
 class AddPupilSection extends StatefulWidget {
+  final UserType userType;
+  AddPupilSection({this.userType});
   @override
   State<StatefulWidget> createState() {
     return AddPupilSectionstate();
@@ -18,6 +21,7 @@ class AddPupilSection extends StatefulWidget {
 }
 
 class AddPupilSectionstate extends State<AddPupilSection> {
+  Future<Pupil> pupil;
   String _selectedCountry = CountryWisePhoneCode2.keys.first;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
@@ -34,6 +38,16 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     switchOnEyeTest = false;
     switchOnTheoryRecord = false;
     switchOnPreviousExp = false;
+    if (appData.userType == UserType.Pupil) getPupilInfo();
+  }
+
+  void getPupilInfo() async {
+    Logger logger = Logger("update pupil");
+    logger.info(" Pupil Id >>>> : ${appData.pupilId}");
+    setState(() {
+      pupil = Pupil(id: appData.pupilId).getPupil();
+      logger.info("Pupil Model >>>> : $pupil");
+    });
   }
 
   @override
@@ -125,6 +139,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                   padding: EdgeInsets.only(
                                       left: 2.0, right: 2.0, bottom: 5.0),
                                   child: TextFormField(
+                                    enabled:
+                                        appData.userType == UserType.Instructor
+                                            ? true
+                                            : false,
                                     controller: phoneController,
                                     keyboardType: TextInputType.phone,
                                     validator: validations.validatePhoneNumber,
