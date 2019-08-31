@@ -22,7 +22,7 @@ class AddPupilSection extends StatefulWidget {
 
 class AddPupilSectionstate extends State<AddPupilSection> {
   Future<Pupil> pupil;
-  String _selectedCountry = CountryWisePhoneCode2.keys.first;
+  String _selectedCountry = CountryWisePhoneCode.keys.first;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -117,7 +117,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 children: [
                                   /*2*/
                                   DropdownButton<String>(
-                                    items: CountryWisePhoneCode2.keys
+                                    items: CountryWisePhoneCode.keys
                                         .map((String country) {
                                       return DropdownMenuItem<String>(
                                         value: country,
@@ -397,10 +397,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   Future<void> _saveData() async {
     Pupil pupil = new Pupil();
     pupil.id =
-        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
+        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     pupil.name = nameController.text;
     pupil.phoneNumber =
-        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
+        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     pupil.address = addressController.text;
     pupil.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
         '-' +
