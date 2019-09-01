@@ -71,7 +71,7 @@ class Pupil {
         TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
   }
 
-  Future<Pupil> getPupil() async {
+  Future<Pupil> populatePupilInfo() async {
     var pupil = await this.get();
     if (!pupil.exists) {
       Logger('models->pupil').shout('${this.id} pupil does not exists.');

@@ -21,7 +21,6 @@ class AddPupilSection extends StatefulWidget {
 }
 
 class AddPupilSectionstate extends State<AddPupilSection> {
-  Future<Pupil> pupil;
   String _selectedCountry = CountryWisePhoneCode2.keys.first;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
@@ -44,9 +43,18 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   void getPupilInfo() async {
     Logger logger = Logger("update pupil");
     logger.info(" Pupil Id >>>> : ${appData.pupilId}");
+    Pupil pupil = await Pupil(id: appData.pupilId).populatePupilInfo();
+    logger.info("Pupil Model >>>> : $pupil");
+    nameController.text = pupil.name;
+    addressController.text = pupil.address;
+    phoneController.text = pupil.phoneNumber;
+    drivingLicenseController.text = pupil.licenseNo;
     setState(() {
-      pupil = Pupil(id: appData.pupilId).getPupil();
-      logger.info("Pupil Model >>>> : $pupil");
+      var format = DateFormat("MMM-dd-yyyy");
+      showDate = format.format(pupil.dateOfBirth);
+      switchOnEyeTest = pupil.eyeTest;
+      switchOnTheoryRecord = pupil.theoryRecord;
+      switchOnPreviousExp = pupil.previousExperience;
     });
   }
 
@@ -112,27 +120,29 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           padding: EdgeInsets.only(left: 2.0, right: 2.0),
                           child: Row(
                             children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  /*2*/
-                                  DropdownButton<String>(
-                                    items: CountryWisePhoneCode2.keys
-                                        .map((String country) {
-                                      return DropdownMenuItem<String>(
-                                        value: country,
-                                        child: Text(country),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String value) {
-                                      setState(() {
-                                        _selectedCountry = value;
-                                      });
-                                    },
-                                    value: _selectedCountry,
-                                  ),
-                                ],
-                              ),
+                              appData.userType == UserType.Pupil
+                                  ? Column()
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        /*2*/
+                                        DropdownButton<String>(
+                                            items: CountryWisePhoneCode2.keys
+                                                .map((String country) {
+                                              return DropdownMenuItem<String>(
+                                                value: country,
+                                                child: Text(country),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                _selectedCountry = value;
+                                              });
+                                            },
+                                            value: _selectedCountry),
+                                      ],
+                                    ),
                               /*3*/
                               Flexible(
                                 child: Container(
@@ -145,9 +155,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                             : false,
                                     controller: phoneController,
                                     keyboardType: TextInputType.phone,
-                                    validator: validations.validatePhoneNumber,
+                                    validator:
+                                        appData.userType == UserType.Instructor
+                                            ? validations.validatePhoneNumber
+                                            : null,
                                     decoration: InputDecoration(
-                                        suffixIcon: Icon(Icons.star,
+                                        suffixIcon: appData.userType == UserType.Pupil
+                                            ? null
+                                            : Icon(Icons.star,
                                             color: Colors.red[600]),
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
@@ -399,9 +414,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.id =
         '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
     pupil.name = nameController.text;
-    pupil.phoneNumber =
-        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
+    appData.userType == UserType.Instructor ?
+      pupil.phoneNumber =
+          '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}' : phoneController.text;
     pupil.address = addressController.text;
+    pupil.licenseNo = drivingLicenseController.text;
     pupil.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
         '-' +
         dateOfBirth.substring(3, 5) +
@@ -411,10 +428,15 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.eyeTest = switchOnEyeTest;
     pupil.previousExperience = switchOnPreviousExp;
     pupil.theoryRecord = switchOnTheoryRecord;
-    var result = await pupil.add();
-    var instructor = await Instructor(id: appData.instructorId).getInstructor();
-    await pupilManager.tagPupil(pupil, instructor);
-    await pupilManager.tagInstructor(pupil, instructor);
+    var result = appData.userType == UserType.Pupil
+        ? await pupil.update()
+        : await pupil.add();
+    if (appData.userType == UserType.Instructor) {
+      var instructor =
+          await Instructor(id: appData.instructorId).getInstructor();
+      await pupilManager.tagPupil(pupil, instructor);
+      await pupilManager.tagInstructor(pupil, instructor);
+    }
     result == true
         ? frequentWidgets.getSnackbar(
             message: 'Pupil created successfully.',
@@ -445,7 +467,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
-
+  int countryCodeIndex;
   Future<void> dialogBoxPicture(BuildContext context) {
     return showDialog<void>(
       context: context,
