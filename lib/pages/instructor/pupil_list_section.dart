@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -26,6 +27,19 @@ class PupilPistSectionState extends State<PupilListSection> {
       _querySnapshot = Instructor(id: appData.instructorId).getPupils().asStream();
     });
   }
+RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    setState(() {
+      _querySnapshot = Instructor(id: appData.instructorId).getPupils().asStream();
+    });
+    _refreshController.refreshCompleted();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +54,10 @@ class PupilPistSectionState extends State<PupilListSection> {
           case ConnectionState.waiting:
             return Text('Loading...');
           default:
-            return ListView(
+            return SmartRefresher(
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              child: ListView(
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
                   return ListTile(
@@ -64,6 +81,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                   );
                 },
               ).toList(),
+            )
             );
         }
       },

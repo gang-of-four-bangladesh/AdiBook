@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LessonListSection extends StatefulWidget {
   @override
@@ -33,6 +34,17 @@ class LessonListSectionState extends State<LessonListSection> {
     });
   }
 
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _loadLessonsData();
+    _refreshController.refreshCompleted();
+  }
+
   @override
   Widget build(BuildContext context) {
     Logger _logger = Logger(this.runtimeType.toString());
@@ -47,62 +59,66 @@ class LessonListSectionState extends State<LessonListSection> {
           case ConnectionState.waiting:
             return Text('Loading...');
           default:
-            return ListView(
-              children: snapshot.data.documents.map(
-                (DocumentSnapshot document) {
-                  return Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          (format
-                              .format(TypeConversion.timeStampToDateTime(
-                                  document["ldt"]))
-                              .toString()),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+            return SmartRefresher(
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                child: ListView(
+                  children: snapshot.data.documents.map(
+                    (DocumentSnapshot document) {
+                      return Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              (format
+                                  .format(TypeConversion.timeStampToDateTime(
+                                      document["ldt"]))
+                                  .toString()),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              enumValueToString(LessionType.values[
+                                          int.parse(document["ltp"].toString())]
+                                      .toString() +
+                                  ' - ' +
+                                  document["ldu"].toString() +
+                                  ' minutes - ' +
+                                  enumValueToString(VehicleType.values[
+                                          int.parse(document["vtp"].toString())]
+                                      .toString()) +
+                                  " Drive"),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                                enumValueToString(TripLocation.values[int.parse(
+                                            document["pul"].toString())]
+                                        .toString()) +
+                                    ' : ' +
+                                    enumValueToString(TripLocation.values[
+                                            int.parse(
+                                                document["dol"].toString())]
+                                        .toString()),
+                                style: TextStyle(fontSize: 16)),
+                            SizedBox(
+                              height: 1,
+                            ),
+                            Text(document["dnt"].toString(),
+                                style: TextStyle(fontSize: 14)),
+                          ],
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          enumValueToString(LessionType
-                                  .values[int.parse(document["ltp"].toString())]
-                                  .toString() +
-                              ' - ' +
-                              document["ldu"].toString() +
-                              ' minutes - ' +
-                              enumValueToString(VehicleType
-                                  .values[int.parse(document["vtp"].toString())]
-                                  .toString()) +
-                              " Drive"),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                            enumValueToString(TripLocation.values[
-                                        int.parse(document["pul"].toString())]
-                                    .toString()) +
-                                ' : ' +
-                                enumValueToString(TripLocation.values[
-                                        int.parse(document["dol"].toString())]
-                                    .toString()),
-                            style: TextStyle(fontSize: 16)),
-                        SizedBox(
-                          height: 1,
-                        ),
-                        Text(document["dnt"].toString(),
-                            style: TextStyle(fontSize: 14)),
-                      ],
-                    ),
-                  );
-                },
-              ).toList(),
-            );
+                      );
+                    },
+                  ).toList(),
+                ));
         }
       },
     );
