@@ -1,8 +1,8 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/event_list_section.dart';
+import 'package:adibook/pages/instructor/instructor_profile.dart';
 import 'package:adibook/pages/instructor/message_list_section.dart';
-import 'package:adibook/pages/instructor/more_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
@@ -102,11 +102,11 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 4,
-      appBarTitle: 'More',
-      bottomNavTitle: 'More',
+      appBarTitle: 'Profile',
+      bottomNavTitle: 'Profile',
       availableFor: UserType.Instructor,
-      sectionWidget: MoreList(),
-      bottomNavIcon: Icon(EvaIcons.moreHorizotnalOutline, color: Colors.white),
+      sectionWidget: InstructorProfile(),
+      bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
       sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
@@ -115,7 +115,7 @@ class PageManager {
       bottomNavTitle: 'Profile',
       availableFor: UserType.Pupil,
       sectionWidget: AddPupilSection(),
-      bottomNavIcon: Icon(FontAwesomeIcons.user, color: Colors.white),
+      bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
       sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(

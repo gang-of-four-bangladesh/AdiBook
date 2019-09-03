@@ -2,7 +2,6 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
-import 'package:adibook/models/pupil.dart';
 import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
@@ -11,16 +10,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
-class AddPupilSection extends StatefulWidget {
+class InstructorProfile extends StatefulWidget {
   final UserType userType;
-  AddPupilSection({this.userType});
+  InstructorProfile({this.userType});
   @override
   State<StatefulWidget> createState() {
-    return AddPupilSectionstate();
+    return _InstructorProfile();
   }
 }
 
-class AddPupilSectionstate extends State<AddPupilSection> {
+class _InstructorProfile extends State<InstructorProfile> {
   String _selectedCountry = CountryWisePhoneCode2.keys.first;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
@@ -34,27 +33,23 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     super.initState();
     dateOfBirth = '';
     showDate = '';
-    switchOnEyeTest = false;
-    switchOnTheoryRecord = false;
-    switchOnPreviousExp = false;
-    if (appData.userType == UserType.Pupil) getPupilInfo();
+    getInstructorInfo();
   }
 
-  void getPupilInfo() async {
+  void getInstructorInfo() async {
     Logger logger = Logger("update pupil");
     logger.info(" Pupil Id >>>> : ${appData.pupilId}");
-    Pupil pupil = await Pupil(id: appData.pupilId).populatePupilInfo();
-    logger.info("Pupil Model >>>> : $pupil");
-    nameController.text = pupil.name;
-    addressController.text = pupil.address;
-    phoneController.text = pupil.phoneNumber;
-    drivingLicenseController.text = pupil.licenseNo;
+    // Pupil pupil = await Pupil(id: appData.pupilId).populatePupilInfo();
+    Instructor instructor =
+        await Instructor(id: appData.instructorId).getInstructor();
+    logger.info("Pupil Model >>>> : $instructor");
+    nameController.text = instructor.name;
+    addressController.text = instructor.address;
+    phoneController.text = instructor.phoneNumber;
+    drivingLicenseController.text = instructor.licenseNo;
     setState(() {
       var format = DateFormat("MMM-dd-yyyy");
-      showDate = format.format(pupil.dateOfBirth);
-      switchOnEyeTest = pupil.eyeTest;
-      switchOnTheoryRecord = pupil.theoryRecord;
-      switchOnPreviousExp = pupil.previousExperience;
+      showDate = format.format(instructor.dateOfBirth);
     });
   }
 
@@ -114,67 +109,20 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       ],
                     ),
                     Column(
-                      children: <Widget>[
-                        //  Driving Type,
+                      children: [
                         Container(
-                          padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                          child: Row(
-                            children: [
-                              appData.userType == UserType.Pupil
-                                  ? Column()
-                                  : Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        /*2*/
-                                        DropdownButton<String>(
-                                            items: CountryWisePhoneCode2.keys
-                                                .map((String country) {
-                                              return DropdownMenuItem<String>(
-                                                value: country,
-                                                child: Text(country),
-                                              );
-                                            }).toList(),
-                                            onChanged: (String value) {
-                                              setState(() {
-                                                _selectedCountry = value;
-                                              });
-                                            },
-                                            value: _selectedCountry),
-                                      ],
-                                    ),
-                              /*3*/
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: 2.0, right: 2.0, bottom: 5.0),
-                                  child: TextFormField(
-                                    enabled:
-                                        appData.userType == UserType.Instructor
-                                            ? true
-                                            : false,
-                                    controller: phoneController,
-                                    keyboardType: TextInputType.phone,
-                                    validator:
-                                        appData.userType == UserType.Instructor
-                                            ? validations.validatePhoneNumber
-                                            : null,
-                                    decoration: InputDecoration(
-                                        suffixIcon:
-                                            appData.userType == UserType.Pupil
-                                                ? null
-                                                : Icon(Icons.star,
-                                                    color: Colors.red[600]),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.cyan[300]),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
-                                        hintText: "Phone"),
-                                  ),
-                                ),
-                              )
-                            ],
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: TextFormField(
+                            controller: phoneController,
+                            keyboardType: TextInputType.phone,
+                            enabled: false,
+                            validator: validations.validatePhoneNumber,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.cyan[300]),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                hintText: "Phone"),
                           ),
                         ),
                       ],
@@ -238,101 +186,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                   ],
                 ),
               ),
-
-              //  Eye test,
-              Container(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Text(
-                              'Eye test',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    /*3*/
-                    Switch(
-                        value: switchOnEyeTest,
-                        onChanged: (val) =>
-                            setState(() => switchOnEyeTest = val),
-                        activeColor: AppTheme.appThemeColor)
-                  ],
-                ),
-              ),
-              //  theory record,
-              Container(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Text(
-                              'Theory record',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    /*3*/
-                    Switch(
-                        value: switchOnTheoryRecord,
-                        onChanged: (val) =>
-                            setState(() => switchOnTheoryRecord = val),
-                        activeColor: AppTheme.appThemeColor)
-                  ],
-                ),
-              ),
-              //  Previous driving exp,
-              Container(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Text(
-                              'Previous driving exp.',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    /*3*/
-                    Switch(
-                        value: switchOnPreviousExp,
-                        onChanged: (val) =>
-                            setState(() => switchOnPreviousExp = val),
-                        activeColor: AppTheme.appThemeColor)
-                  ],
-                ),
-              ),
-
               //  addButton,
               Container(
                 padding: EdgeInsets.all(5.0),
@@ -355,9 +208,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               },
                               color: AppTheme.appThemeColor,
                               child: Text(
-                                appData.userType == UserType.Pupil
-                                    ? "Update"
-                                    : "Save",
+                                "Update",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -406,48 +257,34 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       drivingLicenseController.text = '';
       dateOfBirth = '';
       showDate = '';
-      switchOnEyeTest = false;
-      switchOnTheoryRecord = false;
-      switchOnPreviousExp = false;
     });
   }
 
   Future<void> _saveData() async {
-    Pupil pupil = new Pupil();
-    pupil.id =
+    Instructor instructor = new Instructor();
+    instructor.id =
         '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
-    pupil.name = nameController.text;
-    appData.userType == UserType.Instructor
-        ? pupil.phoneNumber =
-            '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}'
-        : phoneController.text;
-    pupil.address = addressController.text;
-    pupil.licenseNo = drivingLicenseController.text;
-    pupil.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
+    instructor.name = nameController.text;
+    //appData.userType == UserType.Instructor
+        //? pupil.phoneNumber =
+            //'${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}'
+        //: phoneController.text;
+    instructor.address = addressController.text;
+    instructor.licenseNo = drivingLicenseController.text;
+    instructor.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
         '-' +
         dateOfBirth.substring(3, 5) +
         '-' +
         dateOfBirth.substring(0, 2) +
         ' 00:00:00.000');
-    pupil.eyeTest = switchOnEyeTest;
-    pupil.previousExperience = switchOnPreviousExp;
-    pupil.theoryRecord = switchOnTheoryRecord;
-    var result = appData.userType == UserType.Pupil
-        ? await pupil.update()
-        : await pupil.add();
-    if (appData.userType == UserType.Instructor) {
-      var instructor =
-          await Instructor(id: appData.instructorId).getInstructor();
-      await pupilManager.tagPupil(pupil, instructor);
-      await pupilManager.tagInstructor(pupil, instructor);
-    }
+    var result = await instructor.update();
     result == true
         ? frequentWidgets.getSnackbar(
-            message: 'Pupil created successfully.',
+            message: 'Instructor profile update successfully.',
             context: context,
           )
         : frequentWidgets.getSnackbar(
-            message: 'Pupil creation failed.',
+            message: 'Instructor profile update failed.',
             context: context,
           );
     _makeEmpty();
@@ -464,9 +301,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     setState(() {});
   }
 
-  bool switchOnEyeTest = false;
-  bool switchOnTheoryRecord = false;
-  bool switchOnPreviousExp = false;
+ 
   TextEditingController nameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
