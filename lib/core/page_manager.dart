@@ -2,7 +2,6 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/event_list_section.dart';
 import 'package:adibook/pages/instructor/instructor_profile.dart';
-import 'package:adibook/pages/instructor/message_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
@@ -91,17 +90,9 @@ class PageManager {
       bottomNavIcon: Icon(EvaIcons.book, color: Colors.white),
       sectionType: SectionType.InstructorActivity,
     ),
+    
     WidgetConfiguration(
       index: 3,
-      appBarTitle: 'Your Messages',
-      bottomNavTitle: 'Messages',
-      availableFor: UserType.Instructor,
-      sectionWidget: MessageListSection(),
-      bottomNavIcon: Icon(EvaIcons.bell, color: Colors.white),
-      sectionType: SectionType.InstructorActivity,
-    ),
-    WidgetConfiguration(
-      index: 4,
       appBarTitle: 'Profile',
       bottomNavTitle: 'Profile',
       availableFor: UserType.Instructor,
