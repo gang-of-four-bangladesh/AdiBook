@@ -1,7 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
-import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
@@ -20,36 +19,34 @@ class InstructorProfile extends StatefulWidget {
 }
 
 class _InstructorProfile extends State<InstructorProfile> {
-  String _selectedCountry = CountryWisePhoneCode.keys.first;
-  FrequentWidgets frequentWidgets = FrequentWidgets();
-  // _formKey and _autoValidate
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
+  var _logger = Logger("instructor->information");
+  var _frequentWidgets = FrequentWidgets();
+  final _formKey = GlobalKey<FormState>();
 
-  var pupilManager = new PupilManager();
+  bool _autoValidate;
 
   @override
   void initState() {
     super.initState();
-    dateOfBirth = '';
-    showDate = '';
+    this._autoValidate = false;
+    this._showDate = EmptyString;
     getInstructorInfo();
   }
 
   void getInstructorInfo() async {
-    Logger logger = Logger("update pupil");
-    logger.info(" Pupil Id >>>> : ${appData.pupilId}");
-    // Pupil pupil = await Pupil(id: appData.pupilId).populatePupilInfo();
+    this._logger.info(" Pupil Id >>>> : ${appData.pupilId}");
     Instructor instructor =
         await Instructor(id: appData.instructorId).getInstructor();
-    logger.info("Pupil Model >>>> : $instructor");
+    this._logger.info("Pupil Model >>>> : $instructor");
     nameController.text = instructor.name;
     addressController.text = instructor.address;
     phoneController.text = instructor.phoneNumber;
     drivingLicenseController.text = instructor.licenseNo;
     setState(() {
-      var format = DateFormat("MMM-dd-yyyy");
-      showDate = format.format(instructor.dateOfBirth);
+      if (instructor.dateOfBirth != null) {
+        var format = DateFormat("MMM-dd-yyyy");
+        _showDate = format.format(instructor.dateOfBirth);
+      }
     });
   }
 
@@ -180,7 +177,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                     ),
                     /*3*/
                     Text(
-                      "$showDate",
+                      "$_showDate",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -203,8 +200,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                             height: 50.0,
                             child: RaisedButton(
                               onPressed: () async {
-                                if (_validateInputs() == true)
-                                  await _saveData();
+                                if (_validateInputs()) await _saveData();
                               },
                               color: AppTheme.appThemeColor,
                               child: Text(
@@ -233,61 +229,37 @@ class _InstructorProfile extends State<InstructorProfile> {
   }
 
   bool _validateInputs() {
+    this._logger.info('Validate input called.');
     if (_formKey.currentState.validate()) {
-      //If all data are correct then save data to out variables
-      if (dateOfBirth == '') {
-        frequentWidgets.getSnackbar(
-          message: 'Date of Birth is Required',
-          context: context,
-        );
+      this._logger.info('${this._dateOfBirth}');
+      if (this._dateOfBirth == null) {
+        this._frequentWidgets.getSnackbar(
+              message: 'Date of Birth is Required',
+              context: context,
+            );
         return false;
       }
       return true;
     } else {
-      //If all data are not valid then start auto validation.
+      this._logger.info('Please check inputs.');
       return false;
     }
   }
 
-  void _makeEmpty() {
-    setState(() {
-      nameController.text = '';
-      addressController.text = '';
-      phoneController.text = '';
-      drivingLicenseController.text = '';
-      dateOfBirth = '';
-      showDate = '';
-    });
-  }
-
   Future<void> _saveData() async {
-    Instructor instructor = new Instructor();
-    instructor.id =
-        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
+    var instructor = Instructor(id: appData.instructorId);
     instructor.name = nameController.text;
-    //appData.userType == UserType.Instructor
-        //? pupil.phoneNumber =
-            //'${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}'
-        //: phoneController.text;
     instructor.address = addressController.text;
     instructor.licenseNo = drivingLicenseController.text;
-    instructor.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
-        '-' +
-        dateOfBirth.substring(3, 5) +
-        '-' +
-        dateOfBirth.substring(0, 2) +
-        ' 00:00:00.000');
+    instructor.dateOfBirth = this._dateOfBirth;
     var result = await instructor.update();
-    result == true
-        ? frequentWidgets.getSnackbar(
-            message: 'Instructor profile update successfully.',
-            context: context,
-          )
-        : frequentWidgets.getSnackbar(
-            message: 'Instructor profile update failed.',
-            context: context,
-          );
-    _makeEmpty();
+    String message = result
+        ? 'Instructor updated successfully.'
+        : 'Instructor update failed.';
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
   }
 
   File img;
@@ -301,7 +273,6 @@ class _InstructorProfile extends State<InstructorProfile> {
     setState(() {});
   }
 
- 
   TextEditingController nameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
@@ -344,31 +315,25 @@ class _InstructorProfile extends State<InstructorProfile> {
     );
   }
 
-  DateTime selectedDate = DateTime.now();
-  int getyear = 2019;
-  String dateOfBirth = '';
-  String showDate = '';
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+  DateTime _dateOfBirth = DateTime.now();
+  String _showDate;
+  Future<void> _selectDate(BuildContext context) async {
+    this._dateOfBirth = await showDatePicker(
       context: context,
-      initialDate: dateOfBirth == ''
-          ? selectedDate
-          : DateTime.parse(dateOfBirth.substring(6, 10) +
-              '-' +
-              dateOfBirth.substring(3, 5) +
-              '-' +
-              dateOfBirth.substring(0, 2) +
-              ' 00:00:00.000'),
+      initialDate: this._dateOfBirth,
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
-    if (picked != null) {
+    if (this._dateOfBirth != null) {
       setState(
         () {
-          dateOfBirth = new DateFormat('dd/MM/yyyy').format(picked);
-          showDate = new DateFormat('MMM-dd-yyyy').format(picked);
+          this._showDate = DateFormat('MMM-dd-yyyy').format(_dateOfBirth);
         },
       );
+    }
+    if (this._dateOfBirth == null && this._showDate.isNotEmpty) {
+      this._dateOfBirth = DateFormat('MMM-dd-yyyy').parse(this._showDate);
+      this._logger.info('${this._showDate} converted to ${this._dateOfBirth}');
     }
   }
 }

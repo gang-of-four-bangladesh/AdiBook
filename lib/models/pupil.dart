@@ -88,7 +88,7 @@ class Pupil {
         .get();
   }
 
-  Future add() async {
+  Future<bool> add() async {
     try {
       this.createdAt = DateTime.now().toUtc();
       Firestore.instance
@@ -103,22 +103,22 @@ class Pupil {
     }
   }
 
-  Future update() async {
+  Future<bool> update() async {
     try {
       this.updatedAt = DateTime.now().toUtc();
       Firestore.instance
           .collection(FirestorePath.PupilCollection)
           .document(this.id)
           .updateData(this.toJson());
-      print('$this created successfully.');
+      print('$this updated successfully.');
       return true;
     } catch (e) {
-      print('user creation failed. $e');
+      print('user update failed. $e');
       return false;
     }
   }
 
-  Future delete() async {
+  Future<void> delete() async {
     return Firestore.instance
         .collection(FirestorePath.PupilCollection)
         .document(this.id)

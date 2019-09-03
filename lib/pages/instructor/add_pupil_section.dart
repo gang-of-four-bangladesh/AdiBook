@@ -21,19 +21,19 @@ class AddPupilSection extends StatefulWidget {
 }
 
 class AddPupilSectionstate extends State<AddPupilSection> {
-  String _selectedCountry = CountryWisePhoneCode.keys.first;
-  FrequentWidgets frequentWidgets = FrequentWidgets();
-  // _formKey and _autoValidate
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
+  var _logger = Logger("pupil->profile");
+  var _pupilManager = PupilManager();
+  var _frequentWidgets = FrequentWidgets();
+  final _formKey = GlobalKey<FormState>();
 
-  var pupilManager = new PupilManager();
+  var _selectedCountry = CountryWisePhoneCode.keys.first;
+  bool _autoValidate;
 
   @override
   void initState() {
     super.initState();
-    dateOfBirth = '';
-    showDate = '';
+    _showDate = '';
+    this._autoValidate = false;
     switchOnEyeTest = false;
     switchOnTheoryRecord = false;
     switchOnPreviousExp = false;
@@ -41,17 +41,16 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   }
 
   void getPupilInfo() async {
-    Logger logger = Logger("update pupil");
-    logger.info(" Pupil Id >>>> : ${appData.pupilId}");
+    this._logger.info(" Pupil Id >>>> : ${appData.pupilId}");
     Pupil pupil = await Pupil(id: appData.pupilId).populatePupilInfo();
-    logger.info("Pupil Model >>>> : $pupil");
+    this._logger.info("Pupil Model >>>> : $pupil");
     nameController.text = pupil.name;
     addressController.text = pupil.address;
     phoneController.text = pupil.phoneNumber;
     drivingLicenseController.text = pupil.licenseNo;
     setState(() {
       var format = DateFormat("MMM-dd-yyyy");
-      showDate = format.format(pupil.dateOfBirth);
+      _showDate = format.format(pupil.dateOfBirth);
       switchOnEyeTest = pupil.eyeTest;
       switchOnTheoryRecord = pupil.theoryRecord;
       switchOnPreviousExp = pupil.previousExperience;
@@ -232,7 +231,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Text(
-                      "$showDate",
+                      "$_showDate",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -350,8 +349,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             height: 50.0,
                             child: RaisedButton(
                               onPressed: () async {
-                                if (_validateInputs() == true)
-                                  await _saveData();
+                                if (_validateInputs()) {
+                                  if (appData.userType == UserType.Instructor)
+                                    await _saveData();
+                                  if (appData.userType == UserType.Pupil)
+                                    await _updateData();
+                                }
                               },
                               color: AppTheme.appThemeColor,
                               child: Text(
@@ -384,8 +387,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   bool _validateInputs() {
     if (_formKey.currentState.validate()) {
       //If all data are correct then save data to out variables
-      if (dateOfBirth == '') {
-        frequentWidgets.getSnackbar(
+      if (this._dateOfBirth == null) {
+        _frequentWidgets.getSnackbar(
           message: 'Date of Birth is Required',
           context: context,
         );
@@ -404,52 +407,58 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       addressController.text = '';
       phoneController.text = '';
       drivingLicenseController.text = '';
-      dateOfBirth = '';
-      showDate = '';
+      _dateOfBirth = DateTime.now();
+      _showDate = null;
       switchOnEyeTest = false;
       switchOnTheoryRecord = false;
       switchOnPreviousExp = false;
     });
   }
 
-  Future<void> _saveData() async {
-    Pupil pupil = new Pupil();
-    pupil.id =
-        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
+  Future<void> _updateData() async {
+    this._logger.info('Updating pupil information ${appData.pupilId}.');
+    Pupil pupil = Pupil(id: appData.pupilId);
     pupil.name = nameController.text;
-    appData.userType == UserType.Instructor
-        ? pupil.phoneNumber =
-            '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}'
-        : phoneController.text;
+    pupil.phoneNumber = phoneController.text;
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseController.text;
-    pupil.dateOfBirth = DateTime.parse(dateOfBirth.substring(6, 10) +
-        '-' +
-        dateOfBirth.substring(3, 5) +
-        '-' +
-        dateOfBirth.substring(0, 2) +
-        ' 00:00:00.000');
+    pupil.dateOfBirth = this._dateOfBirth;
     pupil.eyeTest = switchOnEyeTest;
     pupil.previousExperience = switchOnPreviousExp;
     pupil.theoryRecord = switchOnTheoryRecord;
-    var result = appData.userType == UserType.Pupil
-        ? await pupil.update()
-        : await pupil.add();
-    if (appData.userType == UserType.Instructor) {
-      var instructor =
-          await Instructor(id: appData.instructorId).getInstructor();
-      await pupilManager.tagPupil(pupil, instructor);
-      await pupilManager.tagInstructor(pupil, instructor);
-    }
-    result == true
-        ? frequentWidgets.getSnackbar(
-            message: 'Pupil created successfully.',
-            context: context,
-          )
-        : frequentWidgets.getSnackbar(
-            message: 'Pupil creation failed.',
-            context: context,
-          );
+    var result = await pupil.update();
+    String message =
+        result ? 'Pupil updated successfully.' : 'Pupil update failed.';
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
+  }
+
+  Future<void> _saveData() async {
+    var id = '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
+    this._logger.info('Saving pupil information $id.');
+    Pupil pupil = Pupil(id: id);
+    pupil.name = nameController.text;
+    pupil.phoneNumber =
+        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
+    pupil.address = addressController.text;
+    pupil.licenseNo = drivingLicenseController.text;
+    pupil.dateOfBirth = this._dateOfBirth;
+    pupil.eyeTest = switchOnEyeTest;
+    pupil.previousExperience = switchOnPreviousExp;
+    pupil.theoryRecord = switchOnTheoryRecord;
+    var result = await pupil.add();
+    var instructor = await Instructor(id: appData.instructorId).getInstructor();
+    await _pupilManager.tagPupil(pupil, instructor);
+    await _pupilManager.tagInstructor(pupil, instructor);
+    String message = result
+        ? 'Instructor updated successfully.'
+        : 'Instructor update failed.';
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
     _makeEmpty();
   }
 
@@ -509,29 +518,20 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     );
   }
 
-  DateTime selectedDate = DateTime.now();
-  int getyear = 2019;
-  String dateOfBirth = '';
-  String showDate = '';
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+  DateTime _dateOfBirth = DateTime.now();
+  String _showDate;
+  Future<void> _selectDate(BuildContext context) async {
+    this._dateOfBirth = await showDatePicker(
       context: context,
-      initialDate: dateOfBirth == ''
-          ? selectedDate
-          : DateTime.parse(dateOfBirth.substring(6, 10) +
-              '-' +
-              dateOfBirth.substring(3, 5) +
-              '-' +
-              dateOfBirth.substring(0, 2) +
-              ' 00:00:00.000'),
+      initialDate: _dateOfBirth,
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
-    if (picked != null) {
+    if (this._dateOfBirth != null) {
       setState(
         () {
-          dateOfBirth = new DateFormat('dd/MM/yyyy').format(picked);
-          showDate = new DateFormat('MMM-dd-yyyy').format(picked);
+          this._showDate =
+              new DateFormat('MMM-dd-yyyy').format(this._dateOfBirth);
         },
       );
     }

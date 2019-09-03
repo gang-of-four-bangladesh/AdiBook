@@ -457,15 +457,13 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessionDate: this._lessonDate,
       lessionDuration: _lessionDuration,
     );
-    await lesson.add()
-        ? _frequentWidgets.getSnackbar(
-            message: 'Lesson created successfully.',
-            context: context,
-          )
-        : _frequentWidgets.getSnackbar(
-            message: 'Lesson creation failed.',
-            context: context,
-          );
+    var message = await lesson.add()
+        ? 'Lesson created successfully.'
+        : 'Lesson creation failed.';
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
     _makeEmpty();
   }
 

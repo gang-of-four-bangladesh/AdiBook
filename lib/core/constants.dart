@@ -61,6 +61,8 @@ class EnvironmentStatus {
   }
 }
 
+const String EmptyString = '';
+
 class AppTheme {
   static Color appThemeColor =
       Colors.lightBlueAccent.withRed(3).withGreen(209).withBlue(191);

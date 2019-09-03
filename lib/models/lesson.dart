@@ -105,7 +105,7 @@ class Lesson {
     return Firestore.instance.collection(path).document(this.id).get();
   }
 
-  Future add() async {
+  Future<bool> add() async {
     try {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
@@ -125,7 +125,7 @@ class Lesson {
     }
   }
 
-  Future update() async {
+  Future<bool> update() async {
     try {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
@@ -142,7 +142,7 @@ class Lesson {
     }
   }
 
-  Future delete() async {
+  Future<void> delete() async {
     var path = sprintf(FirestorePath.LessonsOfAPupilColection,
         [this.pupilId, this.instructorId]);
     return Firestore.instance.collection(path).document(this.id).delete();

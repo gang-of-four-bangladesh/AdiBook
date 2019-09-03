@@ -2,6 +2,7 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ RefreshController _refreshController =
                 (DocumentSnapshot document) {
                   return ListTile(
                     trailing: Icon(Icons.person),
-                    title: Text(document["nam"]),
+                    title: Text(document[Pupil.NameKey]),
                     onTap: () {
                       appData.pupilId = document.documentID;
                       Navigator.push(
