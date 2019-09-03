@@ -17,6 +17,7 @@ class LessonListSection extends StatefulWidget {
 
 class LessonListSectionState extends State<LessonListSection> {
   Stream<QuerySnapshot> _querySnapshot;
+  FrequentWidgets frequentWidgets = FrequentWidgets();
   @override
   void initState() {
     super.initState();
@@ -57,7 +58,7 @@ class LessonListSectionState extends State<LessonListSection> {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return Text('Loading...');
+            return FrequentWidgets().getProgressBar();
           default:
             return SmartRefresher(
                 controller: _refreshController,
