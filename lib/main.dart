@@ -1,11 +1,11 @@
 import 'package:adibook/app.dart';
+import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/log_manager.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
-import 'package:adibook/utils/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,7 +1,7 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
-import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

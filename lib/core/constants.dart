@@ -67,11 +67,6 @@ class AppTheme {
 }
 
 const Map<String, String> CountryWisePhoneCode = {
-  "United Kingdom (+44)": "+44",
-  "Bangladesh (+880)": "+880"
-};
-
-const Map<String, String> CountryWisePhoneCode2 = {
   "UK (+44)": "+44",
   "BD (+880)": "+880"
 };

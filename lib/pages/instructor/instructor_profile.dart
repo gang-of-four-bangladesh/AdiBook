@@ -20,7 +20,7 @@ class InstructorProfile extends StatefulWidget {
 }
 
 class _InstructorProfile extends State<InstructorProfile> {
-  String _selectedCountry = CountryWisePhoneCode2.keys.first;
+  String _selectedCountry = CountryWisePhoneCode.keys.first;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -263,7 +263,7 @@ class _InstructorProfile extends State<InstructorProfile> {
   Future<void> _saveData() async {
     Instructor instructor = new Instructor();
     instructor.id =
-        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
+        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     instructor.name = nameController.text;
     //appData.userType == UserType.Instructor
         //? pupil.phoneNumber =

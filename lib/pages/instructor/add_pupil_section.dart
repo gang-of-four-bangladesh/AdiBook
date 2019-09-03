@@ -1,9 +1,9 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
-import 'package:adibook/utils/frequent_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
@@ -21,7 +21,7 @@ class AddPupilSection extends StatefulWidget {
 }
 
 class AddPupilSectionstate extends State<AddPupilSection> {
-  String _selectedCountry = CountryWisePhoneCode2.keys.first;
+  String _selectedCountry = CountryWisePhoneCode.keys.first;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   // _formKey and _autoValidate
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -128,7 +128,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                       children: [
                                         /*2*/
                                         DropdownButton<String>(
-                                            items: CountryWisePhoneCode2.keys
+                                            items: CountryWisePhoneCode.keys
                                                 .map((String country) {
                                               return DropdownMenuItem<String>(
                                                 value: country,
@@ -415,11 +415,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   Future<void> _saveData() async {
     Pupil pupil = new Pupil();
     pupil.id =
-        '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}';
+        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     pupil.name = nameController.text;
     appData.userType == UserType.Instructor
         ? pupil.phoneNumber =
-            '${CountryWisePhoneCode2[_selectedCountry]}${phoneController.text}'
+            '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}'
         : phoneController.text;
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseController.text;
