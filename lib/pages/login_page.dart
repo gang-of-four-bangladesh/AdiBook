@@ -74,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                             value: UserType.Instructor,
                             groupValue: _selectedUserType,
                             onChanged: _onUserTypeSelected,
+                            activeColor: AppTheme.appThemeColor,
                           ),
                           Text(
                             'Instructor',
@@ -83,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                             value: UserType.Pupil,
                             groupValue: _selectedUserType,
                             onChanged: _onUserTypeSelected,
+                            activeColor: AppTheme.appThemeColor,
                           ),
                           Text(
                             'Pupil',
