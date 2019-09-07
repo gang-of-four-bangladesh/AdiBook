@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
@@ -380,9 +382,16 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                         onPressed: () async {
                           var _path = await FilePicker.getFilePath(
                               type: FileType.CUSTOM, fileExtension: "pdf");
-                          setState(() {
-                            this._attachedDocPath = _path;
-                          });
+                          File file = File(_path);
+                          print(file.lengthSync());
+                          file.lengthSync() <= 500000
+                              ? setState(() {
+                                  this._attachedDocPath = _path;
+                                })
+                              : _frequentWidgets.getSnackbar(
+                                  message: "pdf file must be under 500kb",
+                                  context: context,
+                                  duration: 1);
                         },
                       )
                     ],
@@ -438,7 +447,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
     Logger _logger = Logger('lessons->datasave');
-
     var documentDownloadUrl =
         await storageUpload.uploadLessonFile(this._attachedDocPath);
     _logger.info('Download url $documentDownloadUrl;');
