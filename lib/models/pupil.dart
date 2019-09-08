@@ -14,7 +14,7 @@ class Pupil {
   static const String PreviousExperiencehKey = 'pex';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
-
+  Logger _logger;
   Pupil(
       {this.id,
       this.name,
@@ -26,7 +26,8 @@ class Pupil {
       this.theoryRecord = false,
       this.previousExperience = false})
       : this.createdAt = null,
-        this.updatedAt = null;
+        this.updatedAt = null,
+        this._logger = Logger('model->pupil');
   String id;
   String name;
   String address;
@@ -48,13 +49,11 @@ class Pupil {
       DateOfBirthKey: dateOfBirth,
       EyeTestKey: eyeTest,
       TheoryRecordKey: theoryRecord,
-      PreviousExperiencehKey: previousExperience,
-      CreatedAtKey: createdAt,
-      UpdatedAtKey: updatedAt
+      PreviousExperiencehKey: previousExperience
     };
   }
 
-  Future<void> _snapshotToPupil(DocumentSnapshot snapshot) async {
+  Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
     this.name = snapshot[Pupil.NameKey];
     this.address = snapshot[Pupil.AddressKey];
@@ -71,13 +70,13 @@ class Pupil {
         TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
   }
 
-  Future<Pupil> populatePupilInfo() async {
+  Future<Pupil> getPupil() async {
     var pupil = await this.get();
     if (!pupil.exists) {
-      Logger('models->pupil').shout('${this.id} pupil does not exists.');
+      this._logger.severe('${this.id} pupil does not exists.');
       return null;
     }
-    await _snapshotToPupil(pupil);
+    await _toObject(pupil);
     return this;
   }
 
@@ -90,30 +89,34 @@ class Pupil {
 
   Future<bool> add() async {
     try {
+      var json = this.toJson();
       this.createdAt = DateTime.now().toUtc();
+      json[CreatedAtKey] = this.createdAt;
       Firestore.instance
           .collection(FirestorePath.PupilCollection)
           .document(this.id)
-          .setData(this.toJson());
-      print('$this created successfully.');
+          .setData(json);
+      this._logger.info('Pupil created successfully with data $json .');
       return true;
     } catch (e) {
-      print('user creation failed. $e');
+      this._logger.shout('Pupil creation failed. Reason $e');
       return false;
     }
   }
 
   Future<bool> update() async {
     try {
+      var json = this.toJson();
       this.updatedAt = DateTime.now().toUtc();
+      json[UpdatedAtKey] = this.updatedAt;
       Firestore.instance
           .collection(FirestorePath.PupilCollection)
           .document(this.id)
-          .updateData(this.toJson());
-      print('$this updated successfully.');
+          .updateData(json);
+      this._logger.info('Pupil updated successfully with data $json.');
       return true;
     } catch (e) {
-      print('user update failed. $e');
+      this._logger.shout('Pupil update failed. Reason $e');
       return false;
     }
   }

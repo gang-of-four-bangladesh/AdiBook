@@ -10,7 +10,7 @@ class User {
   static const String IsVerifiedKey = 'isv';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
-
+  Logger _logger;
   User({
     this.id,
     this.name,
@@ -18,7 +18,8 @@ class User {
     this.userType = UserType.Instructor,
     this.isVerified = false,
   })  : this.createdAt = null,
-        this.updatedAt = null;
+        this.updatedAt = null,
+        this._logger = Logger('model->user');
   String id;
   String name;
   String phoneNumber;
@@ -32,13 +33,11 @@ class User {
       NameKey: name,
       PhoneNumberKey: phoneNumber,
       UserTypeKey: userType.index,
-      IsVerifiedKey: isVerified,
-      CreatedAtKey: createdAt,
-      UpdatedAtKey: updatedAt,
+      IsVerifiedKey: isVerified
     };
   }
 
-  Future<void> _snapshotToUser(DocumentSnapshot snapshot) async {
+  Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
     this.name = snapshot[User.NameKey];
     this.phoneNumber = snapshot[User.PhoneNumberKey];
@@ -53,10 +52,10 @@ class User {
   Future<User> getUser() async {
     var userSanp = await this.get();
     if (!userSanp.exists) {
-      Logger('models->user').shout('${this.id} user does not exists.');
+      this._logger.severe('${this.id} user does not exists.');
       return null;
     }
-    await _snapshotToUser(userSanp);
+    await _toObject(userSanp);
     return this;
   }
 
@@ -69,45 +68,42 @@ class User {
 
   Future<bool> add() async {
     try {
-      this.createdAt = DateTime.now().toUtc();
+      this.createdAt = DateTime.now();
+      var json = this._toJson();
+      json[CreatedAtKey] = this.createdAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.UserCollection)
           .document(this.id)
-          .setData(this._toJson());
-      print('$this created successfully.');
+          .setData(json);
+      this._logger.info('User created successfully with data $json.');
       return true;
     } catch (e) {
-      print('user creation failed. $e');
+      this._logger.shout('User creation failed. Reason $e');
       return false;
     }
   }
 
   Future<bool> update() async {
     try {
-      this.updatedAt = DateTime.now().toUtc();
+      this.updatedAt = DateTime.now();
+      var json = this._toJson();
+      json[UpdatedAtKey] = this.updatedAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.UserCollection)
           .document(this.id)
-          .updateData(this._toJson());
-      print('$this updated successfully.');
+          .updateData(json);
+      this._logger.info('User updated successfully with data $json.');
       return true;
     } catch (e) {
-      print('user update failed. $e');
+      this._logger.severe('User update failed. Reason $e');
       return false;
     }
   }
 
-  Future<bool> delete() async {
-    try {
-      await Firestore.instance
-          .collection(FirestorePath.UserCollection)
-          .document(this.id)
-          .delete();
-      print('$this deleted successfully.');
-      return true;
-    } catch (e) {
-      print('user deletion failed. $e');
-      return false;
-    }
+  Future<void> delete() async {
+    await Firestore.instance
+        .collection(FirestorePath.UserCollection)
+        .document(this.id)
+        .delete();
   }
 }

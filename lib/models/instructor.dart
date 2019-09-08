@@ -12,6 +12,7 @@ class Instructor {
   static const String DateOfBirthKey = 'dob';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
+  Logger _logger;
 
   Instructor(
       {this.id,
@@ -21,7 +22,8 @@ class Instructor {
       this.phoneNumber,
       this.dateOfBirth})
       : this.createdAt = null,
-        this.updatedAt = null;
+        this.updatedAt = null,
+        this._logger = Logger('mode->instructor');
   String id;
   String name;
   String address;
@@ -37,15 +39,11 @@ class Instructor {
       AddressKey: address,
       PhoneNumberKey: phoneNumber,
       LicenseKey: licenseNo,
-      DateOfBirthKey: dateOfBirth,
-      CreatedAtKey: createdAt,
-      UpdatedAtKey: updatedAt
+      DateOfBirthKey: dateOfBirth
     };
   }
 
-  Future<void> _snapshotToInstructor(DocumentSnapshot snapshot) async {
-    print(
-        'org:${snapshot[Instructor.CreatedAtKey]} coverted:${snapshot[Instructor.CreatedAtKey].toDate()}, id: ${snapshot.documentID}');
+  Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
     this.name = snapshot[Instructor.NameKey];
     this.address = snapshot[Instructor.AddressKey];
@@ -62,10 +60,10 @@ class Instructor {
   Future<Instructor> getInstructor() async {
     var snapshot = await this.get();
     if (!snapshot.exists) {
-      Logger('instructor').shout('Instructor id ${this.id} does not exits!');
+      this._logger.severe('Instructor id ${this.id} does not exits!');
       return null;
     }
-    await _snapshotToInstructor(snapshot);
+    await _toObject(snapshot);
     return this;
   }
 
@@ -83,45 +81,42 @@ class Instructor {
 
   Future<bool> add() async {
     try {
-      this.createdAt = DateTime.now().toUtc();
+      this.createdAt = DateTime.now();
+      var json = this.toJson();
+      json[CreatedAtKey] = this.createdAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.InstructorCollection)
           .document(this.id)
-          .setData(this.toJson());
-      print('$this created successfully.');
+          .setData(json);
+      this._logger.info('Instructor created succussfully with data $json');
       return true;
     } catch (e) {
-      print('user creation failed. $e');
+      this._logger.shout('Instructor creation failed. Reason $e');
       return false;
     }
   }
 
   Future<bool> update() async {
     try {
-      this.updatedAt = DateTime.now().toUtc();
+      this.updatedAt = DateTime.now();
+      var json = this.toJson();
+      json[UpdatedAtKey] = this.updatedAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.InstructorCollection)
           .document(this.id)
-          .updateData(this.toJson());
-      print('$this updated successfully.');
+          .updateData(json);
+      this._logger.info('Instructor updated successfully with data $json');
       return true;
     } catch (e) {
-      print('user update failed. $e');
+      this._logger.shout('Instructor update failed. Reason $e');
       return false;
     }
   }
 
-  Future<bool> delete() async {
-    try {
-      await Firestore.instance
-          .collection(FirestorePath.InstructorCollection)
-          .document(this.id)
-          .delete();
-      print('$this deleted successfully.');
-      return true;
-    } catch (e) {
-      print('user deletion failed. $e');
-      return false;
-    }
+  Future<void> delete() async {
+    await Firestore.instance
+        .collection(FirestorePath.InstructorCollection)
+        .document(this.id)
+        .delete();
   }
 }

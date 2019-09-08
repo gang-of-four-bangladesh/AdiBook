@@ -37,12 +37,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     switchOnEyeTest = false;
     switchOnTheoryRecord = false;
     switchOnPreviousExp = false;
-    if (appData.userType == UserType.Pupil) getPupilInfo();
+    if (appData.userType == UserType.Pupil) populatePupilInfo();
   }
 
-  void getPupilInfo() async {
+  void populatePupilInfo() async {
     this._logger.info(" Pupil Id >>>> : ${appData.pupilId}");
-    Pupil pupil = await Pupil(id: appData.pupilId).populatePupilInfo();
+    Pupil pupil = await Pupil(id: appData.pupilId).getPupil();
     this._logger.info("Pupil Model >>>> : $pupil");
     nameController.text = pupil.name;
     addressController.text = pupil.address;

@@ -20,7 +20,7 @@ class Lesson {
   static const String HasAcknowledgedKey = 'ack';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
-
+  Logger _logger;
   Lesson(
       {@required this.pupilId,
       @required this.instructorId,
@@ -36,7 +36,8 @@ class Lesson {
       this.documentDownloadUrl,
       this.hasAcknowledged = false})
       : this.createdAt = null,
-        this.updatedAt = null;
+        this.updatedAt = null,
+        this._logger = Logger('model->lession');
 
   String id;
   String pupilId;
@@ -65,13 +66,11 @@ class Lesson {
       DiaryNotesKey: diaryNotes,
       ReportCardKey: reportCard,
       DocumentDownloadUrl: documentDownloadUrl,
-      HasAcknowledgedKey: hasAcknowledged,
-      CreatedAtKey: createdAt,
-      UpdatedAtKey: updatedAt
+      HasAcknowledgedKey: hasAcknowledged
     };
   }
 
-  Future<void> _snapshotToLession(DocumentSnapshot snapshot) async {
+  Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
     this.lessionDate = snapshot[Lesson.LessionTypeKey];
     this.lessionDuration = snapshot[Lesson.LessonDurationKey];
@@ -91,11 +90,11 @@ class Lesson {
   Future<Lesson> getLession() async {
     var lession = await this.get();
     if (!lession.exists) {
-      Logger('lession').shout(
-          'Lession id ${this.id} for pupil ${this.pupilId} and instructor ${this.instructorId} does not exits!');
+      this._logger.severe(
+          'Lession ${this.id} for pupil ${this.pupilId} and instructor ${this.instructorId} does not exits!');
       return null;
     }
-    await _snapshotToLession(lession);
+    await _toObject(lession);
     return this;
   }
 
@@ -109,18 +108,15 @@ class Lesson {
     try {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
-      Logger('lessons->add').info(path);
       this.id = Uuid().v1();
+      var json = this.toJson();
       this.createdAt = DateTime.now().toUtc();
-      Firestore.instance
-          .collection(path)
-          .document(this.id)
-          .setData(this.toJson());
-      print('$this created successfully.');
-
+      json[CreatedAtKey] = this.createdAt;
+      Firestore.instance.collection(path).document(this.id).setData(json);
+      this._logger.info('Lesson created successfully with data $json.');
       return true;
     } catch (e) {
-      print('lesson creation failed. $e');
+      this._logger.shout('Lesson creation failed. Reason $e');
       return false;
     }
   }
@@ -130,14 +126,13 @@ class Lesson {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
       this.updatedAt = DateTime.now().toUtc();
-      Firestore.instance
-          .collection(path)
-          .document(this.id)
-          .updateData(this.toJson());
-      print('$this created successfully.');
+      var json = this.toJson();
+      json[UpdatedAtKey] = this.updatedAt;
+      Firestore.instance.collection(path).document(this.id).updateData(json);
+      this._logger.info('Lesson updated successfully with data $json.');
       return true;
     } catch (e) {
-      print('lesson creation failed. $e');
+      this._logger.shout('Lesson update failed. Reason $e');
       return false;
     }
   }

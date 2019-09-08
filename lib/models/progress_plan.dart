@@ -9,6 +9,7 @@ class ProgressPlan {
   static const String ProgressPlanKey = "pp";
   static const String UpdatedAtKey = 'uat';
   static const String CreatedAtKey = 'cat';
+  Logger _logger = Logger('model->progress_plan');
 
   ProgressPlan({
     @required this.pupilId,
@@ -34,7 +35,7 @@ class ProgressPlan {
   Future<ProgressPlan> getProgressPlan() async {
     var progressPlanSnap = await this.get();
     if (!progressPlanSnap.exists) {
-      Logger('models->pp').shout('$ProgressPlanKey document does not exists.');
+      this._logger.severe('$ProgressPlanKey document does not exists.');
       return null;
     }
     await _toObject(progressPlanSnap);
@@ -59,22 +60,18 @@ class ProgressPlan {
     try {
       var path = sprintf(FirestorePath.ProgressPlanDocumentPath,
           [this.pupilId, this.instructorId]);
+      this.progressPlanSubject.updatedAt = DateTime.now();
+      var json = this._toJson();
       this.updatedAt = DateTime.now().toUtc();
-      this.progressPlanSubject.updatedAt = DateTime.now().toUtc();
-      var jsonData = this._toJson();
-      jsonData.addAll(
-        {
-          UpdatedAtKey: DateTime.now().toUtc(),
-        },
-      );
+      json[UpdatedAtKey] = this.updatedAt;
       await Firestore.instance
           .collection(path)
           .document(ProgressPlanKey)
-          .updateData(jsonData);
-      print('$this updated successfully.');
+          .updateData(json);
+      this._logger.info('$this updated successfully.');
       return true;
     } catch (e) {
-      print('progress plan update failed. $e');
+      this._logger.shout('progress plan update failed. $e');
       return false;
     }
   }
@@ -91,14 +88,14 @@ class ProgressPlanSubject {
   Map<String, dynamic> toJson() {
     return {
       StatusKey: this.subjectStatus.index,
-      UpdatedAtKey: this.updatedAt.toUtc()
+      UpdatedAtKey: this.updatedAt
     };
   }
 
   Future<ProgressPlanSubject> toObject(DocumentSnapshot snapshot) async {
     this.subjectStatus = ProgressSubjectStatus.values[snapshot[StatusKey]];
     this.updatedAt = TypeConversion.timeStampToDateTime(
-        snapshot[ProgressPlanSubject.UpdatedAtKey]);
+            snapshot[ProgressPlanSubject.UpdatedAtKey]);
     return this;
   }
 
