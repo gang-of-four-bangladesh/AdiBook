@@ -108,20 +108,33 @@ class _InstructorProfile extends State<InstructorProfile> {
                     Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            controller: phoneController,
-                            keyboardType: TextInputType.phone,
-                            enabled: false,
-                            validator: validations.validatePhoneNumber,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
-                                hintText: "Phone"),
-                          ),
-                        ),
+                            padding: EdgeInsets.only(bottom: 5.0),
+                            child: appData.userType == UserType.Instructor
+                                ? TextFormField(
+                                    controller: phoneController,
+                                    keyboardType: TextInputType.phone,
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.cyan[300]),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        hintText: "Phone"),
+                                  )
+                                : TextFormField(
+                                    controller: phoneController,
+                                    keyboardType: TextInputType.phone,
+                                    enabled: false,
+                                    validator: validations.validatePhoneNumber,
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.cyan[300]),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        hintText: "Phone"),
+                                  )),
                       ],
                     ),
                     Column(
