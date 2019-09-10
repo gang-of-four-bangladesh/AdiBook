@@ -1,6 +1,10 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/models/lession_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
+import 'package:logging/logging.dart';
+import 'package:intl/intl.dart';
 
 class EventListSection extends StatefulWidget {
   @override
@@ -8,6 +12,8 @@ class EventListSection extends StatefulWidget {
 }
 
 class EventListSectionState extends State<EventListSection> {
+  Logger _logger;
+  EventListSectionState() : this._logger = Logger('page->event_list');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,7 +73,7 @@ class EventListSectionState extends State<EventListSection> {
                     events: _events,
                     onRangeSelected: (range) =>
                         print("Range is ${range.from}, ${range.to}"),
-                    onDateSelected: (date) => _handleNewDate(date),
+                    onDateSelected: (date) => _onDateSelected(date),
                     isExpanded: true,
                     isExpandable: true,
                     showTodayIcon: true,
@@ -80,8 +86,8 @@ class EventListSectionState extends State<EventListSection> {
         ),
       ),
     );
-    
   }
+
   Widget _buildEventList() {
     return Expanded(
       child: ListView.builder(
@@ -102,12 +108,26 @@ class EventListSectionState extends State<EventListSection> {
     );
   }
 
-  void _handleNewDate(date) {
+  void _onDateSelected(DateTime date) async {
     setState(() {
       _selectedDay = date;
       _selectedEvents = _events[_selectedDay] ?? [];
     });
-    print(_selectedEvents);
+    var format = DateFormat("yMMM");
+    var id = format.format(date);
+    var lessionEvent = LessonEvent(
+      id: id,
+      instructorId: appData.instructorId,
+      day: date.day.toString(),
+    );
+    var snap = await lessionEvent.get();
+    await lessionEvent.delete();
+    this._logger.info(snap.exists);
+    if (snap.exists) {
+      await lessionEvent.update();
+      return;
+    }
+    await lessionEvent.add();
   }
 
   List _selectedEvents;

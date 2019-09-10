@@ -43,7 +43,7 @@ class ProgressPlan {
   }
 
   Future<DocumentSnapshot> get() async {
-    var path = sprintf(FirestorePath.ProgressPlanDocumentPath,
+    var path = sprintf(FirestorePath.ProgressPlanOfAPupilCollection,
         [this.pupilId, this.instructorId]);
     return Firestore.instance.collection(path).document(ProgressPlanKey).get();
   }
@@ -58,7 +58,7 @@ class ProgressPlan {
 
   Future<bool> update() async {
     try {
-      var path = sprintf(FirestorePath.ProgressPlanDocumentPath,
+      var path = sprintf(FirestorePath.ProgressPlanOfAPupilCollection,
           [this.pupilId, this.instructorId]);
       this.progressPlanSubject.updatedAt = DateTime.now();
       var json = this._toJson();

@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
-import 'package:uuid/uuid.dart';
 
 class Lesson {
   static const String LessonDateKey = 'ldt';
@@ -108,9 +107,9 @@ class Lesson {
     try {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
-      this.id = Uuid().v1();
-      var json = this.toJson();
       this.createdAt = DateTime.now().toUtc();
+      this.id = TypeConversion.toNumberFormat(this.createdAt);
+      var json = this.toJson();
       json[CreatedAtKey] = this.createdAt;
       Firestore.instance.collection(path).document(this.id).setData(json);
       this._logger.info('Lesson created successfully with data $json.');

@@ -11,4 +11,9 @@ class TypeConversion {
     var format = DateFormat("MMM dd, yyyy hh:mm aaa");
     return format.format(dateTime);
   }
+
+  static String toNumberFormat(DateTime dateTime) {
+    var format = DateFormat("yMdHms");
+    return format.format(dateTime);
+  }
 }
