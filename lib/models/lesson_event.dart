@@ -1,5 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -7,28 +8,35 @@ class LessonEvent {
   static const String PupilNameKey = 'pnm';
   static const String LessonTimeKey = "ltm";
   static const String PupilReferenceKey = 'pref';
+  static const String PupilReferenceTaggedAtKey = 'pRef';
 
   Logger _logger;
   LessonEvent({
-    this.id,
-    this.instructorId,
-    this.day,
-    this.pupilName,
-    this.lessonTime,
+    @required this.id,
+    @required this.instructorId,
+    @required this.pupilId,
+    @required this.day,
+    @required this.pupilName,
+    @required this.lessonAt,
   }) : this._logger = Logger('model->lesson_event');
   String id;
   String day;
   String instructorId;
   String pupilName;
-  String lessonTime;
+  DateTime lessonAt;
+  String pupilId;
 
   Map<String, dynamic> _toJson() {
+    var ref = Firestore.instance
+        .collection(FirestorePath.PupilCollection)
+        .document(this.pupilId);
     return {
       this.day: FieldValue.arrayUnion(
         [
           {
             PupilNameKey: this.pupilName,
-            LessonTimeKey: this.lessonTime,
+            LessonTimeKey: this.lessonAt,
+            PupilReferenceTaggedAtKey: ref,
           }
         ],
       ),
@@ -82,7 +90,7 @@ class LessonEvent {
         [
           {
             PupilNameKey: this.pupilName,
-            LessonTimeKey: this.lessonTime,
+            LessonTimeKey: this.lessonAt,
           }
         ],
       ),

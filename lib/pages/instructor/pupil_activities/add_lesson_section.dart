@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:file_picker/file_picker.dart';
@@ -446,12 +446,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
-    Logger _logger = Logger('lessons->datasave');
     var documentDownloadUrl =
         await storageUpload.uploadLessonFile(this._attachedDocPath);
-    _logger.info('Download url $documentDownloadUrl;');
     var _lessionDuration = int.parse(_lessonDurationController.text);
-    print(_lessionDuration);
     Lesson lesson = new Lesson(
       pupilId: appData.pupilId,
       instructorId: appData.instructorId,
@@ -465,7 +462,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessionDate: this._lessonDate,
       lessionDuration: _lessionDuration,
     );
-    var message = await lesson.add()
+    var message = await LessonManager().createLesson(lesson)
         ? 'Lesson created successfully.'
         : 'Lesson creation failed.';
     _frequentWidgets.getSnackbar(
@@ -496,6 +493,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       );
       return false;
     }
+    this._logger.info('For validity ${_formKey.currentState.validate()}');
     return _formKey.currentState.validate();
   }
 
