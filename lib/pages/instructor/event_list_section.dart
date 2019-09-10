@@ -1,6 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/models/lession_event.dart';
+import 'package:adibook/models/lesson_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'package:logging/logging.dart';
