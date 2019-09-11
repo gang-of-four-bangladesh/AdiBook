@@ -5,10 +5,12 @@ import 'package:adibook/data/pupil_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class LessonListSection extends StatefulWidget {
   @override
@@ -66,7 +68,26 @@ class LessonListSectionState extends State<LessonListSection> {
                 child: ListView(
                   children: snapshot.data.documents.map(
                     (DocumentSnapshot document) {
-                      return Container(
+                      return Slidable(
+                         actionPane: SlidableScrollActionPane(),
+                        actionExtentRatio: 0.12,
+                        actions: <Widget>[
+                          
+                          IconSlideAction(
+                            caption: 'Delete',
+                            color: Colors.red,
+                            icon: FontAwesomeIcons.trash,
+                            onTap: () {},
+                          ),
+                          IconSlideAction(
+                            caption: 'Edit',
+                            color: AppTheme.appThemeColor,
+                            icon: FontAwesomeIcons.edit,
+                            foregroundColor: Colors.white,
+                            onTap: () {},
+                          ),
+                        ],
+                      child: Container(
                         padding: EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,6 +137,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                 style: TextStyle(fontSize: 14)),
                           ],
                         ),
+                      )
                       );
                     },
                   ).toList(),
