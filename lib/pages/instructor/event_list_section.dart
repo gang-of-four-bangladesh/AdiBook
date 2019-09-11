@@ -109,17 +109,17 @@ class EventListSectionState extends State<EventListSection> {
     );
   }
 
+  //List _selectedEvents;
+  DateTime selectedday;
   void _onDateSelected(DateTime date) async {
     setState(() {
-      _selectedDay = date;
+      selectedday = date;
       //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
     });
   }
 
-  //List _selectedEvents;
-  DateTime _selectedDay;
 
-  Map _test_events = {
+  Map _testevents = {
     DateTime(2019, 7, 1): [
       {'name': 'Event A', 'isDone': true},
     ],
@@ -152,7 +152,7 @@ class EventListSectionState extends State<EventListSection> {
     //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
         });
           this._logger.info(this._events);
-          this._logger.info(this._test_events);
+          this._logger.info(this._testevents);
   }
 
   @override
