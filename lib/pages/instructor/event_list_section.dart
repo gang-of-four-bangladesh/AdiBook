@@ -1,5 +1,5 @@
-
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/data/lesson_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'package:logging/logging.dart';
@@ -11,7 +11,9 @@ class EventListSection extends StatefulWidget {
 
 class EventListSectionState extends State<EventListSection> {
   Logger _logger;
+  Map _events = {};
   EventListSectionState() : this._logger = Logger('page->event_list');
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,8 +71,9 @@ class EventListSectionState extends State<EventListSection> {
               Container(
                 child: Calendar(
                     events: _events,
-                    onRangeSelected: (range) =>
-                        this._logger.info("Range is ${range.from}, ${range.to}"),
+                    onRangeSelected: (range) => this
+                        ._logger
+                        .info("Range is ${range.from}, ${range.to}"),
                     onDateSelected: (date) => _onDateSelected(date),
                     isExpanded: true,
                     isExpandable: true,
@@ -97,11 +100,11 @@ class EventListSectionState extends State<EventListSection> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
           child: ListTile(
-            title: Text(_selectedEvents[index]['name'].toString()),
+            title: Text('test'),//Text(_selectedEvents[index]['name'].toString()),
             onTap: () {},
           ),
         ),
-        itemCount: _selectedEvents.length,
+        itemCount: 1//_selectedEvents.length,
       ),
     );
   }
@@ -109,14 +112,14 @@ class EventListSectionState extends State<EventListSection> {
   void _onDateSelected(DateTime date) async {
     setState(() {
       _selectedDay = date;
-      _selectedEvents = _events[_selectedDay] ?? [];
+      //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
     });
   }
 
-  List _selectedEvents;
+  //List _selectedEvents;
   DateTime _selectedDay;
 
-  final Map _events = {
+  Map _test_events = {
     DateTime(2019, 7, 1): [
       {'name': 'Event A', 'isDone': true},
     ],
@@ -142,10 +145,19 @@ class EventListSectionState extends State<EventListSection> {
       {'name': 'Event A', 'isDone': false},
     ],
   };
+  void _loadLessonEvents() async {
+    var events = await LessonManager().getLessonEvents(year: DateTime.now().year, month: DateTime.now().month);
+        setState(() {
+          this._events=events;
+    //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
+        });
+          this._logger.info(this._events);
+          this._logger.info(this._test_events);
+  }
 
   @override
   void initState() {
     super.initState();
-    _selectedEvents = _events[_selectedDay] ?? [];
+    this._loadLessonEvents();
   }
 }

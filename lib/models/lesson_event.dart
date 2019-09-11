@@ -14,10 +14,10 @@ class LessonEvent {
   LessonEvent({
     @required this.id,
     @required this.instructorId,
-    @required this.pupilId,
-    @required this.day,
-    @required this.pupilName,
-    @required this.lessonAt,
+    this.pupilId,
+    this.day,
+    this.pupilName,
+    this.lessonAt,
   }) : this._logger = Logger('model->lesson_event');
   String id;
   String day;
