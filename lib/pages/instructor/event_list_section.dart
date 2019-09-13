@@ -117,42 +117,12 @@ class EventListSectionState extends State<EventListSection> {
       //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
     });
   }
-
-
-  Map _testevents = {
-    DateTime(2019, 7, 1): [
-      {'name': 'Event A', 'isDone': true},
-    ],
-    DateTime(2019, 7, 3): [
-      {'name': 'Event A', 'isDone': true},
-      {'name': 'Event B', 'isDone': true},
-    ],
-    DateTime(2019, 7, 5): [
-      {'name': 'Event A', 'isDone': true},
-      {'name': 'Event B', 'isDone': true},
-    ],
-    DateTime(2019, 7, 24): [
-      {'name': 'Event A', 'isDone': true},
-      {'name': 'Event B', 'isDone': true},
-      {'name': 'Event C', 'isDone': false},
-    ],
-    DateTime(2019, 7, 20): [
-      {'name': 'Event A', 'isDone': true},
-      {'name': 'Event B', 'isDone': true},
-      {'name': 'Event C', 'isDone': false},
-    ],
-    DateTime(2019, 8, 26): [
-      {'name': 'Event A', 'isDone': false},
-    ],
-  };
   void _loadLessonEvents() async {
     var events = await LessonManager().getLessonEvents(year: DateTime.now().year, month: DateTime.now().month);
         setState(() {
           this._events=events;
     //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
         });
-          this._logger.info(this._events);
-          this._logger.info(this._testevents);
   }
 
   @override

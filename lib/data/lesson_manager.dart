@@ -29,7 +29,7 @@ class LessonManager {
     return await lessonEvent.add();
   }
 
-  Future<Map> getLessonEvents({int year,int month}) async {
+  Future<Map> getLessonEvents({int year, int month}) async {
     var id = DateFormat("yyyy-MM").format(DateTime(year, month));
     var lastDayOfMonth = DateTime(year, month + 1, 0).day;
     this._logger.info('Last day of month $month is $lastDayOfMonth');
@@ -48,5 +48,33 @@ class LessonManager {
     }
     this._logger.info(events);
     return events;
+
+
+    // return {
+    //   DateTime(2019, 7, 1): [
+    //     {'name': 'Event A', 'isDone': true},
+    //   ],
+    //   DateTime(2019, 7, 3): [
+    //     {'name': 'Event A', 'isDone': true},
+    //     {'name': 'Event B', 'isDone': true},
+    //   ],
+    //   DateTime(2019, 7, 5): [
+    //     {'name': 'Event A', 'isDone': true},
+    //     {'name': 'Event B', 'isDone': true},
+    //   ],
+    //   DateTime(2019, 7, 24): [
+    //     {'name': 'Event A', 'isDone': true},
+    //     {'name': 'Event B', 'isDone': true},
+    //     {'name': 'Event C', 'isDone': false},
+    //   ],
+    //   DateTime(2019, 7, 20): [
+    //     {'name': 'Event A', 'isDone': true},
+    //     {'name': 'Event B', 'isDone': true},
+    //     {'name': 'Event C', 'isDone': false},
+    //   ],
+    //   DateTime(2019, 8, 26): [
+    //     {'name': 'Event A', 'isDone': false},
+    //   ],
+    // };
   }
 }
