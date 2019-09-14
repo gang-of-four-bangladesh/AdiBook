@@ -56,14 +56,21 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        "Logo",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage:
+                            AssetImage("assets/images/adiBook.png"),
+                        maxRadius: 50,
+                        minRadius: 20,
                       ),
+                      // Text(
+                      //   "Logo",
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //       color: Colors.green,
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 20),
+                      // ),
                       SizedBox(
                         height: 20,
                       ),
