@@ -57,9 +57,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppTheme.appThemeColor,
                         backgroundImage:
-                            AssetImage("assets/images/adiBook.png"),
+                            AssetImage("assets/images/adibook.jpg"),
                         maxRadius: 50,
                         minRadius: 20,
                       ),
