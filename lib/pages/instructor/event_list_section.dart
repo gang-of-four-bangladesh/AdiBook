@@ -11,8 +11,28 @@ class EventListSection extends StatefulWidget {
 
 class EventListSectionState extends State<EventListSection> {
   Logger _logger;
-  Map _events = {};
   EventListSectionState() : this._logger = Logger('page->event_list');
+  List _selectedEvents = [];
+  DateTime _selectedDay = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+  Map _events = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  void _initialize() async {
+    this._events = await LessonManager()
+        .getLessonEvents(month: _selectedDay.month, year: _selectedDay.year);
+    setState(() {
+      _selectedEvents = _events[_selectedDay] ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,52 +43,6 @@ class EventListSectionState extends State<EventListSection> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(left: 13.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ButtonTheme(
-                      padding: EdgeInsets.all(8.0),
-                      minWidth: 20.0,
-                      height: 40.0,
-                      child: RaisedButton(
-                        color: AppTheme.appThemeColor,
-                        onPressed: () {},
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(8.0),
-                        ),
-                        child: Text(
-                          "Add Lesson",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                    ),
-                    ButtonTheme(
-                      minWidth: 20.0,
-                      height: 40.0,
-                      child: RaisedButton(
-                        color: AppTheme.appThemeColor,
-                        onPressed: () {},
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(8.0),
-                        ),
-                        child: Text(
-                          "Unavailability",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
                 child: Calendar(
                     events: _events,
                     onRangeSelected: (range) => this
@@ -78,8 +52,7 @@ class EventListSectionState extends State<EventListSection> {
                     isExpanded: true,
                     isExpandable: true,
                     showTodayIcon: true,
-                    eventDoneColor: AppTheme.appThemeColor,
-                    eventColor: AppTheme.appThemeColor),
+                    eventColor: AppTheme.calendarEventPendingColor),
               ),
               _buildEventList()
             ],
@@ -100,34 +73,23 @@ class EventListSectionState extends State<EventListSection> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
           child: ListTile(
-            title: Text('test'),//Text(_selectedEvents[index]['name'].toString()),
+            title: Text(
+              _selectedEvents[index][LessonManager.LessonDescriptionKey]
+                  .toString(),
+            ),
             onTap: () {},
           ),
         ),
-        itemCount: 1//_selectedEvents.length,
+        itemCount: _selectedEvents.length,
       ),
     );
   }
 
-  //List _selectedEvents;
-  DateTime selectedday;
   void _onDateSelected(DateTime date) async {
     setState(() {
-      selectedday = date;
-      //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
+      _selectedDay = date;
+      var key = DateTime(date.year, date.month, date.day);
+      _selectedEvents = _events[key] ?? [];
     });
-  }
-  void _loadLessonEvents() async {
-    var events = await LessonManager().getLessonEvents(year: DateTime.now().year, month: DateTime.now().month);
-        setState(() {
-          this._events=events;
-    //_selectedEvents = _events[DateTime(2019,9,11)] ?? [];
-        });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    this._loadLessonEvents();
   }
 }

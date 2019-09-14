@@ -1,4 +1,5 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/models/lesson_event.dart';
 import 'package:adibook/models/pupil.dart';
@@ -6,6 +7,8 @@ import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
 
 class LessonManager {
+  static const String LessonDescriptionKey = 'description';
+  static const String LessonHasCompletedKey = 'isDone';
   Logger _logger;
   LessonManager() : this._logger = Logger('manger->lesson_manager');
 
@@ -35,46 +38,27 @@ class LessonManager {
     this._logger.info('Last day of month $month is $lastDayOfMonth');
     var snap =
         await LessonEvent(id: id, instructorId: appData.instructorId).get();
-    Map events = {};
+    this._logger.info(
+        'Snapshot ${snap.data}, id = $id, instructorid = ${appData.instructorId}');
+    if (snap.data == null) return {};
+    Map eventDetails = {};
     for (var i = 1; i < lastDayOfMonth; i++) {
+      List<Map> events = new List();
       var data = snap.data[i.toString()];
       if (data == null) continue;
-      var key = DateTime(year,month,i);
-      var event = { key : data};
-      events.addAll(event);
-      //for (var item in data) {
-      //  this._logger.info('Pupil ${item[LessonEvent.PupilNameKey]} have a meeting at ${item[LessonEvent.LessonTimeKey]}');
-      //}
+      var key = DateTime(year, month, i);
+      for (var item in data) {
+        var lessonTime = (TypeConversion.timeStampToDateTime(item[LessonEvent.LessonTimeKey])).toLocal();
+        var difference = DateTime.now().difference(lessonTime).inSeconds;
+        this._logger.info('Current time and lesson time difference in seconds $difference');
+        var eventDescription = 'Lesson with ${item[LessonEvent.PupilNameKey]} at ${TypeConversion.toDisplayFormat(lessonTime)}.';
+        events.add({
+          LessonDescriptionKey: eventDescription,
+          LessonHasCompletedKey: difference >= 0
+        });
+      }
+      eventDetails.addAll({key: events});
     }
-    this._logger.info(events);
-    return events;
-
-
-    // return {
-    //   DateTime(2019, 7, 1): [
-    //     {'name': 'Event A', 'isDone': true},
-    //   ],
-    //   DateTime(2019, 7, 3): [
-    //     {'name': 'Event A', 'isDone': true},
-    //     {'name': 'Event B', 'isDone': true},
-    //   ],
-    //   DateTime(2019, 7, 5): [
-    //     {'name': 'Event A', 'isDone': true},
-    //     {'name': 'Event B', 'isDone': true},
-    //   ],
-    //   DateTime(2019, 7, 24): [
-    //     {'name': 'Event A', 'isDone': true},
-    //     {'name': 'Event B', 'isDone': true},
-    //     {'name': 'Event C', 'isDone': false},
-    //   ],
-    //   DateTime(2019, 7, 20): [
-    //     {'name': 'Event A', 'isDone': true},
-    //     {'name': 'Event B', 'isDone': true},
-    //     {'name': 'Event C', 'isDone': false},
-    //   ],
-    //   DateTime(2019, 8, 26): [
-    //     {'name': 'Event A', 'isDone': false},
-    //   ],
-    // };
+    return eventDetails;
   }
 }

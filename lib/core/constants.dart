@@ -69,6 +69,7 @@ const String EmptyString = '';
 class AppTheme {
   static Color appThemeColor =
       Colors.lightBlueAccent.withRed(3).withGreen(209).withBlue(191);
+  static Color calendarEventPendingColor = Colors.greenAccent;
 }
 
 const Map<String, String> CountryWisePhoneCode = {
