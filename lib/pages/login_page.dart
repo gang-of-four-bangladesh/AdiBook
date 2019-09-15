@@ -1,4 +1,5 @@
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
@@ -27,10 +28,10 @@ class _LoginPageState extends State<LoginPage> {
   bool _showProgressBar = false;
 
   _LoginPageState() {
-    //  if (!DeviceInfo.isOnPhysicalDevice) {
-    this._phoneNumberController.text = "1234567890";
-    this._smsCodeController.text = "654321";
-    //  }
+    if (!DeviceInfo.isOnPhysicalDevice) {
+      this._phoneNumberController.text = "1234567890";
+      this._smsCodeController.text = "654321";
+    }
     _logger = Logger(this.runtimeType.toString());
   }
   @override

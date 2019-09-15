@@ -28,7 +28,7 @@ class EventListSectionState extends State<EventListSection> {
 
   void _initialize() async {
     this._events = await LessonManager()
-        .getLessonEvents(month: _selectedDay.month, year: _selectedDay.year);
+        .getLessonEvents(date: _selectedDay);
     setState(() {
       _selectedEvents = _events[_selectedDay] ?? [];
     });
