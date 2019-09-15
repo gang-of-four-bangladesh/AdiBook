@@ -218,5 +218,53 @@ class ProgressPlanManager {
     {
       "tmq": "Tell me questions",
     },
+    {
+      "cdr": "Cockpit Drill",
+    },
+    {
+      "mos": "Moving Off and Stopping",
+    },
+    {
+      "aju": "Approaching Junctions",
+    },
+    {
+      "emrgng": "Emerging",
+    },
+    {
+      "mtrfc": "Meeting Traffic",
+    },
+    {
+      "emrgs": "Emergency Stop",
+    },
+    {
+      "pdscrs": "Pedestrian Crossing",
+    },
+    {
+      "hawrns": "Hazard Awareness",
+    },
+    {
+      "prgsmr": "Progress - Main Roads",
+    },
+    {
+      "rndabts": "Roundabouts",
+    },
+    {
+      "dlcrgaws": "Dual Carriageways",
+    },
+    {
+      "tntr": "Turn in the Road",
+    },
+    {
+      "ritb": "Reverse into a Bay",
+    },
+    {
+      "pprk": "Parallel Parking",
+    },
+    {
+      "rracnr": "Reverse Around a Corner",
+    },
+    {
+      "smtm": "Show Me, Tell Me",
+    },
   ];
 }

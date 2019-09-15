@@ -53,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.only(
                     left: _oneFourthWidth,
                     right: _oneFourthWidth,
-                    top: 20,
                   ),
                   child: Column(
                     children: <Widget>[
@@ -72,9 +71,6 @@ class _LoginPageState extends State<LoginPage> {
                       //       fontWeight: FontWeight.bold,
                       //       fontSize: 20),
                       // ),
-                      SizedBox(
-                        height: 20,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -113,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         value: _selectedCountry,
+
                       ),
                       Container(
                         padding: EdgeInsets.all(5),
