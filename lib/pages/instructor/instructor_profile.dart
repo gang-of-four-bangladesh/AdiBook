@@ -1,12 +1,12 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
+import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
 class InstructorProfile extends StatefulWidget {
@@ -22,14 +22,18 @@ class _InstructorProfile extends State<InstructorProfile> {
   var _logger = Logger("instructor->information");
   var _frequentWidgets = FrequentWidgets();
   final _formKey = GlobalKey<FormState>();
-
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController phoneController = new TextEditingController();
+  TextEditingController addressController = new TextEditingController();
+  TextEditingController drivingLicenseController = new TextEditingController();
+  int countryCodeIndex;
+  DateTime _dateOfBirth;
   bool _autoValidate;
 
   @override
   void initState() {
     super.initState();
     this._autoValidate = false;
-    this._showDate = EmptyString;
     getInstructorInfo();
   }
 
@@ -37,23 +41,19 @@ class _InstructorProfile extends State<InstructorProfile> {
     this._logger.info(" Pupil Id >>>> : ${appData.pupilId}");
     Instructor instructor =
         await Instructor(id: appData.instructorId).getInstructor();
-    this._logger.info("Pupil Model >>>> : $instructor");
+    this._logger.info("Pupil Model >>>> : ${instructor.dateOfBirth}");
     nameController.text = instructor.name;
     addressController.text = instructor.address;
     phoneController.text = instructor.phoneNumber;
     drivingLicenseController.text = instructor.licenseNo;
     setState(() {
-      if (instructor.dateOfBirth != null) {
-        var format = DateFormat("MMM-dd-yyyy");
-        _showDate = format.format(instructor.dateOfBirth);
-      }
+      this._dateOfBirth = instructor.dateOfBirth;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     Validations validations = new Validations();
-
     return SingleChildScrollView(
       child: Container(
         child: Form(
@@ -176,7 +176,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                               children: <Widget>[
                                 IconButton(
                                   icon: Icon(Icons.date_range),
-                                  onPressed: () => _selectDate(context),
+                                  onPressed: _selectDateOfBirth,
                                 ),
                                 Text(
                                   "Date Of Birth",
@@ -188,15 +188,13 @@ class _InstructorProfile extends State<InstructorProfile> {
                         ],
                       ),
                     ),
-                    /*3*/
                     Text(
-                      "$_showDate",
+                      "${TypeConversion.toDobFormat(this._dateOfBirth)}",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
-              //  addButton,
               Container(
                 padding: EdgeInsets.all(5.0),
                 child: Row(
@@ -264,6 +262,7 @@ class _InstructorProfile extends State<InstructorProfile> {
     instructor.name = nameController.text;
     instructor.address = addressController.text;
     instructor.licenseNo = drivingLicenseController.text;
+    instructor.phoneNumber = phoneController.text;
     instructor.dateOfBirth = this._dateOfBirth;
     var result = await instructor.update();
     String message = result
@@ -286,11 +285,6 @@ class _InstructorProfile extends State<InstructorProfile> {
     setState(() {});
   }
 
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController phoneController = new TextEditingController();
-  TextEditingController addressController = new TextEditingController();
-  TextEditingController drivingLicenseController = new TextEditingController();
-  int countryCodeIndex;
   Future<void> dialogBoxPicture(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -328,25 +322,18 @@ class _InstructorProfile extends State<InstructorProfile> {
     );
   }
 
-  DateTime _dateOfBirth = DateTime.now();
-  String _showDate;
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDateOfBirth() async {
+    var selectedDob = this._dateOfBirth;
     this._dateOfBirth = await showDatePicker(
       context: context,
       initialDate: this._dateOfBirth,
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
-    if (this._dateOfBirth != null) {
-      setState(
-        () {
-          this._showDate = DateFormat('MMM-dd-yyyy').format(_dateOfBirth);
-        },
-      );
-    }
-    if (this._dateOfBirth == null && this._showDate.isNotEmpty) {
-      this._dateOfBirth = DateFormat('MMM-dd-yyyy').parse(this._showDate);
-      this._logger.info('${this._showDate} converted to ${this._dateOfBirth}');
-    }
+    if (this._dateOfBirth == null) this._dateOfBirth = selectedDob;
+    setState(() {
+      //This is for UI update only. This twice before remove.
+      this._dateOfBirth = this._dateOfBirth;
+    });
   }
 }

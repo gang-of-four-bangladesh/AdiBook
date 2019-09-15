@@ -3,6 +3,7 @@ import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
+import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -100,7 +101,6 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         value: _selectedCountry,
-
                       ),
                       Container(
                         padding: EdgeInsets.all(5),
@@ -210,7 +210,9 @@ class _LoginPageState extends State<LoginPage> {
     var user = await _signInUser(authCredential);
     await UserManager()
         .createUser(id: user.phoneNumber, userType: this._selectedUserType);
-    //await User(id: user.phoneNumber, userType: this._selectedUserType).update();
+    //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
+    //Please do not remove the line
+    await User(id: user.phoneNumber, userType: this._selectedUserType).update();
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
@@ -263,7 +265,10 @@ class _LoginPageState extends State<LoginPage> {
       _logger.fine(message);
       await UserManager()
           .createUser(id: user.phoneNumber, userType: this._selectedUserType);
-      //await User(id: user.phoneNumber, userType: this._selectedUserType).update();
+      //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
+      //Please do not remove the line
+      await User(id: user.phoneNumber, userType: this._selectedUserType)
+          .update();
       await UserManager().updateAppDataByUserId(user.phoneNumber);
       await _displayProgressBar(false);
       Navigator.push(

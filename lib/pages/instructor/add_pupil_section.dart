@@ -282,11 +282,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                 child: Row(
                   children: [
                     Expanded(
-                      /*1*/
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          /*2*/
                           Container(
                             child: Text(
                               'Theory record',
@@ -298,12 +296,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         ],
                       ),
                     ),
-                    /*3*/
                     Switch(
-                        value: _switchOnTheoryRecord,
-                        onChanged: (val) =>
-                            setState(() => _switchOnTheoryRecord = val),
-                        activeColor: AppTheme.appThemeColor)
+                      value: _switchOnTheoryRecord,
+                      onChanged: (val) =>
+                          setState(() => _switchOnTheoryRecord = val),
+                      activeColor: AppTheme.appThemeColor,
+                    ),
                   ],
                 ),
               ),
@@ -331,10 +329,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: _switchOnPreviousExp,
-                        onChanged: (val) =>
-                            setState(() => _switchOnPreviousExp = val),
-                        activeColor: AppTheme.appThemeColor)
+                      value: _switchOnPreviousExp,
+                      onChanged: (val) =>
+                          setState(() => _switchOnPreviousExp = val),
+                      activeColor: AppTheme.appThemeColor,
+                    ),
                   ],
                 ),
               ),
@@ -408,16 +407,16 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     }
   }
 
-  void _makeEmpty() {
+  void _resetPageData() {
     setState(() {
-      nameController.text = '';
-      addressController.text = '';
-      phoneController.text = '';
-      drivingLicenseController.text = '';
-      _dateOfBirth = DateTime.now();
-      _switchOnEyeTest = false;
-      _switchOnTheoryRecord = false;
-      _switchOnPreviousExp = false;
+      this.nameController.text = EmptyString;
+      this.addressController.text = EmptyString;
+      this.phoneController.text = EmptyString;
+      this.drivingLicenseController.text = EmptyString;
+      this._dateOfBirth = DateTime.now();
+      this._switchOnEyeTest = false;
+      this._switchOnTheoryRecord = false;
+      this._switchOnPreviousExp = false;
     });
   }
 
@@ -458,14 +457,13 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     var instructor = await Instructor(id: appData.instructorId).getInstructor();
     await _pupilManager.tagPupil(pupil, instructor);
     await _pupilManager.tagInstructor(pupil, instructor);
-    String message = result
-        ? 'Instructor updated successfully.'
-        : 'Instructor update failed.';
+    String message =
+        result ? 'Pupil created successfully.' : 'Pupil creation failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
     );
-    _makeEmpty();
+    _resetPageData();
   }
 
   File img;
@@ -526,7 +524,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     );
     if (this._dateOfBirth == null) this._dateOfBirth = selectedDateOfBirth;
     setState(() {
-      this._dateOfBirth = this._dateOfBirth;//This is for update the UI. Please before remove check twice.
+      //This is for update the UI. Please before remove check twice.
+      this._dateOfBirth = this._dateOfBirth;
     });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/models/pupil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
@@ -69,7 +70,7 @@ class Instructor {
 
   Future<QuerySnapshot> getPupils() async {
     var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [this.id]);
-    return Firestore.instance.collection(path).getDocuments();
+    return Firestore.instance.collection(path).orderBy(Pupil.NameKey).getDocuments();
   }
 
   Future<DocumentSnapshot> get() async {
