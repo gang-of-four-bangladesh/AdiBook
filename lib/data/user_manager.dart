@@ -10,7 +10,7 @@ class UserManager {
   Future<String> get currentUserId async {
     var user = await FirebaseAuth.instance.currentUser();
     if (user == null) return null;
-    return user.uid;
+    return user.phoneNumber;
   }
 
   Future<User> get currentUser async {
@@ -46,10 +46,10 @@ class UserManager {
       {String id, UserType userType = UserType.Instructor}) async {
     Logger _logger = Logger('UserManager=>createUser');
     if (!await userExists(id, userType)) {
-      await User(id: id, userType: userType).add();
+      await User(id: id, phoneNumber: id, userType: userType, isVerified: true).add();
       userType == UserType.Instructor
-          ? await Instructor(id: id).add()
-          : await Pupil(id: id).add();
+          ? await Instructor(id: id, phoneNumber: id).add()
+          : await Pupil(id: id, phoneNumber: id).add();
       _logger.info('User of type $userType with $id created.');
     }
     _logger.info('User creation skipped. User $id already exits.');

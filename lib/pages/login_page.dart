@@ -3,7 +3,6 @@ import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,14 +62,6 @@ class _LoginPageState extends State<LoginPage> {
                         maxRadius: 50,
                         minRadius: 20,
                       ),
-                      // Text(
-                      //   "Logo",
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //       color: Colors.green,
-                      //       fontWeight: FontWeight.bold,
-                      //       fontSize: 20),
-                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -219,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
     var user = await _signInUser(authCredential);
     await UserManager()
         .createUser(id: user.phoneNumber, userType: this._selectedUserType);
-    await User(id: user.phoneNumber, userType: this._selectedUserType).update();
+    //await User(id: user.phoneNumber, userType: this._selectedUserType).update();
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
@@ -236,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
     var user = await FirebaseAuth.instance.signInWithCredential(authCredential);
     final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-    assert(user.uid == currentUser.uid);
+    assert(user.phoneNumber == currentUser.phoneNumber);
     var message =
         'signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
     _logger.fine(message);
@@ -266,13 +257,13 @@ class _LoginPageState extends State<LoginPage> {
           await FirebaseAuth.instance.signInWithCredential(authCredential);
       final FirebaseUser currentUser =
           await FirebaseAuth.instance.currentUser();
-      assert(user.uid == currentUser.uid);
+      assert(user.phoneNumber == currentUser.phoneNumber);
       var message =
           'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
       _logger.fine(message);
       await UserManager()
-          .createUser(id: user.uid, userType: this._selectedUserType);
-      await User(id: user.uid, userType: this._selectedUserType).update();
+          .createUser(id: user.phoneNumber, userType: this._selectedUserType);
+      //await User(id: user.phoneNumber, userType: this._selectedUserType).update();
       await UserManager().updateAppDataByUserId(user.phoneNumber);
       await _displayProgressBar(false);
       Navigator.push(

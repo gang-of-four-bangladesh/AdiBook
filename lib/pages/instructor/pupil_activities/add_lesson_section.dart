@@ -103,7 +103,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                   ),
                                 ),
                                 Text(
-                                  '${TypeConversion.toDisplayFormat(_lessonDate)}',
+                                  '${TypeConversion.toDisplayFormat(this._lessonDate)}',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -504,19 +504,29 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   }
 
   Future _selectDate() async {
-    _lessonDate = await showDatePicker(
+    var selectedLessonDate = this._lessonDate;
+    var selectedLessonTime = this._lessonTime;
+    this._lessonDate = await showDatePicker(
       context: context,
-      initialDate: _lessonDate,
+      initialDate: this._lessonDate,
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
     this._logger.info('Selected lesson date $_lessonDate');
-    if (_lessonDate == null) return null;
+    if (this._lessonDate == null) {
+      setState(() {
+        this._lessonDate = selectedLessonDate;
+        this._lessonTime = selectedLessonTime;
+      });
+      return;
+    }
 
-    _lessonTime =
-        await showTimePicker(context: context, initialTime: _lessonTime);
-    if (_lessonTime == null) _lessonTime = TimeOfDay.now();
+    this._lessonTime = await showTimePicker(
+        context: context, initialTime: _lessonTime);
     this._logger.info('Selected lesson time $_lessonTime');
+
+    if (this._lessonTime == null) _lessonTime = selectedLessonTime;
+
     setState(() {
       _lessonDate = DateTime(_lessonDate.year, _lessonDate.month,
           _lessonDate.day, _lessonTime.hour, _lessonTime.minute);

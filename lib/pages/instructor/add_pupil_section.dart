@@ -1,6 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
+import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
 class AddPupilSection extends StatefulWidget {
@@ -25,18 +25,26 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   var _pupilManager = PupilManager();
   var _frequentWidgets = FrequentWidgets();
   final _formKey = GlobalKey<FormState>();
-
+  bool _switchOnEyeTest = false;
+  bool _switchOnTheoryRecord = false;
+  bool _switchOnPreviousExp = false;
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController phoneController = new TextEditingController();
+  TextEditingController addressController = new TextEditingController();
+  TextEditingController drivingLicenseController = new TextEditingController();
+  int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
   bool _autoValidate;
+  DateTime _dateOfBirth;
 
   @override
   void initState() {
     super.initState();
-    _showDate = '';
     this._autoValidate = false;
-    switchOnEyeTest = false;
-    switchOnTheoryRecord = false;
-    switchOnPreviousExp = false;
+    this._switchOnEyeTest = false;
+    this._switchOnTheoryRecord = false;
+    this._switchOnPreviousExp = false;
+    this._dateOfBirth = DateTime.now();
     if (appData.userType == UserType.Pupil) populatePupilInfo();
   }
 
@@ -49,11 +57,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     phoneController.text = pupil.phoneNumber;
     drivingLicenseController.text = pupil.licenseNo;
     setState(() {
-      var format = DateFormat("MMM-dd-yyyy");
-      _showDate = format.format(pupil.dateOfBirth);
-      switchOnEyeTest = pupil.eyeTest;
-      switchOnTheoryRecord = pupil.theoryRecord;
-      switchOnPreviousExp = pupil.previousExperience;
+      this._dateOfBirth = pupil.dateOfBirth;
+      this._switchOnEyeTest = pupil.eyeTest;
+      this._switchOnTheoryRecord = pupil.theoryRecord;
+      this._switchOnPreviousExp = pupil.previousExperience;
     });
   }
 
@@ -217,7 +224,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               children: <Widget>[
                                 IconButton(
                                   icon: Icon(Icons.date_range),
-                                  onPressed: () => _selectDate(context),
+                                  onPressed: _selectDateOfBirth,
                                 ),
                                 Text(
                                   "Date Of Birth",
@@ -231,7 +238,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Text(
-                      "$_showDate",
+                      "${TypeConversion.toDobFormat(this._dateOfBirth)}",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -262,9 +269,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: switchOnEyeTest,
+                        value: _switchOnEyeTest,
                         onChanged: (val) =>
-                            setState(() => switchOnEyeTest = val),
+                            setState(() => _switchOnEyeTest = val),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -293,9 +300,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: switchOnTheoryRecord,
+                        value: _switchOnTheoryRecord,
                         onChanged: (val) =>
-                            setState(() => switchOnTheoryRecord = val),
+                            setState(() => _switchOnTheoryRecord = val),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -324,9 +331,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     /*3*/
                     Switch(
-                        value: switchOnPreviousExp,
+                        value: _switchOnPreviousExp,
                         onChanged: (val) =>
-                            setState(() => switchOnPreviousExp = val),
+                            setState(() => _switchOnPreviousExp = val),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -408,10 +415,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       phoneController.text = '';
       drivingLicenseController.text = '';
       _dateOfBirth = DateTime.now();
-      _showDate = null;
-      switchOnEyeTest = false;
-      switchOnTheoryRecord = false;
-      switchOnPreviousExp = false;
+      _switchOnEyeTest = false;
+      _switchOnTheoryRecord = false;
+      _switchOnPreviousExp = false;
     });
   }
 
@@ -423,9 +429,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseController.text;
     pupil.dateOfBirth = this._dateOfBirth;
-    pupil.eyeTest = switchOnEyeTest;
-    pupil.previousExperience = switchOnPreviousExp;
-    pupil.theoryRecord = switchOnTheoryRecord;
+    pupil.eyeTest = _switchOnEyeTest;
+    pupil.previousExperience = _switchOnPreviousExp;
+    pupil.theoryRecord = _switchOnTheoryRecord;
     var result = await pupil.update();
     String message =
         result ? 'Pupil updated successfully.' : 'Pupil update failed.';
@@ -445,9 +451,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseController.text;
     pupil.dateOfBirth = this._dateOfBirth;
-    pupil.eyeTest = switchOnEyeTest;
-    pupil.previousExperience = switchOnPreviousExp;
-    pupil.theoryRecord = switchOnTheoryRecord;
+    pupil.eyeTest = _switchOnEyeTest;
+    pupil.previousExperience = _switchOnPreviousExp;
+    pupil.theoryRecord = _switchOnTheoryRecord;
     var result = await pupil.add();
     var instructor = await Instructor(id: appData.instructorId).getInstructor();
     await _pupilManager.tagPupil(pupil, instructor);
@@ -473,14 +479,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     setState(() {});
   }
 
-  bool switchOnEyeTest = false;
-  bool switchOnTheoryRecord = false;
-  bool switchOnPreviousExp = false;
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController phoneController = new TextEditingController();
-  TextEditingController addressController = new TextEditingController();
-  TextEditingController drivingLicenseController = new TextEditingController();
-  int countryCodeIndex;
   Future<void> dialogBoxPicture(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -518,22 +516,17 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     );
   }
 
-  DateTime _dateOfBirth = DateTime.now();
-  String _showDate;
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDateOfBirth() async {
+    var selectedDateOfBirth = this._dateOfBirth;
     this._dateOfBirth = await showDatePicker(
       context: context,
-      initialDate: _dateOfBirth,
+      initialDate: this._dateOfBirth,
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
-    if (this._dateOfBirth != null) {
-      setState(
-        () {
-          this._showDate =
-              new DateFormat('MMM-dd-yyyy').format(this._dateOfBirth);
-        },
-      );
-    }
+    if (this._dateOfBirth == null) this._dateOfBirth = selectedDateOfBirth;
+    setState(() {
+      this._dateOfBirth = this._dateOfBirth;//This is for update the UI. Please before remove check twice.
+    });
   }
 }
