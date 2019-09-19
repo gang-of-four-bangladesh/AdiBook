@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class PupilListSection extends StatefulWidget {
@@ -21,6 +20,7 @@ class PupilListSection extends StatefulWidget {
 class PupilPistSectionState extends State<PupilListSection> {
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
+  Logger _logger = Logger('page->pupil_list');
 
   @override
   void initState() {
@@ -29,29 +29,16 @@ class PupilPistSectionState extends State<PupilListSection> {
   }
 
   void _loadPupilsData() async {
-    setState(() {
-      _querySnapshot =
-          Instructor(id: appData.instructorId).getPupils().asStream();
-    });
-  }
-
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
-  void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    setState(() {
-      _querySnapshot =
-          Instructor(id: appData.instructorId).getPupils().asStream();
-    });
-    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        _querySnapshot =
+            Instructor(id: appData.instructorId).getPupils().asStream();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Logger _logger = Logger(this.runtimeType.toString());
     _logger.fine('Loading pupils listing page.');
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
@@ -62,64 +49,60 @@ class PupilPistSectionState extends State<PupilListSection> {
           case ConnectionState.waiting:
             return this.frequentWidgets.getProgressBar();
           default:
-            return SmartRefresher(
-                controller: _refreshController,
-                onRefresh: _onRefresh,
-                child: ListView(
-                  children: snapshot.data.documents.map(
-                    (DocumentSnapshot document) {
-                      return Slidable(
-                        actionPane: SlidableStrechActionPane(),
-                        actionExtentRatio: 0.15,
-                        actions: <Widget>[
-                          
-                          IconSlideAction(
-                            caption: 'Delete',
-                            color: Colors.red,
-                            icon: FontAwesomeIcons.trash,
-                            onTap: () {},
+            return ListView(
+              children: snapshot.data.documents.map(
+                (DocumentSnapshot document) {
+                  return Slidable(
+                    actionPane: SlidableStrechActionPane(),
+                    actionExtentRatio: 0.15,
+                    actions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Delete',
+                        color: Colors.red,
+                        icon: FontAwesomeIcons.trash,
+                        onTap: () {},
+                      ),
+                      IconSlideAction(
+                        caption: 'Edit',
+                        color: AppTheme.appThemeColor,
+                        icon: FontAwesomeIcons.edit,
+                        foregroundColor: Colors.white,
+                        onTap: () {
+                          appData.pupilId = document.documentID;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddPupilSection(userType: appData.userType),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                    child: ListTile(
+                      trailing: Icon(Icons.person),
+                      title: Text(document[Pupil.NameKey]),
+                      onTap: () {
+                        appData.pupilId = document.documentID;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(
+                              sectionType:
+                                  SectionType.InstructorActivityForPupil,
+                              userType: UserType.Instructor,
+                              contextInfo: {
+                                DataSharingKeys.PupilIdKey: document.documentID
+                              },
+                            ),
                           ),
-                          IconSlideAction(
-                            caption: 'Edit',
-                            color: AppTheme.appThemeColor,
-                            icon: FontAwesomeIcons.edit,
-                            foregroundColor: Colors.white,
-                            onTap: () {
-                               appData.pupilId = document.documentID;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                              builder: (context) => AddPupilSection(userType: appData.userType),
-                              ),
-                            );
-                            },
-                          ),
-                        ],
-                        child: ListTile(
-                          trailing: Icon(Icons.person),
-                          title: Text(document[Pupil.NameKey]),
-                          onTap: () {
-                            appData.pupilId = document.documentID;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                  sectionType:
-                                      SectionType.InstructorActivityForPupil,
-                                  userType: UserType.Instructor,
-                                  contextInfo: {
-                                    DataSharingKeys.PupilIdKey:
-                                        document.documentID
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ).toList(),
-                ));
+                        );
+                      },
+                    ),
+                  );
+                },
+              ).toList(),
+            );
         }
       },
     );

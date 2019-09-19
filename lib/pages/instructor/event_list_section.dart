@@ -3,7 +3,6 @@ import 'package:adibook/data/lesson_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'package:logging/logging.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class EventListSection extends StatefulWidget {
   @override
@@ -12,8 +11,6 @@ class EventListSection extends StatefulWidget {
 
 class EventListSectionState extends State<EventListSection> {
   Logger _logger;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
   EventListSectionState() : this._logger = Logger('page->event_list');
   List _selectedEvents = [];
   DateTime _selectedDay = DateTime(
@@ -31,25 +28,16 @@ class EventListSectionState extends State<EventListSection> {
 
   void _initialize() async {
     this._events = await LessonManager().getLessonEvents(date: _selectedDay);
-    setState(() {
-      _selectedEvents = _events[_selectedDay] ?? [];
-    });
-  }
-
-  void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _initialize();
-    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        _selectedEvents = _events[_selectedDay] ?? [];
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _refreshController,
-      onRefresh: _onRefresh,
-      child: Center(
+    return Center(
         child: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -67,8 +55,7 @@ class EventListSectionState extends State<EventListSection> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildEventList() {

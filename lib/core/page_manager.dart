@@ -74,8 +74,8 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 1,
-      appBarTitle: 'Add Pupil',
-      bottomNavTitle: 'Add Pupil',
+      appBarTitle: 'NEW',
+      bottomNavTitle: 'NEW',
       availableFor: UserType.Instructor,
       sectionWidget: AddPupilSection(),
       bottomNavIcon: Icon(EvaIcons.plus, color: Colors.white),

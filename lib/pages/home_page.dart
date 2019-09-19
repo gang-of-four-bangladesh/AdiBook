@@ -2,7 +2,6 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -19,55 +18,14 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Logger _logger = Logger('HomePage');
   int _selectedPage;
   String _appbarTitle;
   List<WidgetConfiguration> _widgetsConfiguration = [];
   List<Widget> _widgets = [];
-  List<BottomNavigationBarItem> _bottomNavBarItems = [
-    BottomNavigationBarItem(
-      icon: Icon(
-        EvaIcons.loaderOutline,
-        color: AppTheme.appThemeColor,
-        size: 0.0,
-      ),
-      title: Text(
-        "Loading..",
-        style: TextStyle(
-          fontWeight: FontWeight.w100,
-          color: AppTheme.appThemeColor,
-          fontSize: 1.0,
-        ),
-      ),
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(EvaIcons.loaderOutline, color: Colors.white),
-      title: Text(
-        "Loading..",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-          fontSize: 12.0,
-        ),
-      ),
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        EvaIcons.loaderOutline,
-        color: AppTheme.appThemeColor,
-        size: 0.0,
-      ),
-      title: Text(
-        "Loading..",
-        style: TextStyle(
-          fontWeight: FontWeight.w100,
-          color: AppTheme.appThemeColor,
-          fontSize: 1.0,
-        ),
-      ),
-    ),
-  ];
+  TabController _tabController;
+  List<Tab> _tabs = [];
 
   @override
   void initState() {
@@ -88,7 +46,12 @@ class _HomePageState extends State<HomePage> {
       this._logger.info(
           'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBarTitle)}');
       _appbarTitle = this._widgetsConfiguration[_selectedPage].appBarTitle;
-      this._getBottomNavBarItems();
+      this._getTabs();
+      _tabController = TabController(
+        vsync: this,
+        initialIndex: _selectedPage,
+        length: this._widgets.length,
+      );
     });
   }
 
@@ -98,82 +61,95 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppTheme.appThemeColor,
-        title: Text(_appbarTitle),
+        elevation: 0.7,
+        leading: CircleAvatar(
+          backgroundColor: AppTheme.appThemeColor,
+          backgroundImage: AssetImage("assets/images/adibook.jpg"),
+        ),
+        centerTitle: true,
+        title: Title(
+          child: Text(
+            'AdiBook',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          color: Colors.white,
+        ),
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.white,
+          tabs: this._tabs,
+        ),
         actions: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 2.0),
             child: Center(
-                child: ButtonTheme(
-              minWidth: 100.0,
-              height: 60.0,
-              child: RaisedButton(
-                color: AppTheme.appThemeColor,
-                onPressed: () async {
-                  await UserManager().logout();
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    PageRoutes.LoginPage,
-                    (r) => false,
-                  );
-                },
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  "Logout",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+              child: ButtonTheme(
+                minWidth: 100.0,
+                height: 60.0,
+                child: IconButton(
+                  icon: Icon(Icons.power_settings_new),
+                  onPressed: () async {
+                    await UserManager().logout();
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      PageRoutes.LoginPage,
+                      (r) => false,
+                    );
+                  },
                 ),
               ),
-            )),
+            ),
           )
         ],
       ),
-      body: Center(
-        child: IndexedStack(
-          index: _selectedPage,
-          children: this._widgets,
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: AppTheme.appThemeColor,
+              ),
+            ),
+            ListTile(
+              title: Text('Item 1'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Item 2'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
-      bottomNavigationBar: new Theme(
-        data: Theme.of(context).copyWith(
-            canvasColor: AppTheme.appThemeColor,
-            primaryColor: Colors.red,
-            textTheme: Theme.of(context)
-                .textTheme
-                .copyWith(caption: new TextStyle(color: Colors.yellow))),
-        child: BottomNavigationBar(
-          currentIndex: _selectedPage,
-          onTap: (int index) {
-            setState(() {
-              _selectedPage = index;
-              _appbarTitle =
-                  this._widgetsConfiguration[_selectedPage].appBarTitle;
-              this._logger.info(
-                  'selected page index $_selectedPage and app bar title $_appbarTitle');
-            });
-          },
-          items: this._bottomNavBarItems.toList(),
-        ),
+      body: TabBarView(
+        controller: _tabController,
+        children: this._widgets,
       ),
     );
   }
 
-  void _getBottomNavBarItems() {
-    this._bottomNavBarItems.clear();
+  void _getTabs() {
+    this._tabs.clear();
     this._widgetsConfiguration.forEach(
-          (f) => this._bottomNavBarItems.add(
-                BottomNavigationBarItem(
-                  icon: f.bottomNavIcon,
-                  title: Text(
-                    f.bottomNavTitle,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 12.0),
-                  ),
-                ),
-              ),
-        );
-    _logger.info('${this._bottomNavBarItems.length} bottomm navigation bars');
+        (f) => this._tabs.add(Tab(text: f.bottomNavTitle.toUpperCase())));
   }
 }
