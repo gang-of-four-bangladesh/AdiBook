@@ -28,10 +28,10 @@ class _LoginPageState extends State<LoginPage> {
   bool _showProgressBar = false;
 
   _LoginPageState() {
-    if (!DeviceInfo.isOnPhysicalDevice) {
+   // if (!DeviceInfo.isOnPhysicalDevice) {
       this._phoneNumberController.text = "1234567890";
       this._smsCodeController.text = "654321";
-    }
+    //}
     _logger = Logger(this.runtimeType.toString());
   }
   @override
