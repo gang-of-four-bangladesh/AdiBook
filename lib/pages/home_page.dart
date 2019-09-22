@@ -62,9 +62,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         backgroundColor: AppTheme.appThemeColor,
         elevation: 0.7,
-        leading: CircleAvatar(
-          backgroundColor: AppTheme.appThemeColor,
-          backgroundImage: AssetImage("assets/images/adibook.jpg"),
+        leading: Container(
+          padding: EdgeInsets.only(left: 5, top: 5),
+          child: CircleAvatar(
+            backgroundColor: AppTheme.appThemeColor,
+            backgroundImage: AssetImage("assets/images/adibook.jpg"),
+          ),
         ),
         centerTitle: true,
         title: Title(

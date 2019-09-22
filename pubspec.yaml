@@ -38,6 +38,7 @@ dependencies:
   file_picker: ^1.4.0+1
   pull_to_refresh: ^1.5.5
   flutter_slidable:
+  firebase_messaging:
   
   flutter:
     sdk: flutter
