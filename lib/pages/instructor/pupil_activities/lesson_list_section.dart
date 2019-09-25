@@ -27,16 +27,15 @@ class LessonListSectionState extends State<LessonListSection> {
   }
 
   void _loadLessonsData() async {
-    if (mounted) {
-      setState(() {
-        this._logger.info(
-            'Lesson listing instructor id ${appData.instructorId}, pupil id ${appData.pupilId}');
-        _querySnapshot = PupilManager()
-            .getLessions(
-                instructorId: appData.instructorId, pupilId: appData.pupilId)
-            .asStream();
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      this._logger.info(
+          'Lesson listing instructor id ${appData.instructorId}, pupil id ${appData.pupilId}');
+      _querySnapshot = PupilManager()
+          .getLessions(
+              instructorId: appData.instructorId, pupilId: appData.pupilId)
+          .asStream();
+    });
   }
 
   @override

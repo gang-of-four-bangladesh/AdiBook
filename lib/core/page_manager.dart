@@ -6,8 +6,8 @@ import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dar
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
-import 'package:adibook/pages/pupil/ability_section.dart';
 import 'package:adibook/pages/pupil/account_section.dart';
+import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:adibook/pages/pupil/resources_section.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -102,20 +102,20 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 0,
-      appBarTitle: 'Profile',
-      bottomNavTitle: 'Profile',
+      appBarTitle: 'Status',
+      bottomNavTitle: 'Status',
       availableFor: UserType.Pupil,
-      sectionWidget: AddPupilSection(),
-      bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
+      sectionWidget: StatusSection(),
+      bottomNavIcon: Icon(Icons.people, color: Colors.white),
       sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(
       index: 1,
-      appBarTitle: 'Ability',
-      bottomNavTitle: 'Ability',
+      appBarTitle: 'Profile',
+      bottomNavTitle: 'Profile',
       availableFor: UserType.Pupil,
-      sectionWidget: AbilitySection(),
-      bottomNavIcon: Icon(Icons.settings_applications, color: Colors.white),
+      sectionWidget: AddPupilSection(),
+      bottomNavIcon: Icon(FontAwesomeIcons.infoCircle, color: Colors.white),
       sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(

@@ -29,12 +29,11 @@ class PupilPistSectionState extends State<PupilListSection> {
   }
 
   void _loadPupilsData() async {
-    if (mounted) {
-      setState(() {
-        _querySnapshot =
-            Instructor(id: appData.instructorId).getPupils().asStream();
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      _querySnapshot =
+          Instructor(id: appData.instructorId).getPupils().asStream();
+    });
   }
 
   @override

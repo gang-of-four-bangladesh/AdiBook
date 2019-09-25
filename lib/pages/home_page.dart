@@ -21,7 +21,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Logger _logger = Logger('HomePage');
   int _selectedPage;
-  String _appbarTitle;
   List<WidgetConfiguration> _widgetsConfiguration = [];
   List<Widget> _widgets = [];
   TabController _tabController;
@@ -45,7 +44,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           _widgetsConfiguration.map((f) => f.sectionWidget).toList();
       this._logger.info(
           'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBarTitle)}');
-      _appbarTitle = this._widgetsConfiguration[_selectedPage].appBarTitle;
       this._getTabs();
       _tabController = TabController(
         vsync: this,
@@ -63,10 +61,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         backgroundColor: AppTheme.appThemeColor,
         elevation: 0.7,
         leading: Container(
-          padding: EdgeInsets.only(left: 5, top: 5),
+          padding: EdgeInsets.only(left: 15, top: 15),
           child: CircleAvatar(
             backgroundColor: AppTheme.appThemeColor,
-            backgroundImage: AssetImage("assets/images/adibook.jpg"),
+            backgroundImage: AssetImage("assets/images/adibook.jpg"),radius: 5.0,
           ),
         ),
         centerTitle: true,

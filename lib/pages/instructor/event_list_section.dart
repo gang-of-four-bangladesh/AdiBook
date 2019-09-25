@@ -28,11 +28,10 @@ class EventListSectionState extends State<EventListSection> {
 
   void _initialize() async {
     this._events = await LessonManager().getLessonEvents(date: _selectedDay);
-    if (mounted) {
+    if (!mounted) return;
       setState(() {
         _selectedEvents = _events[_selectedDay] ?? [];
       });
-    }
   }
 
   @override

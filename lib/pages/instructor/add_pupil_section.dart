@@ -10,7 +10,6 @@ import 'package:adibook/pages/validation.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AddPupilSection extends StatefulWidget {
   final UserType userType;
@@ -33,7 +32,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
-  final FirebaseMessaging _fcm = FirebaseMessaging();
   int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
   bool _autoValidate;
@@ -58,6 +56,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     addressController.text = pupil.address;
     phoneController.text = pupil.phoneNumber;
     drivingLicenseController.text = pupil.licenseNo;
+    if (!mounted) return;
     setState(() {
       this._dateOfBirth = pupil.dateOfBirth;
       this._switchOnEyeTest = pupil.eyeTest;

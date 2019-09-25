@@ -1,5 +1,4 @@
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
