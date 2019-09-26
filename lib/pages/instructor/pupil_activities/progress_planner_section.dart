@@ -284,7 +284,7 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                           _progressPlanDetails[index].status =
                               ProgressSubjectStatus.values[v.toInt()];
                           print(
-                              'Rating changed for index ${_progressPlanDetails[index].subjectDisplayName} to ${_progressPlanDetails[index].status}');
+                              'Rating changed for index ${_progressPlanDetails[index].subjectDisplayName} from $v to ${_progressPlanDetails[index].status}');
                         });
                         var _subject = new ProgressPlanSubject(
                           subjectName: _progressPlanDetails[index].subjectName,

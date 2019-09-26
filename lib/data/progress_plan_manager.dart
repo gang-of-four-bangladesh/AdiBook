@@ -43,6 +43,14 @@ class ProgressPlanManager {
     return _data;
   }
 
+  Future<double> getProgressPercentage() async {
+    var progressDetails = await this.getProgressDetails();
+    int ratingSum = 0;
+    progressDetails.forEach((p) => ratingSum += p.status.index);
+    var percent = ratingSum / (progressPlanSubjects.length * 5);
+    return percent.ceilToDouble();
+  }
+
   static const progressPlanSubjects = [
     {
       "nmo": "Normal move off",

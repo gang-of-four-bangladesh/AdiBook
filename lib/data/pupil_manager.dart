@@ -59,4 +59,12 @@ class PupilManager {
     print('Lessons path $path');
     return Firestore.instance.collection(path).getDocuments();
   }
+
+  Future<Instructor> getDefaultInstructor(String pupilId) async {
+    var path = sprintf(FirestorePath.InstructorsOfAPupilColection, [pupilId]);
+    var instructorsDoc =
+        await Firestore.instance.collection(path).getDocuments();
+    var defaultInstructorSnap = instructorsDoc.documents.first;
+    return Instructor(id: defaultInstructorSnap.documentID).getInstructor();
+  }
 }
