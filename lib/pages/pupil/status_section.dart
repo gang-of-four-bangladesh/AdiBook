@@ -30,16 +30,22 @@ class _StatusSectionState extends State<StatusSection> {
   Widget build(BuildContext context) {
     return CircularPercentIndicator(
       radius: 120.0,
-      lineWidth: 13.0,
+      lineWidth: 10.0,
       animation: true,
       percent: this._progressPercentage,
-      center: new Text(
-        '$_progressPercentage %',
-        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+      center: Text(
+        '${(_progressPercentage * 100).ceil()}%',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+        ),
       ),
-      footer: new Text(
-        "Overall Progress",
-        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+      footer: Text(
+        "Driving Progress",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 17.0,
+        ),
       ),
       circularStrokeCap: CircularStrokeCap.round,
       progressColor: Colors.purple,

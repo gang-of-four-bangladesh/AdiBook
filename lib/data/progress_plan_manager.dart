@@ -48,7 +48,8 @@ class ProgressPlanManager {
     int ratingSum = 0;
     progressDetails.forEach((p) => ratingSum += p.status.index);
     var percent = ratingSum / (progressPlanSubjects.length * 5);
-    return percent.ceilToDouble();
+    this._logger.info('Total Subjects are ${progressPlanSubjects.length}, and rating summation is $ratingSum.');
+    return percent;
   }
 
   static const progressPlanSubjects = [

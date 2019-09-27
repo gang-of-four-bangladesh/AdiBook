@@ -1,5 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/models/user.dart';
@@ -46,7 +47,8 @@ class UserManager {
       {String id, UserType userType = UserType.Instructor}) async {
     Logger _logger = Logger('UserManager=>createUser');
     if (!await userExists(id, userType)) {
-      await User(id: id, phoneNumber: id, userType: userType, isVerified: true).add();
+      await User(id: id, phoneNumber: id, userType: userType, isVerified: true)
+          .add();
       userType == UserType.Instructor
           ? await Instructor(id: id, phoneNumber: id).add()
           : await Pupil(id: id, phoneNumber: id).add();
@@ -58,20 +60,15 @@ class UserManager {
   Future<void> updateAppDataByUser(User adiBookUser) async {
     Logger _logger = Logger('UserManager=>updateAppDataByUser');
     appData.userType = adiBookUser.userType;
-    switch (adiBookUser.userType) {
-      case UserType.Instructor:
-        appData.instructorId = adiBookUser.id;
-        break;
-      case UserType.Pupil:
-        appData.pupilId = adiBookUser.id;
-        break;
-      case UserType.Admin:
-        appData.adminId = adiBookUser.id;
-        break;
-      default:
-        break;
+    if (adiBookUser.userType == UserType.Instructor) {
+      appData.instructorId = adiBookUser.id;
+    } else if (adiBookUser.userType == UserType.Pupil) {
+      appData.pupilId = adiBookUser.id;
+      var instructor =
+          await PupilManager().getDefaultInstructor(adiBookUser.id);
+      appData.instructorId = instructor.id;
     }
-    _logger.info('updated app data information $appData');
+    _logger.info('updated app data information, instructor id: ${appData.instructorId}, pupil id ${appData.pupilId} and user type ${appData.userType}.');
   }
 
   Future<void> updateAppDataByUserId(String userId) async {

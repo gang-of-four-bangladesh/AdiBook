@@ -6,9 +6,7 @@ import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dar
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
-import 'package:adibook/pages/pupil/account_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
-import 'package:adibook/pages/pupil/resources_section.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -120,20 +118,11 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 2,
-      appBarTitle: 'Resources',
-      bottomNavTitle: 'Resources',
+      appBarTitle: 'Lessons',
+      bottomNavTitle: 'Lessons',
       availableFor: UserType.Pupil,
-      sectionWidget: ResourcesSection(),
+      sectionWidget: LessonListSection(),
       bottomNavIcon: Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
-      sectionType: SectionType.PupilActivity,
-    ),
-    WidgetConfiguration(
-      index: 3,
-      appBarTitle: 'Account',
-      bottomNavTitle: 'Account',
-      availableFor: UserType.Pupil,
-      sectionWidget: AccountSection(),
-      bottomNavIcon: Icon(Icons.account_circle, color: Colors.white),
       sectionType: SectionType.PupilActivity,
     ),
     WidgetConfiguration(
