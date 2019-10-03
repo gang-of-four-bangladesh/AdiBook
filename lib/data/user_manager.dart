@@ -44,10 +44,10 @@ class UserManager {
   }
 
   Future<void> createUser(
-      {String id, UserType userType = UserType.Instructor}) async {
+      {String id, UserType userType = UserType.Instructor,String token}) async {
     Logger _logger = Logger('UserManager=>createUser');
     if (!await userExists(id, userType)) {
-      await User(id: id, phoneNumber: id, userType: userType, isVerified: true)
+      await User(id: id, phoneNumber: id, userType: userType,userToken:token, isVerified: true)
           .add();
       userType == UserType.Instructor
           ? await Instructor(id: id, phoneNumber: id).add()

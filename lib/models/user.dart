@@ -7,6 +7,7 @@ class User {
   static const String NameKey = 'nam';
   static const String PhoneNumberKey = 'phn';
   static const String UserTypeKey = 'utp';
+  static const String UserTokenKey = 'tkn';
   static const String IsVerifiedKey = 'isv';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
@@ -16,6 +17,7 @@ class User {
     this.name,
     this.phoneNumber,
     this.userType = UserType.Instructor,
+    this.userToken,
     this.isVerified = false,
   })  : this.createdAt = null,
         this.updatedAt = null,
@@ -24,6 +26,7 @@ class User {
   String name;
   String phoneNumber;
   UserType userType;
+  String userToken;
   bool isVerified;
   DateTime createdAt;
   DateTime updatedAt;
@@ -33,6 +36,7 @@ class User {
       NameKey: name,
       PhoneNumberKey: phoneNumber,
       UserTypeKey: userType.index,
+      UserTokenKey: userToken,
       IsVerifiedKey: isVerified
     };
   }
@@ -42,6 +46,7 @@ class User {
     this.name = snapshot[User.NameKey];
     this.phoneNumber = snapshot[User.PhoneNumberKey];
     this.userType = UserType.values[snapshot[User.UserTypeKey]];
+    this.userToken = snapshot[User.UserTokenKey];
     this.isVerified = snapshot[User.IsVerifiedKey];
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);

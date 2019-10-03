@@ -1,6 +1,8 @@
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
+import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
@@ -27,9 +29,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _showProgressBar = false;
 
   _LoginPageState() {
-   // if (!DeviceInfo.isOnPhysicalDevice) {
-      this._phoneNumberController.text = "1234567890";
-      this._smsCodeController.text = "654321";
+    // if (!DeviceInfo.isOnPhysicalDevice) {
+    this._phoneNumberController.text = "1234567890";
+    this._smsCodeController.text = "654321";
     //}
     _logger = Logger(this.runtimeType.toString());
   }
@@ -204,14 +206,17 @@ class _LoginPageState extends State<LoginPage> {
       dialogBox(context, 'OTP Code', 'OTP code should be six characters.');
       return;
     }
+    
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: this._smsCodeController.text);
     var user = await _signInUser(authCredential);
-    await UserManager()
-        .createUser(id: user.phoneNumber, userType: this._selectedUserType);
+   PushNotificationToken _pushNotification = PushNotificationToken();
+    var _user_token = await _pushNotification.getToken();
+    _logger.info("push notification >>>> " + _user_token);
+    await UserManager().createUser(id: user.phoneNumber,userType: this._selectedUserType,token: _user_token);
     //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
     //Please do not remove the line
-    await User(id: user.phoneNumber, userType: this._selectedUserType).update();
+    await User(id: user.phoneNumber, userType: this._selectedUserType,userToken: _user_token).update();
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
