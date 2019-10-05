@@ -87,6 +87,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
+                            enabled: appData.userType == UserType.Instructor
+                                ? true
+                                : false,
                             keyboardType: TextInputType.text,
                             controller: nameController,
                             validator: validations.validateText,
@@ -108,6 +111,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
+                            enabled: appData.userType == UserType.Instructor
+                                ? true
+                                : false,
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
@@ -191,6 +197,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
+                            enabled: appData.userType == UserType.Instructor
+                                ? true
+                                : false,
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
@@ -225,7 +234,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               children: <Widget>[
                                 IconButton(
                                   icon: Icon(Icons.date_range),
-                                  onPressed: _selectDateOfBirth,
+                                  onPressed:
+                                      appData.userType == UserType.Instructor
+                                          ? _selectDateOfBirth
+                                          : null,
                                 ),
                                 Text(
                                   "Date Of Birth",
@@ -271,8 +283,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     /*3*/
                     Switch(
                         value: _switchOnEyeTest,
-                        onChanged: (val) =>
-                            setState(() => _switchOnEyeTest = val),
+                        onChanged: (val) => setState(() =>
+                            appData.userType == UserType.Instructor
+                                ? _switchOnEyeTest = val
+                                : null),
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
@@ -299,8 +313,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     ),
                     Switch(
                       value: _switchOnTheoryRecord,
-                      onChanged: (val) =>
-                          setState(() => _switchOnTheoryRecord = val),
+                      onChanged: (val) => setState(() =>
+                          appData.userType == UserType.Instructor
+                              ? _switchOnTheoryRecord = val
+                              : null),
                       activeColor: AppTheme.appThemeColor,
                     ),
                   ],
@@ -331,8 +347,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     /*3*/
                     Switch(
                       value: _switchOnPreviousExp,
-                      onChanged: (val) =>
-                          setState(() => _switchOnPreviousExp = val),
+                      onChanged: (val) => setState(() =>
+                          appData.userType == UserType.Instructor
+                              ? _switchOnPreviousExp = val
+                              : null),
                       activeColor: AppTheme.appThemeColor,
                     ),
                   ],
@@ -354,29 +372,29 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           ButtonTheme(
                             minWidth: 180.0,
                             height: 50.0,
-                            child: RaisedButton(
-                              onPressed: () async {
-                                if (_validateInputs()) {
-                                  if (appData.userType == UserType.Instructor)
-                                    await _saveData();
-                                  if (appData.userType == UserType.Pupil)
-                                    await _updateData();
-                                }
-                              },
-                              color: AppTheme.appThemeColor,
-                              child: Text(
-                                appData.userType == UserType.Pupil
-                                    ? "Update"
-                                    : "Save",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                              ),
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(8.0),
-                              ),
-                            ),
+                            child: appData.userType == UserType.Instructor
+                                ? RaisedButton(
+                                    onPressed: () async {
+                                      if (_validateInputs()) {
+                                        if (appData.userType ==
+                                            UserType.Instructor)
+                                          await _saveData();
+                                      }
+                                    },
+                                    color: AppTheme.appThemeColor,
+                                    child: Text(
+                                      "Save",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(8.0),
+                                    ),
+                                  )
+                                : Container(),
                           )
                         ],
                       ),
@@ -421,25 +439,25 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     });
   }
 
-  Future<void> _updateData() async {
-    this._logger.info('Updating pupil information ${appData.pupilId}.');
-    Pupil pupil = Pupil(id: appData.pupilId);
-    pupil.name = nameController.text;
-    pupil.phoneNumber = phoneController.text;
-    pupil.address = addressController.text;
-    pupil.licenseNo = drivingLicenseController.text;
-    pupil.dateOfBirth = this._dateOfBirth;
-    pupil.eyeTest = _switchOnEyeTest;
-    pupil.previousExperience = _switchOnPreviousExp;
-    pupil.theoryRecord = _switchOnTheoryRecord;
-    var result = await pupil.update();
-    String message =
-        result ? 'Pupil updated successfully.' : 'Pupil update failed.';
-    _frequentWidgets.getSnackbar(
-      message: message,
-      context: context,
-    );
-  }
+  // Future<void> _updateData() async {
+  //   this._logger.info('Updating pupil information ${appData.pupilId}.');
+  //   Pupil pupil = Pupil(id: appData.pupilId);
+  //   pupil.name = nameController.text;
+  //   pupil.phoneNumber = phoneController.text;
+  //   pupil.address = addressController.text;
+  //   pupil.licenseNo = drivingLicenseController.text;
+  //   pupil.dateOfBirth = this._dateOfBirth;
+  //   pupil.eyeTest = _switchOnEyeTest;
+  //   pupil.previousExperience = _switchOnPreviousExp;
+  //   pupil.theoryRecord = _switchOnTheoryRecord;
+  //   var result = await pupil.update();
+  //   String message =
+  //       result ? 'Pupil updated successfully.' : 'Pupil update failed.';
+  //   _frequentWidgets.getSnackbar(
+  //     message: message,
+  //     context: context,
+  //   );
+  // }
 
   Future<void> _saveData() async {
     var id = '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';

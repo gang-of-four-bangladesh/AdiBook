@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
+import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/lesson_manager.dart';
@@ -55,6 +56,20 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   @override
   Widget build(BuildContext context) {
     Validations validations = Validations();
+     Future _sendNotification() async {
+    final response = await Messaging.sendTo(
+      title: 'New Lesson Add',
+      body: 'This is lesson',
+      fcmToken: 'd7yKkv_VbjQ:APA91bHT6r7OJkx6NgcMYTG8LqZXKjYctEyTaxWZTVrABp2zWVEegOs7unFketveT_leVX_OdegEjCR6NfXNo40M2RMvKQjqwem7KEkdwH_PzC76H7WHeeEZlizfpLvzFL3xOFihTpoA',
+    );
+
+    if (response.statusCode != 200) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content:
+            Text('[${response.statusCode}] Error message: ${response.body}'),
+      ));
+    }
+  }
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -415,7 +430,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (_validateInputs()) await _saveData();
+                                  if (_validateInputs()) await 
+                                  //_saveData();
+                                  _sendNotification();
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
