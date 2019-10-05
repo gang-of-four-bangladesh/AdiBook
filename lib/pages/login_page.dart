@@ -1,5 +1,4 @@
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/core/push_notification_manager.dart';
@@ -208,12 +207,12 @@ class _LoginPageState extends State<LoginPage> {
         verificationId: verificationId, smsCode: this._smsCodeController.text);
     var user = await _signInUser(authCredential);
    PushNotificationToken _pushNotification = PushNotificationToken();
-    var _user_token = await _pushNotification.getToken();
-    _logger.info("push notification >>>> " + _user_token);
-    await UserManager().createUser(id: user.phoneNumber,userType: this._selectedUserType,token: _user_token);
+    var _userToken = await _pushNotification.getToken();
+    _logger.info("push notification >>>> " + _userToken);
+    await UserManager().createUser(id: user.phoneNumber,userType: this._selectedUserType,token: _userToken);
     //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
     //Please do not remove the line
-    await User(id: user.phoneNumber, userType: this._selectedUserType,userToken: _user_token).update();
+    await User(id: user.phoneNumber, userType: this._selectedUserType,userToken: _userToken).update();
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
