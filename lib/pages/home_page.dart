@@ -1,6 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/page_manager.dart';
+import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _initialize();
   }
 
-  void _initialize() {
+  void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     this._logger.info(
         'Contextual information ${this.widget.contextInfo}, app data information appData, instructorId: ${appData.instructorId} and pupilId: ${appData.pupilId}');

@@ -145,8 +145,8 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 2,
-      appBarTitle: 'Progress Planner',
-      bottomNavTitle: 'Progress Planner',
+      appBarTitle: 'Progress',
+      bottomNavTitle: 'Progress',
       availableFor: UserType.Instructor,
       sectionWidget: ProgressPlannerSection(),
       bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),

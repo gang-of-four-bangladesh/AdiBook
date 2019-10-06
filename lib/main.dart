@@ -12,7 +12,7 @@ import 'package:logging/logging.dart';
 Future main() async {
   await DeviceInfo.initializeDeviceState();
   var logWriter =
-      DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
+      !DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
   await LoggerSetup.setupLogger(logWriter: logWriter);
   var _logger = Logger('main');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

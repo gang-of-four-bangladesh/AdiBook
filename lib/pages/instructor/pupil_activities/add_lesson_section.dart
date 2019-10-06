@@ -53,14 +53,12 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedlessionType = LessionType.None;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Validations validations = Validations();
-     Future _sendNotification() async {
+  Future _sendNotification() async {
     final response = await Messaging.sendTo(
       title: 'New Lesson Add',
       body: 'This is lesson',
-      fcmToken: 'd7yKkv_VbjQ:APA91bHT6r7OJkx6NgcMYTG8LqZXKjYctEyTaxWZTVrABp2zWVEegOs7unFketveT_leVX_OdegEjCR6NfXNo40M2RMvKQjqwem7KEkdwH_PzC76H7WHeeEZlizfpLvzFL3xOFihTpoA',
+      fcmToken:
+          'd7yKkv_VbjQ:APA91bHT6r7OJkx6NgcMYTG8LqZXKjYctEyTaxWZTVrABp2zWVEegOs7unFketveT_leVX_OdegEjCR6NfXNo40M2RMvKQjqwem7KEkdwH_PzC76H7WHeeEZlizfpLvzFL3xOFihTpoA',
     );
 
     if (response.statusCode != 200) {
@@ -70,6 +68,10 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       ));
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    Validations validations = Validations();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -430,9 +432,10 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (_validateInputs()) await 
-                                  //_saveData();
-                                  _sendNotification();
+                                  if (_validateInputs())
+                                    await
+                                        //_saveData();
+                                        _sendNotification();
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
@@ -538,8 +541,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       return;
     }
 
-    this._lessonTime = await showTimePicker(
-        context: context, initialTime: _lessonTime);
+    this._lessonTime =
+        await showTimePicker(context: context, initialTime: _lessonTime);
     this._logger.info('Selected lesson time $_lessonTime');
 
     if (this._lessonTime == null) _lessonTime = selectedLessonTime;
