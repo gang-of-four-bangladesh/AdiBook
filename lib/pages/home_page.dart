@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           padding: EdgeInsets.only(left: 15, top: 15),
           child: CircleAvatar(
             backgroundColor: AppTheme.appThemeColor,
-            backgroundImage: AssetImage("assets/images/adibook.jpg"),radius: 5.0,
+            backgroundImage: AssetImage("assets/images/logo.png"),radius: 5.0,
           ),
         ),
         centerTitle: true,
