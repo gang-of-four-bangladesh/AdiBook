@@ -146,6 +146,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                           ),
                         ],
                       ),
+                     
                       Column(
                         children: <Widget>[
                           //  Pickup TripLocation,
@@ -434,8 +435,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 onPressed: () async {
                                   if (_validateInputs())
                                     await
-                                        //_saveData();
-                                        _sendNotification();
+                                        _saveData();
+                                        // _sendNotification();
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(

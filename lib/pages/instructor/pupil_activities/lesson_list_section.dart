@@ -20,9 +20,11 @@ class LessonListSectionState extends State<LessonListSection> {
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->lesson_list');
+  bool _switchAckTest = false;
   @override
   void initState() {
     super.initState();
+    this._switchAckTest = false;
     _loadLessonsData();
   }
 
@@ -57,68 +59,99 @@ class LessonListSectionState extends State<LessonListSection> {
                   return Slidable(
                     actionPane: SlidableScrollActionPane(),
                     actionExtentRatio: 0.12,
-                    actions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Delete',
-                        color: Colors.red,
-                        icon: FontAwesomeIcons.trash,
-                        onTap: () {},
-                      ),
-                      IconSlideAction(
-                        caption: 'Edit',
-                        color: AppTheme.appThemeColor,
-                        icon: FontAwesomeIcons.edit,
-                        foregroundColor: Colors.white,
-                        onTap: () {},
-                      ),
-                    ],
                     child: Container(
                       padding: EdgeInsets.all(10),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            (format
-                                .format(TypeConversion.timeStampToDateTime(
-                                    document["ldt"]))
-                                .toString()),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                          //  Lesson Date,
+                          Container(
+                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  /*1*/
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      /*2*/
+                                      Container(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  (format
+                                                      .format(TypeConversion
+                                                          .timeStampToDateTime(
+                                                              document["ldt"]))
+                                                      .toString()),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  enumValueToString(LessionType
+                                                          .values[int.parse(
+                                                              document["ltp"]
+                                                                  .toString())]
+                                                          .toString() +
+                                                      ' - ' +
+                                                      document["ldu"]
+                                                          .toString() +
+                                                      ' minutes - ' +
+                                                      enumValueToString(VehicleType
+                                                          .values[int.parse(
+                                                              document["vtp"]
+                                                                  .toString())]
+                                                          .toString()) +
+                                                      " Drive"),
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    enumValueToString(TripLocation
+                                                            .values[int.parse(
+                                                                document["pul"]
+                                                                    .toString())]
+                                                            .toString()) +
+                                                        ' : ' +
+                                                        enumValueToString(TripLocation
+                                                            .values[int.parse(
+                                                                document["dol"]
+                                                                    .toString())]
+                                                            .toString()),
+                                                    style: TextStyle(
+                                                        fontSize: 16)),
+                                                SizedBox(
+                                                  height: 1,
+                                                ),
+                                              ],
+                                            ),
+                                            Text(document["dnt"].toString(),
+                                                style: TextStyle(fontSize: 14)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                //Text(document["ack"].toString()),
+                                Switch(
+                                    value: _switchAckTest,
+                                    onChanged: (val) => setState(
+                                        () => val = true),
+                                    activeColor: AppTheme.appThemeColor)
+                              ],
+                            ),
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            enumValueToString(LessionType.values[
-                                        int.parse(document["ltp"].toString())]
-                                    .toString() +
-                                ' - ' +
-                                document["ldu"].toString() +
-                                ' minutes - ' +
-                                enumValueToString(VehicleType.values[
-                                        int.parse(document["vtp"].toString())]
-                                    .toString()) +
-                                " Drive"),
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                              enumValueToString(TripLocation.values[
-                                          int.parse(document["pul"].toString())]
-                                      .toString()) +
-                                  ' : ' +
-                                  enumValueToString(TripLocation.values[
-                                          int.parse(document["dol"].toString())]
-                                      .toString()),
-                              style: TextStyle(fontSize: 16)),
-                          SizedBox(
-                            height: 1,
-                          ),
-                          Text(document["dnt"].toString(),
-                              style: TextStyle(fontSize: 14)),
                         ],
                       ),
                     ),
