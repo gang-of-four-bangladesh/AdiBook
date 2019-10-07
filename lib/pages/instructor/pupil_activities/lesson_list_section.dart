@@ -17,6 +17,7 @@ class LessonListSection extends StatefulWidget {
 }
 
 class LessonListSectionState extends State<LessonListSection> {
+  bool flagWarranty = false;
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->lesson_list');
@@ -24,13 +25,13 @@ class LessonListSectionState extends State<LessonListSection> {
   @override
   void initState() {
     super.initState();
-    this._switchAckTest = false;
     _loadLessonsData();
   }
 
   void _loadLessonsData() async {
     if (!mounted) return;
     setState(() {
+      this._switchAckTest = false;
       this._logger.info(
           'Lesson listing instructor id ${appData.instructorId}, pupil id ${appData.pupilId}');
       _querySnapshot = PupilManager()
@@ -56,6 +57,8 @@ class LessonListSectionState extends State<LessonListSection> {
             return ListView(
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
+                  // this._switchAckTest =
+                  //    document['ack'].toString() == 'true' ? true : false;
                   return Slidable(
                     actionPane: SlidableScrollActionPane(),
                     actionExtentRatio: 0.12,
@@ -144,11 +147,13 @@ class LessonListSectionState extends State<LessonListSection> {
                                   ),
                                 ),
                                 //Text(document["ack"].toString()),
-                                Switch(
+                                Checkbox(
                                     value: _switchAckTest,
-                                    onChanged: (val) => setState(
-                                        () => val = true),
-                                    activeColor: AppTheme.appThemeColor)
+                                    onChanged: (bool val) => setState(() =>
+                                        appData.userType == UserType.Instructor
+                                            ? _switchAckTest = val
+                                            : print(_switchAckTest)),
+                                    activeColor: AppTheme.appThemeColor),
                               ],
                             ),
                           ),
