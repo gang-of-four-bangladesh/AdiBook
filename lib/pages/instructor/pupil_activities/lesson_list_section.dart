@@ -2,10 +2,10 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
+import 'package:adibook/models/lesson.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
@@ -57,8 +57,6 @@ class LessonListSectionState extends State<LessonListSection> {
             return ListView(
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
-                  // this._switchAckTest =
-                  //    document['ack'].toString() == 'true' ? true : false;
                   return Slidable(
                     actionPane: SlidableScrollActionPane(),
                     actionExtentRatio: 0.12,
@@ -148,11 +146,10 @@ class LessonListSectionState extends State<LessonListSection> {
                                 ),
                                 //Text(document["ack"].toString()),
                                 Checkbox(
-                                    value: _switchAckTest,
-                                    onChanged: (bool val) => setState(() =>
-                                        appData.userType == UserType.Instructor
-                                            ? _switchAckTest = val
-                                            : print(_switchAckTest)),
+                                    value: document[Lesson.HasAcknowledgedKey],
+                                    onChanged:(lesson){
+                                      Lesson(instructorId: appData.instructorId,pupilId: appData.pupilId);
+                                    },
                                     activeColor: AppTheme.appThemeColor),
                               ],
                             ),

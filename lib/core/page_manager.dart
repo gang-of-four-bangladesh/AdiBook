@@ -3,6 +3,7 @@ import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/event_list_section.dart';
 import 'package:adibook/pages/instructor/instructor_profile.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
+import 'package:adibook/pages/instructor/pupil_activities/add_payment_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
@@ -145,6 +146,15 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 2,
+      appBarTitle: 'Add Payment',
+      bottomNavTitle: 'Add Payment',
+      availableFor: UserType.Instructor,
+      sectionWidget: AddPaymentSection(),
+      bottomNavIcon: Icon(FontAwesomeIcons.plus, color: Colors.white),
+      sectionType: SectionType.InstructorActivityForPupil,
+    ),
+    WidgetConfiguration(
+      index: 3,
       appBarTitle: 'Progress',
       bottomNavTitle: 'Progress',
       availableFor: UserType.Instructor,

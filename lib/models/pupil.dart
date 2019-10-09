@@ -22,9 +22,9 @@ class Pupil {
       this.licenseNo,
       this.address,
       this.dateOfBirth,
-      this.eyeTest = false,
-      this.theoryRecord = false,
-      this.previousExperience = false})
+      this.eyeTest,
+      this.theoryRecord,
+      this.previousExperience})
       : this.createdAt = null,
         this.updatedAt = null,
         this._logger = Logger('model->pupil');
@@ -35,8 +35,8 @@ class Pupil {
   String licenseNo;
   DateTime dateOfBirth;
   bool eyeTest;
-  bool theoryRecord;
-  bool previousExperience;
+  String theoryRecord;
+  String previousExperience;
   DateTime createdAt;
   DateTime updatedAt;
 
