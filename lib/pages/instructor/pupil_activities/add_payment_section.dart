@@ -10,10 +10,10 @@ import 'package:logging/logging.dart';
 
 class AddPaymentSection extends StatefulWidget {
   @override
-  _AddLessonSectionState createState() => _AddLessonSectionState();
+  _AddPaymentSectionState createState() => _AddPaymentSectionState();
 }
 
-class _AddLessonSectionState extends State<AddPaymentSection> {
+class _AddPaymentSectionState extends State<AddPaymentSection> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Logger _logger;
   bool _autoValidate;
@@ -48,45 +48,46 @@ class _AddLessonSectionState extends State<AddPaymentSection> {
             autovalidate: _autoValidate,
             child: Center(
               child: Column(children: <Widget>[
-                   //  Date of Birth,
-              Container(
-                padding: EdgeInsets.only(left: 5.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.date_range),
-                                  onPressed:
-                                      appData.userType == UserType.Instructor
-                                          ? _selectDateOfBirth
-                                          : null,
-                                ),
-                                Text(
-                                  "Date Of Payment",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                //  Date of Birth,
+                Container(
+                  padding: EdgeInsets.only(left: 5.0, right: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        /*1*/
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /*2*/
+                            Container(
+                              child: Row(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.date_range),
+                                    onPressed:
+                                        appData.userType == UserType.Instructor
+                                            ? _selectDateOfpayment
+                                            : null,
+                                  ),
+                                  Text(
+                                    "Date Of Payment",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    /*3*/
-                    Text(
-                      "${TypeConversion.toDobFormat(this._dateOfPayment)}",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                      /*3*/
+                      Text(
+                        "${TypeConversion.toDobFormat(this._dateOfPayment)}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
                 //textBoxSection,
                 Container(
@@ -181,11 +182,8 @@ class _AddLessonSectionState extends State<AddPaymentSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (_validateInputs()) {
-                                        if (appData.userType ==
-                                            UserType.Instructor)
-                                          await _saveData();
-                                      }
+                                  if (appData.userType == UserType.Instructor)
+                                    await _saveData();
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
@@ -215,10 +213,13 @@ class _AddLessonSectionState extends State<AddPaymentSection> {
   }
 
   Future<void> _saveData() async {
+    var _amount = int.parse(_amountController.text);
     Payment payment = new Payment(
-      pupilId: appData.pupilId,
-      instructorId: appData.instructorId,
-    );
+        pupilId: appData.pupilId,
+        instructorId: appData.instructorId,
+        paymentDate: this._paymentDate,
+        amount: _amount,
+        type: this._selectedPaymentType);
     var message = await PaymentManager().createPayment(payment)
         ? 'Payment created successfully.'
         : 'Payment creation failed.';
@@ -231,29 +232,31 @@ class _AddLessonSectionState extends State<AddPaymentSection> {
 
   void _makeEmpty() {
     setState(() {
+      this._dateOfPayment = DateTime.now();
       _amountController.text = null;
       _selectedPaymentType = PaymentType.Cash;
     });
   }
 
-  bool _validateInputs() {
-    if (_paymentDate == null) {
-      _frequentWidgets.getSnackbar(
-        message: 'Date of Payment is Required',
-        context: context,
-      );
-      return false;
-    }
-    this._logger.info('For validity ${_formKey.currentState.validate()}');
-    return _formKey.currentState.validate();
-  }
+  // bool _validateInputs() {
+  //   if (_paymentDate == null) {
+  //     _frequentWidgets.getSnackbar(
+  //       message: 'Date of Payment is Required',
+  //       context: context,
+  //     );
+  //     return false;
+  //   }
+  //   this._logger.info('For validity ${_formKey.currentState.validate()}');
+  //   return _formKey.currentState.validate();
+  // }
 
   String enumValueToString(String enumvalue) {
     return enumvalue
         .toString()
         .substring(enumvalue.toString().indexOf('.') + 1);
   }
-   Future<void> _selectDateOfBirth() async {
+
+  Future<void> _selectDateOfpayment() async {
     var selectedDateOfPayment = this._dateOfPayment;
     this._dateOfPayment = await showDatePicker(
       context: context,
@@ -261,7 +264,8 @@ class _AddLessonSectionState extends State<AddPaymentSection> {
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
-    if (this._dateOfPayment == null) this._dateOfPayment = selectedDateOfPayment;
+    if (this._dateOfPayment == null)
+      this._dateOfPayment = selectedDateOfPayment;
     setState(() {
       //This is for update the UI. Please before remove check twice.
       this._dateOfPayment = this._dateOfPayment;

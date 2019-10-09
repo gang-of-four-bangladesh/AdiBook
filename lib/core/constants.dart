@@ -21,8 +21,6 @@ class FirestorePath {
       '$PupilCollection/%s/$InstructorCollection/%s/$ProgressPlanCollection';
   static const String LessonEventsOfAInstructorCollection =
       '$InstructorCollection/%s/$LessonEventsCollection';
-      static const String PaymentEventOfAPupilCollection =
-       '$InstructorCollection/%s/$PaymentEventsCollection';
 }
 
 class StoragePath {

@@ -17,21 +17,21 @@ class PaymentManager {
   Future<bool> createPayment(Payment payment) async {
     if (!await payment.add()) return false;
     var pupil = await Pupil(id: payment.pupilId).getPupil();
-    PaymentEvent paymentEvent = PaymentEvent(
-         id: DateFormat(_paymentIdDateFormat).format(payment.paymentDate),
-      day: payment.paymentDate.day.toString(),
-      instructorId: payment.instructorId,
-      paymentAt: payment.paymentDate,
-      pupilName: pupil.name,
-      pupilId: pupil.id,
-    );
-    var snap = await paymentEvent.get();
-    if (snap.exists) {
-      return await paymentEvent.update();
-    }
+    // PaymentEvent paymentEvent = PaymentEvent(
+    //      id: DateFormat(_paymentIdDateFormat).format(payment.paymentDate),
+    //   day: payment.paymentDate.day.toString(),
+    //   instructorId: payment.instructorId,
+    //   paymentAt: payment.paymentDate,
+    //   pupilName: pupil.name,
+    //   pupilId: pupil.id,
+    // );
+    // var snap = await paymentEvent.get();
+    // if (snap.exists) {
+    //   return await paymentEvent.update();
+    // }
     this._logger.info(
         'Lesson ${payment.id} for pupil ${pupil.id} by instructor ${payment.instructorId} creation complete including events.');
-    return await paymentEvent.add();
+    return await payment.add();
   }
 
   Future<Map> getLessonEvents({DateTime date}) async {

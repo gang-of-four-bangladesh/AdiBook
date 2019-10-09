@@ -44,14 +44,14 @@ class PaymentEvent {
   }
 
   Future<DocumentSnapshot> get() async {
-    var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+    var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
         [this.instructorId, this.id]);
     return Firestore.instance.collection(path).document(this.id).get();
   }
 
   Future<bool> add() async {
     try {
-      var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+      var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.instructorId, this.id]);
       this._logger.info(path);
       var json = this._toJson();
@@ -66,7 +66,7 @@ class PaymentEvent {
 
   Future<bool> update() async {
     try {
-      var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+      var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.instructorId, this.id]);
       this._logger.info(path);
       var json = this._toJson();
@@ -83,7 +83,7 @@ class PaymentEvent {
   }
 
   Future<void> delete() async {
-    var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+    var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
         [this.instructorId, this.id]);
     var json = {
       this.day: FieldValue.arrayRemove(

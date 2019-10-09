@@ -23,11 +23,12 @@ class Payment {
       : this.createdAt = null,
         this.updatedAt = null,
         this._logger = Logger('model->payment');
+
   String id;
   String pupilId;
   String instructorId;
   DateTime paymentDate;
-  String amount;
+  int amount;
   PaymentType type;
   DateTime createdAt;
   DateTime updatedAt;
@@ -48,7 +49,7 @@ class Payment {
   }
 
   Future<DocumentSnapshot> get() async {
-    var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+    var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
         [this.pupilId, this.instructorId]);
     return Firestore.instance.collection(path).document(this.id).get();
   }
@@ -66,7 +67,7 @@ class Payment {
 
   Future<bool> add() async {
     try {
-      var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+      var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.pupilId, this.instructorId]);
       this.createdAt = DateTime.now().toUtc();
       this.id = TypeConversion.toNumberFormat(this.createdAt);
@@ -83,7 +84,7 @@ class Payment {
 
   Future<bool> update() async {
     try {
-      var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+      var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.pupilId, this.instructorId]);
       this.updatedAt = DateTime.now().toUtc();
       var json = this.toJson();
@@ -98,7 +99,7 @@ class Payment {
   }
 
   Future<void> delete() async {
-    var path = sprintf(FirestorePath.PaymentEventOfAPupilCollection,
+    var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
         [this.pupilId, this.instructorId]);
     return Firestore.instance.collection(path).document(this.id).delete();
   }
