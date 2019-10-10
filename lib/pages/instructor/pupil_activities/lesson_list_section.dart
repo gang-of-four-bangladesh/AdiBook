@@ -57,8 +57,6 @@ class LessonListSectionState extends State<LessonListSection> {
             return ListView(
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
-                  // this._switchAckTest =
-                  //    document['ack'].toString() == 'true' ? true : false;
                   return Slidable(
                     actionPane: SlidableScrollActionPane(),
                     actionExtentRatio: 0.12,
@@ -148,11 +146,10 @@ class LessonListSectionState extends State<LessonListSection> {
                                 ),
                                 //Text(document["ack"].toString()),
                                 Checkbox(
-                                    value: _switchAckTest,
-                                    onChanged: (bool val) => setState(() =>
-                                        appData.userType == UserType.Instructor
-                                            ? _switchAckTest = val
-                                            : print(_switchAckTest)),
+                                    value: document[Lesson.HasAcknowledgedKey],
+                                    onChanged:(lesson){
+                                      Lesson(instructorId: appData.instructorId,pupilId: appData.pupilId);
+                                    },
                                     activeColor: AppTheme.appThemeColor),
                               ],
                             ),

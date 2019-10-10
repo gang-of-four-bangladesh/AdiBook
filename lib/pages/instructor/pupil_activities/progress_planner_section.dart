@@ -87,36 +87,6 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                         width: 2.0,
                       ),
                       Text(
-                        "Talk Through",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.star,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      Icon(
-                        Icons.star,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      Icon(
-                        Icons.star,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
                         "Prompted",
                         style: TextStyle(
                           fontSize: 15,
@@ -134,11 +104,6 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(
-                        Icons.star,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
                       Icon(
                         Icons.star,
                         size: 20.0,
@@ -189,11 +154,6 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                         size: 20.0,
                         color: Colors.green,
                       ),
-                      Icon(
-                        Icons.star,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
                       SizedBox(
                         width: 2.0,
                       ),
@@ -207,50 +167,13 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.star_border,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      Icon(
-                        Icons.star_border,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      Icon(
-                        Icons.star_border,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      Icon(
-                        Icons.star_border,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      Icon(
-                        Icons.star_border,
-                        size: 20.0,
-                        color: Colors.green,
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
-                        "No Attempt",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: 4.0,
         ),
         Expanded(
           child: ListView.builder(
@@ -297,7 +220,7 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                           progressPlanSubject: _subject,
                         ).update();
                       },
-                      starCount: 5,
+                      starCount: 4,
                       rating:
                           _progressPlanDetails[index].status.index.toDouble(),
                       size: 35.0,

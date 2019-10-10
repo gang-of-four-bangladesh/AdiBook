@@ -26,11 +26,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   var _frequentWidgets = FrequentWidgets();
   final _formKey = GlobalKey<FormState>();
   bool _switchOnEyeTest = false;
-  bool _switchOnTheoryRecord = false;
-  bool _switchOnPreviousExp = false;
   TextEditingController nameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
+  TextEditingController theoryRecordController = new TextEditingController();
+  TextEditingController previousExperienceController = new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
   int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
@@ -42,8 +42,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     super.initState();
     this._autoValidate = false;
     this._switchOnEyeTest = false;
-    this._switchOnTheoryRecord = false;
-    this._switchOnPreviousExp = false;
     this._dateOfBirth = DateTime.now();
     if (appData.userType == UserType.Pupil) populatePupilInfo();
   }
@@ -56,12 +54,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     addressController.text = pupil.address;
     phoneController.text = pupil.phoneNumber;
     drivingLicenseController.text = pupil.licenseNo;
+    theoryRecordController.text = pupil.theoryRecord;
+    previousExperienceController.text = pupil.previousExperience;
     if (!mounted) return;
     setState(() {
       this._dateOfBirth = pupil.dateOfBirth;
       this._switchOnEyeTest = pupil.eyeTest;
-      this._switchOnTheoryRecord = pupil.theoryRecord;
-      this._switchOnPreviousExp = pupil.previousExperience;
     });
   }
 
@@ -122,6 +120,38 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                         BorderSide(color: Colors.cyan[300]),
                                     borderRadius: BorderRadius.circular(8.0)),
                                 hintText: "Address"),
+                          ),
+                        ),
+                          Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: TextFormField(
+                            enabled: appData.userType == UserType.Instructor
+                                ? true
+                                : false,
+                            keyboardType: TextInputType.text,
+                            controller: theoryRecordController,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.cyan[300]),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                hintText: "Theory Record"),
+                          ),
+                        ),
+                          Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: TextFormField(
+                            enabled: appData.userType == UserType.Instructor
+                                ? true
+                                : false,
+                            keyboardType: TextInputType.text,
+                            controller: previousExperienceController,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.cyan[300]),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                hintText: "Previous Experience"),
                           ),
                         ),
                       ],
@@ -290,73 +320,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
-              ),
-              //  theory record,
-              Container(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              'Theory record',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Switch(
-                      value: _switchOnTheoryRecord,
-                      onChanged: (val) => setState(() =>
-                          appData.userType == UserType.Instructor
-                              ? _switchOnTheoryRecord = val
-                              : null),
-                      activeColor: AppTheme.appThemeColor,
-                    ),
-                  ],
-                ),
-              ),
-              //  Previous driving exp,
-              Container(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Text(
-                              'Previous driving exp.',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    /*3*/
-                    Switch(
-                      value: _switchOnPreviousExp,
-                      onChanged: (val) => setState(() =>
-                          appData.userType == UserType.Instructor
-                              ? _switchOnPreviousExp = val
-                              : null),
-                      activeColor: AppTheme.appThemeColor,
-                    ),
-                  ],
-                ),
-              ),
-
+              ),              
               //  addButton,
               Container(
                 padding: EdgeInsets.all(5.0),
@@ -430,12 +394,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     setState(() {
       this.nameController.text = EmptyString;
       this.addressController.text = EmptyString;
+      this.theoryRecordController.text = EmptyString;
+      this.previousExperienceController.text = EmptyString;
       this.phoneController.text = EmptyString;
       this.drivingLicenseController.text = EmptyString;
       this._dateOfBirth = DateTime.now();
       this._switchOnEyeTest = false;
-      this._switchOnTheoryRecord = false;
-      this._switchOnPreviousExp = false;
     });
   }
 
@@ -470,8 +434,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.licenseNo = drivingLicenseController.text;
     pupil.dateOfBirth = this._dateOfBirth;
     pupil.eyeTest = _switchOnEyeTest;
-    pupil.previousExperience = _switchOnPreviousExp;
-    pupil.theoryRecord = _switchOnTheoryRecord;
+    pupil.previousExperience = theoryRecordController.text;
+    pupil.theoryRecord = previousExperienceController.text;
     var result = await pupil.add();
     var instructor = await Instructor(id: appData.instructorId).getInstructor();
     await _pupilManager.tagPupil(pupil, instructor);
