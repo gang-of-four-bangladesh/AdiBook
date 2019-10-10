@@ -2,10 +2,10 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
+import 'package:adibook/models/lesson.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
@@ -87,7 +87,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                   (format
                                                       .format(TypeConversion
                                                           .timeStampToDateTime(
-                                                              document["ldt"]))
+                                                              document[Lesson.LessonDateKey]))
                                                       .toString()),
                                                   style: TextStyle(
                                                       fontWeight:
@@ -100,16 +100,16 @@ class LessonListSectionState extends State<LessonListSection> {
                                                 Text(
                                                   enumValueToString(LessionType
                                                           .values[int.parse(
-                                                              document["ltp"]
+                                                              document[Lesson.LessionTypeKey]
                                                                   .toString())]
                                                           .toString() +
                                                       ' - ' +
-                                                      document["ldu"]
+                                                      document[Lesson.LessonDurationKey]
                                                           .toString() +
                                                       ' minutes - ' +
                                                       enumValueToString(VehicleType
                                                           .values[int.parse(
-                                                              document["vtp"]
+                                                              document[Lesson.VehicleTypeKey]
                                                                   .toString())]
                                                           .toString()) +
                                                       " Drive"),
@@ -122,13 +122,13 @@ class LessonListSectionState extends State<LessonListSection> {
                                                 Text(
                                                     enumValueToString(TripLocation
                                                             .values[int.parse(
-                                                                document["pul"]
+                                                                document[Lesson.PickUpLocationKey]
                                                                     .toString())]
                                                             .toString()) +
                                                         ' : ' +
                                                         enumValueToString(TripLocation
                                                             .values[int.parse(
-                                                                document["dol"]
+                                                                document[Lesson.DropOffLocationKey]
                                                                     .toString())]
                                                             .toString()),
                                                     style: TextStyle(
@@ -138,7 +138,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                 ),
                                               ],
                                             ),
-                                            Text(document["dnt"].toString(),
+                                            Text(document[Lesson.DiaryNotesKey].toString(),
                                                 style: TextStyle(fontSize: 14)),
                                           ],
                                         ),

@@ -2,6 +2,7 @@ import 'package:adibook/app.dart';
 import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/log_manager.dart';
 import 'package:adibook/core/page_manager.dart';
+import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
@@ -12,12 +13,13 @@ import 'package:logging/logging.dart';
 Future main() async {
   await DeviceInfo.initializeDeviceState();
   var logWriter =
-      !DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
+      DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
   await LoggerSetup.setupLogger(logWriter: logWriter);
-  var _logger = Logger('main');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await FirebaseCloudMessaging.setupNotification();
   Widget _defaultPage = LoginPage();
   var _userManager = UserManager();
+  var _logger = Logger('main');
 
   var adiBookUser = await _userManager.currentUser;
   _logger.info('FirebaseAuth.instance.currentUser() $adiBookUser');

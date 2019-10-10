@@ -59,7 +59,8 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 5,
                       ),
-                      Image.asset("assets/images/logo.png",width: 100,height: 100),
+                      Image.asset("assets/images/logo.png",
+                          width: 100, height: 100),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -202,17 +203,20 @@ class _LoginPageState extends State<LoginPage> {
       dialogBox(context, 'OTP Code', 'OTP code should be six characters.');
       return;
     }
-    
+
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: this._smsCodeController.text);
     var user = await _signInUser(authCredential);
-   PushNotificationToken _pushNotification = PushNotificationToken();
-    var _userToken = await _pushNotification.getToken();
+    var _userToken = await FirebaseCloudMessaging.getToken();
     _logger.info("push notification >>>> " + _userToken);
-    await UserManager().createUser(id: user.phoneNumber,userType: this._selectedUserType,token: _userToken);
+    await UserManager().createUser(
+      id: user.phoneNumber,
+      userType: this._selectedUserType,
+      token: _userToken,
+    );
     //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
     //Please do not remove the line
-    await User(id: user.phoneNumber, userType: this._selectedUserType,userToken: _userToken).update();
+    await User(id: user.phoneNumber, userType: this._selectedUserType).update();
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
@@ -263,8 +267,13 @@ class _LoginPageState extends State<LoginPage> {
       var message =
           'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
       _logger.fine(message);
-      await UserManager()
-          .createUser(id: user.phoneNumber, userType: this._selectedUserType);
+      var _userToken = await FirebaseCloudMessaging.getToken();
+      _logger.info("push notification >>>> " + _userToken);
+      await UserManager().createUser(
+        id: user.phoneNumber,
+        userType: this._selectedUserType,
+        token: _userToken,
+      );
       //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
       //Please do not remove the line
       await User(id: user.phoneNumber, userType: this._selectedUserType)

@@ -6,6 +6,7 @@ import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/lesson_manager.dart';
+import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:file_picker/file_picker.dart';
@@ -51,22 +52,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.None;
     _selectedlessionType = LessionType.None;
-  }
-
-  Future _sendNotification() async {
-    final response = await Messaging.sendTo(
-      title: 'New Lesson Add',
-      body: 'This is lesson',
-      fcmToken:
-          'd7yKkv_VbjQ:APA91bHT6r7OJkx6NgcMYTG8LqZXKjYctEyTaxWZTVrABp2zWVEegOs7unFketveT_leVX_OdegEjCR6NfXNo40M2RMvKQjqwem7KEkdwH_PzC76H7WHeeEZlizfpLvzFL3xOFihTpoA',
-    );
-
-    if (response.statusCode != 200) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content:
-            Text('[${response.statusCode}] Error message: ${response.body}'),
-      ));
-    }
   }
 
   @override
@@ -146,7 +131,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                           ),
                         ],
                       ),
-                     
                       Column(
                         children: <Widget>[
                           //  Pickup TripLocation,
@@ -433,10 +417,15 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (_validateInputs())
-                                    await
-                                        _saveData();
-                                        // _sendNotification();
+                                  if (_validateInputs()) {
+                                    await _saveData();
+                                    var instructor = await Instructor(id: appData.instructorId).getInstructor();
+                                    await PushNotificationSender.send(
+                                      userId: appData.pupilId,
+                                      title: 'Driving Lesson Schedule',
+                                      body: 'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonTime} minutes.',
+                                    );
+                                  }
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
