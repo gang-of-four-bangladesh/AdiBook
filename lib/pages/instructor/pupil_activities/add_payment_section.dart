@@ -7,6 +7,7 @@ import 'package:adibook/models/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
 
 class AddPaymentSection extends StatefulWidget {
   @override
@@ -213,14 +214,16 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   }
 
   Future<void> _saveData() async {
+    Uuid uuid = Uuid();
     var _amount = int.parse(_amountController.text);
     Payment payment = new Payment(
         pupilId: appData.pupilId,
         instructorId: appData.instructorId,
+        id: uuid.v4(),
         paymentDate: this._paymentDate,
         amount: _amount,
         type: this._selectedPaymentType);
-    var message = await PaymentManager().createPayment(payment)
+    var message = await payment.add()
         ? 'Payment created successfully.'
         : 'Payment creation failed.';
     _frequentWidgets.getSnackbar(
