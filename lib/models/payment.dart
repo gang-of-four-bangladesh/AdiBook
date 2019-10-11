@@ -70,7 +70,7 @@ class Payment {
       var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.pupilId, this.instructorId]);
       this.createdAt = DateTime.now().toUtc();
-      this.id = TypeConversion.toNumberFormat(this.createdAt);
+      //this.id = TypeConversion.toNumberFormat(this.createdAt);
       var json = this.toJson();
       json[CreatedAtKey] = this.createdAt;
       Firestore.instance.collection(path).document(this.id).setData(json);
