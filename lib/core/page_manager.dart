@@ -5,6 +5,7 @@ import 'package:adibook/pages/instructor/instructor_profile.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_payment_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
+import 'package:adibook/pages/instructor/pupil_activities/payment_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
@@ -135,8 +136,17 @@ class PageManager {
       bottomNavIcon: Icon(Icons.list, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),
-    WidgetConfiguration(
+      WidgetConfiguration(
       index: 1,
+      appBarTitle: 'Payment List',
+      bottomNavTitle: 'Payments',
+      availableFor: UserType.Instructor,
+      sectionWidget: PaymentListSection(),
+      bottomNavIcon: Icon(Icons.list, color: Colors.white),
+      sectionType: SectionType.InstructorActivityForPupil,
+    ),
+    WidgetConfiguration(
+      index: 2,
       appBarTitle: 'Add Lesson',
       bottomNavTitle: 'Add Lesson',
       availableFor: UserType.Instructor,
@@ -145,7 +155,7 @@ class PageManager {
       sectionType: SectionType.InstructorActivityForPupil,
     ),
     WidgetConfiguration(
-      index: 2,
+      index: 3,
       appBarTitle: 'Add Payment',
       bottomNavTitle: 'Add Payment',
       availableFor: UserType.Instructor,
@@ -154,7 +164,7 @@ class PageManager {
       sectionType: SectionType.InstructorActivityForPupil,
     ),
     WidgetConfiguration(
-      index: 3,
+      index: 4,
       appBarTitle: 'Progress',
       bottomNavTitle: 'Progress',
       availableFor: UserType.Instructor,

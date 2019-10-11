@@ -74,10 +74,10 @@ class Payment {
       var json = this.toJson();
       json[CreatedAtKey] = this.createdAt;
       Firestore.instance.collection(path).document(this.id).setData(json);
-      this._logger.info('Lesson created successfully with data $json.');
+      this._logger.info('Payment created successfully with data $json.');
       return true;
     } catch (e) {
-      this._logger.shout('Lesson creation failed. Reason $e');
+      this._logger.shout('Payment creation failed. Reason $e');
       return false;
     }
   }

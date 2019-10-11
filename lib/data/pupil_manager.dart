@@ -59,6 +59,17 @@ class PupilManager {
     print('Lessons path $path');
     return Firestore.instance.collection(path).getDocuments();
   }
+   Future<QuerySnapshot> getPayments({
+    @required String instructorId,
+    @required String pupilId,
+  }) async {
+    var path = sprintf(FirestorePath.PaymentsOfAPupilColection, [
+      pupilId,
+      instructorId,
+    ]);
+    print('Payments path $path');
+    return Firestore.instance.collection(path).getDocuments();
+  }
 
   Future<Instructor> getDefaultInstructor(String pupilId) async {
     var path = sprintf(FirestorePath.InstructorsOfAPupilColection, [pupilId]);

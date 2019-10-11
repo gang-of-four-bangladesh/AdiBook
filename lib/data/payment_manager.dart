@@ -15,22 +15,16 @@ class PaymentManager {
   PaymentManager() : this._logger = Logger('manger->payment_manager');
 
   Future<bool> createPayment(Payment payment) async {
-    if (!await payment.add()) return false;
+   if (!await payment.add()) return false;
     var pupil = await Pupil(id: payment.pupilId).getPupil();
-    // PaymentEvent paymentEvent = PaymentEvent(
-    //      id: DateFormat(_paymentIdDateFormat).format(payment.paymentDate),
-    //   day: payment.paymentDate.day.toString(),
-    //   instructorId: payment.instructorId,
-    //   paymentAt: payment.paymentDate,
-    //   pupilName: pupil.name,
-    //   pupilId: pupil.id,
-    // );
-    // var snap = await paymentEvent.get();
-    // if (snap.exists) {
-    //   return await paymentEvent.update();
-    // }
+    //Payment paymentEvent = Payment(
+   // );
+   // var snap = await paymentEvent.get();
+    //if (snap.exists) {
+     // return await payment.add();
+    //}
     this._logger.info(
-        'Lesson ${payment.id} for pupil ${pupil.id} by instructor ${payment.instructorId} creation complete including events.');
+        'Lesson ${payment.id} for pupil ${pupil.id} by instructor ${appData.instructorId} creation complete including events.');
     return await payment.add();
   }
 
