@@ -423,7 +423,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                     await PushNotificationSender.send(
                                       userId: appData.pupilId,
                                       title: 'Driving Lesson Schedule',
-                                      body: 'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonTime} minutes.',
+                                      body: 'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonDurationController.text} minutes.',
                                     );
                                   }
                                 },

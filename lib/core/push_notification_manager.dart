@@ -1,3 +1,4 @@
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/user.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,9 @@ class PushNotificationSender {
     var postUrl = 'https://fcm.googleapis.com/fcm/send';
     final String _serverKey =
         'AAAAfY9D6eo:APA91bEAerZZcGuGM-4jJDZwbbBwoiLZsHpxXzAsUBFYWrczghSOGt2OobwycAvxh5UBi0KwRQs_itUAgp45cUdELevoQyGKz0QxTaF_p5afY0lptCYjRETnNhK3S5nJOhHJt-u8KuZD';
-    
+
     var user = await User(id: userId).getUser();
+    if (user == null || user.userToken == null || user.userToken == EmptyString) return null;
     return Client().post(
       postUrl,
       body: json.encode(

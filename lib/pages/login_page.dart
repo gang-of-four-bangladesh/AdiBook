@@ -205,7 +205,9 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
-        verificationId: verificationId, smsCode: this._smsCodeController.text);
+      verificationId: verificationId,
+      smsCode: this._smsCodeController.text,
+    );
     var user = await _signInUser(authCredential);
     var _userToken = await FirebaseCloudMessaging.getToken();
     _logger.info("push notification >>>> " + _userToken);
@@ -216,7 +218,11 @@ class _LoginPageState extends State<LoginPage> {
     );
     //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
     //Please do not remove the line
-    await User(id: user.phoneNumber, userType: this._selectedUserType).update();
+    await User(
+      id: user.phoneNumber,
+      userType: this._selectedUserType,
+      userToken: _userToken,
+    ).update();
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
@@ -276,8 +282,11 @@ class _LoginPageState extends State<LoginPage> {
       );
       //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
       //Please do not remove the line
-      await User(id: user.phoneNumber, userType: this._selectedUserType)
-          .update();
+      await User(
+        id: user.phoneNumber,
+        userType: this._selectedUserType,
+        userToken: _userToken,
+      ).update();
       await UserManager().updateAppDataByUserId(user.phoneNumber);
       await _displayProgressBar(false);
       Navigator.push(
