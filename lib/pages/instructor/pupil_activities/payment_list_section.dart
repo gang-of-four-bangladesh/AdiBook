@@ -46,7 +46,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        var format = DateFormat("EEEE dd MMMM @ HH:mm aaa");
+        var format = DateFormat("EEEE dd MMMM");
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         switch (snapshot.connectionState) {
@@ -78,17 +78,35 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                           Column(
                                             children: <Widget>[
                                               Text(
-                                                (format
-                                                        .format(TypeConversion
-                                                            .timeStampToDateTime(
-                                                                document[Payment
-                                                                    .CreatedAtKey]))
-                                                        .toString() +
-                                                    ": "),
+                                                ("Amount:" +
+                                                    document[Payment.AmountKey]
+                                                        .toString()),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16),
-                                              )
+                                              ),
+                                              Text(
+                                                ("Payment Date:" +
+                                                    format
+                                                        .format(TypeConversion
+                                                            .timeStampToDateTime(
+                                                                document[Payment
+                                                                    .DateKey]))
+                                                        .toString()),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              // Text(
+                                              //   (enumValueToString(PaymentType
+                                              //       .values[int.parse(document[
+                                              //           Payment.TypeKey
+                                              //               .toString()])]
+                                              //       .toString())),
+                                              //   style: TextStyle(
+                                              //       fontWeight: FontWeight.bold,
+                                              //       fontSize: 16),
+                                              // )
                                             ],
                                           )
                                         ],

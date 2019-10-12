@@ -34,9 +34,7 @@ class Payment {
   DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
-    return {
-      // NameKey: name,
-    };
+    return {DateKey: paymentDate, AmountKey: amount, TypeKey: type.index};
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {

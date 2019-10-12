@@ -2,12 +2,10 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
-import 'package:adibook/data/payment_manager.dart';
 import 'package:adibook/models/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:logging/logging.dart';
-import 'package:uuid/uuid.dart';
 
 class AddPaymentSection extends StatefulWidget {
   @override
@@ -214,13 +212,11 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   }
 
   Future<void> _saveData() async {
-    Uuid uuid = Uuid();
     var _amount = int.parse(_amountController.text);
     Payment payment = new Payment(
         pupilId: appData.pupilId,
         instructorId: appData.instructorId,
-        id: uuid.v4(),
-        paymentDate: this._paymentDate,
+        paymentDate: this._dateOfPayment,
         amount: _amount,
         type: this._selectedPaymentType);
     var message = await payment.add()
@@ -236,7 +232,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   void _makeEmpty() {
     setState(() {
       this._dateOfPayment = DateTime.now();
-      _amountController.text = null;
+      _amountController.text = EmptyString;
       _selectedPaymentType = PaymentType.Cash;
     });
   }
