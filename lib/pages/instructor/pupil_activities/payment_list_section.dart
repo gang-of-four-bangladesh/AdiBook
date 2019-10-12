@@ -1,14 +1,13 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
-import 'package:adibook/models/lesson.dart';
 import 'package:adibook/models/payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
-import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -57,70 +56,82 @@ class PaymentListSectionState extends State<PaymentListSection> {
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
                   return Slidable(
-                    actionPane: SlidableScrollActionPane(),
-                    actionExtentRatio: 0.12,
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: <Widget>[
-                          //  Payment Date,
-                          Container(
-                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      actionPane: SlidableScrollActionPane(),
+                      actionExtentRatio: 0.12,
+                      child: ListTile(
+                        onTap: () {
+                          print("clicked");
+                        },
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              //  Payment Date,
+                              Container(
+                                padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                child: Row(
                                   children: [
-                                    /*2*/
-                                    Container(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Column(
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        /*2*/
+                                        Container(
+                                          child: Row(
                                             children: <Widget>[
-                                              Text(
-                                                ("Amount:" +
-                                                    document[Payment.AmountKey]
-                                                        .toString()),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16),
-                                              ),
-                                              Text(
-                                                ("Payment Date:" +
-                                                    format
-                                                        .format(TypeConversion
-                                                            .timeStampToDateTime(
+                                              Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                    ("Amount: " +
+                                                        document[Payment
+                                                                .AmountKey]
+                                                            .toString() +
+                                                        "\$"),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                  ),
+                                                  Text(
+                                                    ("Payment Date: " +
+                                                        format
+                                                            .format(TypeConversion
+                                                                .timeStampToDateTime(
+                                                                    document[Payment
+                                                                        .DateKey]))
+                                                            .toString()),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                  ),
+                                                  Text(
+                                                    "Payment Type: " +
+                                                        enumValueToString(PaymentType
+                                                            .values[int.parse(
                                                                 document[Payment
-                                                                    .DateKey]))
-                                                        .toString()),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16),
-                                              ),
-                                              // Text(
-                                              //   (enumValueToString(PaymentType
-                                              //       .values[int.parse(document[
-                                              //           Payment.TypeKey
-                                              //               .toString()])]
-                                              //       .toString())),
-                                              //   style: TextStyle(
-                                              //       fontWeight: FontWeight.bold,
-                                              //       fontSize: 16),
-                                              // )
+                                                                        .TypeKey]
+                                                                    .toString())]
+                                                            .toString()),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              )
                                             ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                   ],
-                                )
-                              ],
-                            ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
+                        ),
+                      ));
                 },
               ).toList(),
             );
