@@ -26,7 +26,6 @@ class _InstructorProfile extends State<InstructorProfile> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
-  int countryCodeIndex;
   DateTime _dateOfBirth;
   bool _autoValidate;
 
@@ -243,13 +242,6 @@ class _InstructorProfile extends State<InstructorProfile> {
     this._logger.info('Validate input called.');
     if (_formKey.currentState.validate()) {
       this._logger.info('${this._dateOfBirth}');
-      if (this._dateOfBirth == null) {
-        this._frequentWidgets.getSnackbar(
-              message: 'Date of Birth is Required',
-              context: context,
-            );
-        return false;
-      }
       return true;
     } else {
       this._logger.info('Please check inputs.');
@@ -326,7 +318,8 @@ class _InstructorProfile extends State<InstructorProfile> {
     var selectedDob = this._dateOfBirth;
     this._dateOfBirth = await showDatePicker(
       context: context,
-      initialDate: this._dateOfBirth,
+      initialDate:
+          this._dateOfBirth == null ? DateTime.now() : this._dateOfBirth,
       firstDate: DateTime(1900, 8),
       lastDate: DateTime(2101),
     );
