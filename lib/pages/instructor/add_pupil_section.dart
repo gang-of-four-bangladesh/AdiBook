@@ -403,25 +403,23 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     });
   }
 
-  // Future<void> _updateData() async {
-  //   this._logger.info('Updating pupil information ${appData.pupilId}.');
-  //   Pupil pupil = Pupil(id: appData.pupilId);
-  //   pupil.name = nameController.text;
-  //   pupil.phoneNumber = phoneController.text;
-  //   pupil.address = addressController.text;
-  //   pupil.licenseNo = drivingLicenseController.text;
-  //   pupil.dateOfBirth = this._dateOfBirth;
-  //   pupil.eyeTest = _switchOnEyeTest;
-  //   pupil.previousExperience = _switchOnPreviousExp;
-  //   pupil.theoryRecord = _switchOnTheoryRecord;
-  //   var result = await pupil.update();
-  //   String message =
-  //       result ? 'Pupil updated successfully.' : 'Pupil update failed.';
-  //   _frequentWidgets.getSnackbar(
-  //     message: message,
-  //     context: context,
-  //   );
-  // }
+  Future<void> _updateData() async {
+    this._logger.info('Updating pupil information ${appData.pupilId}.');
+    Pupil pupil = Pupil(id: appData.pupilId);
+    pupil.name = nameController.text;
+    pupil.phoneNumber = phoneController.text;
+    pupil.address = addressController.text;
+    pupil.licenseNo = drivingLicenseController.text;
+    pupil.dateOfBirth = this._dateOfBirth;
+    pupil.eyeTest = _switchOnEyeTest;
+    var result = await pupil.update();
+    String message =
+        result ? 'Pupil updated successfully.' : 'Pupil update failed.';
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
+  }
 
   Future<void> _saveData() async {
     var id = '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';

@@ -4,8 +4,10 @@ import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
@@ -58,14 +60,28 @@ class LessonListSectionState extends State<LessonListSection> {
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
                   return Slidable(
+                    actions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Remove',
+                        color: Colors.blue,
+                        icon: EvaIcons.trash2,
+                        onTap: () => {},
+                      ),
+                      IconSlideAction(
+                        caption: 'Edit',
+                        color: Colors.indigo,
+                        icon: FontAwesomeIcons.edit,
+                        onTap: () => {},
+                      ),
+                    ],
                     actionPane: SlidableScrollActionPane(),
                     actionExtentRatio: 0.12,
                     child: ListTile(
                       onTap: () {
                         print("clicked");
-                        setState(() {
-                          _switchAckTest == true ? false : true;
-                        });
+                        appData.userType == UserType.Instructor
+                            ? _updateData(document.documentID)
+                            : print(document["id"]);
                       },
                       title: Container(
                         padding: EdgeInsets.all(10),
@@ -79,8 +95,6 @@ class LessonListSectionState extends State<LessonListSection> {
                                   Expanded(
                                     /*1*/
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
                                         /*2*/
                                         Container(
@@ -98,7 +112,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 16),
+                                                        fontSize: 14),
                                                   ),
                                                   SizedBox(
                                                     height: 5,
@@ -122,7 +136,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                             .toString()) +
                                                         " Drive"),
                                                     style:
-                                                        TextStyle(fontSize: 16),
+                                                        TextStyle(fontSize: 14),
                                                   ),
                                                   SizedBox(
                                                     height: 5,
@@ -141,7 +155,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                                       .toString())]
                                                               .toString()),
                                                       style: TextStyle(
-                                                          fontSize: 16)),
+                                                          fontSize: 14)),
                                                   SizedBox(
                                                     height: 1,
                                                   ),
@@ -151,7 +165,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                   document[Lesson.DiaryNotesKey]
                                                       .toString(),
                                                   style:
-                                                      TextStyle(fontSize: 14)),
+                                                      TextStyle(fontSize: 12)),
                                             ],
                                           ),
                                         ),
@@ -166,9 +180,10 @@ class LessonListSectionState extends State<LessonListSection> {
                                         Lesson(
                                             instructorId: appData.instructorId,
                                             pupilId: appData.pupilId);
-                                            setState(() {
-                                             _switchAckTest =  document[Lesson.HasAcknowledgedKey];
-                                            });
+                                        setState(() {
+                                          _switchAckTest = document[
+                                              Lesson.HasAcknowledgedKey];
+                                        });
                                       },
                                       activeColor: AppTheme.appThemeColor),
                                 ],
@@ -191,5 +206,19 @@ class LessonListSectionState extends State<LessonListSection> {
     return enumvalue
         .toString()
         .substring(enumvalue.toString().indexOf('.') + 1);
+  }
+
+  Future<void> _updateData(String lessonId) async {
+    this._logger.info('Updating lesson information $lessonId.');
+    Lesson lesson = Lesson(pupilId: appData.pupilId,instructorId: appData.instructorId,id: lessonId);
+    lesson.hasAcknowledged = true;
+    var result = await lesson.update();
+    String message =
+        result ? 'Lesson updated successfully.' : 'Lesson update failed.';
+        FrequentWidgets _frequentWidgets = FrequentWidgets();
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
   }
 }
