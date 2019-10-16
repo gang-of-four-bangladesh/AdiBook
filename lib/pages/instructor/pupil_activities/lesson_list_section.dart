@@ -79,7 +79,7 @@ class LessonListSectionState extends State<LessonListSection> {
                     child: ListTile(
                       onTap: () {
                         print("clicked");
-                        appData.userType == UserType.Instructor
+                        appData.userType == UserType.Pupil
                             ? _updateData(document.documentID)
                             : print(document["id"]);
                       },
@@ -220,5 +220,6 @@ class LessonListSectionState extends State<LessonListSection> {
       message: message,
       context: context,
     );
+    _loadLessonsData();
   }
 }
