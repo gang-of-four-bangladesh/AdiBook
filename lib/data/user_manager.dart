@@ -44,11 +44,18 @@ class UserManager {
   }
 
   Future<void> createUser(
-      {String id, UserType userType = UserType.Instructor,String token}) async {
+      {String id,
+      UserType userType = UserType.Instructor,
+      String token}) async {
     Logger _logger = Logger('UserManager=>createUser');
     if (!await userExists(id, userType)) {
-      await User(id: id, phoneNumber: id, userType: userType,userToken:token, isVerified: true)
-          .add();
+      await User(
+        id: id,
+        phoneNumber: id,
+        userType: userType,
+        userToken: token,
+        isVerified: true,
+      ).add();
       userType == UserType.Instructor
           ? await Instructor(id: id, phoneNumber: id).add()
           : await Pupil(id: id, phoneNumber: id).add();
@@ -68,11 +75,22 @@ class UserManager {
           await PupilManager().getDefaultInstructor(adiBookUser.id);
       appData.instructorId = instructor.id;
     }
-    _logger.info('updated app data information, instructor id: ${appData.instructorId}, pupil id ${appData.pupilId} and user type ${appData.userType}.');
+    _logger.info(
+        'updated app data information, instructor id: ${appData.instructorId}, pupil id ${appData.pupilId} and user type ${appData.userType}.');
   }
 
   Future<void> updateAppDataByUserId(String userId) async {
     var adiBookUser = await User(id: userId).getUser();
     updateAppDataByUser(adiBookUser);
+  }
+
+  bool hasExpired(DateTime expiryDate) {
+    if (expiryDate == null) return false;
+    return DateTime.now().difference(expiryDate).inSeconds > 0;
+  }
+
+  Future<bool> hasUserExpired(String userId) async {
+    var user = await User(id: userId).getUser();
+    return hasExpired(user.expiryDate);
   }
 }
