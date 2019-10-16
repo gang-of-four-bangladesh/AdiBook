@@ -9,6 +9,7 @@ class User {
   static const String UserTypeKey = 'utp';
   static const String UserTokenKey = 'tkn';
   static const String IsVerifiedKey = 'isv';
+  static const String ExpiryDateKey = 'end';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
   Logger _logger;
@@ -28,6 +29,7 @@ class User {
   UserType userType;
   String userToken;
   bool isVerified;
+  DateTime expiryDate;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -37,7 +39,8 @@ class User {
       PhoneNumberKey: phoneNumber,
       UserTypeKey: userType.index,
       UserTokenKey: userToken,
-      IsVerifiedKey: isVerified
+      IsVerifiedKey: isVerified,
+      ExpiryDateKey: expiryDate.toUtc()
     };
   }
 
@@ -48,6 +51,8 @@ class User {
     this.userType = UserType.values[snapshot[User.UserTypeKey]];
     this.userToken = snapshot[User.UserTokenKey];
     this.isVerified = snapshot[User.IsVerifiedKey];
+    this.expiryDate =
+        TypeConversion.timeStampToDateTime(snapshot[User.ExpiryDateKey]);
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
     this.updatedAt =
@@ -74,6 +79,7 @@ class User {
   Future<bool> add() async {
     try {
       this.createdAt = DateTime.now();
+      this.expiryDate = this.createdAt.add(Duration(days: 30));
       var json = this._toJson();
       json[CreatedAtKey] = this.createdAt.toUtc();
       await Firestore.instance
