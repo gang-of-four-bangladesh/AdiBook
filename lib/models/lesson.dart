@@ -71,15 +71,16 @@ class Lesson {
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
-    this.lessionDate = snapshot[Lesson.LessionTypeKey];
+    this.lessionDate = TypeConversion.timeStampToDateTime(snapshot[Lesson.LessonDateKey]);
     this.lessionDuration = snapshot[Lesson.LessonDurationKey];
-    this.pickupLocation = snapshot[Lesson.PickUpLocationKey];
-    this.dropOffLocation = snapshot[Lesson.DropOffLocationKey];
+    this.pickupLocation = TripLocation.values[snapshot[Lesson.PickUpLocationKey]];
+    this.dropOffLocation = TripLocation.values[snapshot[Lesson.DropOffLocationKey]];
     this.vehicleType = VehicleType.values[snapshot[Lesson.VehicleTypeKey]];
     this.lessionType = LessionType.values[snapshot[Lesson.LessionTypeKey]];
     this.diaryNotes = snapshot[Lesson.DiaryNotesKey];
     this.reportCard = snapshot[Lesson.ReportCardKey];
     this.documentDownloadUrl = snapshot[Lesson.DocumentDownloadUrl];
+    this.hasAcknowledged = snapshot[Lesson.HasAcknowledgedKey];
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[Lesson.CreatedAtKey]);
     this.updatedAt =
@@ -110,7 +111,6 @@ class Lesson {
       this.createdAt = DateTime.now().toUtc();
       this.id = TypeConversion.toNumberFormat(this.createdAt);
       var json = this.toJson();
-      json[CreatedAtKey] = this.createdAt;
       Firestore.instance.collection(path).document(this.id).setData(json);
       this._logger.info('Lesson created successfully with data $json.');
       return true;
