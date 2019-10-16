@@ -485,7 +485,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   void _makeEmpty() {
     setState(() {
-      _lessonDurationController.text = null;
+      _lessonDurationController.text = EmptyString;
       _diaryNotesController.text = null;
       _reportCardController.text = null;
       _selectedPickupLocation = TripLocation.None;
