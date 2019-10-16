@@ -210,7 +210,7 @@ class LessonListSectionState extends State<LessonListSection> {
 
   Future<void> _updateData(String lessonId) async {
     this._logger.info('Updating lesson information $lessonId.');
-    Lesson lesson = Lesson(pupilId: appData.pupilId,instructorId: appData.instructorId,id: lessonId);
+    Lesson lesson = await Lesson(pupilId: appData.pupilId,instructorId: appData.instructorId,id: lessonId).getLession();
     lesson.hasAcknowledged = true;
     var result = await lesson.update();
     String message =
