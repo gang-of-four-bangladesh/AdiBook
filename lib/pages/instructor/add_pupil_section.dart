@@ -1,12 +1,15 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
+import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
@@ -30,13 +33,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController theoryRecordController = new TextEditingController();
-  TextEditingController previousExperienceController = new TextEditingController();
+  TextEditingController previousExperienceController =
+      new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
   int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
   bool _autoValidate;
   DateTime _dateOfBirth;
-
+  String _attachedDocPath;
   @override
   void initState() {
     super.initState();
@@ -122,7 +126,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 hintText: "Address"),
                           ),
                         ),
-                          Container(
+                        Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
                             enabled: appData.userType == UserType.Instructor
@@ -138,7 +142,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 hintText: "Theory Record"),
                           ),
                         ),
-                          Container(
+                        Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
                             enabled: appData.userType == UserType.Instructor
@@ -320,7 +324,60 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         activeColor: AppTheme.appThemeColor)
                   ],
                 ),
-              ),              
+              ),
+
+              //Driving License image upload
+              Container(
+                padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      /*1*/
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /*2*/
+                          Container(
+                            child: Text(
+                              'Driving License Image Upload',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    /*3*/
+                    IconButton(
+                      icon: this._attachedDocPath == null
+                          ? Icon(
+                              FontAwesomeIcons.solidFileImage,
+                              color: AppTheme.appThemeColor,
+                            )
+                          : Icon(
+                              FontAwesomeIcons.solidCheckSquare,
+                              color: AppTheme.appThemeColor,
+                            ),
+                      onPressed: () async {
+                        var _path = EmptyString;
+                        _path = await FilePicker.getFilePath(type: FileType.IMAGE);
+                        File file = File(_path);
+                        print(file.lengthSync());
+                        file.lengthSync() <= 500000
+                            ? setState(() {
+                                this._attachedDocPath = _path;
+                              })
+                            : _frequentWidgets.getSnackbar(
+                                message: "Image must be under 500kb",
+                                context: context,
+                                duration: 1);
+                      },
+                    )
+                  ],
+                ),
+              ),
+
               //  addButton,
               Container(
                 padding: EdgeInsets.all(5.0),
@@ -423,6 +480,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   Future<void> _saveData() async {
     var id = '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
+    StorageUpload storageUpload = StorageUpload();
+    var documentDownloadUrl =
+        await storageUpload.uploadDrivingLicenseFile(this._attachedDocPath);
     this._logger.info('Saving pupil information $id.');
     Pupil pupil = Pupil(id: id);
     pupil.name = nameController.text;
@@ -433,6 +493,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.dateOfBirth = this._dateOfBirth;
     pupil.eyeTest = _switchOnEyeTest;
     pupil.previousExperience = theoryRecordController.text;
+    pupil.documentDownloadUrl = documentDownloadUrl;
     pupil.theoryRecord = previousExperienceController.text;
     var result = await pupil.add();
     var instructor = await Instructor(id: appData.instructorId).getInstructor();

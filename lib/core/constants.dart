@@ -27,7 +27,9 @@ class StoragePath {
   static const String LogsFolder = '/logs';
   static const String UserLogsFolder = '$LogsFolder/%s';
   static const String AppDocumentsFolder = '/app_docs';
+  static const String DrivingLicenseFolder = '/driving_license';
   static const String LessonsFolder = '$AppDocumentsFolder/lessons';
+  static const String PupilsFolder = '$AppDocumentsFolder/pupils/$DrivingLicenseFolder';
 }
 
 class PageRoutes {

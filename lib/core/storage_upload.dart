@@ -21,4 +21,20 @@ class StorageUpload {
     this._logger.info('Download url is $dowloadUrl;');
     return dowloadUrl.toString();
   }
+  Future<String> uploadDrivingLicenseFile(String filePath) async {
+    this._logger.info('Uploading Driving License file $filePath');
+    if (filePath == null) return null;
+    var filename = basename(filePath);
+    StorageReference _storageRef = FirebaseStorage.instance
+        .ref()
+        .child(StoragePath.PupilsFolder)
+        .child(filename);
+    var uploadStatus = _storageRef.putFile(
+        File(filePath));
+    var taskSnap = await uploadStatus.onComplete;
+    var dowloadUrl = await taskSnap.ref.getDownloadURL();
+    this._logger.info('Download url is $dowloadUrl;');
+    return dowloadUrl.toString();
+  }
+  
 }

@@ -10,7 +10,8 @@ class Pupil {
   static const String LicenseKey = 'lno';
   static const String DateOfBirthKey = 'dob';
   static const String EyeTestKey = 'ets';
-  static const String TheoryRecordKey = 'thr';
+  static const String TheoryRecordKey = 'thr';  
+  static const String DocumentDownloadUrl = 'url';
   static const String PreviousExperiencehKey = 'pex';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
@@ -24,6 +25,7 @@ class Pupil {
       this.dateOfBirth,
       this.eyeTest,
       this.theoryRecord,
+      this.documentDownloadUrl,
       this.previousExperience})
       : this.createdAt = null,
         this.updatedAt = null,
@@ -36,6 +38,7 @@ class Pupil {
   DateTime dateOfBirth;
   bool eyeTest;
   String theoryRecord;
+  String documentDownloadUrl;
   String previousExperience;
   DateTime createdAt;
   DateTime updatedAt;
@@ -49,6 +52,7 @@ class Pupil {
       DateOfBirthKey: dateOfBirth,
       EyeTestKey: eyeTest,
       TheoryRecordKey: theoryRecord,
+      DocumentDownloadUrl: documentDownloadUrl,
       PreviousExperiencehKey: previousExperience
     };
   }
@@ -63,6 +67,7 @@ class Pupil {
         TypeConversion.timeStampToDateTime(snapshot[Pupil.DateOfBirthKey]);
     this.eyeTest = snapshot[Pupil.EyeTestKey];
     this.theoryRecord = snapshot[Pupil.TheoryRecordKey];
+    this.documentDownloadUrl = snapshot[Pupil.DocumentDownloadUrl];
     this.previousExperience = snapshot[Pupil.PreviousExperiencehKey];
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[Pupil.CreatedAtKey]);

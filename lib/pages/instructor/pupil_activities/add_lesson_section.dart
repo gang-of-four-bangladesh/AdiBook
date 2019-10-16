@@ -382,7 +382,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 color: AppTheme.appThemeColor,
                               ),
                         onPressed: () async {
-                          var _path = await FilePicker.getFilePath(
+                          var _path = EmptyString;
+                          _path = await FilePicker.getFilePath(
                               type: FileType.CUSTOM, fileExtension: "pdf");
                           File file = File(_path);
                           print(file.lengthSync());
@@ -391,7 +392,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                   this._attachedDocPath = _path;
                                 })
                               : _frequentWidgets.getSnackbar(
-                                  message: "pdf file must be under 500kb",
+                                  message: "PDF file must be under 500kb",
                                   context: context,
                                   duration: 1);
                         },
