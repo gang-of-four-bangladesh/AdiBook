@@ -420,9 +420,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 onPressed: () async {
                                   if (_validateInputs()) {
                                     await _saveData();
-                                    var instructor = await Instructor(id: appData.instructorId).getInstructor();
+                                    var instructor = await Instructor(id: appData.instructor.id).getInstructor();
                                     await PushNotificationSender.send(
-                                      userId: appData.pupilId,
+                                      userId: appData.pupil.id,
                                       title: 'Driving Lesson Schedule',
                                       body: 'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonDurationController.text} minutes.',
                                     );
@@ -461,8 +461,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         await storageUpload.uploadLessonFile(this._attachedDocPath);
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
-      pupilId: appData.pupilId,
-      instructorId: appData.instructorId,
+      pupilId: appData.pupil.id,
+      instructorId: appData.instructor.id,
       vehicleType: this._selectedVehicleType,
       lessionType: this._selectedlessionType,
       diaryNotes: this._diaryNotesController.text,

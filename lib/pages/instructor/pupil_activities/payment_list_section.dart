@@ -31,10 +31,10 @@ class PaymentListSectionState extends State<PaymentListSection> {
     if (!mounted) return;
     setState(() {
       this._logger.info(
-          'Payment listing instructor id ${appData.instructorId}, pupil id ${appData.pupilId}');
+          'Payment listing instructor id ${appData.instructor.id}, pupil id ${appData.pupil.id}');
       _querySnapshot = PupilManager()
           .getPayments(
-              instructorId: appData.instructorId, pupilId: appData.pupilId)
+              instructorId: appData.instructor.id, pupilId: appData.pupil.id)
           .asStream();
     });
   }

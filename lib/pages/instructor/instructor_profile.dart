@@ -37,9 +37,9 @@ class _InstructorProfile extends State<InstructorProfile> {
   }
 
   void getInstructorInfo() async {
-    this._logger.info(" Pupil Id >>>> : ${appData.pupilId}");
+    this._logger.info(" Pupil Id >>>> : ${appData.pupil.id}");
     Instructor instructor =
-        await Instructor(id: appData.instructorId).getInstructor();
+        await Instructor(id: appData.instructor.id).getInstructor();
     this._logger.info("Pupil Model >>>> : ${instructor.dateOfBirth}");
     nameController.text = instructor.name;
     addressController.text = instructor.address;
@@ -108,7 +108,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                       children: [
                         Container(
                             padding: EdgeInsets.only(bottom: 5.0),
-                            child: appData.userType == UserType.Instructor
+                            child: appData.user.userType == UserType.Instructor
                                 ? TextFormField(
                                     controller: phoneController,
                                     keyboardType: TextInputType.phone,
@@ -250,7 +250,7 @@ class _InstructorProfile extends State<InstructorProfile> {
   }
 
   Future<void> _saveData() async {
-    var instructor = Instructor(id: appData.instructorId);
+    var instructor = Instructor(id: appData.instructor.id);
     instructor.name = nameController.text;
     instructor.address = addressController.text;
     instructor.licenseNo = drivingLicenseController.text;

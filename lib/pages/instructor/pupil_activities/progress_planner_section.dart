@@ -215,8 +215,8 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                               ProgressSubjectStatus.values[v.toInt()],
                         );
                         await ProgressPlan(
-                          pupilId: appData.pupilId,
-                          instructorId: appData.instructorId,
+                          pupilId: appData.pupil.id,
+                          instructorId: appData.instructor.id,
                           progressPlanSubject: _subject,
                         ).update();
                       },

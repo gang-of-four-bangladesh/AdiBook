@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     this._logger.info(
-        'Contextual information ${this.widget.contextInfo}, app data information appData, instructorId: ${appData.instructorId} and pupilId: ${appData.pupilId}');
+        'Contextual information ${this.widget.contextInfo}, app data information appData, instructorId: ${appData.instructor.id} and pupilId: ${appData.pupil.id}');
     setState(() {
       _selectedPage = 0;
       this._widgetsConfiguration = PageManager().getWidgetConfigurations(

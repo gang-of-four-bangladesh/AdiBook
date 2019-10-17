@@ -47,7 +47,7 @@ class LessonManager {
       var id = DateFormat(_lessonIdDateFormat).format(DateTime(year, month));
       var lastDayOfMonth = DateTime(year, month + 1, 0).day;
       var snap =
-          await LessonEvent(id: id, instructorId: appData.instructorId).get();
+          await LessonEvent(id: id, instructorId: appData.instructor.id).get();
       if (snap.data == null) continue;
       for (var i = 1; i <= lastDayOfMonth; i++) {
         List<Map> events = new List();

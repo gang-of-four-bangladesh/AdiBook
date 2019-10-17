@@ -19,7 +19,7 @@ class ProgressPlanManager {
   Future<List<ProgressPlanViewModel>> getProgressDetails() async {
     List<ProgressPlanViewModel> _data = [];
     var progressSnap = await ProgressPlan(
-            pupilId: appData.pupilId, instructorId: appData.instructorId)
+            pupilId: appData.pupil.id, instructorId: appData.instructor.id)
         .get();
     this._logger.info('Progress snap $progressSnap');
     for (var progressPlanSubject in progressPlanSubjects) {

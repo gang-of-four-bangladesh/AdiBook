@@ -64,7 +64,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                                   IconButton(
                                     icon: Icon(Icons.date_range),
                                     onPressed:
-                                        appData.userType == UserType.Instructor
+                                        appData.user.userType == UserType.Instructor
                                             ? _selectDateOfpayment
                                             : null,
                                   ),
@@ -181,7 +181,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (appData.userType == UserType.Instructor)
+                                  if (appData.user.userType == UserType.Instructor)
                                     await _saveData();
                                 },
                                 color: AppTheme.appThemeColor,
@@ -214,8 +214,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   Future<void> _saveData() async {
     var _amount = int.parse(_amountController.text);
     Payment payment = new Payment(
-        pupilId: appData.pupilId,
-        instructorId: appData.instructorId,
+        pupilId: appData.pupil.id,
+        instructorId: appData.instructor.id,
         paymentDate: this._dateOfPayment,
         amount: _amount,
         type: this._selectedPaymentType);

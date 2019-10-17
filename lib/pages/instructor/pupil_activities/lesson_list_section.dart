@@ -35,10 +35,10 @@ class LessonListSectionState extends State<LessonListSection> {
     setState(() {
       this._switchAckTest = false;
       this._logger.info(
-          'Lesson listing instructor id ${appData.instructorId}, pupil id ${appData.pupilId}');
+          'Lesson listing instructor id ${appData.instructor.id}, pupil id ${appData.pupil.id}');
       _querySnapshot = PupilManager()
           .getLessions(
-              instructorId: appData.instructorId, pupilId: appData.pupilId)
+              instructorId: appData.instructor.id, pupilId: appData.pupil.id)
           .asStream();
     });
   }
@@ -79,7 +79,7 @@ class LessonListSectionState extends State<LessonListSection> {
                     child: ListTile(
                       onTap: () {
                         print("clicked");
-                        appData.userType == UserType.Pupil
+                        appData.user.userType == UserType.Pupil
                             ? _updateData(document.documentID)
                             : print(document["id"]);
                       },
@@ -178,8 +178,8 @@ class LessonListSectionState extends State<LessonListSection> {
                                           document[Lesson.HasAcknowledgedKey],
                                       onChanged: (lesson) {
                                         Lesson(
-                                            instructorId: appData.instructorId,
-                                            pupilId: appData.pupilId);
+                                            instructorId: appData.instructor.id,
+                                            pupilId: appData.pupil.id);
                                         setState(() {
                                           _switchAckTest = document[
                                               Lesson.HasAcknowledgedKey];
@@ -210,7 +210,7 @@ class LessonListSectionState extends State<LessonListSection> {
 
   Future<void> _updateData(String lessonId) async {
     this._logger.info('Updating lesson information $lessonId.');
-    Lesson lesson = await Lesson(pupilId: appData.pupilId,instructorId: appData.instructorId,id: lessonId).getLession();
+    Lesson lesson = await Lesson(pupilId: appData.pupil.id,instructorId: appData.instructor.id,id: lessonId).getLession();
     lesson.hasAcknowledged = true;
     var result = await lesson.update();
     String message =

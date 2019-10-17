@@ -47,12 +47,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     this._autoValidate = false;
     this._switchOnEyeTest = false;
     this._dateOfBirth = DateTime.now();
-    if (appData.userType == UserType.Pupil) populatePupilInfo();
+    if (appData.user.userType == UserType.Pupil) populatePupilInfo();
   }
 
   void populatePupilInfo() async {
-    this._logger.info(" Pupil Id >>>> : ${appData.pupilId}");
-    Pupil pupil = await Pupil(id: appData.pupilId).getPupil();
+    this._logger.info(" Pupil Id >>>> : ${appData.pupil.id}");
+    Pupil pupil = await Pupil(id: appData.pupil.id).getPupil();
     this._logger.info("Pupil Model >>>> : $pupil");
     nameController.text = pupil.name;
     addressController.text = pupil.address;
@@ -89,7 +89,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.userType == UserType.Instructor
+                            enabled: appData.user.userType == UserType.Instructor
                                 ? true
                                 : false,
                             keyboardType: TextInputType.text,
@@ -113,7 +113,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.userType == UserType.Instructor
+                            enabled: appData.user.userType == UserType.Instructor
                                 ? true
                                 : false,
                             keyboardType: TextInputType.text,
@@ -129,7 +129,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.userType == UserType.Instructor
+                            enabled: appData.user.userType == UserType.Instructor
                                 ? true
                                 : false,
                             keyboardType: TextInputType.text,
@@ -145,7 +145,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.userType == UserType.Instructor
+                            enabled: appData.user.userType == UserType.Instructor
                                 ? true
                                 : false,
                             keyboardType: TextInputType.text,
@@ -167,7 +167,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           padding: EdgeInsets.only(left: 2.0, right: 2.0),
                           child: Row(
                             children: [
-                              appData.userType == UserType.Pupil
+                              appData.user.userType == UserType.Pupil
                                   ? Column()
                                   : Column(
                                       mainAxisAlignment:
@@ -197,18 +197,18 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                       left: 2.0, right: 2.0, bottom: 5.0),
                                   child: TextFormField(
                                     enabled:
-                                        appData.userType == UserType.Instructor
+                                        appData.user.userType == UserType.Instructor
                                             ? true
                                             : false,
                                     controller: phoneController,
                                     keyboardType: TextInputType.phone,
                                     validator:
-                                        appData.userType == UserType.Instructor
+                                        appData.user.userType == UserType.Instructor
                                             ? validations.validatePhoneNumber
                                             : null,
                                     decoration: InputDecoration(
                                         suffixIcon:
-                                            appData.userType == UserType.Pupil
+                                            appData.user.userType == UserType.Pupil
                                                 ? null
                                                 : Icon(Icons.star,
                                                     color: Colors.red[600]),
@@ -231,7 +231,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.userType == UserType.Instructor
+                            enabled: appData.user.userType == UserType.Instructor
                                 ? true
                                 : false,
                             controller: drivingLicenseController,
@@ -269,7 +269,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 IconButton(
                                   icon: Icon(Icons.date_range),
                                   onPressed:
-                                      appData.userType == UserType.Instructor
+                                      appData.user.userType == UserType.Instructor
                                           ? _selectDateOfBirth
                                           : null,
                                 ),
@@ -318,7 +318,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                     Switch(
                         value: _switchOnEyeTest,
                         onChanged: (val) => setState(() =>
-                            appData.userType == UserType.Instructor
+                            appData.user.userType == UserType.Instructor
                                 ? _switchOnEyeTest = val
                                 : null),
                         activeColor: AppTheme.appThemeColor)
@@ -393,11 +393,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           ButtonTheme(
                             minWidth: 180.0,
                             height: 50.0,
-                            child: appData.userType == UserType.Instructor
+                            child: appData.user.userType == UserType.Instructor
                                 ? RaisedButton(
                                     onPressed: () async {
                                       if (_validateInputs()) {
-                                        if (appData.userType ==
+                                        if (appData.user.userType ==
                                             UserType.Instructor)
                                           await _saveData();
                                       }
@@ -461,8 +461,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   }
 
   Future<void> _updateData() async {
-    this._logger.info('Updating pupil information ${appData.pupilId}.');
-    Pupil pupil = Pupil(id: appData.pupilId);
+    this._logger.info('Updating pupil information ${appData.pupil.id}.');
+    Pupil pupil = Pupil(id: appData.pupil.id);
     pupil.name = nameController.text;
     pupil.phoneNumber = phoneController.text;
     pupil.address = addressController.text;
@@ -496,7 +496,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.documentDownloadUrl = documentDownloadUrl;
     pupil.theoryRecord = previousExperienceController.text;
     var result = await pupil.add();
-    var instructor = await Instructor(id: appData.instructorId).getInstructor();
+    var instructor = await Instructor(id: appData.instructor.id).getInstructor();
     await _pupilManager.tagPupil(pupil, instructor);
     await _pupilManager.tagInstructor(pupil, instructor);
     String message =

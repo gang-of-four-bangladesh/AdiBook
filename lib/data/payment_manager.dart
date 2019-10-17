@@ -24,7 +24,7 @@ class PaymentManager {
      // return await payment.add();
     //}
     this._logger.info(
-        'Lesson ${payment.id} for pupil ${pupil.id} by instructor ${appData.instructorId} creation complete including events.');
+        'Lesson ${payment.id} for pupil ${pupil.id} by instructor ${appData.instructor.id} creation complete including events.');
     return await payment.add();
   }
 
@@ -42,7 +42,7 @@ class PaymentManager {
       var id = DateFormat(_paymentIdDateFormat).format(DateTime(year, month));
       var lastDayOfMonth = DateTime(year, month + 1, 0).day;
       var snap =
-          await PaymentEvent(id: id, instructorId: appData.instructorId).get();
+          await PaymentEvent(id: id, instructorId: appData.instructor.id).get();
       if (snap.data == null) continue;
       for (var i = 1; i <= lastDayOfMonth; i++) {
         List<Map> events = new List();

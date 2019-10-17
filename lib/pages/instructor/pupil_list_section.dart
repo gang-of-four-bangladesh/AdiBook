@@ -32,7 +32,7 @@ class PupilPistSectionState extends State<PupilListSection> {
     if (!mounted) return;
     setState(() {
       _querySnapshot =
-          Instructor(id: appData.instructorId).getPupils().asStream();
+          Instructor(id: appData.instructor.id).getPupils().asStream();
     });
   }
 
@@ -67,12 +67,12 @@ class PupilPistSectionState extends State<PupilListSection> {
                         icon: FontAwesomeIcons.edit,
                         foregroundColor: Colors.white,
                         onTap: () {
-                          appData.pupilId = document.documentID;
+                          appData.pupil.id = document.documentID;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  AddPupilSection(userType: appData.userType),
+                                  AddPupilSection(userType: appData.user.userType),
                             ),
                           );
                         },
@@ -82,7 +82,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                       trailing: Icon(Icons.person),
                       title: Text(document[Pupil.NameKey]),
                       onTap: () {
-                        appData.pupilId = document.documentID;
+                        appData.pupil.id = document.documentID;
                         Navigator.push(
                           context,
                           MaterialPageRoute(
