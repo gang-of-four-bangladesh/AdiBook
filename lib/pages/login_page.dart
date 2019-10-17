@@ -237,11 +237,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
-    var user = await FirebaseAuth.instance.signInWithCredential(authCredential);
+    var authResult = await FirebaseAuth.instance.signInWithCredential(authCredential);
     final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-    assert(user.phoneNumber == currentUser.phoneNumber);
+    assert(authResult.user.phoneNumber == currentUser.phoneNumber);
     var message =
-        'signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
+        'signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> ${authResult.user}';
     _logger.fine(message);
     return currentUser;
   }
@@ -265,29 +265,29 @@ class _LoginPageState extends State<LoginPage> {
     }
     final PhoneVerificationCompleted verificationCompleted =
         (AuthCredential authCredential) async {
-      var user =
+      var authResult =
           await FirebaseAuth.instance.signInWithCredential(authCredential);
       final FirebaseUser currentUser =
           await FirebaseAuth.instance.currentUser();
-      assert(user.phoneNumber == currentUser.phoneNumber);
+      assert(authResult.user.phoneNumber == currentUser.phoneNumber);
       var message =
-          'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $user';
+          'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $currentUser';
       _logger.fine(message);
       var _userToken = await FirebaseCloudMessaging.getToken();
       _logger.info("push notification >>>> " + _userToken);
       await UserManager().createUser(
-        id: user.phoneNumber,
+        id: currentUser.phoneNumber,
         userType: this._selectedUserType,
         token: _userToken,
       );
       //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
       //Please do not remove the line
       await User(
-        id: user.phoneNumber,
+        id: currentUser.phoneNumber,
         userType: this._selectedUserType,
         userToken: _userToken,
       ).update();
-      await UserManager().updateAppDataByUserId(user.phoneNumber);
+      await UserManager().updateAppDataByUserId(currentUser.phoneNumber);
       await _displayProgressBar(false);
       Navigator.push(
         context,

@@ -65,16 +65,14 @@ class UserManager {
   }
 
   Future<void> updateAppDataByUser(User adiBookUser) async {
-    Logger _logger = Logger('UserManager=>updateAppDataByUser');
     appData.user = adiBookUser;
     if (adiBookUser.userType == UserType.Instructor) {
       appData.instructor = await Instructor(id: adiBookUser.id).getInstructor();
     } else if (adiBookUser.userType == UserType.Pupil) {
       appData.pupil = await Pupil(id: adiBookUser.id).getPupil();
-      appData.instructor = await PupilManager().getDefaultInstructor(adiBookUser.id);
+      appData.instructor =
+          await PupilManager().getDefaultInstructor(adiBookUser.id);
     }
-    _logger.info(
-        'updated app data information, instructor id: ${appData.instructor.id}, pupil id ${appData.pupil.id} and user type ${appData.user.userType}.');
   }
 
   Future<void> updateAppDataByUserId(String userId) async {
