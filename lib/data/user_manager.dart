@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
 
 class UserManager {
+  Logger _logger = Logger('UserManager=>createUser');
   Future<String> get currentUserId async {
     var user = await FirebaseAuth.instance.currentUser();
     if (user == null) return null;
@@ -47,21 +48,28 @@ class UserManager {
       {String id,
       UserType userType = UserType.Instructor,
       String token}) async {
-    Logger _logger = Logger('UserManager=>createUser');
-    if (!await userExists(id, userType)) {
+    if (await userExists(id, userType)) {
+      this._logger.info('User creation skipped. User $id already exits.');
+      //Update user login type and token.
       await User(
         id: id,
-        phoneNumber: id,
         userType: userType,
         userToken: token,
-        isVerified: true,
-      ).add();
-      userType == UserType.Instructor
-          ? await Instructor(id: id, phoneNumber: id).add()
-          : await Pupil(id: id, phoneNumber: id).add();
-      _logger.info('User of type $userType with $id created.');
+      ).update();
+      this._logger.info('Updated user logged in type $userType and token $token.');
+      return;
     }
-    _logger.info('User creation skipped. User $id already exits.');
+    await User(
+      id: id,
+      phoneNumber: id,
+      userType: userType,
+      userToken: token,
+      isVerified: true,
+    ).add();
+    userType == UserType.Instructor
+        ? await Instructor(id: id, phoneNumber: id).add()
+        : await Pupil(id: id, phoneNumber: id).add();
+    this._logger.info('User of type $userType with $id created.');
   }
 
   Future<void> updateAppDataByUser(User adiBookUser) async {
@@ -82,7 +90,10 @@ class UserManager {
 
   bool hasExpired(DateTime expiryDate) {
     if (expiryDate == null) return false;
-    return DateTime.now().difference(expiryDate).inSeconds > 0;
+    var difference = DateTime.now().difference(expiryDate).inSeconds;
+    this._logger.info(
+        'User expire date $expiryDate, current date ${DateTime.now()}, difference $difference seconds.');
+    return difference > 0;
   }
 
   Future<bool> hasUserExpired(String userId) async {

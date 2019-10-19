@@ -73,7 +73,7 @@ class User {
     return Firestore.instance
         .collection(FirestorePath.UserCollection)
         .document(this.id)
-        .get(source: Source.server);
+        .get(source: Source.serverAndCache);
   }
 
   Future<bool> add() async {

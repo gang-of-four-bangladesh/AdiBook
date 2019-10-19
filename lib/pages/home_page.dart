@@ -1,5 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:flutter/material.dart';
@@ -18,30 +19,65 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   Logger _logger = Logger('HomePage');
   int _selectedPage;
-  List<WidgetConfiguration> _widgetsConfiguration = [];
+  List<WidgetConfiguration> _widgetsConfig = [];
   List<Widget> _widgets = [];
   TabController _tabController;
   List<Tab> _tabs = [];
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      if (UserManager().hasExpired(appData.user.expiryDate)) {
+        this._handleExpiredUser();
+        return;
+      }
+    });
     super.initState();
     _initialize();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    this._logger.info('Application life cycle test. Current state $state');
+    if (state == AppLifecycleState.resumed) {
+      if (UserManager().hasExpired(appData.user.expiryDate)) {
+        this._handleExpiredUser();
+        return;
+      }
+    }
+  }
+
+  Future _handleExpiredUser() async {
+    await UserManager().logout();
+    await FrequentWidgets().dialogBox(
+      context,
+      'Validity Expire Alert',
+      "Your license has expired. Please contact administrator.",
+    );
+    Navigator.pushNamedAndRemoveUntil(
+        context, PageRoutes.LoginPage, (r) => false);
   }
 
   void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     setState(() {
       _selectedPage = 0;
-      this._widgetsConfiguration = PageManager().getWidgetConfigurations(
-          this.widget.userType, this.widget.sectionType);
-      this._widgets =
-          _widgetsConfiguration.map((f) => f.sectionWidget).toList();
-      this._logger.info(
-          'selected widgets for usertype ${this.widget.userType} and section type ${this.widget.sectionType} are ${this._widgetsConfiguration.map((f) => f.appBarTitle)}');
+      this._widgetsConfig = PageManager().getWidgetConfigurations(
+        this.widget.userType,
+        this.widget.sectionType,
+      );
+      this._widgets = _widgetsConfig.map((f) => f.sectionWidget).toList();
       this._getTabs();
       _tabController = TabController(
         vsync: this,
@@ -62,7 +98,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           padding: EdgeInsets.only(left: 15, top: 15),
           child: CircleAvatar(
             backgroundColor: AppTheme.appThemeColor,
-            backgroundImage: AssetImage("assets/images/logo.png"),radius: 5.0,
+            backgroundImage: AssetImage("assets/images/logo.png"),
+            radius: 5.0,
           ),
         ),
         centerTitle: true,
@@ -93,10 +130,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   onPressed: () async {
                     await UserManager().logout();
                     Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      PageRoutes.LoginPage,
-                      (r) => false,
-                    );
+                        context, PageRoutes.LoginPage, (r) => false);
                   },
                 ),
               ),
@@ -148,7 +182,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _getTabs() {
     this._tabs.clear();
-    this._widgetsConfiguration.forEach(
+    this._widgetsConfig.forEach(
         (f) => this._tabs.add(Tab(text: f.bottomNavTitle.toUpperCase())));
   }
 }

@@ -3,7 +3,6 @@ import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:adibook/models/user.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -196,33 +195,30 @@ class _LoginPageState extends State<LoginPage> {
   Future _onPressLoginButton() async {
     await _displayProgressBar(true);
     if (this._smsCodeController.text.isEmpty) {
-      dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
+      await FrequentWidgets()
+          .dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
       return;
     }
     if (this._smsCodeController.text.length != 6) {
-      dialogBox(context, 'OTP Code', 'OTP code should be six characters.');
+      await FrequentWidgets()
+          .dialogBox(context, 'OTP Code', 'OTP code should be six characters.');
       return;
     }
-
     AuthCredential authCredential = PhoneAuthProvider.getCredential(
       verificationId: verificationId,
       smsCode: this._smsCodeController.text,
     );
     var user = await _signInUser(authCredential);
     var _userToken = await FirebaseCloudMessaging.getToken();
-    _logger.info("push notification >>>> " + _userToken);
     await UserManager().createUser(
       id: user.phoneNumber,
       userType: this._selectedUserType,
       token: _userToken,
     );
-    //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
-    //Please do not remove the line
-    await User(
-      id: user.phoneNumber,
-      userType: this._selectedUserType,
-      userToken: _userToken,
-    ).update();
+    if (await UserManager().hasUserExpired(user.phoneNumber)) {
+      this._handleExpiredUser();
+      return;
+    }
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
     Navigator.push(
@@ -237,7 +233,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
-    var authResult = await FirebaseAuth.instance.signInWithCredential(authCredential);
+    var authResult =
+        await FirebaseAuth.instance.signInWithCredential(authCredential);
     final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
     assert(authResult.user.phoneNumber == currentUser.phoneNumber);
     var message =
@@ -252,121 +249,108 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  /// Sends the code to the specified phone number.
-  Future<void> _onPressSendOTPCode(BuildContext _context) async {
-    await _displayProgressBar(true);
-    if (this._phoneNumberController.text.isEmpty) {
-      dialogBox(context, 'Phone number', 'Phone number cannot be empty.');
+  Future<void> _verificationCompleted(AuthCredential authCredential) async {
+    var authResult =
+        await FirebaseAuth.instance.signInWithCredential(authCredential);
+    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    assert(authResult.user.phoneNumber == currentUser.phoneNumber);
+    var _userToken = await FirebaseCloudMessaging.getToken();
+    await UserManager().createUser(
+      id: currentUser.phoneNumber,
+      userType: this._selectedUserType,
+      token: _userToken,
+    );
+    if (await UserManager().hasUserExpired(currentUser.phoneNumber)) {
+      this._handleExpiredUser();
       return;
     }
-    if (this._phoneNumberController.text.length < 9) {
-      dialogBox(context, 'Phone number', "Phone number isn't correct.");
-      return;
-    }
-    final PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential authCredential) async {
-      var authResult =
-          await FirebaseAuth.instance.signInWithCredential(authCredential);
-      final FirebaseUser currentUser =
-          await FirebaseAuth.instance.currentUser();
-      assert(authResult.user.phoneNumber == currentUser.phoneNumber);
-      var message =
-          'PhoneVerificationCompleted. signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> $currentUser';
-      _logger.fine(message);
-      var _userToken = await FirebaseCloudMessaging.getToken();
-      _logger.info("push notification >>>> " + _userToken);
-      await UserManager().createUser(
-        id: currentUser.phoneNumber,
-        userType: this._selectedUserType,
-        token: _userToken,
-      );
-      //This below line is necessary if same person is both instructor and pupil. Saving the last logged in zone.
-      //Please do not remove the line
-      await User(
-        id: currentUser.phoneNumber,
-        userType: this._selectedUserType,
-        userToken: _userToken,
-      ).update();
-      await UserManager().updateAppDataByUserId(currentUser.phoneNumber);
-      await _displayProgressBar(false);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(
-            userType: this._selectedUserType,
-            sectionType:
-                _pageManager.defaultSectionType(this._selectedUserType),
-          ),
+    await UserManager().updateAppDataByUserId(currentUser.phoneNumber);
+    await _displayProgressBar(false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(
+          userType: this._selectedUserType,
+          sectionType: _pageManager.defaultSectionType(this._selectedUserType),
         ),
-      );
-    };
-
-    final PhoneVerificationFailed verificationFailed =
-        (AuthException authException) async {
-      await _displayProgressBar(false);
-      var message =
-          'PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}';
-      this._logger.shout(message);
-    };
-
-    final PhoneCodeSent codeSent =
-        (String verificationId, [int forceResendingToken]) async {
-      await _displayProgressBar(false);
-      this.verificationId = verificationId;
-      FrequentWidgets().getSnackbar(
-        message:
-            'OTP code sent to phone number ${this._phoneNumberController.text}.',
-        context: _context,
-        duration: 5,
-      );
-      var message =
-          "PhoneCodeSent. code sent to " + _phoneNumberController.text;
-      this._logger.fine(message);
-    };
-
-    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-        (String verificationId) async {
-      await _displayProgressBar(false);
-      this.verificationId = verificationId;
-      FrequentWidgets().getSnackbar(
-        message:
-            'OTP code auto retrieval failed. Please enter the OTP code sent by sms.',
-        context: _context,
-        duration: 5,
-      );
-      var message = "PhoneCodeAutoRetrievalTimeout. time out";
-      this._logger.shout(message);
-    };
-    var userPhoneNumber =
-        '${CountryWisePhoneCode[_selectedCountry]}${_phoneNumberController.text}';
-    this._logger.info(
-        'User provided country code $_selectedCountry, User entered phone number ${_phoneNumberController.text}, selected user type ${this._selectedUserType}.');
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: userPhoneNumber,
-        timeout: const Duration(seconds: 5),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+      ),
+    );
   }
 
-  Future<void> dialogBox(BuildContext context, String title, String message) {
-    return showDialog<void>(
+  Future<void> _verificationFailed(AuthException authException) async {
+    await _displayProgressBar(false);
+    this._logger.shout(
+        "PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}");
+  }
+
+  Future<void> _codeSent(String verificationId, int forceResendingToken,
+      BuildContext context) async {
+    await _displayProgressBar(false);
+    this.verificationId = verificationId;
+    FrequentWidgets().getSnackbar(
+      message:
+          'OTP code sent to phone number ${this._phoneNumberController.text}.',
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      duration: 5,
     );
+  }
+
+  Future<void> _codeAutoRetrievalTimeout(
+      String verificationId, BuildContext context) async {
+    await _displayProgressBar(false);
+    this.verificationId = verificationId;
+    FrequentWidgets().getSnackbar(
+      message:
+          'OTP code auto retrieval failed. Please enter the OTP code sent by sms.',
+      context: context,
+      duration: 5,
+    );
+  }
+
+  Future<void> _onPressSendOTPCode(BuildContext context) async {
+    await _displayProgressBar(true);
+    if (!await _checkUserInput()) return;
+    var phoneNumber =
+        '${CountryWisePhoneCode[_selectedCountry]}${_phoneNumberController.text}';
+    this._logger.info("User phone number $phoneNumber");
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        timeout: const Duration(seconds: 5),
+        verificationCompleted: this._verificationCompleted,
+        verificationFailed: this._verificationFailed,
+        codeSent: (String verificationId, [int forceResendingToken]) async {
+          await this._codeSent(verificationId, forceResendingToken, context);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          this._codeAutoRetrievalTimeout(verificationId, context);
+        });
+  }
+
+  Future _handleExpiredUser() async {
+    await UserManager().logout();
+    await FrequentWidgets().dialogBox(
+      context,
+      'Validity Expire Alert',
+      "Your license has expired. Please contact administrator.",
+    );
+    Navigator.pushNamedAndRemoveUntil(
+        context, PageRoutes.LoginPage, (r) => false);
+  }
+
+  Future<bool> _checkUserInput() async {
+    this._logger.info("""User provided country code $_selectedCountry, 
+    User entered phone number ${_phoneNumberController.text}, 
+    Selected user type ${this._selectedUserType}.""");
+    if (this._phoneNumberController.text.isEmpty) {
+      await FrequentWidgets()
+          .dialogBox(context, 'Phone number', 'Phone number cannot be empty.');
+      return false;
+    }
+    if (this._phoneNumberController.text.length < 9) {
+      await FrequentWidgets()
+          .dialogBox(context, 'Phone number', "Phone number isn't correct.");
+      return false;
+    }
+    return true;
   }
 }

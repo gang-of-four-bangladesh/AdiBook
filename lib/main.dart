@@ -4,7 +4,6 @@ import 'package:adibook/core/log_manager.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:adibook/pages/expiry_page.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/login_page.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +25,13 @@ Future main() async {
   var adiBookUser = await _userManager.currentUser;
   _logger.info('FirebaseAuth.instance.currentUser() ${adiBookUser.toString()}');
   if (adiBookUser != null) {
-    var hasExpired = UserManager().hasExpired(adiBookUser.expiryDate);
-    if (hasExpired) {
-      _defaultPage = ExpiryPage();
-    } else {
-      _logger.info(
-          'Logged in user $adiBookUser, user name ${adiBookUser.name} has logged in as ${adiBookUser.userType}, expire date ${adiBookUser.expiryDate}');
-      _defaultPage = HomePage(
-        userType: adiBookUser.userType,
-        sectionType: PageManager().defaultSectionType(adiBookUser.userType),
-      );
-      await _userManager.updateAppDataByUser(adiBookUser);
-    }
+    _logger.info(
+        'Logged in user $adiBookUser, user name ${adiBookUser.name} has logged in as ${adiBookUser.userType}, expire date ${adiBookUser.expiryDate}');
+    _defaultPage = HomePage(
+      userType: adiBookUser.userType,
+      sectionType: PageManager().defaultSectionType(adiBookUser.userType),
+    );
+    await _userManager.updateAppDataByUser(adiBookUser);
   }
   runApp(AdiBookApp(_defaultPage));
   _logger.info(
