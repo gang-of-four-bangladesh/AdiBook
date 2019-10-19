@@ -57,4 +57,28 @@ class FrequentWidgets {
       },
     );
   }
+
+}
+class DetailScreen extends StatelessWidget {
+  final downloadUrl;
+  DetailScreen({this.downloadUrl});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: 'imageHero',
+            child: Image.network(
+              downloadUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
 }

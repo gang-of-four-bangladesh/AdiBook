@@ -343,10 +343,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          /*2*/
-                          Container(
+                          /*2*/ Container(
                             child: Text(
-                              'Driving License Image',
+                             this._drivingLicenseImageUrl == null ? 'Upload Driving License Picture':'Driving License Picture',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -388,15 +387,21 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               tag: 'imageHero',
                               child: Image.network(
                                 this._drivingLicenseImageUrl,
-                                width: 10,
-                                height: 10,
+                                width: 50,
+                                height: 50,
                               ),
                             ),
                             onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (_) {
-                                return DetailScreen();
-                              }));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return DetailScreen(
+                                        downloadUrl:
+                                            this._drivingLicenseImageUrl);
+                                  },
+                                ),
+                              );
                             },
                           ),
                   ],
@@ -598,24 +603,4 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   }
 }
 
-class DetailScreen extends StatelessWidget {
-  String downloadUrl;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        child: Center(
-          child: Hero(
-            tag: 'imageHero',
-            child: Image.network(
-              downloadUrl,
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
-}
+
