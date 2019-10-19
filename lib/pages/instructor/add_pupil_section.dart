@@ -41,6 +41,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   bool _autoValidate;
   DateTime _dateOfBirth;
   String _attachedDocPath;
+  String _drivingLicenseImageUrl;
   @override
   void initState() {
     super.initState();
@@ -59,6 +60,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     phoneController.text = pupil.phoneNumber;
     drivingLicenseController.text = pupil.licenseNo;
     theoryRecordController.text = pupil.theoryRecord;
+    _drivingLicenseImageUrl = pupil.documentDownloadUrl;
     previousExperienceController.text = pupil.previousExperience;
     if (!mounted) return;
     setState(() {
@@ -89,9 +91,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.user.userType == UserType.Instructor
-                                ? true
-                                : false,
+                            enabled:
+                                appData.user.userType == UserType.Instructor
+                                    ? true
+                                    : false,
                             keyboardType: TextInputType.text,
                             controller: nameController,
                             validator: validations.validateText,
@@ -113,9 +116,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.user.userType == UserType.Instructor
-                                ? true
-                                : false,
+                            enabled:
+                                appData.user.userType == UserType.Instructor
+                                    ? true
+                                    : false,
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
@@ -129,9 +133,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.user.userType == UserType.Instructor
-                                ? true
-                                : false,
+                            enabled:
+                                appData.user.userType == UserType.Instructor
+                                    ? true
+                                    : false,
                             keyboardType: TextInputType.text,
                             controller: theoryRecordController,
                             decoration: InputDecoration(
@@ -145,9 +150,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.user.userType == UserType.Instructor
-                                ? true
-                                : false,
+                            enabled:
+                                appData.user.userType == UserType.Instructor
+                                    ? true
+                                    : false,
                             keyboardType: TextInputType.text,
                             controller: previousExperienceController,
                             decoration: InputDecoration(
@@ -196,22 +202,22 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                   padding: EdgeInsets.only(
                                       left: 2.0, right: 2.0, bottom: 5.0),
                                   child: TextFormField(
-                                    enabled:
-                                        appData.user.userType == UserType.Instructor
-                                            ? true
-                                            : false,
+                                    enabled: appData.user.userType ==
+                                            UserType.Instructor
+                                        ? true
+                                        : false,
                                     controller: phoneController,
                                     keyboardType: TextInputType.phone,
-                                    validator:
-                                        appData.user.userType == UserType.Instructor
-                                            ? validations.validatePhoneNumber
-                                            : null,
+                                    validator: appData.user.userType ==
+                                            UserType.Instructor
+                                        ? validations.validatePhoneNumber
+                                        : null,
                                     decoration: InputDecoration(
-                                        suffixIcon:
-                                            appData.user.userType == UserType.Pupil
-                                                ? null
-                                                : Icon(Icons.star,
-                                                    color: Colors.red[600]),
+                                        suffixIcon: appData.user.userType ==
+                                                UserType.Pupil
+                                            ? null
+                                            : Icon(Icons.star,
+                                                color: Colors.red[600]),
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Colors.cyan[300]),
@@ -231,9 +237,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: TextFormField(
-                            enabled: appData.user.userType == UserType.Instructor
-                                ? true
-                                : false,
+                            enabled:
+                                appData.user.userType == UserType.Instructor
+                                    ? true
+                                    : false,
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
@@ -268,10 +275,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                               children: <Widget>[
                                 IconButton(
                                   icon: Icon(Icons.date_range),
-                                  onPressed:
-                                      appData.user.userType == UserType.Instructor
-                                          ? _selectDateOfBirth
-                                          : null,
+                                  onPressed: appData.user.userType ==
+                                          UserType.Instructor
+                                      ? _selectDateOfBirth
+                                      : null,
                                 ),
                                 Text(
                                   "Date Of Birth",
@@ -339,7 +346,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           /*2*/
                           Container(
                             child: Text(
-                              'Driving License Image Upload',
+                              'Driving License Image',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -349,31 +356,49 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       ),
                     ),
                     /*3*/
-                    IconButton(
-                      icon: this._attachedDocPath == null
-                          ? Icon(
-                              FontAwesomeIcons.solidFileImage,
-                              color: AppTheme.appThemeColor,
-                            )
-                          : Icon(
-                              FontAwesomeIcons.solidCheckSquare,
-                              color: AppTheme.appThemeColor,
+                    _drivingLicenseImageUrl == null
+                        ? IconButton(
+                            icon: this._attachedDocPath == null
+                                ? Icon(
+                                    FontAwesomeIcons.solidFileImage,
+                                    color: AppTheme.appThemeColor,
+                                  )
+                                : Icon(
+                                    FontAwesomeIcons.solidCheckSquare,
+                                    color: AppTheme.appThemeColor,
+                                  ),
+                            onPressed: () async {
+                              var _path = EmptyString;
+                              _path = await FilePicker.getFilePath(
+                                  type: FileType.IMAGE);
+                              File file = File(_path);
+                              print(file.lengthSync());
+                              file.lengthSync() <= 500000
+                                  ? setState(() {
+                                      this._attachedDocPath = _path;
+                                    })
+                                  : _frequentWidgets.getSnackbar(
+                                      message: "Image must be under 500kb",
+                                      context: context,
+                                      duration: 1);
+                            },
+                          )
+                        : GestureDetector(
+                            child: Hero(
+                              tag: 'imageHero',
+                              child: Image.network(
+                                this._drivingLicenseImageUrl,
+                                width: 10,
+                                height: 10,
+                              ),
                             ),
-                      onPressed: () async {
-                        var _path = EmptyString;
-                        _path = await FilePicker.getFilePath(type: FileType.IMAGE);
-                        File file = File(_path);
-                        print(file.lengthSync());
-                        file.lengthSync() <= 500000
-                            ? setState(() {
-                                this._attachedDocPath = _path;
-                              })
-                            : _frequentWidgets.getSnackbar(
-                                message: "Image must be under 500kb",
-                                context: context,
-                                duration: 1);
-                      },
-                    )
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) {
+                                return DetailScreen();
+                              }));
+                            },
+                          ),
                   ],
                 ),
               ),
@@ -496,7 +521,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.documentDownloadUrl = documentDownloadUrl;
     pupil.theoryRecord = previousExperienceController.text;
     var result = await pupil.add();
-    var instructor = await Instructor(id: appData.instructor.id).getInstructor();
+    var instructor =
+        await Instructor(id: appData.instructor.id).getInstructor();
     await _pupilManager.tagPupil(pupil, instructor);
     await _pupilManager.tagInstructor(pupil, instructor);
     String message =
@@ -569,5 +595,27 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       //This is for update the UI. Please before remove check twice.
       this._dateOfBirth = this._dateOfBirth;
     });
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  String downloadUrl;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: 'imageHero',
+            child: Image.network(
+              downloadUrl,
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 }
