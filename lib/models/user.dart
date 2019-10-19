@@ -39,8 +39,7 @@ class User {
       PhoneNumberKey: phoneNumber,
       UserTypeKey: userType.index,
       UserTokenKey: userToken,
-      IsVerifiedKey: isVerified,
-      ExpiryDateKey: expiryDate.toUtc()
+      IsVerifiedKey: isVerified
     };
   }
 
