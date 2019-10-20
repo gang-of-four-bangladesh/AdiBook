@@ -345,7 +345,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         children: [
                           /*2*/ Container(
                             child: Text(
-                             this._drivingLicenseImageUrl == null ? 'Upload Driving License Picture':'Driving License Picture',
+                              this._drivingLicenseImageUrl == null
+                                  ? 'Upload Driving License Picture'
+                                  : 'Driving License Picture',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -500,8 +502,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.dateOfBirth = this._dateOfBirth;
     pupil.eyeTest = _switchOnEyeTest;
     var result = await pupil.update();
-    String message =
-        result ? 'Pupil updated successfully.' : 'Pupil update failed.';
+    String message = isNotNullOrEmpty(result)
+        ? 'Pupil updated successfully.'
+        : 'Pupil update failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
@@ -531,7 +534,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     await _pupilManager.tagPupil(pupil, instructor);
     await _pupilManager.tagInstructor(pupil, instructor);
     String message =
-        result ? 'Pupil created successfully.' : 'Pupil creation failed.';
+        isNotNullOrEmpty(result) ? 'Pupil created successfully.' : 'Pupil creation failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
@@ -602,5 +605,3 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     });
   }
 }
-
-

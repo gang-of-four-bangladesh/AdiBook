@@ -1,4 +1,5 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/models/lesson_event.dart';
@@ -14,23 +15,23 @@ class LessonManager {
   LessonManager() : this._logger = Logger('manger->lesson_manager');
 
   Future<bool> createLesson(Lesson lesson) async {
-    if (!await lesson.add()) return false;
+    if (isNullOrEmpty(await lesson.add())) return false;
     var pupil = await Pupil(id: lesson.pupilId).getPupil();
     LessonEvent lessonEvent = LessonEvent(
-      id: DateFormat(_lessonIdDateFormat).format(lesson.lessionDate),
-      day: lesson.lessionDate.day.toString(),
+      id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
+      day: lesson.lessonDate.day.toString(),
       instructorId: lesson.instructorId,
-      lessonAt: lesson.lessionDate,
+      lessonAt: lesson.lessonDate,
       pupilName: pupil.name,
       pupilId: pupil.id,
     );
     var snap = await lessonEvent.get();
     if (snap.exists) {
-      return await lessonEvent.update();
+      return isNotNullOrEmpty(await lessonEvent.update());
     }
     this._logger.info(
         'Lesson ${lesson.id} for pupil ${pupil.id} by instructor ${lesson.instructorId} creation complete including events.');
-    return await lessonEvent.add();
+    return isNotNullOrEmpty(await lessonEvent.add());
   }
 
   Future<Map> getLessonEvents({DateTime date}) async {
@@ -43,7 +44,8 @@ class LessonManager {
             DateTime(startDate.year, startDate.month + 1, startDate.day)) {
       var month = startDate.month;
       var year = startDate.year;
-      this._logger.info('Retreiving lesson events for date $startDate and difference ${endDate.difference(startDate).inDays}');
+      this._logger.info(
+          'Retreiving lesson events for date $startDate and difference ${endDate.difference(startDate).inDays}');
       var id = DateFormat(_lessonIdDateFormat).format(DateTime(year, month));
       var lastDayOfMonth = DateTime(year, month + 1, 0).day;
       var snap =

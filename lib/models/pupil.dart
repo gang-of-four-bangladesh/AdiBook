@@ -11,7 +11,7 @@ class Pupil {
   static const String DateOfBirthKey = 'dob';
   static const String EyeTestKey = 'ets';
   static const String TheoryRecordKey = 'thr';  
-  static const String DocumentDownloadUrl = 'url';
+  static const String DocumentDownloadUrlKey = 'url';
   static const String PreviousExperiencehKey = 'pex';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
@@ -44,17 +44,19 @@ class Pupil {
   DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
-    return {
-      NameKey: name,
-      AddressKey: address,
-      PhoneNumberKey: phoneNumber,
-      LicenseKey: licenseNo,
-      DateOfBirthKey: dateOfBirth,
-      EyeTestKey: eyeTest,
-      TheoryRecordKey: theoryRecord,
-      DocumentDownloadUrl: documentDownloadUrl,
-      PreviousExperiencehKey: previousExperience
-    };
+    var json = Map<String, dynamic>();
+    if (isNotNullOrEmpty(name)) json[NameKey] = name;
+    if (isNotNullOrEmpty(phoneNumber)) json[PhoneNumberKey] = phoneNumber;
+    if (isNotNullOrEmpty(address)) json[AddressKey] = address;
+    if (isNotNullOrEmpty(licenseNo)) json[LicenseKey] = licenseNo;
+    if (isNotNullOrEmpty(eyeTest)) json[EyeTestKey] = eyeTest;
+    if (isNotNullOrEmpty(theoryRecord)) json[TheoryRecordKey] = theoryRecord;
+    if (isNotNullOrEmpty(documentDownloadUrl)) json[DocumentDownloadUrlKey] = documentDownloadUrl;
+    if (isNotNullOrEmpty(previousExperience)) json[PreviousExperiencehKey] = previousExperience;
+    if (isNotNullOrEmpty(dateOfBirth)) json[DateOfBirthKey] = dateOfBirth.toUtc();
+    if (isNotNullOrEmpty(createdAt)) json[CreatedAtKey] = createdAt.toUtc();
+    if (isNotNullOrEmpty(updatedAt)) json[UpdatedAtKey] = updatedAt.toUtc();
+    return json;
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
@@ -67,7 +69,7 @@ class Pupil {
         TypeConversion.timeStampToDateTime(snapshot[Pupil.DateOfBirthKey]);
     this.eyeTest = snapshot[Pupil.EyeTestKey];
     this.theoryRecord = snapshot[Pupil.TheoryRecordKey];
-    this.documentDownloadUrl = snapshot[Pupil.DocumentDownloadUrl];
+    this.documentDownloadUrl = snapshot[Pupil.DocumentDownloadUrlKey];
     this.previousExperience = snapshot[Pupil.PreviousExperiencehKey];
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[Pupil.CreatedAtKey]);
@@ -92,37 +94,33 @@ class Pupil {
         .get();
   }
 
-  Future<bool> add() async {
+  Future<Pupil> add() async {
     try {
-      var json = this.toJson();
-      this.createdAt = DateTime.now().toUtc();
-      json[CreatedAtKey] = this.createdAt;
+      this.createdAt = DateTime.now();
       Firestore.instance
           .collection(FirestorePath.PupilCollection)
           .document(this.id)
-          .setData(json);
-      this._logger.info('Pupil created successfully with data $json .');
-      return true;
+          .setData(this.toJson());
+      this._logger.info('Pupil created successfully.');
+      return this;
     } catch (e) {
       this._logger.shout('Pupil creation failed. Reason $e');
-      return false;
+      return null;
     }
   }
 
-  Future<bool> update() async {
+  Future<Pupil> update() async {
     try {
-      var json = this.toJson();
-      this.updatedAt = DateTime.now().toUtc();
-      json[UpdatedAtKey] = this.updatedAt;
+      this.updatedAt = DateTime.now();
       Firestore.instance
           .collection(FirestorePath.PupilCollection)
           .document(this.id)
-          .updateData(json);
-      this._logger.info('Pupil updated successfully with data $json.');
-      return true;
+          .updateData(this.toJson());
+      this._logger.info('Pupil updated successfully.');
+      return this;
     } catch (e) {
       this._logger.shout('Pupil update failed. Reason $e');
-      return false;
+      return null;
     }
   }
 

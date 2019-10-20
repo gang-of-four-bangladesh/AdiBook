@@ -79,7 +79,7 @@ class UserManager {
     } else if (adiBookUser.userType == UserType.Pupil) {
       appData.pupil = await Pupil(id: adiBookUser.id).getPupil();
       appData.instructor =
-          await PupilManager().getDefaultInstructor(adiBookUser.id);
+          await PupilManager().getDefaultInstructor(appData.pupil.id);
     }
   }
 

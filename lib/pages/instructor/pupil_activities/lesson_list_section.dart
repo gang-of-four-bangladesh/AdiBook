@@ -31,14 +31,13 @@ class LessonListSectionState extends State<LessonListSection> {
   }
 
   void _loadLessonsData() async {
+    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    if (isNullOrEmpty(pupilId)) return;
     if (!mounted) return;
     setState(() {
       this._switchAckTest = false;
-      this._logger.info(
-          'Lesson listing instructor id ${appData.instructor.id}, pupil id ${appData.pupil.id}');
       _querySnapshot = PupilManager()
-          .getLessions(
-              instructorId: appData.instructor.id, pupilId: appData.pupil.id)
+          .getLessions(instructorId: appData.instructor.id, pupilId: pupilId)
           .asStream();
     });
   }
@@ -120,7 +119,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                   Text(
                                                     enumValueToString(LessionType
                                                             .values[int.parse(
-                                                                document[Lesson.LessionTypeKey]
+                                                                document[Lesson.LessonTypeKey]
                                                                     .toString())]
                                                             .toString() +
                                                         ' - ' +
@@ -210,12 +209,17 @@ class LessonListSectionState extends State<LessonListSection> {
 
   Future<void> _updateData(String lessonId) async {
     this._logger.info('Updating lesson information $lessonId.');
-    Lesson lesson = await Lesson(pupilId: appData.pupil.id,instructorId: appData.instructor.id,id: lessonId).getLession();
+    Lesson lesson = await Lesson(
+            pupilId: appData.pupil.id,
+            instructorId: appData.instructor.id,
+            id: lessonId)
+        .getLession();
     lesson.hasAcknowledged = true;
     var result = await lesson.update();
-    String message =
-        result ? 'Lesson updated successfully.' : 'Lesson update failed.';
-        FrequentWidgets _frequentWidgets = FrequentWidgets();
+    String message = isNotNullOrEmpty(result)
+        ? 'Lesson updated successfully.'
+        : 'Lesson update failed.';
+    FrequentWidgets _frequentWidgets = FrequentWidgets();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

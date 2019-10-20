@@ -464,14 +464,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       pupilId: appData.pupil.id,
       instructorId: appData.instructor.id,
       vehicleType: this._selectedVehicleType,
-      lessionType: this._selectedlessionType,
+      lessonType: this._selectedlessionType,
       diaryNotes: this._diaryNotesController.text,
       reportCard: this._reportCardController.text,
       documentDownloadUrl: documentDownloadUrl,
       pickupLocation: this._selectedPickupLocation,
       dropOffLocation: this._selectedDropOffLocation,
-      lessionDate: this._lessonDate,
-      lessionDuration: _lessionDuration,
+      lessonDate: this._lessonDate,
+      lessonDuration: _lessionDuration,
     );
     var message = await LessonManager().createLesson(lesson)
         ? 'Lesson created successfully.'

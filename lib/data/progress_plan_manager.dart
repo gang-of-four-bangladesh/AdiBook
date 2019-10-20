@@ -16,11 +16,11 @@ class ProgressPlanViewModel {
 
 class ProgressPlanManager {
   Logger _logger = Logger('progress_plan_manager');
-  Future<List<ProgressPlanViewModel>> getProgressDetails() async {
+  Future<List<ProgressPlanViewModel>> getProgressDetails(
+      {String pupilId, String instructorId}) async {
     List<ProgressPlanViewModel> _data = [];
-    var progressSnap = await ProgressPlan(
-            pupilId: appData.pupil.id, instructorId: appData.instructor.id)
-        .get();
+    var progressSnap =
+        await ProgressPlan(pupilId: pupilId, instructorId: instructorId).get();
     this._logger.info('Progress snap $progressSnap');
     for (var progressPlanSubject in progressPlanSubjects) {
       var progressData = ProgressPlanViewModel(
@@ -48,7 +48,8 @@ class ProgressPlanManager {
     int ratingSum = 0;
     progressDetails.forEach((p) => ratingSum += p.status.index);
     var percent = ratingSum / (progressPlanSubjects.length * 5);
-    this._logger.info('Total Subjects are ${progressPlanSubjects.length}, and rating summation is $ratingSum.');
+    this._logger.info(
+        'Total Subjects are ${progressPlanSubjects.length}, and rating summation is $ratingSum.');
     return percent;
   }
 

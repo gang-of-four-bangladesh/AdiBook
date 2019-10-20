@@ -37,14 +37,13 @@ class _InstructorProfile extends State<InstructorProfile> {
   }
 
   void getInstructorInfo() async {
-    this._logger.info(" Pupil Id >>>> : ${appData.pupil.id}");
     Instructor instructor =
         await Instructor(id: appData.instructor.id).getInstructor();
-    this._logger.info("Pupil Model >>>> : ${instructor.dateOfBirth}");
     nameController.text = instructor.name;
     addressController.text = instructor.address;
     phoneController.text = instructor.phoneNumber;
     drivingLicenseController.text = instructor.licenseNo;
+    if (!mounted) return;
     setState(() {
       this._dateOfBirth = instructor.dateOfBirth;
     });
@@ -257,7 +256,7 @@ class _InstructorProfile extends State<InstructorProfile> {
     instructor.phoneNumber = phoneController.text;
     instructor.dateOfBirth = this._dateOfBirth;
     var result = await instructor.update();
-    String message = result
+    String message = isNotNullOrEmpty(result)
         ? 'Instructor updated successfully.'
         : 'Instructor update failed.';
     _frequentWidgets.getSnackbar(

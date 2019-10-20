@@ -82,7 +82,6 @@ class PupilPistSectionState extends State<PupilListSection> {
                       trailing: Icon(Icons.person),
                       title: Text(document[Pupil.NameKey]),
                       onTap: () {
-                        appData.pupil.id = document.documentID;
                         Navigator.push(
                           context,
                           MaterialPageRoute(

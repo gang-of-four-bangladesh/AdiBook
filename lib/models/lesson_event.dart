@@ -30,15 +30,13 @@ class LessonEvent {
     var ref = Firestore.instance
         .collection(FirestorePath.PupilCollection)
         .document(this.pupilId);
+    var json = Map<String, dynamic>();
+    if (isNotNullOrEmpty(pupilName)) json[PupilNameKey] = pupilName;
+    if (isNotNullOrEmpty(lessonAt)) json[LessonTimeKey] = lessonAt.toUtc();
+    if (isNotNullOrEmpty(ref)) json[PupilReferenceTaggedAtKey] = ref;
     return {
       this.day: FieldValue.arrayUnion(
-        [
-          {
-            PupilNameKey: this.pupilName,
-            LessonTimeKey: this.lessonAt,
-            PupilReferenceTaggedAtKey: ref,
-          }
-        ],
+        [json],
       ),
     };
   }
@@ -49,36 +47,32 @@ class LessonEvent {
     return Firestore.instance.collection(path).document(this.id).get();
   }
 
-  Future<bool> add() async {
+  Future<LessonEvent> add() async {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      this._logger.info(path);
-      var json = this._toJson();
-      await Firestore.instance.collection(path).document(this.id).setData(json);
-      this._logger.info('Lesson event created successfully with data $json.');
-      return true;
+      await Firestore.instance.collection(path).document(this.id).setData(this._toJson());
+      this._logger.info('Lesson event created successfully.');
+      return this;
     } catch (e) {
       this._logger.shout('Lesson event creation failed. Reason $e');
-      return false;
+      return null;
     }
   }
 
-  Future<bool> update() async {
+  Future<LessonEvent> update() async {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      this._logger.info(path);
-      var json = this._toJson();
       await Firestore.instance
           .collection(path)
           .document(this.id)
-          .updateData(json);
-      this._logger.info('Lesson event updated successfully with data $json.');
-      return true;
+          .updateData(this._toJson());
+      this._logger.info('Lesson event updated successfully.');
+      return this;
     } catch (e) {
       this._logger.severe('Lesson event update failed. Reason $e');
-      return false;
+      return null;
     }
   }
 

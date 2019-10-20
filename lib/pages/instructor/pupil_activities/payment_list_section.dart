@@ -28,13 +28,13 @@ class PaymentListSectionState extends State<PaymentListSection> {
   }
 
   void _loadPaymentsData() async {
+    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    if (isNullOrEmpty(pupilId)) return;
     if (!mounted) return;
     setState(() {
-      this._logger.info(
-          'Payment listing instructor id ${appData.instructor.id}, pupil id ${appData.pupil.id}');
       _querySnapshot = PupilManager()
           .getPayments(
-              instructorId: appData.instructor.id, pupilId: appData.pupil.id)
+              instructorId: appData.instructor.id, pupilId: pupilId)
           .asStream();
     });
   }
@@ -98,7 +98,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                                             .format(TypeConversion
                                                                 .timeStampToDateTime(
                                                                     document[Payment
-                                                                        .DateKey]))
+                                                                        .PaymentDateKey]))
                                                             .toString()),
                                                     style: TextStyle(
                                                         fontWeight:
@@ -110,7 +110,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                                         enumValueToString(PaymentType
                                                             .values[int.parse(
                                                                 document[Payment
-                                                                        .TypeKey]
+                                                                        .PaymentTypeKey]
                                                                     .toString())]
                                                             .toString()),
                                                     style: TextStyle(

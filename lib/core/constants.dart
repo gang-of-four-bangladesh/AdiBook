@@ -4,18 +4,18 @@ class FirestorePath {
   static const String InstructorCollection = 'instructors';
   static const String UserCollection = 'users';
   static const String PupilCollection = 'pupils';
-  static const String LessionCollection = 'lessons';  
+  static const String LessionCollection = 'lessons';
   static const String PaymentCollection = 'payments';
   static const String ProgressPlanCollection = 'progress';
   static const String LessonEventsCollection = 'lesson_events';
-    static const String PaymentEventsCollection = 'payment_events';
+  static const String PaymentEventsCollection = 'payment_events';
   static const String PupilsOfAnInstructorCollection =
       '$InstructorCollection/%s/$PupilCollection';
   static const String InstructorsOfAPupilColection =
       '$PupilCollection/%s/$InstructorCollection';
   static const String LessonsOfAPupilColection =
       '$PupilCollection/%s/$InstructorCollection/%s/$LessionCollection';
-      static const String PaymentsOfAPupilColection =
+  static const String PaymentsOfAPupilColection =
       '$PupilCollection/%s/$InstructorCollection/%s/$PaymentCollection';
   static const String ProgressPlanOfAPupilCollection =
       '$PupilCollection/%s/$InstructorCollection/%s/$ProgressPlanCollection';
@@ -29,7 +29,8 @@ class StoragePath {
   static const String AppDocumentsFolder = '/app_docs';
   static const String DrivingLicenseFolder = '/driving_license';
   static const String LessonsFolder = '$AppDocumentsFolder/lessons';
-  static const String PupilsFolder = '$AppDocumentsFolder/pupils/$DrivingLicenseFolder';
+  static const String PupilsFolder =
+      '$AppDocumentsFolder/pupils/$DrivingLicenseFolder';
 }
 
 class PageRoutes {
@@ -135,3 +136,12 @@ enum ProgressSubjectStatus {
 }
 
 enum PaymentType { Cash, Card, Cheque }
+
+bool isNullOrEmpty<T>(T value) {
+  if (value is String) return value == null || value.isEmpty;
+  return value == null;
+}
+
+bool isNotNullOrEmpty<T>(T value) {
+  return !isNullOrEmpty(value);
+}

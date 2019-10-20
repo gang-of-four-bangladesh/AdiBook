@@ -17,9 +17,9 @@ class User {
     this.id,
     this.name,
     this.phoneNumber,
-    this.userType = UserType.Instructor,
+    this.userType,
     this.userToken,
-    this.isVerified = false,
+    this.isVerified,
   })  : this.createdAt = null,
         this.updatedAt = null,
         this._logger = Logger('model->user');
@@ -34,13 +34,16 @@ class User {
   DateTime updatedAt;
 
   Map<String, dynamic> _toJson() {
-    return {
-      NameKey: name,
-      PhoneNumberKey: phoneNumber,
-      UserTypeKey: userType.index,
-      UserTokenKey: userToken,
-      IsVerifiedKey: isVerified
-    };
+    var json = Map<String, dynamic>();
+    if (isNotNullOrEmpty(name)) json[NameKey] = name;
+    if (isNotNullOrEmpty(phoneNumber)) json[PhoneNumberKey] = phoneNumber;
+    if (isNotNullOrEmpty(userType)) json[UserTypeKey] = userType.index;
+    if (isNotNullOrEmpty(userToken)) json[UserTokenKey] = userToken;
+    if (isNotNullOrEmpty(isVerified)) json[IsVerifiedKey] = isVerified;
+    if (isNotNullOrEmpty(expiryDate)) json[ExpiryDateKey] = expiryDate.toUtc();
+    if (isNotNullOrEmpty(createdAt)) json[CreatedAtKey] = createdAt.toUtc();
+    if (isNotNullOrEmpty(updatedAt)) json[UpdatedAtKey] = updatedAt.toUtc();
+    return json;
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
@@ -80,7 +83,6 @@ class User {
       this.createdAt = DateTime.now();
       this.expiryDate = this.createdAt.add(Duration(days: 30));
       var json = this._toJson();
-      json[CreatedAtKey] = this.createdAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.UserCollection)
           .document(this.id)

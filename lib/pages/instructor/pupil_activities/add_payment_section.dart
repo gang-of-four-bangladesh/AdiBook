@@ -213,13 +213,14 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
 
   Future<void> _saveData() async {
     var _amount = int.parse(_amountController.text);
+    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     Payment payment = new Payment(
-        pupilId: appData.pupil.id,
+        pupilId: pupilId,
         instructorId: appData.instructor.id,
         paymentDate: this._dateOfPayment,
         amount: _amount,
-        type: this._selectedPaymentType);
-    var message = await payment.add()
+        paymentType: this._selectedPaymentType);
+    var message =isNotNullOrEmpty(await payment.add())
         ? 'Payment created successfully.'
         : 'Payment creation failed.';
     _frequentWidgets.getSnackbar(

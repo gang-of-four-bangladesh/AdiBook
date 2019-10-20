@@ -20,7 +20,7 @@ class _StatusSectionState extends State<StatusSection> {
 
   void _initialize() async {
     var _progress = await ProgressPlanManager().getProgressPercentage();
-    this._logger.info('Progress percentage is $_progress');
+    if (!mounted) return;
     setState(() {
       this._progressPercentage = _progress;
     });

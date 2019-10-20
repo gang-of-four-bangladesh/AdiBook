@@ -7,9 +7,9 @@ import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
 
 class Payment {
-  static const String DateKey = 'pod';
+  static const String PaymentDateKey = 'pod';
   static const String AmountKey = 'amn';
-  static const String TypeKey = 'pot';
+  static const String PaymentTypeKey = 'pot';
   static const String CreatedAtKey = 'cat';
   static const String UpdatedAtKey = 'uat';
   Logger _logger;
@@ -19,7 +19,7 @@ class Payment {
       this.id,
       this.paymentDate,
       this.amount,
-      this.type})
+      this.paymentType})
       : this.createdAt = null,
         this.updatedAt = null,
         this._logger = Logger('model->payment');
@@ -29,17 +29,23 @@ class Payment {
   String instructorId;
   DateTime paymentDate;
   int amount;
-  PaymentType type;
+  PaymentType paymentType;
   DateTime createdAt;
   DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
-    return {DateKey: paymentDate, AmountKey: amount, TypeKey: type.index};
+    var json = Map<String, dynamic>();
+    if (isNotNullOrEmpty(paymentDate)) json[PaymentDateKey] = paymentDate;
+    if (isNotNullOrEmpty(amount)) json[AmountKey] = amount;
+    if (isNotNullOrEmpty(paymentType)) json[PaymentTypeKey] = paymentType.index;
+    if (isNotNullOrEmpty(createdAt)) json[CreatedAtKey] = createdAt.toUtc();
+    if (isNotNullOrEmpty(updatedAt)) json[UpdatedAtKey] = updatedAt.toUtc();
+    return json;
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
-    this.paymentDate = snapshot[Payment.DateKey];
+    this.paymentDate = snapshot[Payment.PaymentDateKey];
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[Payment.CreatedAtKey]);
     this.updatedAt =
@@ -63,20 +69,18 @@ class Payment {
     return this;
   }
 
-  Future<bool> add() async {
+  Future<Payment> add() async {
     try {
       var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.pupilId, this.instructorId]);
-      this.createdAt = DateTime.now().toUtc();
+      this.createdAt = DateTime.now();
       this.id = TypeConversion.toNumberFormat(this.createdAt);
-      var json = this.toJson();
-      json[CreatedAtKey] = this.createdAt;
-      Firestore.instance.collection(path).document(this.id).setData(json);
-      this._logger.info('Payment created successfully with data $json.');
-      return true;
+      Firestore.instance.collection(path).document(this.id).setData(this.toJson());
+      this._logger.info('Payment created successfully.');
+      return this;
     } catch (e) {
       this._logger.shout('Payment creation failed. Reason $e');
-      return false;
+      return null;
     }
   }
 
@@ -84,11 +88,9 @@ class Payment {
     try {
       var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
           [this.pupilId, this.instructorId]);
-      this.updatedAt = DateTime.now().toUtc();
-      var json = this.toJson();
-      json[UpdatedAtKey] = this.updatedAt;
-      Firestore.instance.collection(path).document(this.id).updateData(json);
-      this._logger.info('Lesson updated successfully with data $json.');
+      this.updatedAt = DateTime.now();
+      Firestore.instance.collection(path).document(this.id).updateData(this.toJson());
+      this._logger.info('Lesson updated successfully.');
       return true;
     } catch (e) {
       this._logger.shout('Lesson update failed. Reason $e');

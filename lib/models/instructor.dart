@@ -35,13 +35,15 @@ class Instructor {
   DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
-    return {
-      NameKey: name,
-      AddressKey: address,
-      PhoneNumberKey: phoneNumber,
-      LicenseKey: licenseNo,
-      DateOfBirthKey: dateOfBirth
-    };
+    var json = Map<String, dynamic>();
+    if (isNotNullOrEmpty(name)) json[NameKey] = name;
+    if (isNotNullOrEmpty(address)) json[AddressKey] = address;
+    if (isNotNullOrEmpty(phoneNumber)) json[PhoneNumberKey] = phoneNumber;
+    if (isNotNullOrEmpty(licenseNo)) json[LicenseKey] = licenseNo;
+    if (isNotNullOrEmpty(dateOfBirth)) json[DateOfBirthKey] = dateOfBirth;
+    if (isNotNullOrEmpty(createdAt)) json[CreatedAtKey] = createdAt.toUtc();
+    if (isNotNullOrEmpty(updatedAt)) json[UpdatedAtKey] = updatedAt.toUtc();
+    return json;
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
@@ -70,7 +72,10 @@ class Instructor {
 
   Future<QuerySnapshot> getPupils() async {
     var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [this.id]);
-    return Firestore.instance.collection(path).orderBy(Pupil.NameKey).getDocuments();
+    return Firestore.instance
+        .collection(path)
+        .orderBy(Pupil.NameKey)
+        .getDocuments();
   }
 
   Future<DocumentSnapshot> get() async {
@@ -80,37 +85,33 @@ class Instructor {
         .get();
   }
 
-  Future<bool> add() async {
+  Future<Instructor> add() async {
     try {
       this.createdAt = DateTime.now();
-      var json = this.toJson();
-      json[CreatedAtKey] = this.createdAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.InstructorCollection)
           .document(this.id)
-          .setData(json);
-      this._logger.info('Instructor created succussfully with data $json');
-      return true;
+          .setData(this.toJson());
+      this._logger.info('Instructor created succussfully.');
+      return this;
     } catch (e) {
       this._logger.shout('Instructor creation failed. Reason $e');
-      return false;
+      return null;
     }
   }
 
-  Future<bool> update() async {
+  Future<Instructor> update() async {
     try {
       this.updatedAt = DateTime.now();
-      var json = this.toJson();
-      json[UpdatedAtKey] = this.updatedAt.toUtc();
       await Firestore.instance
           .collection(FirestorePath.InstructorCollection)
           .document(this.id)
-          .updateData(json);
-      this._logger.info('Instructor updated successfully with data $json');
-      return true;
+          .updateData(this.toJson());
+      this._logger.info('Instructor updated successfully.');
+      return this;
     } catch (e) {
       this._logger.shout('Instructor update failed. Reason $e');
-      return false;
+      return null;
     }
   }
 

@@ -22,7 +22,10 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
 
   void _initialize() async {
     _logger.info('initalizing progress planner. Loading planning list.');
-    var _progressDetails = await ProgressPlanManager().getProgressDetails();
+    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    var instructorId = appData.instructor.id;
+    var _progressDetails = await ProgressPlanManager()
+        .getProgressDetails(pupilId: pupilId, instructorId: instructorId);
     setState(() {
       this._progressPlanDetails = _progressDetails;
     });
