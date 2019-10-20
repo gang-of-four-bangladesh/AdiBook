@@ -34,6 +34,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   String _attachedDocPath;
   DateTime _lessonDate;
   TimeOfDay _lessonTime;
+  String _pupilId;
+  String _lessionId;
 
   _AddLessonSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -52,6 +54,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.None;
     _selectedlessionType = LessionType.None;
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];
+    this._logger.info('Lesson in edit mode id ${this._lessionId}');
   }
 
   @override
@@ -422,7 +427,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                     await _saveData();
                                     var instructor = await Instructor(id: appData.instructor.id).getInstructor();
                                     await PushNotificationSender.send(
-                                      userId: appData.pupil.id,
+                                      userId: this._pupilId,
                                       title: 'Driving Lesson Schedule',
                                       body: 'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonDurationController.text} minutes.',
                                     );
@@ -461,7 +466,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         await storageUpload.uploadLessonFile(this._attachedDocPath);
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
-      pupilId: appData.pupil.id,
+      pupilId: this._pupilId,
       instructorId: appData.instructor.id,
       vehicleType: this._selectedVehicleType,
       lessonType: this._selectedlessionType,

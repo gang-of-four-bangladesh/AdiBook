@@ -9,10 +9,12 @@ import 'package:logging/logging.dart';
 class HomePage extends StatefulWidget {
   final SectionType sectionType;
   final UserType userType;
+  final int defaultSectionIndex;
   final Map<String, dynamic> contextInfo;
   HomePage({
     this.userType,
     this.sectionType,
+    this.defaultSectionIndex = 0,
     this.contextInfo,
   });
   @override
@@ -22,7 +24,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   Logger _logger = Logger('HomePage');
-  int _selectedPage;
   List<WidgetConfiguration> _widgetsConfig = [];
   List<Widget> _widgets = [];
   TabController _tabController;
@@ -72,7 +73,6 @@ class _HomePageState extends State<HomePage>
   void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     setState(() {
-      _selectedPage = 0;
       this._widgetsConfig = PageManager().getWidgetConfigurations(
         this.widget.userType,
         this.widget.sectionType,
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage>
       this._getTabs();
       _tabController = TabController(
         vsync: this,
-        initialIndex: _selectedPage,
+        initialIndex: this.widget.defaultSectionIndex,
         length: this._widgets.length,
       );
     });

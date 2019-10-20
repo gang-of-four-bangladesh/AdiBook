@@ -3,6 +3,7 @@ import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';
+import 'package:adibook/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class LessonListSectionState extends State<LessonListSection> {
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->lesson_list');
   bool _switchAckTest = false;
+  String _pupilId;
+
   @override
   void initState() {
     super.initState();
@@ -31,13 +34,13 @@ class LessonListSectionState extends State<LessonListSection> {
   }
 
   void _loadLessonsData() async {
-    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    if (isNullOrEmpty(pupilId)) return;
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     if (!mounted) return;
     setState(() {
       this._switchAckTest = false;
       _querySnapshot = PupilManager()
-          .getLessions(instructorId: appData.instructor.id, pupilId: pupilId)
+          .getLessions(
+              instructorId: appData.instructor.id, pupilId: this._pupilId)
           .asStream();
     });
   }
@@ -70,17 +73,31 @@ class LessonListSectionState extends State<LessonListSection> {
                         caption: 'Edit',
                         color: Colors.indigo,
                         icon: FontAwesomeIcons.edit,
-                        onTap: () => {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                sectionType:
+                                    SectionType.InstructorActivityForPupil,
+                                userType: UserType.Instructor,
+                                defaultSectionIndex: 2,
+                                contextInfo: {
+                                  DataSharingKeys.LessonIdKey:
+                                      document.documentID
+                                },
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                     actionPane: SlidableScrollActionPane(),
                     actionExtentRatio: 0.12,
                     child: ListTile(
                       onTap: () {
-                        print("clicked");
-                        appData.user.userType == UserType.Pupil
-                            ? _updateData(document.documentID)
-                            : print(document["id"]);
+                        appData.user.userType == UserType.Pupil ??
+                            _updateData(document.documentID);
                       },
                       title: Container(
                         padding: EdgeInsets.all(10),
@@ -171,20 +188,11 @@ class LessonListSectionState extends State<LessonListSection> {
                                       ],
                                     ),
                                   ),
-                                  //Text(document["ack"].toString()),
                                   Checkbox(
-                                      value:
-                                          document[Lesson.HasAcknowledgedKey],
-                                      onChanged: (lesson) {
-                                        Lesson(
-                                            instructorId: appData.instructor.id,
-                                            pupilId: appData.pupil.id);
-                                        setState(() {
-                                          _switchAckTest = document[
-                                              Lesson.HasAcknowledgedKey];
-                                        });
-                                      },
-                                      activeColor: AppTheme.appThemeColor),
+                                    value: document[Lesson.HasAcknowledgedKey],
+                                    onChanged: (check) {},
+                                    activeColor: AppTheme.appThemeColor,
+                                  ),
                                 ],
                               ),
                             ),
@@ -210,7 +218,7 @@ class LessonListSectionState extends State<LessonListSection> {
   Future<void> _updateData(String lessonId) async {
     this._logger.info('Updating lesson information $lessonId.');
     Lesson lesson = await Lesson(
-            pupilId: appData.pupil.id,
+            pupilId: this._pupilId,
             instructorId: appData.instructor.id,
             id: lessonId)
         .getLession();

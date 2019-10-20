@@ -67,7 +67,6 @@ class PupilPistSectionState extends State<PupilListSection> {
                         icon: FontAwesomeIcons.edit,
                         foregroundColor: Colors.white,
                         onTap: () {
-                          appData.pupil.id = document.documentID;
                           Navigator.push(
                             context,
                             MaterialPageRoute(

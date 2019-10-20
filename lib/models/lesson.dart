@@ -64,7 +64,7 @@ class Lesson {
     if (isNotNullOrEmpty(dropOffLocation))
       json[DropOffLocationKey] = dropOffLocation.index;
     if (isNotNullOrEmpty(vehicleType)) json[VehicleTypeKey] = vehicleType.index;
-    if (isNotNullOrEmpty(lessonType)) json[LessonTypeKey] = lessonType;
+    if (isNotNullOrEmpty(lessonType)) json[LessonTypeKey] = lessonType.index;
     if (isNotNullOrEmpty(diaryNotes)) json[DiaryNotesKey] = diaryNotes;
     if (isNotNullOrEmpty(reportCard)) json[ReportCardKey] = reportCard;
     if (isNotNullOrEmpty(documentDownloadUrl))
