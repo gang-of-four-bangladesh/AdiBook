@@ -57,6 +57,27 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];
     this._logger.info('Lesson in edit mode id ${this._lessionId}');
+    if (appData.user.userType == UserType.Instructor) populateLessonInfo();
+  }
+
+   void populateLessonInfo() async {
+    Lesson lesson = await Lesson(
+            pupilId: this._pupilId,
+            instructorId: appData.instructor.id,
+            id: _lessionId)
+        .getLession();
+    this._logger.info("Leeson Model >>>> : $_lessionId");
+    this._lessonDurationController.text = lesson.lessonDuration.toString();
+    this._diaryNotesController.text = lesson.diaryNotes;
+    this._reportCardController.text = lesson.reportCard;
+    if (!mounted) return;
+    setState(() {
+      this._lessonDate = lesson.lessonDate;
+      this._selectedPickupLocation = lesson.pickupLocation;
+      this._selectedDropOffLocation = lesson.dropOffLocation;
+      this._selectedVehicleType = lesson.vehicleType;
+      this._selectedlessionType = lesson.lessonType;      
+    });
   }
 
   @override
