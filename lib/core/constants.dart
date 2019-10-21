@@ -54,6 +54,7 @@ class SharedPreferenceKeys {
 class DataSharingKeys {
   static const String PupilIdKey = 'pupil_id_key';
   static const String LessonIdKey = 'lesson_id_key';
+  static const String PaymentIdKey = 'payment_id_key';
 }
 
 class EnvironmentStatus {

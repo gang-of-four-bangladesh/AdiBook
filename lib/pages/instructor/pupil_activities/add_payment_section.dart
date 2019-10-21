@@ -21,6 +21,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   TextEditingController _amountController;
   PaymentType _selectedPaymentType;
   DateTime _dateOfPayment;
+  String _pupilId;
+  String _paymentId;
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
     this._paymentDate = DateTime.now();
@@ -34,6 +36,25 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     this._dateOfPayment = DateTime.now();
     this._autoValidate = false;
     _selectedPaymentType = PaymentType.Cash;
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
+    this._logger.info('Lesson in edit mode id ${this._paymentId}');
+    if (appData.user.userType == UserType.Instructor) populatePaymentInfo();
+  }
+
+  void populatePaymentInfo() async {
+    Payment payment = await Payment(
+            pupilId: this._pupilId,
+            instructorId: appData.instructor.id,
+            id: this._paymentId)
+        .getPayment();
+    this._logger.info("Payment Model >>>> : ${this._paymentId}");
+    this._amountController.text = payment.amount.toString();
+    if (!mounted) return;
+    setState(() {
+      this._dateOfPayment = payment.paymentDate;
+      this._selectedPaymentType = payment.paymentType;
+    });
   }
 
   @override
@@ -63,10 +84,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                                 children: <Widget>[
                                   IconButton(
                                     icon: Icon(Icons.date_range),
-                                    onPressed:
-                                        appData.user.userType == UserType.Instructor
-                                            ? _selectDateOfpayment
-                                            : null,
+                                    onPressed: appData.user.userType ==
+                                            UserType.Instructor
+                                        ? _selectDateOfpayment
+                                        : null,
                                   ),
                                   Text(
                                     "Date Of Payment",
@@ -181,8 +202,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (appData.user.userType == UserType.Instructor)
-                                    await _saveData();
+                                  if (appData.user.userType ==
+                                      UserType.Instructor) await _saveData();
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
@@ -215,14 +236,20 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     var _amount = int.parse(_amountController.text);
     var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     Payment payment = new Payment(
+        id: this._paymentId,
         pupilId: pupilId,
         instructorId: appData.instructor.id,
         paymentDate: this._dateOfPayment,
         amount: _amount,
         paymentType: this._selectedPaymentType);
-    var message =isNotNullOrEmpty(await payment.add())
-        ? 'Payment created successfully.'
-        : 'Payment creation failed.';
+    String message;
+    payment.id == null
+        ? message = isNotNullOrEmpty(await payment.add())
+            ? 'Payment created successfully.'
+            : 'Payment creation failed.'
+        : message = isNotNullOrEmpty(await payment.update())
+            ? 'Payment Updated successfully.'
+            : 'Payment update failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

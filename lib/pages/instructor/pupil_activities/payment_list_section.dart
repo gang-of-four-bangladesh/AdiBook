@@ -4,7 +4,9 @@ import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/payment.dart';
+import 'package:adibook/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
@@ -21,6 +23,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->payment_list');
+  String _pupilId;
   @override
   void initState() {
     super.initState();
@@ -28,13 +31,13 @@ class PaymentListSectionState extends State<PaymentListSection> {
   }
 
   void _loadPaymentsData() async {
-    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    if (isNullOrEmpty(pupilId)) return;
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    if (isNullOrEmpty(this._pupilId)) return;
     if (!mounted) return;
     setState(() {
       _querySnapshot = PupilManager()
           .getPayments(
-              instructorId: appData.instructor.id, pupilId: pupilId)
+              instructorId: appData.instructor.id, pupilId: this._pupilId)
           .asStream();
     });
   }
@@ -56,6 +59,37 @@ class PaymentListSectionState extends State<PaymentListSection> {
               children: snapshot.data.documents.map(
                 (DocumentSnapshot document) {
                   return Slidable(
+                      actions: <Widget>[
+                        IconSlideAction(
+                          caption: 'Remove',
+                          color: AppTheme.appThemeColor,
+                          icon: EvaIcons.trash,
+                          onTap: () => {},
+                        ),
+                        IconSlideAction(
+                          caption: 'Edit',
+                          color: AppTheme.appThemeColor,
+                          icon: EvaIcons.edit,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                  sectionType:
+                                      SectionType.InstructorActivityForPupil,
+                                  userType: UserType.Instructor,
+                                  defaultSectionIndex: 3,
+                                  contextInfo: {
+                                    DataSharingKeys.PaymentIdKey:
+                                        document.documentID,
+                                    DataSharingKeys.PupilIdKey: this._pupilId
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                       actionPane: SlidableScrollActionPane(),
                       actionExtentRatio: 0.12,
                       child: ListTile(

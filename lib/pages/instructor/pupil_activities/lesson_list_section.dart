@@ -65,14 +65,14 @@ class LessonListSectionState extends State<LessonListSection> {
                     actions: <Widget>[
                       IconSlideAction(
                         caption: 'Remove',
-                        color: Colors.blue,
-                        icon: EvaIcons.trash2,
+                        color: AppTheme.appThemeColor,
+                        icon: EvaIcons.trash,
                         onTap: () => {},
                       ),
                       IconSlideAction(
                         caption: 'Edit',
-                        color: Colors.indigo,
-                        icon: FontAwesomeIcons.edit,
+                        color: AppTheme.appThemeColor,
+                        icon: EvaIcons.edit,
                         onTap: () {
                           Navigator.push(
                             context,

@@ -64,10 +64,7 @@ class LessonEvent {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      await Firestore.instance
-          .collection(path)
-          .document(this.id)
-          .updateData(this._toJson());
+      await Firestore.instance.collection(path).document(this.id).updateData(this._toJson());
       this._logger.info('Lesson event updated successfully.');
       return this;
     } catch (e) {

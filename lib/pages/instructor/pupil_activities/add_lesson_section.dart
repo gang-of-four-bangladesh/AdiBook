@@ -505,10 +505,10 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     );
     String message;
     lesson.id == null
-        ? message = await LessonManager().createLesson(lesson)
+        ? message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
             ? 'Lesson created successfully.'
             : 'Lesson creation failed.'
-        : message = await LessonManager().updateLesson(lesson)
+        : message = isNotNullOrEmpty(await LessonManager().updateLesson(lesson))
             ? 'Lesson updated successfully.'
             : 'Lesson update failed.';
     _frequentWidgets.getSnackbar(
