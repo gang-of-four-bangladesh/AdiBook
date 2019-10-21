@@ -54,227 +54,59 @@ class ProgressPlanManager {
   }
 
   static const progressPlanSubjects = [
-    {
-      "nmo": "Normal move off",
-    },
-    {
-      "amo": "Angled move off",
-    },
-    {
-      "hst": "Hill start",
-    },
-    {
-      "dmo": "Decline move off",
-    },
-    {
-      "mobr": "Move off busy road",
-    },
-    {
-      "spts": "Safe places to stop",
-    },
-    {
-      "pp": "Parallel park",
-    },
-    {
-      "bprk": "Bay park",
-    },
-    {
-      "fbprk": "Forward bay park",
-    },
-    {
-      "titr": "Turn in the road",
-    },
-    {
-      "rttl": "Reverse to the left",
-    },
-    {
-      "rttr": "Reverse to the right",
-    },
-    {
-      "puosr": "Pull up, opposite side of the road",
-    },
-    {
-      "mac": "Meeting & clearance",
-    },
-    {
-      "ant": "Anticipation",
-    },
-    {
-      "atsl": "Attention to speed limits",
-    },
-    {
-      "guoh": "General use of handbrake",
-    },
-    {
-      "estp": "Emergency stop",
-    },
-    {
-      "es3": "Emergency stop 30mph+",
-    },
-    {
-      "crd": "Country roads",
-    },
-    {
-      "rabt": "Roundabouts",
-    },
-    {
-      "mrbt": "Mini roundabouts",
-    },
-    {
-      "cjnc": "Complex junctions",
-    },
-    {
-      "mtrw": "Motorway",
-    },
-    {
-      "dcrg": "Dual carriageways",
-    },
-    {
-      "jdc": "Joining/leaving dual carriageways",
-    },
-    {
-      "idpd": "Independent driving",
-    },
-    {
-      "grp": "General road position",
-    },
-    {
-      "guog": "General use of gears",
-    },
-    {
-      "poh": "Progress/hesitancy",
-    },
-    {
-      "maj": "MSPSL all junctions",
-    },
-    {
-      "crst": "Crossing traffic",
-    },
-    {
-      "pdcrs": "Pedestrian crossings",
-    },
-    {
-      "idbsn": "Independent driving by sat nav",
-    },
-    {
-      "idbrs": "Independant driving by road signs",
-    },
-    {
-      "kota": "Knowledge of test area",
-    },
-    {
-      "mkt": "Mock test",
-    },
-    {
-      "cmtdrv": "Commentary drive",
-    },
-    {
-      "uoac": "Use of ancillary controls",
-    },
-    {
-      "cdam": "Cockpit drills and controls",
-    },
-    {
-      "stpn": "Stopping normally",
-    },
-    {
-      "str": "Steering",
-    },
-    {
-      "cltchc": "Clutch control",
-    },
-    {
-      "tlmtm": "Turning left, major to minor",
-    },
-    {
-      "trmtm": "Turning right, major to minor",
-    },
-    {
-      "etjo": "Emerging t-junctions open",
-    },
-    {
-      "emrgb": "Emerging blind",
-    },
-    {
-      "tjnc": "T-junctions",
-    },
-    {
-      "crsr": "Cross roads",
-    },
-    {
-      "ctfr": "Crossing traffic on fast roads",
-    },
-    {
-      "uosp": "Use of speed",
-    },
-    {
-      "tlgt": "Traffic lights",
-    },
-    {
-      "emu": "Effective mirror use",
-    },
-    {
-      "uosg": "Use of signals",
-    },
-    {
-      "dblr": "Double roundabouts",
-    },
-    {
-      "puotr": "Pull up on the right",
-    },
-    {
-      "smq": "Show me questions (on the move)",
-    },
-    {
-      "tmq": "Tell me questions",
-    },
-    {
-      "cdr": "Cockpit Drill",
-    },
-    {
-      "mos": "Moving Off and Stopping",
-    },
-    {
-      "aju": "Approaching Junctions",
-    },
-    {
-      "emrgng": "Emerging",
-    },
-    {
-      "mtrfc": "Meeting Traffic",
-    },
-    {
-      "emrgs": "Emergency Stop",
-    },
-    {
-      "pdscrs": "Pedestrian Crossing",
-    },
-    {
-      "hawrns": "Hazard Awareness",
-    },
-    {
-      "prgsmr": "Progress - Main Roads",
-    },
-    {
-      "rndabts": "Roundabouts",
-    },
-    {
-      "dlcrgaws": "Dual Carriageways",
-    },
-    {
-      "tntr": "Turn in the Road",
-    },
-    {
-      "ritb": "Reverse into a Bay",
-    },
-    {
-      "pprk": "Parallel Parking",
-    },
-    {
-      "rracnr": "Reverse Around a Corner",
-    },
-    {
-      "smtm": "Show Me, Tell Me",
-    },
+    {"ccsc": "COCKPIT (CHECKS / SAFETY CHECKS"},
+    {"ci": "CONTROLS & INSTRUMENTS"},
+    {"mas": "MOVING AWAY & STOPPING"},
+    {"spts": "Safe places to stop"},
+    {"spgrp": "SAFE POSITIONING/ General Road Position "},
+    {"emu": "Effective mirror use"},
+    {"s": "SIGNALS"},
+    {"hs": "Hill start"},
+    {"tl": "Traffic lights"},
+    {"ap": "ANTICIPATION & PLANNING"},
+    {"mc": "Meeting & Clearance"},
+    {"p": "Progress/hesitancy"},
+    {"uos": "USE OF SPEED"},
+    {"ot": "OTHER TRAFFIC"},
+    {"m": "MSPSL"},
+    {"tlmtm": "Turning left, major to minor"},
+    {"trmtm": "Turning right, major to minor"},
+    {"eto": "Emerging t-junctions open"},
+    {"etb": "Emerging T-junctions blind"},
+    {"cr": "Cross roads"},
+    {"r": "ROUNDABOUTS"},
+    {"mr": "MINI ROUNDABOUTS"},
+    {"pc": "PEDESTRIAN CROSSINGS"},
+    {"dcj": "DUAL CARRIAGEWAYS (Joining/leaving)"},
+    {"wr": "WET ROADS"},
+    {"dr": "DRY ROADS"},
+    {"d": "DARKNESS"},
+    {"d0": "DAYLIGHT"},
+    {"c": "COUNTRY"},
+    {"tac": "TOWN AND CITY"},
+    {"m0": "Motorway"},
+    {"idbs": "Independant driving by satnav"},
+    {"idbr": "Independant driving by Roadsign"},
+    {"cses": "Controlled Stop (Emergency Stop)"},
+    {"puotr": "Pulling up on the right"},
+    {"pp": "Parallel Parking "},
+    {"fbp": "Forward Bay Parking "},
+    {"rbp": "Reverse Bay Parking "},
+    {"titrtpt": "Turn in the Road (Three Point Turn)"},
+    {"smqotm": "Show me questions (On the move)"},
+    {"tmq": "Tell me questions"},
+    {"er1": "Exam Route 1"},
+    {"er2": "Exam Route 2"},
+    {"er3": "Exam Route 3"},
+    {"er4": "Exam Route 4"},
+    {"er5": "Exam Route 5"},
+    {"er6": "Exam Route 6"},
+    {"er7": "Exam Route 7"},
+    {"er8": "Exam Route 8"},
+    {"er9": "Exam Route 9"},
+    {"er10": "Exam Route 10"},
+    {"mt1": "Mock test 1"},
+    {"mt2": "Mock test 2"},
+    {"mt3": "Mock test 3"}
   ];
 }
