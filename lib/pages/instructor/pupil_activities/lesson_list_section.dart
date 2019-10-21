@@ -84,7 +84,9 @@ class LessonListSectionState extends State<LessonListSection> {
                                 defaultSectionIndex: 2,
                                 contextInfo: {
                                   DataSharingKeys.LessonIdKey:
-                                      document.documentID
+                                      document.documentID,
+                                      DataSharingKeys.PupilIdKey:
+                                      this._pupilId
                                 },
                               ),
                             ),

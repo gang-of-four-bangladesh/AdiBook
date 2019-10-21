@@ -33,6 +33,25 @@ class LessonManager {
         'Lesson ${lesson.id} for pupil ${pupil.id} by instructor ${lesson.instructorId} creation complete including events.');
     return isNotNullOrEmpty(await lessonEvent.add());
   }
+  Future<bool> updateLesson(Lesson lesson) async {
+    if (isNullOrEmpty(await lesson.update())) return false;
+    var pupil = await Pupil(id: lesson.pupilId).getPupil();
+    LessonEvent lessonEvent = LessonEvent(
+      id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
+      day: lesson.lessonDate.day.toString(),
+      instructorId: lesson.instructorId,
+      lessonAt: lesson.lessonDate,
+      pupilName: pupil.name,
+      pupilId: pupil.id,
+    );
+    var snap = await lessonEvent.get();
+    if (snap.exists) {
+      return isNotNullOrEmpty(await lessonEvent.update());
+    }
+    this._logger.info(
+        'Lesson ${lesson.id} for pupil ${pupil.id} by instructor ${lesson.instructorId} creation complete including events.');
+    return isNotNullOrEmpty(await lessonEvent.update());
+  }
 
   Future<Map> getLessonEvents({DateTime date}) async {
     Map eventDetails = {};

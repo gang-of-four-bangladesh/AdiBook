@@ -60,7 +60,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     if (appData.user.userType == UserType.Instructor) populateLessonInfo();
   }
 
-   void populateLessonInfo() async {
+  void populateLessonInfo() async {
     Lesson lesson = await Lesson(
             pupilId: this._pupilId,
             instructorId: appData.instructor.id,
@@ -76,7 +76,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       this._selectedPickupLocation = lesson.pickupLocation;
       this._selectedDropOffLocation = lesson.dropOffLocation;
       this._selectedVehicleType = lesson.vehicleType;
-      this._selectedlessionType = lesson.lessonType;      
+      this._selectedlessionType = lesson.lessonType;
     });
   }
 
@@ -446,11 +446,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 onPressed: () async {
                                   if (_validateInputs()) {
                                     await _saveData();
-                                    var instructor = await Instructor(id: appData.instructor.id).getInstructor();
+                                    var instructor = await Instructor(
+                                            id: appData.instructor.id)
+                                        .getInstructor();
                                     await PushNotificationSender.send(
                                       userId: this._pupilId,
                                       title: 'Driving Lesson Schedule',
-                                      body: 'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonDurationController.text} minutes.',
+                                      body:
+                                          'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonDurationController.text} minutes.',
                                     );
                                   }
                                 },
@@ -487,6 +490,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         await storageUpload.uploadLessonFile(this._attachedDocPath);
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
+      id: this._lessionId,
       pupilId: this._pupilId,
       instructorId: appData.instructor.id,
       vehicleType: this._selectedVehicleType,
@@ -499,9 +503,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessonDate: this._lessonDate,
       lessonDuration: _lessionDuration,
     );
-    var message = await LessonManager().createLesson(lesson)
-        ? 'Lesson created successfully.'
-        : 'Lesson creation failed.';
+    String message;
+    lesson.id == null
+        ? message = await LessonManager().createLesson(lesson)
+            ? 'Lesson created successfully.'
+            : 'Lesson creation failed.'
+        : message = await LessonManager().updateLesson(lesson)
+            ? 'Lesson updated successfully.'
+            : 'Lesson update failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
