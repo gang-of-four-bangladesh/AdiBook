@@ -137,6 +137,8 @@ enum ProgressSubjectStatus {
 
 enum PaymentType { Cash, Card, Cheque }
 
+enum OperationMode { New, Edit }
+
 bool isNullOrEmpty<T>(T value) {
   if (value is String) return value == null || value.isEmpty;
   return value == null;

@@ -1,6 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/home_page.dart';
@@ -8,7 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
@@ -24,7 +24,6 @@ class LessonListSectionState extends State<LessonListSection> {
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->lesson_list');
-  bool _switchAckTest = false;
   String _pupilId;
 
   @override
@@ -37,7 +36,6 @@ class LessonListSectionState extends State<LessonListSection> {
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     if (!mounted) return;
     setState(() {
-      this._switchAckTest = false;
       _querySnapshot = PupilManager()
           .getLessions(
               instructorId: appData.instructor.id, pupilId: this._pupilId)
@@ -67,7 +65,16 @@ class LessonListSectionState extends State<LessonListSection> {
                         caption: 'Remove',
                         color: AppTheme.appThemeColor,
                         icon: EvaIcons.trash,
-                        onTap: () => {},
+                        onTap: () async {
+                          await LessonManager().deleteLesson(
+                            Lesson(
+                              id: document.documentID,
+                              pupilId: this._pupilId,
+                              instructorId: appData.instructor.id,
+                            ),
+                          );
+                          _loadLessonsData();
+                        },
                       ),
                       IconSlideAction(
                         caption: 'Edit',
@@ -85,8 +92,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                 contextInfo: {
                                   DataSharingKeys.LessonIdKey:
                                       document.documentID,
-                                      DataSharingKeys.PupilIdKey:
-                                      this._pupilId
+                                  DataSharingKeys.PupilIdKey: this._pupilId
                                 },
                               ),
                             ),

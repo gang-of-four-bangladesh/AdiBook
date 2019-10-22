@@ -36,6 +36,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TimeOfDay _lessonTime;
   String _pupilId;
   String _lessionId;
+  OperationMode _operationMode;
 
   _AddLessonSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -56,8 +57,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedlessionType = LessionType.None;
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];
-    this._logger.info('Lesson in edit mode id ${this._lessionId}');
-    if (appData.user.userType == UserType.Instructor) populateLessonInfo();
+    this._operationMode =
+        isNullOrEmpty(this._lessionId) ? OperationMode.New : OperationMode.Edit;
+    if (this._operationMode == OperationMode.Edit) populateLessonInfo();
   }
 
   void populateLessonInfo() async {
@@ -503,14 +505,10 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessonDate: this._lessonDate,
       lessonDuration: _lessionDuration,
     );
-    String message;
-    lesson.id == null
-        ? message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
+    String message =
+        isNotNullOrEmpty(await LessonManager().createLesson(lesson))
             ? 'Lesson created successfully.'
-            : 'Lesson creation failed.'
-        : message = isNotNullOrEmpty(await LessonManager().updateLesson(lesson))
-            ? 'Lesson updated successfully.'
-            : 'Lesson update failed.';
+            : 'Lesson creation failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
@@ -550,6 +548,11 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   }
 
   Future _selectDate() async {
+    if (this._operationMode == OperationMode.Edit) {
+      await FrequentWidgets()
+          .dialogBox(context, 'Lesson Date', 'Lesson date cannot be updated. You can delete this lesson and create a new one with the updated date.');
+      return;
+    }
     var selectedLessonDate = this._lessonDate;
     var selectedLessonTime = this._lessonTime;
     this._lessonDate = await showDatePicker(

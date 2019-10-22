@@ -1,6 +1,5 @@
 import 'package:adibook/data/progress_plan_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class StatusSection extends StatefulWidget {
@@ -9,7 +8,6 @@ class StatusSection extends StatefulWidget {
 }
 
 class _StatusSectionState extends State<StatusSection> {
-  Logger _logger = Logger('pages->status');
   double _progressPercentage = 0;
 
   @override

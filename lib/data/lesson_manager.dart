@@ -1,3 +1,4 @@
+import 'dart:wasm';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
@@ -15,7 +16,11 @@ class LessonManager {
   LessonManager() : this._logger = Logger('manger->lesson_manager');
 
   Future<bool> createLesson(Lesson lesson) async {
-    if (isNullOrEmpty(await lesson.add())) return false;
+    var lessonSnap = await lesson.get();
+    if (lessonSnap.exists)
+      await lesson.update();
+    else
+      await lesson.add();
     var pupil = await Pupil(id: lesson.pupilId).getPupil();
     LessonEvent lessonEvent = LessonEvent(
       id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
@@ -26,31 +31,23 @@ class LessonManager {
       pupilId: pupil.id,
     );
     var snap = await lessonEvent.get();
-    if (snap.exists) {
-      return isNotNullOrEmpty(await lessonEvent.update());
-    }
-    this._logger.info(
-        'Lesson ${lesson.id} for pupil ${pupil.id} by instructor ${lesson.instructorId} creation complete including events.');
+    if (snap.exists) await lessonEvent.delete();
     return isNotNullOrEmpty(await lessonEvent.add());
   }
-  Future<bool> updateLesson(Lesson lesson) async {
-    if (isNullOrEmpty(await lesson.update())) return false;
-    var pupil = await Pupil(id: lesson.pupilId).getPupil();
+
+  Future deleteLesson(Lesson lesson) async {
+    await lesson.delete();
     LessonEvent lessonEvent = LessonEvent(
       id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
       day: lesson.lessonDate.day.toString(),
       instructorId: lesson.instructorId,
       lessonAt: lesson.lessonDate,
-      pupilName: pupil.name,
-      pupilId: pupil.id,
+      pupilId: lesson.pupilId
     );
     var snap = await lessonEvent.get();
     if (snap.exists) {
-      return isNotNullOrEmpty(await lessonEvent.update());
+      await lessonEvent.delete();
     }
-    this._logger.info(
-        'Lesson ${lesson.id} for pupil ${pupil.id} by instructor ${lesson.instructorId} creation complete including events.');
-    return isNotNullOrEmpty(await lessonEvent.update());
   }
 
   Future<Map> getLessonEvents({DateTime date}) async {

@@ -17,7 +17,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   Logger _logger;
   bool _autoValidate;
   FrequentWidgets _frequentWidgets;
-  DateTime _paymentDate;
   TextEditingController _amountController;
   PaymentType _selectedPaymentType;
   DateTime _dateOfPayment;
@@ -25,7 +24,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   String _paymentId;
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
-    this._paymentDate = DateTime.now();
     this._amountController = TextEditingController();
     this._logger = Logger(this.runtimeType.toString());
   }
