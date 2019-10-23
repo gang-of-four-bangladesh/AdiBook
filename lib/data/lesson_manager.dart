@@ -1,4 +1,3 @@
-import 'dart:wasm';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/type_conversion.dart';
@@ -35,15 +34,23 @@ class LessonManager {
     return isNotNullOrEmpty(await lessonEvent.add());
   }
 
-  Future deleteLesson(Lesson lesson) async {
+  Future deleteLesson({
+    String instructorId,
+    String pupilId,
+    String lessonId,
+  }) async {
+    var lesson = await Lesson(
+      pupilId: pupilId,
+      instructorId: instructorId,
+      id: lessonId,
+    ).getLession();
     await lesson.delete();
     LessonEvent lessonEvent = LessonEvent(
-      id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
-      day: lesson.lessonDate.day.toString(),
-      instructorId: lesson.instructorId,
-      lessonAt: lesson.lessonDate,
-      pupilId: lesson.pupilId
-    );
+        id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
+        day: lesson.lessonDate.day.toString(),
+        instructorId: lesson.instructorId,
+        lessonAt: lesson.lessonDate,
+        pupilId: lesson.pupilId);
     var snap = await lessonEvent.get();
     if (snap.exists) {
       await lessonEvent.delete();

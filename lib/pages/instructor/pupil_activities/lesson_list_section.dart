@@ -67,11 +67,9 @@ class LessonListSectionState extends State<LessonListSection> {
                         icon: EvaIcons.trash,
                         onTap: () async {
                           await LessonManager().deleteLesson(
-                            Lesson(
-                              id: document.documentID,
-                              pupilId: this._pupilId,
-                              instructorId: appData.instructor.id,
-                            ),
+                            instructorId: appData.instructor.id,
+                            pupilId: this._pupilId,
+                            lessonId: document.documentID,
                           );
                           _loadLessonsData();
                         },
