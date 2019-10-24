@@ -58,6 +58,8 @@ class FrequentWidgets {
     );
   }
 
+ 
+
 }
 class DetailScreen extends StatelessWidget {
   final downloadUrl;

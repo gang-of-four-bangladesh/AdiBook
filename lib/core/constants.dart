@@ -135,6 +135,8 @@ enum ProgressSubjectStatus {
   Independent
 }
 
+enum ConfirmAction { CANCEL, ACCEPT }
+
 enum PaymentType { Cash, Card, Cheque }
 
 enum OperationMode { New, Edit }

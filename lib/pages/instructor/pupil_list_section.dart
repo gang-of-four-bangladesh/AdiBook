@@ -56,10 +56,39 @@ class PupilPistSectionState extends State<PupilListSection> {
                     actionExtentRatio: 0.15,
                     actions: <Widget>[
                       IconSlideAction(
-                        caption: 'Delete',
-                        color: Colors.red,
+                        caption: 'Remove',
+                        color: AppTheme.appThemeColor,
                         icon: FontAwesomeIcons.trash,
-                        onTap: () {},
+                        onTap: () {
+                          showDialog<ConfirmAction>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button for close dialog!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Delete"),
+                                  content: Text("Do you want to delete ?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: const Text('CANCEL'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(ConfirmAction.CANCEL);
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: const Text('ACCEPT'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(ConfirmAction.ACCEPT);
+                                        _deleteData(document.documentID);
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );                          
+                        },
                       ),
                       IconSlideAction(
                         caption: 'Edit',
@@ -103,5 +132,19 @@ class PupilPistSectionState extends State<PupilListSection> {
         }
       },
     );
+  }
+
+    Future<void> _deleteData(String pupilId) async {
+    Pupil pupil = Pupil(
+        id: pupilId);
+    String message = isNotNullOrEmpty(await pupil.delete())
+        ? 'Payment deleted successfully.'
+        : 'Payment deleted failed.';
+        FrequentWidgets _frequentWidgets = FrequentWidgets();
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
+    this._loadPupilsData();
   }
 }

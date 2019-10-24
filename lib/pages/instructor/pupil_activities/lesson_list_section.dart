@@ -66,12 +66,39 @@ class LessonListSectionState extends State<LessonListSection> {
                         color: AppTheme.appThemeColor,
                         icon: EvaIcons.trash,
                         onTap: () async {
-                          await LessonManager().deleteLesson(
-                            instructorId: appData.instructor.id,
-                            pupilId: this._pupilId,
-                            lessonId: document.documentID,
+                          showDialog<ConfirmAction>(
+                            context: context,
+                            barrierDismissible:
+                                false, // user must tap button for close dialog!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Delete"),
+                                content: Text("Do you want to delete ?"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: const Text('CANCEL'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(ConfirmAction.CANCEL);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: const Text('ACCEPT'),
+                                    onPressed: () async {
+                                      Navigator.of(context)
+                                          .pop(ConfirmAction.ACCEPT);
+                                      LessonManager().deleteLesson(
+                                        instructorId: appData.instructor.id,
+                                        pupilId: this._pupilId,
+                                        lessonId: document.documentID,
+                                      );
+                                      _loadLessonsData();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
                           );
-                          _loadLessonsData();
                         },
                       ),
                       IconSlideAction(

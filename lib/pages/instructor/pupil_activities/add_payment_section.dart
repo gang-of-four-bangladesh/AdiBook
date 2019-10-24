@@ -200,8 +200,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                               height: 50.0,
                               child: RaisedButton(
                                 onPressed: () async {
-                                  if (appData.user.userType ==
-                                      UserType.Instructor) await _saveData();
+                                  if (_validateInputs()) {
+                                    if (appData.user.userType ==
+                                        UserType.Instructor) await _saveData();
+                                  }
                                 },
                                 color: AppTheme.appThemeColor,
                                 child: Text(
@@ -263,17 +265,17 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     });
   }
 
-  // bool _validateInputs() {
-  //   if (_paymentDate == null) {
-  //     _frequentWidgets.getSnackbar(
-  //       message: 'Date of Payment is Required',
-  //       context: context,
-  //     );
-  //     return false;
-  //   }
-  //   this._logger.info('For validity ${_formKey.currentState.validate()}');
-  //   return _formKey.currentState.validate();
-  // }
+  bool _validateInputs() {
+    if (_dateOfPayment == null) {
+      _frequentWidgets.getSnackbar(
+        message: 'Date of Payment is Required',
+        context: context,
+      );
+      return false;
+    }
+    this._logger.info('For validity ${_formKey.currentState.validate()}');
+    return _formKey.currentState.validate();
+  }
 
   String enumValueToString(String enumvalue) {
     return enumvalue

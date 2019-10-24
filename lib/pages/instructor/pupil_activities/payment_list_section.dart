@@ -20,10 +20,12 @@ class PaymentListSection extends StatefulWidget {
 
 class PaymentListSectionState extends State<PaymentListSection> {
   bool flagWarranty = false;
+  FrequentWidgets _frequentWidgets = FrequentWidgets();
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->payment_list');
   String _pupilId;
+  String _paymentId;
   @override
   void initState() {
     super.initState();
@@ -32,6 +34,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
 
   void _loadPaymentsData() async {
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     if (isNullOrEmpty(this._pupilId)) return;
     if (!mounted) return;
     setState(() {
@@ -64,7 +67,36 @@ class PaymentListSectionState extends State<PaymentListSection> {
                           caption: 'Remove',
                           color: AppTheme.appThemeColor,
                           icon: EvaIcons.trash,
-                          onTap: () => {},
+                          onTap: () => {
+                            showDialog<ConfirmAction>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button for close dialog!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Delete"),
+                                  content: Text("Do you want to delete ?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: const Text('CANCEL'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(ConfirmAction.CANCEL);
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: const Text('ACCEPT'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(ConfirmAction.ACCEPT);
+                                        _deleteData(document.documentID);
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            )
+                          },
                         ),
                         IconSlideAction(
                           caption: 'Edit',
@@ -178,5 +210,19 @@ class PaymentListSectionState extends State<PaymentListSection> {
     return enumvalue
         .toString()
         .substring(enumvalue.toString().indexOf('.') + 1);
+  }
+
+  Future<void> _deleteData(String paymentId) async {
+    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    Payment payment = new Payment(
+        id: paymentId, pupilId: pupilId, instructorId: appData.instructor.id);
+    String message = isNotNullOrEmpty(await payment.delete())
+        ? 'Payment deleted successfully.'
+        : 'Payment deleted failed.';
+    _frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
+    this._loadPaymentsData();
   }
 }

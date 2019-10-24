@@ -505,10 +505,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       lessonDate: this._lessonDate,
       lessonDuration: _lessionDuration,
     );
-    String message =
-        isNotNullOrEmpty(await LessonManager().createLesson(lesson))
+    String message;
+    lesson.id == null
+        ? message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
             ? 'Lesson created successfully.'
-            : 'Lesson creation failed.';
+            : 'Lesson creation failed.'
+        : message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
+            ? 'Lesson updated successfully.'
+            : 'Lesson updated failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
@@ -549,8 +553,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   Future _selectDate() async {
     if (this._operationMode == OperationMode.Edit) {
-      await FrequentWidgets()
-          .dialogBox(context, 'Lesson Date', 'Lesson date cannot be updated. You can delete this lesson and create a new one with the updated date.');
+      await FrequentWidgets().dialogBox(context, 'Lesson Date',
+          'Lesson date cannot be updated. You can delete this lesson and create a new one with the updated date.');
       return;
     }
     var selectedLessonDate = this._lessonDate;
