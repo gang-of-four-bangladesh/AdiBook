@@ -14,6 +14,8 @@ class ProgressPlannerSection extends StatefulWidget {
 class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
   Logger _logger = Logger('progress_planner');
   List<ProgressPlanViewModel> _progressPlanDetails = [];
+  String _pupilId;
+
   @override
   void initState() {
     super.initState();
@@ -22,13 +24,21 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
 
   void _initialize() async {
     _logger.info('initalizing progress planner. Loading planning list.');
-    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._pupilId = this._getPupilId();
     var instructorId = appData.instructor.id;
     var _progressDetails = await ProgressPlanManager()
-        .getProgressDetails(pupilId: pupilId, instructorId: instructorId);
+        .getProgressDetails(pupilId: this._pupilId, instructorId: instructorId);
     setState(() {
       this._progressPlanDetails = _progressDetails;
     });
+  }
+
+  String _getPupilId() {
+    if (isNotNullOrEmpty(appData.pupil)) return appData.pupil.id;
+    if (appData.contextualInfo != null &&
+        appData.contextualInfo.containsKey(DataSharingKeys.PupilIdKey))
+      return appData.contextualInfo[DataSharingKeys.PupilIdKey].toString();
+    return null;
   }
 
   @override
@@ -218,7 +228,7 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                               ProgressSubjectStatus.values[v.toInt()],
                         );
                         await ProgressPlan(
-                          pupilId: appData.pupil.id,
+                          pupilId: this._pupilId,
                           instructorId: appData.instructor.id,
                           progressPlanSubject: _subject,
                         ).update();

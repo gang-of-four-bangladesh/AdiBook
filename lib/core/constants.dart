@@ -129,7 +129,6 @@ enum SectionType {
 enum ProgressSubjectStatus {
   None,
   Introduced,
-  TalkThrough,
   Prompted,
   RarelyPrompted,
   Independent

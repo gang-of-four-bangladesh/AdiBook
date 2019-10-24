@@ -33,7 +33,7 @@ class LessonListSectionState extends State<LessonListSection> {
   }
 
   void _loadLessonsData() async {
-    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._pupilId = _getPupilId();
     if (!mounted) return;
     setState(() {
       _querySnapshot = PupilManager()
@@ -41,6 +41,14 @@ class LessonListSectionState extends State<LessonListSection> {
               instructorId: appData.instructor.id, pupilId: this._pupilId)
           .asStream();
     });
+  }
+
+  String _getPupilId() {
+    if (isNotNullOrEmpty(appData.pupil)) return appData.pupil.id;
+    if (appData.contextualInfo != null &&
+        appData.contextualInfo.containsKey(DataSharingKeys.PupilIdKey))
+      return appData.contextualInfo[DataSharingKeys.PupilIdKey].toString();
+    return null;
   }
 
   @override
