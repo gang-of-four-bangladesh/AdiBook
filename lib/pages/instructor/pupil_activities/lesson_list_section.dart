@@ -45,9 +45,10 @@ class LessonListSectionState extends State<LessonListSection> {
 
   String _getPupilId() {
     if (isNotNullOrEmpty(appData.pupil)) return appData.pupil.id;
-    return appData.contextualInfo ??
-        appData.contextualInfo.containsKey(DataSharingKeys.PupilIdKey) ??
-        appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    if (appData.contextualInfo != null &&
+        appData.contextualInfo.containsKey(DataSharingKeys.PupilIdKey))
+      return appData.contextualInfo[DataSharingKeys.PupilIdKey].toString();
+    return null;
   }
 
   @override
