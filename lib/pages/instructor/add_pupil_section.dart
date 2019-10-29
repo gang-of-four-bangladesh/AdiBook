@@ -100,12 +100,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             validator: validations.validateText,
                             decoration: InputDecoration(
                                 suffixIcon:
-                                    Icon(Icons.star, color: Colors.red[600]),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppTheme.appThemeColor),
-                                    borderRadius:
-                                        new BorderRadius.circular(8.0)),
+                                    Icon(Icons.star, color: Colors.red[600],size: 15,),
+                                hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Name"),
                           ),
                         ),
@@ -123,10 +119,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
+                                hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Address"),
                           ),
                         ),
@@ -140,10 +133,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: theoryRecordController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
+                                hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Theory Record"),
                           ),
                         ),
@@ -157,10 +147,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: previousExperienceController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
+                                hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Previous Experience"),
                           ),
                         ),
@@ -217,12 +204,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                                 UserType.Pupil
                                             ? null
                                             : Icon(Icons.star,
-                                                color: Colors.red[600]),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.cyan[300]),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
+                                                color: Colors.red[600], size: 15,),
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
                                         hintText: "Phone"),
                                   ),
                                 ),
@@ -245,12 +229,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
                                 suffixIcon:
-                                    Icon(Icons.star, color: Colors.red[600]),
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
-                                fillColor: Colors.greenAccent,
+                                    Icon(Icons.star, color: Colors.red[600],size: 15,),
+                                hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "License number"),
                           ),
                         ),
@@ -533,8 +513,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
         await Instructor(id: appData.instructor.id).getInstructor();
     await _pupilManager.tagPupil(pupil, instructor);
     await _pupilManager.tagInstructor(pupil, instructor);
-    String message =
-        isNotNullOrEmpty(result) ? 'Pupil created successfully.' : 'Pupil creation failed.';
+    String message = isNotNullOrEmpty(result)
+        ? 'Pupil created successfully.'
+        : 'Pupil creation failed.';
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
