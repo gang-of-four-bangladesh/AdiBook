@@ -6,6 +6,7 @@ import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
@@ -99,6 +100,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             controller: nameController,
                             validator: validations.validateText,
                             decoration: InputDecoration(
+                              icon: Icon(EvaIcons.person),
+                              border: UnderlineInputBorder(),
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600],size: 15,),
                                 hintStyle: TextStyle(color: Colors.grey),
@@ -119,6 +122,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
+                              icon: Icon(EvaIcons.email),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Address"),
                           ),
@@ -133,6 +137,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: theoryRecordController,
                             decoration: InputDecoration(
+                              icon: Icon(EvaIcons.emailOutline),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Theory Record"),
                           ),
@@ -147,6 +152,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: previousExperienceController,
                             decoration: InputDecoration(
+                              icon: Icon(EvaIcons.paperPlane),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Previous Experience"),
                           ),
@@ -200,6 +206,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                         ? validations.validatePhoneNumber
                                         : null,
                                     decoration: InputDecoration(
+                                      icon: Icon(EvaIcons.phone),
                                         suffixIcon: appData.user.userType ==
                                                 UserType.Pupil
                                             ? null
@@ -228,6 +235,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
+                              icon: Icon(EvaIcons.book),
+                              hoverColor:  AppTheme.appThemeColor,
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600],size: 15,),
                                 hintStyle: TextStyle(color: Colors.grey),
