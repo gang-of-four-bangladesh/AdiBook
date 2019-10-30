@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -367,8 +368,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                       controller: _amountController,
                                       validator: validations.validateNumber,
                                       decoration: InputDecoration(
+                                        icon: Icon(FontAwesomeIcons.poundSign,size: 18,),
                                           suffixIcon: Icon(Icons.star,
-                                              color: Colors.red[600]),
+                                              color: Colors.red[600],size: 15,),
                                           hintStyle:
                                               TextStyle(color: Colors.grey),
                                           hintText: "Amount"),
@@ -446,7 +448,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                     children: <Widget>[
                                       ButtonTheme(
                                         minWidth: 100.0,
-                                        height: 30.0,
+                                         height: 40.0,
                                         child: RaisedButton(
                                           onPressed: () async {
                                             if (_validateInputs()) {
@@ -477,7 +479,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                       ),
                                       ButtonTheme(
                                         minWidth: 100.0,
-                                        height: 30.0,
+                                        height: 40.0,
                                         child: RaisedButton(
                                           onPressed: () {
                                             Navigator.of(context)

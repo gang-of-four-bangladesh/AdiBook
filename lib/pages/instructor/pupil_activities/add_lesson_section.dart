@@ -9,6 +9,7 @@ import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/validation.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -147,13 +148,11 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               controller: _lessonDurationController,
                               validator: validations.validateNumber,
                               decoration: InputDecoration(
-                                  suffixIcon:
-                                      Icon(Icons.star, color: Colors.red[600]),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppTheme.appThemeColor),
-                                      borderRadius:
-                                          new BorderRadius.circular(8.0)),
+                                   icon: Icon(EvaIcons.clock),
+                                          suffixIcon: Icon(Icons.star,
+                                              color: Colors.red[600],size: 15,),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
                                   hintText: "Lesson Duration(Minutes)"),
                             ),
                           ),
@@ -350,11 +349,11 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               keyboardType: TextInputType.text,
                               controller: _diaryNotesController,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppTheme.appThemeColor),
-                                      borderRadius:
-                                          new BorderRadius.circular(8.0)),
+                                   icon: Icon(EvaIcons.book),
+                                          suffixIcon: Icon(Icons.star,
+                                              color: Colors.red[600],size: 15,),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
                                   hintText: "Diary Notes(Optional)"),
                             ),
                           ),
@@ -364,11 +363,11 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               keyboardType: TextInputType.multiline,
                               controller: _reportCardController,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppTheme.appThemeColor),
-                                      borderRadius:
-                                          new BorderRadius.circular(8.0)),
+                                   icon: Icon(Icons.report),
+                                          suffixIcon: Icon(Icons.star,
+                                              color: Colors.red[600],size: 15,),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
                                   hintText: "Report Card(Optional)"),
                             ),
                           ),
