@@ -236,7 +236,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
                               icon: Icon(EvaIcons.book),
-                              hoverColor:  AppTheme.appThemeColor,
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600],size: 15,),
                                 hintStyle: TextStyle(color: Colors.grey),

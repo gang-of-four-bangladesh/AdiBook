@@ -3,8 +3,10 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/models/instructor.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
@@ -74,13 +76,11 @@ class _InstructorProfile extends State<InstructorProfile> {
                             controller: nameController,
                             validator: validations.validateText,
                             decoration: InputDecoration(
+                              icon: Icon(EvaIcons.person),
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppTheme.appThemeColor),
-                                    borderRadius:
-                                        new BorderRadius.circular(8.0)),
+                                    hintStyle:
+                                              TextStyle(color: Colors.grey),
                                 hintText: "Name"),
                           ),
                         ),
@@ -94,10 +94,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
+                               icon: Icon(EvaIcons.email),
                                 hintText: "Address"),
                           ),
                         ),
@@ -113,11 +110,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                     keyboardType: TextInputType.phone,
                                     enabled: false,
                                     decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.cyan[300]),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
+                                      icon: Icon(EvaIcons.phone),
                                         hintText: "Phone"),
                                   )
                                 : TextFormField(
@@ -126,11 +119,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                     enabled: false,
                                     validator: validations.validatePhoneNumber,
                                     decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.cyan[300]),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
+                                      icon: Icon(EvaIcons.phone),
                                         hintText: "Phone"),
                                   )),
                       ],
@@ -143,13 +132,9 @@ class _InstructorProfile extends State<InstructorProfile> {
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
+                              icon: Icon(FontAwesomeIcons.book),
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.cyan[300]),
-                                    borderRadius: BorderRadius.circular(8.0)),
-                                fillColor: Colors.greenAccent,
                                 hintText: "License number"),
                           ),
                         ),
