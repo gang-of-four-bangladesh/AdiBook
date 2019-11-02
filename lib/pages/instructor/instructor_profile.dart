@@ -6,6 +6,7 @@ import 'package:adibook/models/instructor.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -76,11 +77,10 @@ class _InstructorProfile extends State<InstructorProfile> {
                             controller: nameController,
                             validator: validations.validateText,
                             decoration: InputDecoration(
-                              icon: Icon(EvaIcons.person),
+                                icon: Icon(EvaIcons.person),
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
-                                    hintStyle:
-                                              TextStyle(color: Colors.grey),
+                                hintStyle: TextStyle(color: Colors.grey),
                                 hintText: "Name"),
                           ),
                         ),
@@ -94,7 +94,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
-                               icon: Icon(EvaIcons.email),
+                                icon: Icon(EvaIcons.email),
                                 hintText: "Address"),
                           ),
                         ),
@@ -110,7 +110,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                     keyboardType: TextInputType.phone,
                                     enabled: false,
                                     decoration: InputDecoration(
-                                      icon: Icon(EvaIcons.phone),
+                                        icon: Icon(EvaIcons.phone),
                                         hintText: "Phone"),
                                   )
                                 : TextFormField(
@@ -119,7 +119,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                     enabled: false,
                                     validator: validations.validatePhoneNumber,
                                     decoration: InputDecoration(
-                                      icon: Icon(EvaIcons.phone),
+                                        icon: Icon(EvaIcons.phone),
                                         hintText: "Phone"),
                                   )),
                       ],
@@ -132,7 +132,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
-                              icon: Icon(FontAwesomeIcons.book),
+                                icon: Icon(FontAwesomeIcons.book),
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
                                 hintText: "License number"),
@@ -299,15 +299,22 @@ class _InstructorProfile extends State<InstructorProfile> {
   }
 
   Future<void> _selectDateOfBirth() async {
-    var selectedDob = this._dateOfBirth;
-    this._dateOfBirth = await showDatePicker(
-      context: context,
-      initialDate:
-          this._dateOfBirth == null ? DateTime.now() : this._dateOfBirth,
-      firstDate: DateTime(1900, 8),
-      lastDate: DateTime(2101),
-    );
-    if (this._dateOfBirth == null) this._dateOfBirth = selectedDob;
+    //var selectedDob = this._dateOfBirth;
+    this._dateOfBirth = await DatePicker.showDatePicker(context,
+        theme: DatePickerTheme(
+          containerHeight: 210.0,
+        ),
+        showTitleActions: true,
+        minTime: DateTime(1950, 1, 1),
+        maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
+      print('confirm $date');      
+      setState(() {
+        this._dateOfBirth = date;
+      });
+    },
+        currentTime:
+            this._dateOfBirth == null ? DateTime.now() : this._dateOfBirth,
+        locale: LocaleType.en);
     setState(() {
       //This is for UI update only. This twice before remove.
       this._dateOfBirth = this._dateOfBirth;
