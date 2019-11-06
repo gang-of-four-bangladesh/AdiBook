@@ -126,151 +126,72 @@ class PaymentListSectionState extends State<PaymentListSection> {
                   return ListView(
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
+                        var paymentText =
+                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by ${PaymentType.values[document[Payment.PaymentTypeKey]]}.';
                         return Slidable(
-                            actions: <Widget>[
-                              IconSlideAction(
-                                caption: 'Remove',
-                                color: Colors.red,
-                                icon: EvaIcons.trash,
-                                onTap: () => {
-                                  showDialog<ConfirmAction>(
-                                    context: context,
-                                    barrierDismissible:
-                                        false, // user must tap button for close dialog!
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text("Delete"),
-                                        content:
-                                            Text("Do you want to delete ?"),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: const Text('CANCEL'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(ConfirmAction.CANCEL);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: const Text('ACCEPT'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(ConfirmAction.ACCEPT);
-                                              _deleteData(document.documentID);
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  )
-                                },
-                              ),
-                              IconSlideAction(
-                                caption: 'Edit',
-                                color: AppTheme.appThemeColor,
-                                icon: EvaIcons.edit,
-                                onTap: () {
-                                  populatePaymentInfo(document.documentID);
-                                  _asyncInputDialog(context);
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => HomePage(
-                                  //       sectionType: SectionType
-                                  //           .InstructorActivityForPupil,
-                                  //       userType: UserType.Instructor,
-                                  //       defaultSectionIndex: 3,
-                                  //       contextInfo: {
-                                  //         DataSharingKeys.PaymentIdKey:
-                                  //             document.documentID,
-                                  //         DataSharingKeys.PupilIdKey:
-                                  //             this._pupilId
-                                  //       },
-                                  //     ),
-                                  //   ),
-                                  // );
-                                },
-                              ),
-                            ],
-                            actionPane: SlidableScrollActionPane(),
-                            actionExtentRatio: 0.12,
+                          actions: <Widget>[
+                            IconSlideAction(
+                              caption: 'Remove',
+                              color: Colors.red,
+                              icon: EvaIcons.trash,
+                              onTap: () => {
+                                showDialog<ConfirmAction>(
+                                  context: context,
+                                  barrierDismissible:
+                                      false, // user must tap button for close dialog!
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Delete"),
+                                      content: Text("Do you want to delete ?"),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: const Text('CANCEL'),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(ConfirmAction.CANCEL);
+                                          },
+                                        ),
+                                        FlatButton(
+                                          child: const Text('ACCEPT'),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(ConfirmAction.ACCEPT);
+                                            _deleteData(document.documentID);
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  },
+                                )
+                              },
+                            ),
+                            IconSlideAction(
+                              caption: 'Edit',
+                              color: AppTheme.appThemeColor,
+                              icon: EvaIcons.edit,
+                              onTap: () {
+                                populatePaymentInfo(document.documentID);
+                                _asyncInputDialog(context);
+                              },
+                            ),
+                          ],
+                          actionPane: SlidableScrollActionPane(),
+                          actionExtentRatio: 0.12,
+                          child: Card(
                             child: ListTile(
                               onTap: () {
                                 print("clicked");
                               },
-                              title: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  children: <Widget>[
-                                    //  Payment Date,
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          left: 2.0, right: 2.0),
-                                      child: Row(
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              /*2*/
-                                              Container(
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Column(
-                                                      children: <Widget>[
-                                                        Text(
-                                                          ("Amount: " +
-                                                              document[Payment
-                                                                      .AmountKey]
-                                                                  .toString() +
-                                                              "\$"),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16),
-                                                        ),
-                                                        Text(
-                                                          ("Payment Date: " +
-                                                              format
-                                                                  .format(TypeConversion
-                                                                      .timeStampToDateTime(
-                                                                          document[
-                                                                              Payment.PaymentDateKey]))
-                                                                  .toString()),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16),
-                                                        ),
-                                                        Text(
-                                                          "Payment Type: " +
-                                                              enumValueToString(PaymentType
-                                                                  .values[int.parse(document[
-                                                                          Payment
-                                                                              .PaymentTypeKey]
-                                                                      .toString())]
-                                                                  .toString()),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16),
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                              title: Text(
+                                paymentText,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                               ),
-                            ));
+                            ),
+                          ),
+                        );
                       },
                     ).toList(),
                   );
@@ -368,9 +289,15 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                       controller: _amountController,
                                       validator: validations.validateNumber,
                                       decoration: InputDecoration(
-                                        icon: Icon(FontAwesomeIcons.poundSign,size: 18,),
-                                          suffixIcon: Icon(Icons.star,
-                                              color: Colors.red[600],size: 15,),
+                                          icon: Icon(
+                                            FontAwesomeIcons.poundSign,
+                                            size: 18,
+                                          ),
+                                          suffixIcon: Icon(
+                                            Icons.star,
+                                            color: Colors.red[600],
+                                            size: 15,
+                                          ),
                                           hintStyle:
                                               TextStyle(color: Colors.grey),
                                           hintText: "Amount"),
@@ -448,7 +375,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                     children: <Widget>[
                                       ButtonTheme(
                                         minWidth: 100.0,
-                                         height: 40.0,
+                                        height: 40.0,
                                         child: RaisedButton(
                                           onPressed: () async {
                                             if (_validateInputs()) {
