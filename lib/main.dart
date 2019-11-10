@@ -4,7 +4,9 @@ import 'package:adibook/core/log_manager.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/data/user_manager.dart';
+import 'package:adibook/pages/entry_home_page.dart';
 import 'package:adibook/pages/home_page.dart';
+import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +29,12 @@ Future main() async {
   if (adiBookUser != null) {
     _logger.info(
         'Logged in user $adiBookUser, user name ${adiBookUser.name} has logged in as ${adiBookUser.userType}, expire date ${adiBookUser.expiryDate}');
-    _defaultPage = HomePage(
+    // _defaultPage = HomePage(
+    //   userType: adiBookUser.userType,
+    //   sectionType: PageManager().defaultSectionType(adiBookUser.userType),
+    // );
+    _defaultPage = EntryHomePage(
+      section: AddPupilSection(),
       userType: adiBookUser.userType,
       sectionType: PageManager().defaultSectionType(adiBookUser.userType),
     );

@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage>
   void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     setState(() {
-      this._widgetsConfig = PageManager().getWidgetConfigurations(
+      this._widgetsConfig = PageManager().getTabBarWidgetConfigurations(
         this.widget.userType,
         this.widget.sectionType,
       );
@@ -183,6 +183,6 @@ class _HomePageState extends State<HomePage>
   void _getTabs() {
     this._tabs.clear();
     this._widgetsConfig.forEach(
-        (f) => this._tabs.add(Tab(text: f.bottomNavTitle.toUpperCase())));
+        (f) => this._tabs.add(Tab(text: f.drawerLinkText.toUpperCase())));
   }
 }

@@ -16,19 +16,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class WidgetConfiguration {
   WidgetConfiguration(
       {this.index,
-      this.appBarTitle,
-      this.bottomNavTitle,
+      this.appBarText,
+      this.drawerLinkText,
       this.availableFor,
       this.sectionWidget,
       this.bottomNavIcon,
-      this.sectionType});
+      this.sectionType,
+      this.drawerOnly});
   int index;
-  String appBarTitle;
-  String bottomNavTitle;
+  String appBarText;
+  String drawerLinkText;
   UserType availableFor;
   Widget sectionWidget;
   Icon bottomNavIcon;
   SectionType sectionType;
+  bool drawerOnly;
 }
 
 class PageManager {
@@ -62,39 +64,45 @@ class PageManager {
         .toList();
   }
 
+  List<WidgetConfiguration> getTabBarWidgetConfigurations(
+      UserType userType, SectionType sectionType) {
+    return getWidgetConfigurations(userType, sectionType)
+        .where((f) => !f.drawerOnly);
+  }
+
   List<WidgetConfiguration> _widgetList = [
     WidgetConfiguration(
       index: 0,
-      appBarTitle: 'Pupil',
-      bottomNavTitle: 'Pupil',
+      appBarText: 'Pupils',
+      drawerLinkText: 'Pupils',
       availableFor: UserType.Instructor,
       sectionWidget: PupilListSection(),
       bottomNavIcon: Icon(EvaIcons.person, color: Colors.white),
       sectionType: SectionType.InstructorActivity,
     ),
     WidgetConfiguration(
-      index: 1,
-      appBarTitle: 'NEW',
-      bottomNavTitle: 'NEW',
-      availableFor: UserType.Instructor,
-      sectionWidget: AddPupilSection(),
-      bottomNavIcon: Icon(EvaIcons.plus, color: Colors.white),
-      sectionType: SectionType.InstructorActivity,
-    ),
+        index: 1,
+        appBarText: 'New Pupil',
+        drawerLinkText: 'New Pupil',
+        availableFor: UserType.Instructor,
+        sectionWidget: AddPupilSection(),
+        bottomNavIcon: Icon(EvaIcons.plus, color: Colors.white),
+        sectionType: SectionType.InstructorActivity,
+        drawerOnly: true),
     WidgetConfiguration(
       index: 2,
-      appBarTitle: 'Diary',
-      bottomNavTitle: 'Diary',
+      appBarText: 'Diary',
+      drawerLinkText: 'Diary',
       availableFor: UserType.Instructor,
       sectionWidget: EventListSection(),
       bottomNavIcon: Icon(EvaIcons.book, color: Colors.white),
       sectionType: SectionType.InstructorActivity,
     ),
-    
+
     WidgetConfiguration(
       index: 3,
-      appBarTitle: 'Profile',
-      bottomNavTitle: 'Profile',
+      appBarText: 'Profile',
+      drawerLinkText: 'Profile',
       availableFor: UserType.Instructor,
       sectionWidget: InstructorProfile(),
       bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
@@ -102,8 +110,8 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 0,
-      appBarTitle: 'Status',
-      bottomNavTitle: 'Status',
+      appBarText: 'Status',
+      drawerLinkText: 'Status',
       availableFor: UserType.Pupil,
       sectionWidget: StatusSection(),
       bottomNavIcon: Icon(Icons.people, color: Colors.white),
@@ -111,8 +119,8 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 1,
-      appBarTitle: 'Profile',
-      bottomNavTitle: 'Profile',
+      appBarText: 'Profile',
+      drawerLinkText: 'Profile',
       availableFor: UserType.Pupil,
       sectionWidget: AddPupilSection(),
       bottomNavIcon: Icon(FontAwesomeIcons.infoCircle, color: Colors.white),
@@ -120,8 +128,8 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 2,
-      appBarTitle: 'Lessons',
-      bottomNavTitle: 'Lessons',
+      appBarText: 'Lessons',
+      drawerLinkText: 'Lessons',
       availableFor: UserType.Pupil,
       sectionWidget: LessonListSection(),
       bottomNavIcon: Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
@@ -129,31 +137,31 @@ class PageManager {
     ),
     WidgetConfiguration(
       index: 0,
-      appBarTitle: 'Lesson List',
-      bottomNavTitle: 'Lessons',
+      appBarText: 'Lesson List',
+      drawerLinkText: 'Lessons',
       availableFor: UserType.Instructor,
       sectionWidget: LessonListSection(),
       bottomNavIcon: Icon(Icons.list, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),
-      WidgetConfiguration(
+    WidgetConfiguration(
       index: 1,
-      appBarTitle: 'Payment List',
-      bottomNavTitle: 'Payments',
+      appBarText: 'Payment List',
+      drawerLinkText: 'Payments',
       availableFor: UserType.Instructor,
       sectionWidget: PaymentListSection(),
       bottomNavIcon: Icon(Icons.list, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),
     WidgetConfiguration(
-      index: 2,
-      appBarTitle: 'Add Lesson',
-      bottomNavTitle: 'Add Lesson',
-      availableFor: UserType.Instructor,
-      sectionWidget: AddLessonSection(),
-      bottomNavIcon: Icon(FontAwesomeIcons.plus, color: Colors.white),
-      sectionType: SectionType.InstructorActivityForPupil,
-    ),
+        index: 2,
+        appBarText: 'Add Lesson',
+        drawerLinkText: 'Add Lesson',
+        availableFor: UserType.Instructor,
+        sectionWidget: AddLessonSection(),
+        bottomNavIcon: Icon(FontAwesomeIcons.plus, color: Colors.white),
+        sectionType: SectionType.InstructorActivityForPupil,
+        drawerOnly: true),
     // WidgetConfiguration(
     //   index: 3,
     //   appBarTitle: 'Add Payment',
@@ -165,14 +173,13 @@ class PageManager {
     // ),
     WidgetConfiguration(
       index: 3,
-      appBarTitle: 'Progress',
-      bottomNavTitle: 'Progress',
+      appBarText: 'Progress',
+      drawerLinkText: 'Progress',
       availableFor: UserType.Instructor,
       sectionWidget: ProgressPlannerSection(),
       bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
       sectionType: SectionType.InstructorActivityForPupil,
     ),
-    
   ];
 
   SectionType defaultSectionType(UserType userType) {
