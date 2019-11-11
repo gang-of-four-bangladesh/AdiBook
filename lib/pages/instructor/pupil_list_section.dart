@@ -61,33 +61,33 @@ class PupilPistSectionState extends State<PupilListSection> {
                         icon: FontAwesomeIcons.trash,
                         onTap: () {
                           showDialog<ConfirmAction>(
-                              context: context,
-                              barrierDismissible:
-                                  false, // user must tap button for close dialog!
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Delete"),
-                                  content: Text("Do you want to delete ?"),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: const Text('CANCEL'),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(ConfirmAction.CANCEL);
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: const Text('ACCEPT'),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(ConfirmAction.ACCEPT);
-                                        _deleteData(document.documentID);
-                                      },
-                                    )
-                                  ],
-                                );
-                              },
-                            );                          
+                            context: context,
+                            barrierDismissible:
+                                false, // user must tap button for close dialog!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Delete"),
+                                content: Text("Do you want to delete ?"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: const Text('CANCEL'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(ConfirmAction.CANCEL);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: const Text('ACCEPT'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(ConfirmAction.ACCEPT);
+                                      _deleteData(document.documentID);
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
                         },
                       ),
                       IconSlideAction(
@@ -99,16 +99,22 @@ class PupilPistSectionState extends State<PupilListSection> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AddPupilSection(userType: appData.user.userType),
+                              builder: (context) => AddPupilSection(
+                                  userType: appData.user.userType),
                             ),
                           );
                         },
                       ),
                     ],
                     child: ListTile(
-                      trailing: Icon(Icons.person),
+                      leading: CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
                       title: Text(document[Pupil.NameKey]),
+                      subtitle:
+                          document[Pupil.PhoneNumberKey].toString() == null
+                              ? Text(EmptyString)
+                              : Text(document[Pupil.PhoneNumberKey].toString()),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -134,13 +140,12 @@ class PupilPistSectionState extends State<PupilListSection> {
     );
   }
 
-    Future<void> _deleteData(String pupilId) async {
-    Pupil pupil = Pupil(
-        id: pupilId);
+  Future<void> _deleteData(String pupilId) async {
+    Pupil pupil = Pupil(id: pupilId);
     String message = isNotNullOrEmpty(await pupil.delete())
         ? 'Payment deleted successfully.'
         : 'Payment deleted failed.';
-        FrequentWidgets _frequentWidgets = FrequentWidgets();
+    FrequentWidgets _frequentWidgets = FrequentWidgets();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
