@@ -112,7 +112,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                       ),
                       title: Text(document[Pupil.NameKey]),
                       subtitle:
-                          document[Pupil.PhoneNumberKey].toString() == null
+                          document[Pupil.PhoneNumberKey] == null
                               ? Text(EmptyString)
                               : Text(document[Pupil.PhoneNumberKey].toString()),
                       onTap: () {
