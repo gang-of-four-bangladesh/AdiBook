@@ -3,6 +3,7 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
+import 'package:adibook/pages/entry_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -24,10 +25,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   Logger _logger = Logger('HomePage');
-  List<WidgetConfiguration> _widgetsConfig = [];
-  List<Widget> _widgets = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<WidgetConfiguration> _tabbarWidgetsConfig = [];
+  List<WidgetConfiguration> _drawerWidgetsConfig = [];
+  List<Widget> _tabWidgets = [];
   TabController _tabController;
   List<Tab> _tabs = [];
+  List<Widget> _linkItems = [];
 
   @override
   void initState() {
@@ -73,16 +77,23 @@ class _HomePageState extends State<HomePage>
   void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     setState(() {
-      this._widgetsConfig = PageManager().getTabBarWidgetConfigurations(
+      var widgetsConfig = PageManager().getWidgetConfigurations(
         this.widget.userType,
         this.widget.sectionType,
       );
-      this._widgets = _widgetsConfig.map((f) => f.sectionWidget).toList();
+      this._tabbarWidgetsConfig = widgetsConfig
+          .where((w) => w.displayArea.any((d) => d == DisplayArea.Tab)).toList();
+      this._drawerWidgetsConfig = widgetsConfig
+          .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer)).toList();
+
+      this._tabWidgets =
+          this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
       this._getTabs();
+      this._getDrawerLinks();
       _tabController = TabController(
         vsync: this,
         initialIndex: this.widget.defaultSectionIndex,
-        length: this._widgets.length,
+        length: this._tabWidgets.length,
       );
     });
   }
@@ -90,6 +101,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: this._scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppTheme.appThemeColor,
@@ -135,54 +147,70 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
             ),
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 2.0),
+            child: Center(
+              child: ButtonTheme(
+                minWidth: 100.0,
+                height: 60.0,
+                child: IconButton(
+                  icon: Icon(Icons.more),
+                  onPressed: () async {
+                    _scaffoldKey.currentState.openDrawer();
+                  },
+                ),
+              ),
+            ),
           )
         ],
       ),
       drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                color: AppTheme.appThemeColor,
-              ),
-            ),
-            ListTile(
-              title: Text('Item 1'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          children: this._linkItems,
         ),
       ),
       body: TabBarView(
         controller: _tabController,
-        children: this._widgets,
+        children: this._tabWidgets,
       ),
     );
   }
 
   void _getTabs() {
     this._tabs.clear();
-    this._widgetsConfig.forEach(
+    this._tabbarWidgetsConfig.forEach(
         (f) => this._tabs.add(Tab(text: f.drawerLinkText.toUpperCase())));
+  }
+
+  void _getDrawerLinks() {
+    this._linkItems.clear();
+    this._linkItems.add(
+          DrawerHeader(
+            child: Text('Drawer Header'),
+            decoration: BoxDecoration(
+              color: AppTheme.appThemeColor,
+            ),
+          ),
+        );
+    this._drawerWidgetsConfig.forEach(
+          (f) => this._linkItems.add(
+                ListTile(
+                  title: Text(f.drawerLinkText.toUpperCase()),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EntryHomePage(
+                          section: f.sectionWidget,
+                          sectionType: f.sectionType,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+        );
   }
 }

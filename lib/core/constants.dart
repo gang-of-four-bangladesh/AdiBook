@@ -140,6 +140,8 @@ enum PaymentType { Cash, Card, Cheque }
 
 enum OperationMode { New, Edit }
 
+enum DisplayArea { None, Drawer, Tab }
+
 bool isNullOrEmpty<T>(T value) {
   if (value is String) return value == null || value.isEmpty;
   return value == null;

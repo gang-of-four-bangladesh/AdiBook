@@ -29,15 +29,15 @@ Future main() async {
   if (adiBookUser != null) {
     _logger.info(
         'Logged in user $adiBookUser, user name ${adiBookUser.name} has logged in as ${adiBookUser.userType}, expire date ${adiBookUser.expiryDate}');
-    // _defaultPage = HomePage(
-    //   userType: adiBookUser.userType,
-    //   sectionType: PageManager().defaultSectionType(adiBookUser.userType),
-    // );
-    _defaultPage = EntryHomePage(
-      section: AddPupilSection(),
+    _defaultPage = HomePage(
       userType: adiBookUser.userType,
       sectionType: PageManager().defaultSectionType(adiBookUser.userType),
     );
+    // _defaultPage = EntryHomePage(
+    //   section: AddPupilSection(),
+    //   userType: adiBookUser.userType,
+    //   sectionType: PageManager().defaultSectionType(adiBookUser.userType),
+    // );
     await _userManager.updateAppDataByUser(adiBookUser);
   }
   runApp(AdiBookApp(_defaultPage));

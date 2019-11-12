@@ -28,7 +28,7 @@ class EntryHomePage extends StatefulWidget {
 class _EntryHomePageState extends State<EntryHomePage>
     with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  List<WidgetConfiguration> _widgetsConfig = [];
+  List<WidgetConfiguration> _drawerWidgetsConfig = [];
   List<Widget> _linkItems = [];
   @override
   void initState() {
@@ -46,11 +46,12 @@ class _EntryHomePageState extends State<EntryHomePage>
   void _initialize() async {
     appData.contextualInfo = this.widget.contextInfo;
     setState(() {
-      this._widgetsConfig = PageManager().getWidgetConfigurations(
-        this.widget.userType,
-        this.widget.sectionType,
-      );
-      this._getLinkItems();
+      var widgetsConfig = PageManager().getWidgetConfigurations(
+          this.widget.userType, this.widget.sectionType).toList();
+      this._drawerWidgetsConfig = widgetsConfig
+          .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer))
+          .toList();
+      this._getDrawerLinks();
     });
   }
 
@@ -65,7 +66,7 @@ class _EntryHomePageState extends State<EntryHomePage>
         context, PageRoutes.LoginPage, (r) => false);
   }
 
-  void _getLinkItems() {
+  void _getDrawerLinks() {
     this._linkItems.clear();
     this._linkItems.add(
           DrawerHeader(
@@ -75,7 +76,7 @@ class _EntryHomePageState extends State<EntryHomePage>
             ),
           ),
         );
-    this._widgetsConfig.forEach(
+    this._drawerWidgetsConfig.forEach(
           (f) => this._linkItems.add(
                 ListTile(
                   title: Text(f.drawerLinkText.toUpperCase()),
@@ -85,7 +86,8 @@ class _EntryHomePageState extends State<EntryHomePage>
                       MaterialPageRoute(
                         builder: (context) => EntryHomePage(
                           section: f.sectionWidget,
-                          sectionType: SectionType.InstructorActivity,
+                          userType: appData.user.userType,
+                          sectionType: f.sectionType,
                         ),
                       ),
                     );
