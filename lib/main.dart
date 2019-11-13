@@ -1,4 +1,5 @@
 import 'package:adibook/app.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/device_info.dart';
 import 'package:adibook/core/log_manager.dart';
 import 'package:adibook/core/page_manager.dart';
@@ -7,7 +8,9 @@ import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/pages/entry_home_page.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
+import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/login_page.dart';
+import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
@@ -32,12 +35,10 @@ Future main() async {
     _defaultPage = HomePage(
       userType: adiBookUser.userType,
       sectionType: PageManager().defaultSectionType(adiBookUser.userType),
+      toDisplay: adiBookUser.userType == UserType.Instructor
+          ? PupilListSection()
+          : StatusSection(),
     );
-    // _defaultPage = EntryHomePage(
-    //   section: AddPupilSection(),
-    //   userType: adiBookUser.userType,
-    //   sectionType: PageManager().defaultSectionType(adiBookUser.userType),
-    // );
     await _userManager.updateAppDataByUser(adiBookUser);
   }
   runApp(AdiBookApp(_defaultPage));

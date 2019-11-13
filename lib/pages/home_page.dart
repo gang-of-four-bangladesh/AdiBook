@@ -10,13 +10,11 @@ import 'package:logging/logging.dart';
 class HomePage extends StatefulWidget {
   final SectionType sectionType;
   final UserType userType;
-  final int defaultSectionIndex;
-  final Map<String, dynamic> contextInfo;
+  final Widget toDisplay;
   HomePage({
-    this.userType,
-    this.sectionType,
-    this.defaultSectionIndex = 0,
-    this.contextInfo,
+    @required this.userType,
+    @required this.sectionType,
+    @required this.toDisplay,
   });
   @override
   _HomePageState createState() => _HomePageState();
@@ -75,16 +73,28 @@ class _HomePageState extends State<HomePage>
   }
 
   void _initialize() async {
-    appData.contextualInfo = this.widget.contextInfo;
     setState(() {
       var widgetsConfig = PageManager().getWidgetConfigurations(
         this.widget.userType,
         this.widget.sectionType,
       );
       this._tabbarWidgetsConfig = widgetsConfig
-          .where((w) => w.displayArea.any((d) => d == DisplayArea.Tab)).toList();
+          .where((w) => w.displayArea.any((d) => d == DisplayArea.Tab))
+          .toList();
       this._drawerWidgetsConfig = widgetsConfig
-          .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer)).toList();
+          .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer))
+          .toList();
+      var isTabBarWidget = this._tabbarWidgetsConfig.any((t) =>
+          t.sectionWidget.runtimeType == this.widget.toDisplay.runtimeType);
+      var defaultSectionIndex = 0;
+      if (isTabBarWidget) {
+        var defaultSectionIndex = this
+            ._tabbarWidgetsConfig
+            .firstWhere((t) =>
+                t.sectionWidget.runtimeType.toString() ==
+                this.widget.toDisplay.runtimeType.toString())
+            .index;
+      }
 
       this._tabWidgets =
           this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
@@ -92,7 +102,7 @@ class _HomePageState extends State<HomePage>
       this._getDrawerLinks();
       _tabController = TabController(
         vsync: this,
-        initialIndex: this.widget.defaultSectionIndex,
+        initialIndex: defaultSectionIndex,
         length: this._tabWidgets.length,
       );
     });
@@ -202,9 +212,10 @@ class _HomePageState extends State<HomePage>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EntryHomePage(
-                          section: f.sectionWidget,
+                        builder: (context) => HomePage(
+                          userType: appData.user.userType,
                           sectionType: f.sectionType,
+                          toDisplay: f.sectionWidget,
                         ),
                       ),
                     );

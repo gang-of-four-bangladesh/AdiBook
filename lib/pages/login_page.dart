@@ -1,3 +1,4 @@
+import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
@@ -6,6 +7,8 @@ import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/pages/entry_home_page.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
+import 'package:adibook/pages/instructor/pupil_list_section.dart';
+import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
@@ -223,22 +226,15 @@ class _LoginPageState extends State<LoginPage> {
     }
     await UserManager().updateAppDataByUserId(user.phoneNumber);
     await _displayProgressBar(false);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => HomePage(
-    //       userType: this._selectedUserType,
-    //       sectionType: _pageManager.defaultSectionType(this._selectedUserType),
-    //     ),
-    //   ),
-    // );
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EntryHomePage(
-          section: AddPupilSection(),
+        builder: (context) => HomePage(
           userType: this._selectedUserType,
           sectionType: _pageManager.defaultSectionType(this._selectedUserType),
+          toDisplay: appData.user.userType == UserType.Instructor
+              ? PupilListSection()
+              : StatusSection(),
         ),
       ),
     );
@@ -278,23 +274,15 @@ class _LoginPageState extends State<LoginPage> {
     }
     await UserManager().updateAppDataByUserId(currentUser.phoneNumber);
     await _displayProgressBar(false);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => HomePage(
-    //       userType: this._selectedUserType,
-    //       sectionType: _pageManager.defaultSectionType(this._selectedUserType),
-    //     ),
-    //   ),
-    // );
-
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EntryHomePage(
-          section: AddPupilSection(),
+        builder: (context) => HomePage(
           userType: this._selectedUserType,
           sectionType: _pageManager.defaultSectionType(this._selectedUserType),
+          toDisplay: appData.user.userType == UserType.Instructor
+              ? PupilListSection()
+              : StatusSection(),
         ),
       ),
     );

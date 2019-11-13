@@ -11,14 +11,12 @@ class EntryHomePage extends StatefulWidget {
   final Widget section;
   final SectionType sectionType;
   final UserType userType;
-  final Map<String, dynamic> contextInfo;
 
   EntryHomePage({
     Key key,
     this.section,
     this.sectionType,
     this.userType,
-    this.contextInfo,
   }) : super(key: key);
 
   @override
@@ -44,7 +42,6 @@ class _EntryHomePageState extends State<EntryHomePage>
   }
 
   void _initialize() async {
-    appData.contextualInfo = this.widget.contextInfo;
     setState(() {
       var widgetsConfig = PageManager().getWidgetConfigurations(
           this.widget.userType, this.widget.sectionType).toList();

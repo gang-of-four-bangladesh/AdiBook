@@ -5,6 +5,7 @@ import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/home_page.dart';
+import 'package:adibook/pages/instructor/pupil_activities/payment_list_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,10 @@ class LessonListSectionState extends State<LessonListSection> {
                         color: AppTheme.appThemeColor,
                         icon: EvaIcons.edit,
                         onTap: () {
+                          appData.contextualInfo = {
+                            DataSharingKeys.LessonIdKey: document.documentID,
+                            DataSharingKeys.PupilIdKey: this._pupilId
+                          };
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -121,12 +126,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                 sectionType:
                                     SectionType.InstructorActivityForPupil,
                                 userType: UserType.Instructor,
-                                defaultSectionIndex: 2,
-                                contextInfo: {
-                                  DataSharingKeys.LessonIdKey:
-                                      document.documentID,
-                                  DataSharingKeys.PupilIdKey: this._pupilId
-                                },
+                                toDisplay: PaymentListSection(),
                               ),
                             ),
                           );

@@ -52,7 +52,7 @@ class PageManager {
         sectionWidget: PupilListSection(),
         bottomNavIcon: Icon(EvaIcons.person, color: Colors.white),
         sectionType: SectionType.InstructorActivity,
-        displayArea: [DisplayArea.Drawer]),
+        displayArea: [DisplayArea.Drawer, DisplayArea.Tab]),
     WidgetConfiguration(
         index: 1,
         appBarText: 'New Pupil',
@@ -70,7 +70,7 @@ class PageManager {
         sectionWidget: EventListSection(),
         bottomNavIcon: Icon(EvaIcons.book, color: Colors.white),
         sectionType: SectionType.InstructorActivity,
-        displayArea: [DisplayArea.Tab]),
+        displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
     WidgetConfiguration(
         index: 3,
         appBarText: 'Profile',
@@ -79,7 +79,7 @@ class PageManager {
         sectionWidget: InstructorProfile(),
         bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
         sectionType: SectionType.InstructorActivity,
-        displayArea: [DisplayArea.Drawer]),
+        displayArea: [DisplayArea.Drawer, DisplayArea.Tab]),
     WidgetConfiguration(
         index: 0,
         appBarText: 'Status',
