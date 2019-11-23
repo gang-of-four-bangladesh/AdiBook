@@ -4,7 +4,6 @@ import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/payment.dart';
-import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -134,7 +133,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                               caption: 'Remove',
                               color: Colors.red,
                               icon: EvaIcons.trash,
-                              onTap: () => {
+                              onTap: () {
                                 showDialog<ConfirmAction>(
                                   context: context,
                                   barrierDismissible:
@@ -162,7 +161,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                       ],
                                     );
                                   },
-                                )
+                                );
                               },
                             ),
                             IconSlideAction(

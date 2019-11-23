@@ -261,7 +261,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                                 caption: 'Remove',
                                 color: AppTheme.appThemeColor,
                                 icon: EvaIcons.trash,
-                                onTap: () => {
+                                onTap: () {
                                   showDialog<ConfirmAction>(
                                     context: context,
                                     barrierDismissible:
@@ -290,7 +290,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                                         ],
                                       );
                                     },
-                                  )
+                                  );
                                 },
                               ),
                               IconSlideAction(

@@ -54,7 +54,7 @@ class PageManager {
         sectionType: SectionType.InstructorActivity,
         displayArea: [DisplayArea.Drawer, DisplayArea.Tab]),
     WidgetConfiguration(
-        index: 1,
+        index: 0,
         appBarText: 'New Pupil',
         drawerLinkText: 'New Pupil',
         availableFor: UserType.Instructor,
@@ -63,7 +63,7 @@ class PageManager {
         sectionType: SectionType.InstructorActivity,
         displayArea: [DisplayArea.Drawer]),
     WidgetConfiguration(
-        index: 2,
+        index: 1,
         appBarText: 'Diary',
         drawerLinkText: 'Diary',
         availableFor: UserType.Instructor,
@@ -72,7 +72,7 @@ class PageManager {
         sectionType: SectionType.InstructorActivity,
         displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
     WidgetConfiguration(
-        index: 3,
+        index: 2,
         appBarText: 'Profile',
         drawerLinkText: 'Profile',
         availableFor: UserType.Instructor,
@@ -128,6 +128,15 @@ class PageManager {
         displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
     WidgetConfiguration(
         index: 2,
+        appBarText: 'Progress',
+        drawerLinkText: 'Progress',
+        availableFor: UserType.Instructor,
+        sectionWidget: ProgressPlannerSection(),
+        bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
+        sectionType: SectionType.InstructorActivityForPupil,
+        displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
+    WidgetConfiguration(
+        index: 0,
         appBarText: 'Add Lesson',
         drawerLinkText: 'Add Lesson',
         availableFor: UserType.Instructor,
@@ -136,7 +145,7 @@ class PageManager {
         sectionType: SectionType.InstructorActivityForPupil,
         displayArea: [DisplayArea.Drawer]),
     WidgetConfiguration(
-        index: 3,
+        index: 0,
         appBarText: 'Add Payment',
         drawerLinkText: 'Add Payment',
         availableFor: UserType.Instructor,
@@ -144,15 +153,6 @@ class PageManager {
         bottomNavIcon: Icon(FontAwesomeIcons.plus, color: Colors.white),
         sectionType: SectionType.InstructorActivityForPupil,
         displayArea: [DisplayArea.Drawer]),
-    WidgetConfiguration(
-        index: 3,
-        appBarText: 'Progress',
-        drawerLinkText: 'Progress',
-        availableFor: UserType.Instructor,
-        sectionWidget: ProgressPlannerSection(),
-        bottomNavIcon: Icon(FontAwesomeIcons.addressCard, color: Colors.white),
-        sectionType: SectionType.InstructorActivityForPupil,
-        displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
   ];
 
   SectionType defaultSectionType(UserType userType) {

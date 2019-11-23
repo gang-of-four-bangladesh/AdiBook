@@ -6,7 +6,6 @@ import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
-import 'package:adibook/pages/instructor/pupil_activities/payment_list_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -127,7 +126,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                               sectionType:
                                   SectionType.InstructorActivityForPupil,
                               userType: UserType.Instructor,
-                              toDisplay: PaymentListSection(),
+                              toDisplay: LessonListSection(),
                             ),
                           ),
                         );

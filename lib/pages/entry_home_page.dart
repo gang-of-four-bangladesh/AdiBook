@@ -3,8 +3,6 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:adibook/pages/instructor/add_pupil_section.dart';
-import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
 import 'package:flutter/material.dart';
 
 class EntryHomePage extends StatefulWidget {

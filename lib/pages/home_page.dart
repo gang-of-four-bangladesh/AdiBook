@@ -3,7 +3,8 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
-import 'package:adibook/pages/entry_home_page.dart';
+import 'package:adibook/pages/instructor/pupil_list_section.dart';
+import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -12,9 +13,9 @@ class HomePage extends StatefulWidget {
   final UserType userType;
   final Widget toDisplay;
   HomePage({
-    @required this.userType,
-    @required this.sectionType,
-    @required this.toDisplay,
+    this.userType,
+    this.sectionType,
+    this.toDisplay,
   });
   @override
   _HomePageState createState() => _HomePageState();
@@ -88,14 +89,19 @@ class _HomePageState extends State<HomePage>
           t.sectionWidget.runtimeType == this.widget.toDisplay.runtimeType);
       var defaultSectionIndex = 0;
       if (isTabBarWidget) {
-        var defaultSectionIndex = this
+        defaultSectionIndex = this
             ._tabbarWidgetsConfig
             .firstWhere((t) =>
-                t.sectionWidget.runtimeType.toString() ==
-                this.widget.toDisplay.runtimeType.toString())
+                t.sectionWidget.runtimeType ==
+                this.widget.toDisplay.runtimeType)
             .index;
+      } else {
+        this._tabbarWidgetsConfig = widgetsConfig
+            .where((w) =>
+                w.sectionWidget.runtimeType ==
+                this.widget.toDisplay.runtimeType)
+            .toList();
       }
-
       this._tabWidgets =
           this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
       this._getTabs();
@@ -202,6 +208,27 @@ class _HomePageState extends State<HomePage>
             decoration: BoxDecoration(
               color: AppTheme.appThemeColor,
             ),
+          ),
+        );
+    this._linkItems.add(
+          ListTile(
+            title: Text("HOME"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(
+                    userType: appData.user.userType,
+                    sectionType: appData.user.userType == UserType.Instructor
+                        ? SectionType.InstructorActivity
+                        : SectionType.PupilActivity,
+                    toDisplay: appData.user.userType == UserType.Instructor
+                        ? PupilListSection()
+                        : StatusSection(),
+                  ),
+                ),
+              );
+            },
           ),
         );
     this._drawerWidgetsConfig.forEach(
