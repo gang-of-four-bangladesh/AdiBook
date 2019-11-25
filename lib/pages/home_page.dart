@@ -204,9 +204,15 @@ class _HomePageState extends State<HomePage>
     this._linkItems.clear();
     this._linkItems.add(
           DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: AppTheme.appThemeColor,
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Icon(
+                  Icons.person,
+                  size: 70,
+                ),
+                Text("Abdullah Al Roman")
+              ],
             ),
           ),
         );

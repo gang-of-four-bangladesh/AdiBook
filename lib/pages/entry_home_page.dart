@@ -36,17 +36,19 @@ class _EntryHomePageState extends State<EntryHomePage>
       }
     });
     super.initState();
-    _initialize();
+    //_initialize();
   }
 
   void _initialize() async {
     setState(() {
-      var widgetsConfig = PageManager().getWidgetConfigurations(
-          this.widget.userType, this.widget.sectionType).toList();
+      var widgetsConfig = PageManager()
+          .getWidgetConfigurations(
+              this.widget.userType, this.widget.sectionType)
+          .toList();
       this._drawerWidgetsConfig = widgetsConfig
           .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer))
           .toList();
-      this._getDrawerLinks();
+      //this._getDrawerLinks();
     });
   }
 
@@ -65,9 +67,21 @@ class _EntryHomePageState extends State<EntryHomePage>
     this._linkItems.clear();
     this._linkItems.add(
           DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: AppTheme.appThemeColor,
+            // child: Text('Drawer Header'),
+            // decoration: BoxDecoration(
+            //   color: AppTheme.appThemeColor,
+            // ),
+            child: Column(
+              children: <Widget>[
+                Material(
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                  elevation: 10,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.person),
+                  ),
+                )
+              ],
             ),
           ),
         );
@@ -155,11 +169,15 @@ class _EntryHomePageState extends State<EntryHomePage>
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: this._linkItems,
-        ),
-      ),
+          elevation: 20,
+          child: Column(
+            children: <Widget>[
+              ListView(
+                padding: EdgeInsets.zero,
+                children: this._linkItems,
+              ),
+            ],
+          )),
       body: this.widget.section,
     );
   }
