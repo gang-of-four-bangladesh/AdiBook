@@ -70,42 +70,42 @@ class PaymentListSectionState extends State<PaymentListSection> {
     return Container(
         child: Column(
       children: <Widget>[
-        Container(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  ButtonTheme(
-                    minWidth: 180.0,
-                    height: 50.0,
-                    child: RaisedButton(
-                      onPressed: () {
-                        _makeEmpty();
-                        _asyncInputDialog(context);
-                      },
-                      color: AppTheme.appThemeColor,
-                      child: Text(
-                        "Add Payment",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                      ),
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
+        // Container(
+        //   child: Column(
+        //     children: <Widget>[
+        //       SizedBox(
+        //         height: 8,
+        //       ),
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         crossAxisAlignment: CrossAxisAlignment.center,
+        //         children: <Widget>[
+        //           ButtonTheme(
+        //             minWidth: 180.0,
+        //             height: 50.0,
+        //             child: RaisedButton(
+        //               onPressed: () {
+        //                 _makeEmpty();
+        //                 _asyncInputDialog(context);
+        //               },
+        //               color: AppTheme.appThemeColor,
+        //               child: Text(
+        //                 "Add Payment",
+        //                 style: TextStyle(
+        //                     color: Colors.white,
+        //                     fontWeight: FontWeight.bold,
+        //                     fontSize: 16.0),
+        //               ),
+        //               shape: new RoundedRectangleBorder(
+        //                 borderRadius: new BorderRadius.circular(8.0),
+        //               ),
+        //             ),
+        //           )
+        //         ],
+        //       )
+        //     ],
+        //   ),
+        // ),
         SizedBox(
           height: 15,
         ),

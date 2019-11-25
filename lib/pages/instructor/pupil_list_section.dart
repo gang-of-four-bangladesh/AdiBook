@@ -43,100 +43,98 @@ class PupilPistSectionState extends State<PupilListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return this.frequentWidgets.getProgressBar();
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return this.frequentWidgets.getProgressBar();
-          default:
-            return ListView(
-              children: snapshot.data.documents.map(
-                (DocumentSnapshot document) {
-                  return Slidable(
-                    actionPane: SlidableStrechActionPane(),
-                    actionExtentRatio: 0.15,
-                    actions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Remove',
-                        color: AppTheme.appThemeColor,
-                        icon: FontAwesomeIcons.trash,
-                        onTap: () {
-                          showDialog<ConfirmAction>(
-                            context: context,
-                            barrierDismissible:
-                                false, // user must tap button for close dialog!
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Delete"),
-                                content: Text("Do you want to delete ?"),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: const Text('CANCEL'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(ConfirmAction.CANCEL);
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: const Text('ACCEPT'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(ConfirmAction.ACCEPT);
-                                      _deleteData(document.documentID);
-                                    },
-                                  )
-                                ],
-                              );
-                            },
+        if (snapshot.data.documents.length == 0)
+          return Card(child: Text("No Pupils Found"));
+        return ListView(
+          children: snapshot.data.documents.map(
+            (DocumentSnapshot document) {
+              return Slidable(
+                actionPane: SlidableStrechActionPane(),
+                actionExtentRatio: 0.15,
+                actions: <Widget>[
+                  IconSlideAction(
+                    caption: 'Remove',
+                    color: AppTheme.appThemeColor,
+                    icon: FontAwesomeIcons.trash,
+                    onTap: () {
+                      showDialog<ConfirmAction>(
+                        context: context,
+                        barrierDismissible:
+                            false, // user must tap button for close dialog!
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Delete"),
+                            content: Text("Do you want to delete ?"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: const Text('CANCEL'),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(ConfirmAction.CANCEL);
+                                },
+                              ),
+                              FlatButton(
+                                child: const Text('ACCEPT'),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(ConfirmAction.ACCEPT);
+                                  _deleteData(document.documentID);
+                                },
+                              )
+                            ],
                           );
                         },
+                      );
+                    },
+                  ),
+                  IconSlideAction(
+                    caption: 'Edit',
+                    color: AppTheme.appThemeColor,
+                    icon: FontAwesomeIcons.edit,
+                    foregroundColor: Colors.white,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddPupilSection(userType: appData.user.userType),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(Icons.person),
+                  ),
+                  title: Text(document[Pupil.NameKey]),
+                  subtitle: document[Pupil.PhoneNumberKey] == null
+                      ? Text(EmptyString)
+                      : Text(document[Pupil.PhoneNumberKey].toString()),
+                  onTap: () {
+                    appData.contextualInfo = {
+                      DataSharingKeys.PupilIdKey: document.documentID
+                    };
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(
+                          sectionType: SectionType.InstructorActivityForPupil,
+                          userType: UserType.Instructor,
+                          toDisplay: LessonListSection(),
+                        ),
                       ),
-                      IconSlideAction(
-                        caption: 'Edit',
-                        color: AppTheme.appThemeColor,
-                        icon: FontAwesomeIcons.edit,
-                        foregroundColor: Colors.white,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AddPupilSection(
-                                  userType: appData.user.userType),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Icon(Icons.person),
-                      ),
-                      title: Text(document[Pupil.NameKey]),
-                      subtitle: document[Pupil.PhoneNumberKey] == null
-                          ? Text(EmptyString)
-                          : Text(document[Pupil.PhoneNumberKey].toString()),
-                      onTap: () {
-                        appData.contextualInfo = {
-                          DataSharingKeys.PupilIdKey: document.documentID
-                        };
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(
-                              sectionType:
-                                  SectionType.InstructorActivityForPupil,
-                              userType: UserType.Instructor,
-                              toDisplay: LessonListSection(),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ).toList(),
-            );
-        }
+                    );
+                  },
+                ),
+              );
+            },
+          ).toList(),
+        );
       },
     );
   }
