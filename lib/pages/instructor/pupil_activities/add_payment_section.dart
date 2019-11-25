@@ -2,7 +2,6 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
-import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -39,26 +38,11 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     this._dateOfPayment = DateTime.now();
     this._autoValidate = false;
     _selectedPaymentType = PaymentType.Cash;
-    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
-    this._logger.info('payment in edit mode id ${this._paymentId}');
+    //this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    //this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
+    //this._logger.info('payment in edit mode id ${this._paymentId}');
     //if (appData.user.userType == UserType.Instructor) populatePaymentInfo();
-    this._loadPaymentsData();
-  }
-
-  void populatePaymentInfo() async {
-    Payment payment = await Payment(
-            pupilId: this._pupilId,
-            instructorId: appData.instructor.id,
-            id: this._paymentId)
-        .getPayment();
-    this._logger.info("Payment Model >>>> : ${this._paymentId}");
-    this._amountController.text = payment.amount.toString();
-    if (!mounted) return;
-    setState(() {
-      this._dateOfPayment = payment.paymentDate;
-      this._selectedPaymentType = payment.paymentType;
-    });
+    //this._loadPaymentsData();
   }
 
   @override
@@ -278,43 +262,11 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                                               Navigator.of(context)
                                                   .pop(ConfirmAction.CANCEL);
                                             },
-                                          ),
-                                          FlatButton(
-                                            child: const Text('ACCEPT'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(ConfirmAction.ACCEPT);
-                                              _deleteData(document.documentID);
-                                            },
                                           )
                                         ],
                                       );
                                     },
                                   );
-                                },
-                              ),
-                              IconSlideAction(
-                                caption: 'Edit',
-                                color: AppTheme.appThemeColor,
-                                icon: EvaIcons.edit,
-                                onTap: () {
-                                  populatePaymentInfo();
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => HomePage(
-                                  //       sectionType:
-                                  //           SectionType.InstructorActivityForPupil,
-                                  //       userType: UserType.Instructor,
-                                  //       defaultSectionIndex: 3,
-                                  //       contextInfo: {
-                                  //         DataSharingKeys.PaymentIdKey:
-                                  //             document.documentID,
-                                  //         DataSharingKeys.PupilIdKey: this._pupilId
-                                  //       },
-                                  //     ),
-                                  //   ),
-                                  // );
                                 },
                               ),
                             ],
@@ -473,33 +425,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     setState(() {
       //This is for update the UI. Please before remove check twice.
       this._dateOfPayment = this._dateOfPayment;
-    });
-  }
-
-  Future<void> _deleteData(String paymentId) async {
-    var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    Payment payment = new Payment(
-        id: paymentId, pupilId: pupilId, instructorId: appData.instructor.id);
-    String message = isNotNullOrEmpty(await payment.delete())
-        ? 'Payment deleted successfully.'
-        : 'Payment deleted failed.';
-    _frequentWidgets.getSnackbar(
-      message: message,
-      context: context,
-    );
-    this._loadPaymentsData();
-  }
-
-  void _loadPaymentsData() async {
-    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
-    if (isNullOrEmpty(this._pupilId)) return;
-    if (!mounted) return;
-    setState(() {
-      _querySnapshot = PupilManager()
-          .getPayments(
-              instructorId: appData.instructor.id, pupilId: this._pupilId)
-          .asStream();
     });
   }
 }

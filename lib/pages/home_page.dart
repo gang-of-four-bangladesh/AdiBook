@@ -3,8 +3,10 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/data/user_manager.dart';
+import 'package:adibook/models/instructor.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   List<Tab> _tabs = [];
   List<Widget> _linkItems = [];
-
+  String userName="";
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -43,6 +45,17 @@ class _HomePageState extends State<HomePage>
     });
     super.initState();
     _initialize();
+    getInstructorInfo();
+  }
+
+  void getInstructorInfo() async {
+    Instructor instructor =
+        await Instructor(id: appData.instructor.id).getInstructor();        
+      
+    if (!mounted) return;
+    setState(() {
+      userName = instructor.name;
+    });
   }
 
   @override
@@ -106,6 +119,7 @@ class _HomePageState extends State<HomePage>
           this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
       this._getTabs();
       this._getDrawerLinks();
+      this.getInstructorInfo();
       _tabController = TabController(
         vsync: this,
         initialIndex: defaultSectionIndex,
@@ -204,14 +218,30 @@ class _HomePageState extends State<HomePage>
     this._linkItems.clear();
     this._linkItems.add(
           DrawerHeader(
-            child: ListView(
-              padding: EdgeInsets.zero,
+            decoration: BoxDecoration(color: AppTheme.appThemeColor),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Icon(
-                  Icons.person,
-                  size: 70,
+                Container(
+                  width: 70,
+                  height: 70,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.lightBlue,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 60,
+                    ),
+                  ),
                 ),
-                Text("Abdullah Al Roman")
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "Abdullah Al Roman"+"\n01672593932\nInformation",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),

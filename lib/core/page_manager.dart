@@ -136,7 +136,7 @@ class PageManager {
         sectionType: SectionType.InstructorActivityForPupil,
         displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
     WidgetConfiguration(
-        index: 0,
+        index: 3,
         appBarText: 'Add Lesson',
         drawerLinkText: 'Add Lesson',
         availableFor: UserType.Instructor,
@@ -145,7 +145,7 @@ class PageManager {
         sectionType: SectionType.InstructorActivityForPupil,
         displayArea: [DisplayArea.Drawer]),
     WidgetConfiguration(
-        index: 0,
+        index: 4,
         appBarText: 'Add Payment',
         drawerLinkText: 'Add Payment',
         availableFor: UserType.Instructor,
