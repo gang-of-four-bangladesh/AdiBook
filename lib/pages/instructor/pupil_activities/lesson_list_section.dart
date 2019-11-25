@@ -59,193 +59,189 @@ class LessonListSectionState extends State<LessonListSection> {
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         var format = DateFormat("EEEE dd MMMM @ HH:mm aaa");
-        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return this.frequentWidgets.getProgressBar();
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return FrequentWidgets().getProgressBar();
-          default:
-            return ListView(
-              children: snapshot.data.documents.map(
-                (DocumentSnapshot document) {
-                  return Slidable(
-                    actions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Remove',
-                        color: AppTheme.appThemeColor,
-                        icon: EvaIcons.trash,
-                        onTap: () async {
-                          showDialog<ConfirmAction>(
-                            context: context,
-                            barrierDismissible:
-                                false, // user must tap button for close dialog!
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Delete"),
-                                content: Text("Do you want to delete ?"),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: const Text('CANCEL'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(ConfirmAction.CANCEL);
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: const Text('ACCEPT'),
-                                    onPressed: () async {
-                                      Navigator.of(context)
-                                          .pop(ConfirmAction.ACCEPT);
-                                      LessonManager().deleteLesson(
-                                        instructorId: appData.instructor.id,
-                                        pupilId: this._pupilId,
-                                        lessonId: document.documentID,
-                                      );
-                                      _loadLessonsData();
-                                    },
-                                  )
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      IconSlideAction(
-                        caption: 'Edit',
-                        color: AppTheme.appThemeColor,
-                        icon: EvaIcons.edit,
-                        onTap: () {
-                          appData.contextualInfo = {
-                            DataSharingKeys.LessonIdKey: document.documentID,
-                            DataSharingKeys.PupilIdKey: this._pupilId
-                          };
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(
-                                sectionType:
-                                    SectionType.InstructorActivityForPupil,
-                                userType: UserType.Instructor,
-                                toDisplay: PaymentListSection(),
+        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+        if (snapshot.data.documents.length == 0)
+          return Card(child: Text("No Lessons Found"));
+        return ListView(
+          children: snapshot.data.documents.map(
+            (DocumentSnapshot document) {
+              return Slidable(
+                actions: <Widget>[
+                  IconSlideAction(
+                    caption: 'Remove',
+                    color: AppTheme.appThemeColor,
+                    icon: EvaIcons.trash,
+                    onTap: () async {
+                      showDialog<ConfirmAction>(
+                        context: context,
+                        barrierDismissible:
+                            false, // user must tap button for close dialog!
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Delete"),
+                            content: Text("Do you want to delete ?"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: const Text('CANCEL'),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(ConfirmAction.CANCEL);
+                                },
                               ),
-                            ),
+                              FlatButton(
+                                child: const Text('ACCEPT'),
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pop(ConfirmAction.ACCEPT);
+                                  LessonManager().deleteLesson(
+                                    instructorId: appData.instructor.id,
+                                    pupilId: this._pupilId,
+                                    lessonId: document.documentID,
+                                  );
+                                  _loadLessonsData();
+                                },
+                              )
+                            ],
                           );
                         },
-                      ),
-                    ],
-                    actionPane: SlidableScrollActionPane(),
-                    actionExtentRatio: 0.12,
-                    child: ListTile(
-                      onTap: () {
-                        appData.user.userType == UserType.Pupil ??
-                            _updateData(document.documentID);
-                      },
-                      title: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            //  Lesson Date,
-                            Container(
-                              padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    /*1*/
-                                    child: Column(
-                                      children: [
-                                        /*2*/
-                                        Container(
-                                          child: Row(
+                      );
+                    },
+                  ),
+                  IconSlideAction(
+                    caption: 'Edit',
+                    color: AppTheme.appThemeColor,
+                    icon: EvaIcons.edit,
+                    onTap: () {
+                      appData.contextualInfo = {
+                        DataSharingKeys.LessonIdKey: document.documentID,
+                        DataSharingKeys.PupilIdKey: this._pupilId
+                      };
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(
+                            sectionType: SectionType.InstructorActivityForPupil,
+                            userType: UserType.Instructor,
+                            toDisplay: PaymentListSection(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                actionPane: SlidableScrollActionPane(),
+                actionExtentRatio: 0.12,
+                child: ListTile(
+                  onTap: () {
+                    appData.user.userType == UserType.Pupil ??
+                        _updateData(document.documentID);
+                  },
+                  title: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: <Widget>[
+                        //  Lesson Date,
+                        Container(
+                          padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                /*1*/
+                                child: Column(
+                                  children: [
+                                    /*2*/
+                                    Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Column(
                                             children: <Widget>[
-                                              Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                    (format
-                                                        .format(TypeConversion
-                                                            .timeStampToDateTime(
-                                                                document[Lesson
-                                                                    .LessonDateKey]))
-                                                        .toString()),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    enumValueToString(LessionType
-                                                            .values[int.parse(
-                                                                document[Lesson.LessonTypeKey]
-                                                                    .toString())]
-                                                            .toString() +
-                                                        ' - ' +
-                                                        document[Lesson
-                                                                .LessonDurationKey]
-                                                            .toString() +
-                                                        ' minutes - ' +
-                                                        enumValueToString(VehicleType
-                                                            .values[int.parse(
-                                                                document[Lesson
-                                                                        .VehicleTypeKey]
-                                                                    .toString())]
-                                                            .toString()) +
-                                                        " Drive"),
-                                                    style:
-                                                        TextStyle(fontSize: 14),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                      enumValueToString(TripLocation
-                                                              .values[int.parse(
-                                                                  document[Lesson.PickUpLocationKey]
-                                                                      .toString())]
-                                                              .toString()) +
-                                                          ' : ' +
-                                                          enumValueToString(TripLocation
-                                                              .values[int.parse(
-                                                                  document[Lesson
-                                                                          .DropOffLocationKey]
-                                                                      .toString())]
-                                                              .toString()),
-                                                      style: TextStyle(
-                                                          fontSize: 14)),
-                                                  SizedBox(
-                                                    height: 1,
-                                                  ),
-                                                ],
+                                              Text(
+                                                (format
+                                                    .format(TypeConversion
+                                                        .timeStampToDateTime(
+                                                            document[Lesson
+                                                                .LessonDateKey]))
+                                                    .toString()),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
                                               ),
                                               Text(
-                                                  document[Lesson.DiaryNotesKey]
-                                                      .toString(),
+                                                enumValueToString(LessionType
+                                                        .values[int.parse(
+                                                            document[Lesson
+                                                                    .LessonTypeKey]
+                                                                .toString())]
+                                                        .toString() +
+                                                    ' - ' +
+                                                    document[Lesson.LessonDurationKey]
+                                                        .toString() +
+                                                    ' minutes - ' +
+                                                    enumValueToString(VehicleType
+                                                        .values[int.parse(
+                                                            document[Lesson
+                                                                    .VehicleTypeKey]
+                                                                .toString())]
+                                                        .toString()) +
+                                                    " Drive"),
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                  enumValueToString(TripLocation
+                                                          .values[int.parse(
+                                                              document[Lesson
+                                                                      .PickUpLocationKey]
+                                                                  .toString())]
+                                                          .toString()) +
+                                                      ' : ' +
+                                                      enumValueToString(TripLocation
+                                                          .values[int.parse(
+                                                              document[Lesson
+                                                                      .DropOffLocationKey]
+                                                                  .toString())]
+                                                          .toString()),
                                                   style:
-                                                      TextStyle(fontSize: 12)),
+                                                      TextStyle(fontSize: 14)),
+                                              SizedBox(
+                                                height: 1,
+                                              ),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                              document[Lesson.DiaryNotesKey]
+                                                  .toString(),
+                                              style: TextStyle(fontSize: 12)),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Checkbox(
-                                    value: document[Lesson.HasAcknowledgedKey],
-                                    onChanged: (check) {},
-                                    activeColor: AppTheme.appThemeColor,
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              Checkbox(
+                                value: document[Lesson.HasAcknowledgedKey],
+                                onChanged: (check) {},
+                                activeColor: AppTheme.appThemeColor,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ).toList(),
-            );
-        }
+                  ),
+                ),
+              );
+            },
+          ).toList(),
+        );
       },
     );
   }

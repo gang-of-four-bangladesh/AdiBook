@@ -19,6 +19,12 @@ class TypeConversion {
     return format.format(dateTime);
   }
 
+  static DateTime stringToDobFormat(String dateTime) {
+    if (dateTime == null) return null;
+    var format = DateFormat("MMM dd, yyyy");
+    return format.parse(dateTime);
+  }
+
   static String toNumberFormat(DateTime dateTime) {
     var format = DateFormat("yMdHms");
     return format.format(dateTime);

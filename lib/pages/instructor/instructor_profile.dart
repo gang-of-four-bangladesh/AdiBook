@@ -29,8 +29,9 @@ class _InstructorProfile extends State<InstructorProfile> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
-  DateTime _dateOfBirth;
+  TextEditingController dateOfBirthController = new TextEditingController();
   bool _autoValidate;
+  DateTime dateOfBirth;
 
   @override
   void initState() {
@@ -46,9 +47,11 @@ class _InstructorProfile extends State<InstructorProfile> {
     addressController.text = instructor.address;
     phoneController.text = instructor.phoneNumber;
     drivingLicenseController.text = instructor.licenseNo;
+    this._logger.info('Instructor date of birth ${instructor.dateOfBirth}');
     if (!mounted) return;
     setState(() {
-      this._dateOfBirth = instructor.dateOfBirth;
+      this.dateOfBirthController.text =
+          TypeConversion.toDobFormat(instructor.dateOfBirth);
     });
   }
 
@@ -140,44 +143,59 @@ class _InstructorProfile extends State<InstructorProfile> {
                         ),
                       ],
                     ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: TextFormField(
+                            controller: this.dateOfBirthController,
+                            readOnly: true,
+                            onTap: _selectDateOfBirth,
+                            decoration: InputDecoration(
+                                icon: Icon(FontAwesomeIcons.calendar),
+                                hintText: "Birth Date"),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
               //  Date of Birth,
-              Container(
-                padding: EdgeInsets.only(left: 5.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.date_range),
-                                  onPressed: _selectDateOfBirth,
-                                ),
-                                Text(
-                                  "Date Of Birth",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      "${TypeConversion.toDobFormat(this._dateOfBirth)}",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.only(left: 5.0, right: 20.0),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         /*1*/
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             /*2*/
+              //             Container(
+              //               child: Row(
+              //                 children: <Widget>[
+              //                   IconButton(
+              //                     icon: Icon(FontAwesomeIcons.calendar),
+              //                     onPressed: _selectDateOfBirth,
+              //                   ),
+              //                   Text(
+              //                     "Date Of Birth",
+              //                     style: TextStyle(fontWeight: FontWeight.bold),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //       Text(
+              //         "${TypeConversion.toDobFormat(this._dateOfBirth)}",
+              //         style: TextStyle(fontWeight: FontWeight.bold),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Container(
                 padding: EdgeInsets.all(5.0),
                 child: Row(
@@ -225,7 +243,6 @@ class _InstructorProfile extends State<InstructorProfile> {
   bool _validateInputs() {
     this._logger.info('Validate input called.');
     if (_formKey.currentState.validate()) {
-      this._logger.info('${this._dateOfBirth}');
       return true;
     } else {
       this._logger.info('Please check inputs.');
@@ -239,7 +256,7 @@ class _InstructorProfile extends State<InstructorProfile> {
     instructor.address = addressController.text;
     instructor.licenseNo = drivingLicenseController.text;
     instructor.phoneNumber = phoneController.text;
-    instructor.dateOfBirth = this._dateOfBirth;
+    instructor.dateOfBirth = TypeConversion.stringToDobFormat(this.dateOfBirthController.text);
     var result = await instructor.update();
     String message = isNotNullOrEmpty(result)
         ? 'Instructor updated successfully.'
@@ -299,25 +316,21 @@ class _InstructorProfile extends State<InstructorProfile> {
   }
 
   Future<void> _selectDateOfBirth() async {
-    //var selectedDob = this._dateOfBirth;
-    this._dateOfBirth = await DatePicker.showDatePicker(context,
-        theme: DatePickerTheme(
-          containerHeight: 210.0,
-        ),
-        showTitleActions: true,
-        minTime: DateTime(1950, 1, 1),
-        maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
-      print('confirm $date');      
-      setState(() {
-        this._dateOfBirth = date;
-      });
-    },
-        currentTime:
-            this._dateOfBirth == null ? DateTime.now() : this._dateOfBirth,
-        locale: LocaleType.en);
-    setState(() {
-      //This is for UI update only. This twice before remove.
-      this._dateOfBirth = this._dateOfBirth;
-    });
+    var displayDob = this.dateOfBirthController.text == EmptyString
+        ? DateTime.now()
+        : TypeConversion.stringToDobFormat(this.dateOfBirthController.text);
+    await DatePicker.showDatePicker(
+      context,
+      theme: DatePickerTheme(containerHeight: 210.0),
+      showTitleActions: true,
+      minTime: DateTime(1950, 1, 1),
+      maxTime: DateTime(2022, 12, 31),
+      currentTime: displayDob,
+      onConfirm: (date) {
+        setState(() {
+          this.dateOfBirthController.text = TypeConversion.toDobFormat(date);
+        });
+      },
+    );
   }
 }

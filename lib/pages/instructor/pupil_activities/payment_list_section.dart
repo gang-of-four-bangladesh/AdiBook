@@ -70,6 +70,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     return Container(
         child: Column(
       children: <Widget>[
+<<<<<<< HEAD
         Container(
           child: Column(
             children: <Widget>[
@@ -79,6 +80,44 @@ class PaymentListSectionState extends State<PaymentListSection> {
              ],
           ),
         ),
+=======
+        // Container(
+        //   child: Column(
+        //     children: <Widget>[
+        //       SizedBox(
+        //         height: 8,
+        //       ),
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         crossAxisAlignment: CrossAxisAlignment.center,
+        //         children: <Widget>[
+        //           ButtonTheme(
+        //             minWidth: 180.0,
+        //             height: 50.0,
+        //             child: RaisedButton(
+        //               onPressed: () {
+        //                 _makeEmpty();
+        //                 _asyncInputDialog(context);
+        //               },
+        //               color: AppTheme.appThemeColor,
+        //               child: Text(
+        //                 "Add Payment",
+        //                 style: TextStyle(
+        //                     color: Colors.white,
+        //                     fontWeight: FontWeight.bold,
+        //                     fontSize: 16.0),
+        //               ),
+        //               shape: new RoundedRectangleBorder(
+        //                 borderRadius: new BorderRadius.circular(8.0),
+        //               ),
+        //             ),
+        //           )
+        //         ],
+        //       )
+        //     ],
+        //   ),
+        // ),
+>>>>>>> 4b8ef5fee2367143b60300eb2cd96bca1dd92e04
         SizedBox(
           height: 15,
         ),
