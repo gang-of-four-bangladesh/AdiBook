@@ -84,7 +84,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
                                 hintStyle: TextStyle(color: Colors.grey),
-                                hintText: "Name"),
+                                labelText: "Name"),
                           ),
                         ),
                       ],
@@ -98,7 +98,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                             controller: addressController,
                             decoration: InputDecoration(
                                 icon: Icon(EvaIcons.email),
-                                hintText: "Address"),
+                                labelText: "Address"),
                           ),
                         ),
                       ],
@@ -114,7 +114,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                     enabled: false,
                                     decoration: InputDecoration(
                                         icon: Icon(EvaIcons.phone),
-                                        hintText: "Phone"),
+                                        labelText: "Phone"),
                                   )
                                 : TextFormField(
                                     controller: phoneController,
@@ -123,7 +123,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                     validator: validations.validatePhoneNumber,
                                     decoration: InputDecoration(
                                         icon: Icon(EvaIcons.phone),
-                                        hintText: "Phone"),
+                                        labelText: "Phone"),
                                   )),
                       ],
                     ),
@@ -138,7 +138,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                                 icon: Icon(FontAwesomeIcons.book),
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600]),
-                                hintText: "License number"),
+                                labelText: "License number"),
                           ),
                         ),
                       ],
@@ -153,7 +153,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                             onTap: _selectDateOfBirth,
                             decoration: InputDecoration(
                                 icon: Icon(FontAwesomeIcons.calendar),
-                                hintText: "Birth Date"),
+                                labelText: "Birth Date"),
                           ),
                         ),
                       ],

@@ -33,7 +33,9 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   List<Tab> _tabs = [];
   List<Widget> _linkItems = [];
-  String userName = EmptyString;
+  String userName=EmptyString;
+  String phoneNo=EmptyString;
+  Instructor instructor;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -49,12 +51,8 @@ class _HomePageState extends State<HomePage>
   }
 
   void getInstructorInfo() async {
-    Instructor instructor =
-        await Instructor(id: appData.instructor.id).getInstructor();
-
     if (!mounted) return;
     setState(() {
-      userName = instructor.name;
     });
   }
 
@@ -224,22 +222,24 @@ class _HomePageState extends State<HomePage>
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: 70,
-                  height: 70,
+                  width: 100,
+                  height: 100,
                   child: CircleAvatar(
                     backgroundColor: Colors.lightBlue,
                     child: Icon(
                       Icons.person,
                       color: Colors.white,
-                      size: 60,
+                      size: 100,
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 20,
                 ),
                 Text(
-                  "Abdullah Al Roman" + "\n01672593932\nInformation",
+                  appData.user.userType == UserType.Instructor ? appData.instructor.name+"\n\n"+appData.instructor.phoneNumber:
+                  appData.pupil.name+"\n\n"+appData.pupil.phoneNumber,
+                  //appData.user.userType == UserType.Instructor ? appData.pupil.phoneNumber:appData.pupil.phoneNumber,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],

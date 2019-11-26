@@ -148,12 +148,15 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               controller: _lessonDurationController,
                               validator: validations.validateNumber,
                               decoration: InputDecoration(
-                                   icon: Icon(EvaIcons.clock),
-                                          suffixIcon: Icon(Icons.star,
-                                              color: Colors.red[600],size: 15,),
-                                          hintStyle:
-                                              TextStyle(color: Colors.grey),
-                                  hintText: "Lesson Duration(Minutes)"),
+                                labelText: "Lesson Duration(Minutes)",
+                                icon: Icon(EvaIcons.clock),
+                                suffixIcon: Icon(
+                                  Icons.star,
+                                  color: Colors.red[600],
+                                  size: 15,
+                                ),
+                                hintStyle: TextStyle(color: Colors.grey),
+                              ),
                             ),
                           ),
                         ],
@@ -349,12 +352,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               keyboardType: TextInputType.text,
                               controller: _diaryNotesController,
                               decoration: InputDecoration(
-                                   icon: Icon(EvaIcons.book),
-                                          suffixIcon: Icon(Icons.star,
-                                              color: Colors.red[600],size: 15,),
-                                          hintStyle:
-                                              TextStyle(color: Colors.grey),
-                                  hintText: "Diary Notes(Optional)"),
+                                  labelText: "Diary Notes(Optional)",
+                                  icon: Icon(EvaIcons.book),
+                                  suffixIcon: Icon(
+                                    Icons.star,
+                                    color: Colors.red[600],
+                                    size: 15,
+                                  ),
+                                  hintStyle: TextStyle(color: Colors.grey)),
                             ),
                           ),
                           Container(
@@ -363,12 +368,15 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                               keyboardType: TextInputType.multiline,
                               controller: _reportCardController,
                               decoration: InputDecoration(
-                                   icon: Icon(Icons.report),
-                                          suffixIcon: Icon(Icons.star,
-                                              color: Colors.red[600],size: 15,),
-                                          hintStyle:
-                                              TextStyle(color: Colors.grey),
-                                  hintText: "Report Card(Optional)"),
+                                labelText: "Diary Notes(Optional)",
+                                icon: Icon(Icons.report),
+                                suffixIcon: Icon(
+                                  Icons.star,
+                                  color: Colors.red[600],
+                                  size: 15,
+                                ),
+                                hintStyle: TextStyle(color: Colors.grey),
+                              ),
                             ),
                           ),
                         ],

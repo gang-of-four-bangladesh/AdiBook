@@ -109,14 +109,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
                                 controller: _amountController,
                                 validator: validations.validateNumber,
                                 decoration: InputDecoration(
-                                    suffixIcon: Icon(Icons.star,
-                                        color: Colors.red[600]),
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: AppTheme.appThemeColor),
-                                        borderRadius:
-                                            new BorderRadius.circular(8.0)),
-                                    hintText: "Amount"),
+                                  labelText: "Amount",
+                                  suffixIcon:
+                                      Icon(Icons.star, color: Colors.red[600]),
+                                ),
                               ),
                             ),
                           ],
@@ -218,7 +214,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
               ),
             ), //_logger.fine('Loading pupil payments listing page.');
           ),
-         ],
+        ],
       )),
     );
   }

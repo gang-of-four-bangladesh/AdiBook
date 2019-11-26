@@ -105,7 +105,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600],size: 15,),
                                 hintStyle: TextStyle(color: Colors.grey),
-                                hintText: "Name"),
+                                labelText: "Name"),
                           ),
                         ),
                       ],
@@ -124,7 +124,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             decoration: InputDecoration(
                               icon: Icon(EvaIcons.email),
                                 hintStyle: TextStyle(color: Colors.grey),
-                                hintText: "Address"),
+                                labelText: "Address"),
                           ),
                         ),
                         Container(
@@ -139,7 +139,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             decoration: InputDecoration(
                               icon: Icon(EvaIcons.emailOutline),
                                 hintStyle: TextStyle(color: Colors.grey),
-                                hintText: "Theory Record"),
+                                labelText: "Theory Record"),
                           ),
                         ),
                         Container(
@@ -152,9 +152,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: previousExperienceController,
                             decoration: InputDecoration(
+                              labelText: "Previous Experience",
                               icon: Icon(EvaIcons.paperPlane),
-                                hintStyle: TextStyle(color: Colors.grey),
-                                hintText: "Previous Experience"),
+                                hintStyle: TextStyle(color: Colors.grey),),
                           ),
                         ),
                       ],
@@ -214,7 +214,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                                 color: Colors.red[600], size: 15,),
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
-                                        hintText: "Phone"),
+                                        labelText: "Phone"),
                                   ),
                                 ),
                               )
@@ -239,7 +239,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 suffixIcon:
                                     Icon(Icons.star, color: Colors.red[600],size: 15,),
                                 hintStyle: TextStyle(color: Colors.grey),
-                                hintText: "License number"),
+                                labelText: "License number"),
                           ),
                         ),
                       ],
