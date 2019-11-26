@@ -10,6 +10,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -34,6 +35,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController theoryRecordController = new TextEditingController();
+  TextEditingController dateOfBirthController = new TextEditingController();
   TextEditingController previousExperienceController =
       new TextEditingController();
   TextEditingController drivingLicenseController = new TextEditingController();
@@ -48,7 +50,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     super.initState();
     this._autoValidate = false;
     this._switchOnEyeTest = false;
-    this._dateOfBirth = DateTime.now();
+    this.dateOfBirthController.text = TypeConversion.toDobFormat(DateTime.now());
     if (appData.user.userType == UserType.Pupil) populatePupilInfo();
   }
 
@@ -100,10 +102,13 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             controller: nameController,
                             validator: validations.validateText,
                             decoration: InputDecoration(
-                              icon: Icon(EvaIcons.person),
-                              border: UnderlineInputBorder(),
-                                suffixIcon:
-                                    Icon(Icons.star, color: Colors.red[600],size: 15,),
+                                icon: Icon(EvaIcons.person),
+                                border: UnderlineInputBorder(),
+                                suffixIcon: Icon(
+                                  Icons.star,
+                                  color: Colors.red[600],
+                                  size: 15,
+                                ),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 labelText: "Name"),
                           ),
@@ -122,7 +127,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: addressController,
                             decoration: InputDecoration(
-                              icon: Icon(EvaIcons.email),
+                                icon: Icon(EvaIcons.email),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 labelText: "Address"),
                           ),
@@ -137,7 +142,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             keyboardType: TextInputType.text,
                             controller: theoryRecordController,
                             decoration: InputDecoration(
-                              icon: Icon(EvaIcons.emailOutline),
+                                icon: Icon(EvaIcons.emailOutline),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 labelText: "Theory Record"),
                           ),
@@ -154,7 +159,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             decoration: InputDecoration(
                               labelText: "Previous Experience",
                               icon: Icon(EvaIcons.paperPlane),
-                                hintStyle: TextStyle(color: Colors.grey),),
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
                           ),
                         ),
                       ],
@@ -206,12 +212,15 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                         ? validations.validatePhoneNumber
                                         : null,
                                     decoration: InputDecoration(
-                                      icon: Icon(EvaIcons.phone),
+                                        icon: Icon(EvaIcons.phone),
                                         suffixIcon: appData.user.userType ==
                                                 UserType.Pupil
                                             ? null
-                                            : Icon(Icons.star,
-                                                color: Colors.red[600], size: 15,),
+                                            : Icon(
+                                                Icons.star,
+                                                color: Colors.red[600],
+                                                size: 15,
+                                              ),
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
                                         labelText: "Phone"),
@@ -235,9 +244,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             controller: drivingLicenseController,
                             validator: validations.validateRequired,
                             decoration: InputDecoration(
-                              icon: Icon(EvaIcons.book),
-                                suffixIcon:
-                                    Icon(Icons.star, color: Colors.red[600],size: 15,),
+                                icon: Icon(EvaIcons.book),
+                                suffixIcon: Icon(
+                                  Icons.star,
+                                  color: Colors.red[600],
+                                  size: 15,
+                                ),
                                 hintStyle: TextStyle(color: Colors.grey),
                                 labelText: "License number"),
                           ),
@@ -248,45 +260,21 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                 ),
               ),
               //  Date of Birth,
-              Container(
-                padding: EdgeInsets.only(left: 5.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      /*1*/
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /*2*/
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.date_range),
-                                  onPressed: appData.user.userType ==
-                                          UserType.Instructor
-                                      ? _selectDateOfBirth
-                                      : null,
-                                ),
-                                Text(
-                                  "Date Of Birth",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(bottom: 5.0),
+                    child: TextFormField(
+                      controller: this.dateOfBirthController,
+                      readOnly: true,
+                      onTap: _selectDateOfBirth,
+                      decoration: InputDecoration(
+                          icon: Icon(FontAwesomeIcons.calendar),
+                          labelText: "Birth Date"),
                     ),
-                    /*3*/
-                    Text(
-                      "${TypeConversion.toDobFormat(this._dateOfBirth)}",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
               //  Eye test,
               Container(
                 padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -475,11 +463,28 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       this.previousExperienceController.text = EmptyString;
       this.phoneController.text = EmptyString;
       this.drivingLicenseController.text = EmptyString;
-      this._dateOfBirth = DateTime.now();
+     this.dateOfBirthController.text = TypeConversion.toDobFormat(DateTime.now());
       this._switchOnEyeTest = false;
     });
   }
-
+Future<void> _selectDateOfBirth() async {
+    var displayDob = this.dateOfBirthController.text == EmptyString
+        ? DateTime.now()
+        : TypeConversion.stringToDobFormat(this.dateOfBirthController.text);
+    await DatePicker.showDatePicker(
+      context,
+      theme: DatePickerTheme(containerHeight: 210.0),
+      showTitleActions: true,
+      minTime: DateTime(1950, 1, 1),
+      maxTime: DateTime(2022, 12, 31),
+      currentTime: displayDob,
+      onConfirm: (date) {
+        setState(() {
+          this.dateOfBirthController.text = TypeConversion.toDobFormat(date);
+        });
+      },
+    );
+  }
   // Future<void> _updateData() async {
   //   this._logger.info('Updating pupil information ${appData.pupil.id}.');
   //   Pupil pupil = Pupil(id: appData.pupil.id);
@@ -577,20 +582,5 @@ class AddPupilSectionstate extends State<AddPupilSection> {
         );
       },
     );
-  }
-
-  Future<void> _selectDateOfBirth() async {
-    var selectedDateOfBirth = this._dateOfBirth;
-    this._dateOfBirth = await showDatePicker(
-      context: context,
-      initialDate: this._dateOfBirth,
-      firstDate: DateTime(1900, 8),
-      lastDate: DateTime(2101),
-    );
-    if (this._dateOfBirth == null) this._dateOfBirth = selectedDateOfBirth;
-    setState(() {
-      //This is for update the UI. Please before remove check twice.
-      this._dateOfBirth = this._dateOfBirth;
-    });
-  }
+  } 
 }

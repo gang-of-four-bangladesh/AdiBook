@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,6 +29,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   String _pupilId;
   String _paymentId;
   Stream<QuerySnapshot> _querySnapshot;
+  TextEditingController dateOfPaymentController = new TextEditingController();
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
     this._amountController = TextEditingController();
@@ -35,7 +38,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   @override
   void initState() {
     super.initState();
-    this._dateOfPayment = DateTime.now();
+    this.dateOfPaymentController.text = TypeConversion.toDobFormat(DateTime.now());
     this._autoValidate = false;
     _selectedPaymentType = PaymentType.Cash;
   }
@@ -54,46 +57,21 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
               child: Center(
                 child: Column(children: <Widget>[
                   //  Date of Birth,
-                  Container(
-                    padding: EdgeInsets.only(left: 5.0, right: 20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          /*1*/
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /*2*/
-                              Container(
-                                child: Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.date_range),
-                                      onPressed: appData.user.userType ==
-                                              UserType.Instructor
-                                          ? _selectDateOfpayment
-                                          : null,
-                                    ),
-                                    Text(
-                                      "Date Of Payment",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: TextFormField(
+                            controller: this.dateOfPaymentController,
+                            readOnly: true,
+                            onTap: _selectDateOfBirth,
+                            decoration: InputDecoration(
+                                icon: Icon(FontAwesomeIcons.calendar),
+                                labelText: "Payment Date"),
                           ),
-                        ),
-                        /*3*/
-                        Text(
-                          "${TypeConversion.toDobFormat(this._dateOfPayment)}",
-                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
-                  ),
-
                   //textBoxSection,
                   Container(
                     padding: EdgeInsets.only(
@@ -244,9 +222,29 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     _makeEmpty();
   }
 
+  
+  Future<void> _selectDateOfBirth() async {
+    var displayDob = this.dateOfPaymentController.text == EmptyString
+        ? DateTime.now()
+        : TypeConversion.stringToDobFormat(this.dateOfPaymentController.text);
+    await DatePicker.showDatePicker(
+      context,
+      theme: DatePickerTheme(containerHeight: 210.0),
+      showTitleActions: true,
+      minTime: DateTime(1950, 1, 1),
+      maxTime: DateTime(2022, 12, 31),
+      currentTime: displayDob,
+      onConfirm: (date) {
+        setState(() {
+          this.dateOfPaymentController.text = TypeConversion.toDobFormat(date);
+        });
+      },
+    );
+  }
+
   void _makeEmpty() {
     setState(() {
-      this._dateOfPayment = DateTime.now();
+      this.dateOfPaymentController.text = TypeConversion.toDobFormat(DateTime.now());
       _amountController.text = EmptyString;
       _selectedPaymentType = PaymentType.Cash;
     });
