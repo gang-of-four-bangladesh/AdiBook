@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   List<Tab> _tabs = [];
   List<Widget> _linkItems = [];
-  String userName="";
+  String userName = EmptyString;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -50,8 +50,8 @@ class _HomePageState extends State<HomePage>
 
   void getInstructorInfo() async {
     Instructor instructor =
-        await Instructor(id: appData.instructor.id).getInstructor();        
-      
+        await Instructor(id: appData.instructor.id).getInstructor();
+
     if (!mounted) return;
     setState(() {
       userName = instructor.name;
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage>
                   width: 10,
                 ),
                 Text(
-                  "Abdullah Al Roman"+"\n01672593932\nInformation",
+                  "Abdullah Al Roman" + "\n01672593932\nInformation",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
