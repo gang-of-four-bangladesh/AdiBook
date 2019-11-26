@@ -70,17 +70,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
     return Container(
         child: Column(
       children: <Widget>[
-<<<<<<< HEAD
-        Container(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 8,
-              ),
-             ],
-          ),
-        ),
-=======
         // Container(
         //   child: Column(
         //     children: <Widget>[
@@ -117,7 +106,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
         //     ],
         //   ),
         // ),
->>>>>>> 4b8ef5fee2367143b60300eb2cd96bca1dd92e04
         SizedBox(
           height: 15,
         ),
