@@ -87,209 +87,189 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   Widget build(BuildContext context) {
     Validations validations = Validations();
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save),
+        backgroundColor: AppTheme.appThemeColor,
+        label: const Text(
+          'Save',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+          ),
+        ),
+        onPressed: () async {
+          if (_validateInputs()) {
+            await _saveData();
+            var instructor =
+                await Instructor(id: appData.instructor.id).getInstructor();
+            await PushNotificationSender.send(
+              userId: this._pupilId,
+              title: 'Driving Lesson Schedule',
+              body:
+                  'You have a driving class with ${instructor.name} on ${this._lessonTimeController.text} for ${this._lessonDurationController.text} minutes.',
+            );
+          }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SingleChildScrollView(
         child: Container(
           child: Form(
             key: _formKey,
             autovalidate: _autoValidate,
             child: Center(
-              child: Column(children: <Widget>[
-                //textBoxSection,
-                Container(
-                  padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-                  child: Wrap(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: this._lessonTimeController,
-                        validator: validations.validateRequired,
-                        readOnly: true,
-                        onTap: this._selectLessonTime,
-                        decoration: InputDecoration(
-                            icon: Icon(FontAwesomeIcons.calendar),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                    child: Wrap(
+                      children: <Widget>[
+                        TextFormField(
+                          controller: this._lessonTimeController,
+                          validator: validations.validateRequired,
+                          readOnly: true,
+                          onTap: this._selectLessonTime,
+                          decoration: InputDecoration(
+                              icon: Icon(FontAwesomeIcons.calendar),
+                              suffixIcon: Icon(
+                                Icons.star,
+                                color: Colors.red[600],
+                                size: 15,
+                              ),
+                              labelText: "Lesson At"),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: _lessonDurationController,
+                          validator: validations.validateNumber,
+                          decoration: InputDecoration(
+                            labelText: "Lesson Duration(Minutes)",
+                            icon: Icon(FontAwesomeIcons.clock),
                             suffixIcon: Icon(
                               Icons.star,
                               color: Colors.red[600],
                               size: 15,
                             ),
-                            labelText: "Lesson At"),
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: _lessonDurationController,
-                        validator: validations.validateNumber,
-                        decoration: InputDecoration(
-                          labelText: "Lesson Duration(Minutes)",
-                          icon: Icon(EvaIcons.clock),
-                          suffixIcon: Icon(
-                            Icons.star,
-                            color: Colors.red[600],
-                            size: 15,
+                            hintStyle: TextStyle(color: Colors.grey),
                           ),
-                          hintStyle: TextStyle(color: Colors.grey),
                         ),
-                      ),
-                      DropDownFormField(
-                        titleText: 'Pickup Location',
-                        hintText: 'Please choose one',
-                        required: true,
-                        value: this._selectedPickupLocation.index,
-                        onSaved: (value) {
-                          setState(() {
-                            this._selectedPickupLocation =
-                                TripLocation.values[value];
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            this._selectedPickupLocation =
-                                TripLocation.values[value];
-                          });
-                        },
-                        dataSource: TripLocationData,
-                        textField: 'display',
-                        valueField: 'value',
-                      ),
-                      DropDownFormField(
-                        titleText: 'Drop Off Location',
-                        hintText: 'Please choose one',
-                        required: true,
-                        value: this._selectedDropOffLocation.index,
-                        onSaved: (value) {
-                          setState(() {
-                            this._selectedDropOffLocation =
-                                TripLocation.values[value];
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            this._selectedDropOffLocation =
-                                TripLocation.values[value];
-                          });
-                        },
-                        dataSource: TripLocationData,
-                        textField: 'display',
-                        valueField: 'value',
-                      ),
-                      DropDownFormField(
-                        titleText: 'Vehicle Type',
-                        hintText: 'Please choose one',
-                        required: true,
-                        value: this._selectedVehicleType.index,
-                        onSaved: (value) {
-                          setState(() {
-                            this._selectedVehicleType =
-                                VehicleType.values[value];
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            this._selectedVehicleType =
-                                VehicleType.values[value];
-                          });
-                        },
-                        dataSource: VehicleTypeData,
-                        textField: 'display',
-                        valueField: 'value',
-                      ),
-                      DropDownFormField(
-                        titleText: 'Lesson Type',
-                        hintText: 'Please choose one',
-                        required: true,
-                        value: this._selectedlessionType.index,
-                        onSaved: (value) {
-                          setState(() {
-                            this._selectedlessionType =
-                                LessonType.values[value];
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            this._selectedlessionType =
-                                LessonType.values[value];
-                          });
-                        },
-                        dataSource: LessonTypeData,
-                        textField: 'display',
-                        valueField: 'value',
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.text,
-                        controller: _diaryNotesController,
-                        decoration: InputDecoration(
-                            labelText: "Diary Notes",
-                            icon: Icon(EvaIcons.book),
-                            hintStyle: TextStyle(color: Colors.grey)),
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        controller: _reportCardController,
-                        decoration: InputDecoration(
-                          labelText: "Report Card",
-                          icon: Icon(Icons.report),
-                          hintStyle: TextStyle(color: Colors.grey),
+                        DropDownFormField(
+                          titleText: 'Pickup Location',
+                          hintText: 'Please choose one',
+                          required: true,
+                          value: this._selectedPickupLocation.index,
+                          onSaved: (value) {
+                            setState(() {
+                              this._selectedPickupLocation =
+                                  TripLocation.values[value];
+                            });
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              this._selectedPickupLocation =
+                                  TripLocation.values[value];
+                            });
+                          },
+                          dataSource: TripLocationOptions,
+                          textField: 'display',
+                          valueField: 'value',
                         ),
-                      ),
-                      TextFormField(
-                        controller: this._uploadLicenseController,
-                        readOnly: true,
-                        onTap: this._uploadLicense,
-                        decoration: InputDecoration(
-                            icon: Icon(FontAwesomeIcons.upload),
-                            labelText: "Upload License"),
-                      ),
-                    ],
+                        DropDownFormField(
+                          titleText: 'Drop Off Location',
+                          hintText: 'Please choose one',
+                          required: true,
+                          value: this._selectedDropOffLocation.index,
+                          onSaved: (value) {
+                            setState(() {
+                              this._selectedDropOffLocation =
+                                  TripLocation.values[value];
+                            });
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              this._selectedDropOffLocation =
+                                  TripLocation.values[value];
+                            });
+                          },
+                          dataSource: TripLocationOptions,
+                          textField: 'display',
+                          valueField: 'value',
+                        ),
+                        DropDownFormField(
+                          titleText: 'Vehicle Type',
+                          hintText: 'Please choose one',
+                          required: true,
+                          value: this._selectedVehicleType.index,
+                          onSaved: (value) {
+                            setState(() {
+                              this._selectedVehicleType =
+                                  VehicleType.values[value];
+                            });
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              this._selectedVehicleType =
+                                  VehicleType.values[value];
+                            });
+                          },
+                          dataSource: VehicleTypeOptions,
+                          textField: 'display',
+                          valueField: 'value',
+                        ),
+                        DropDownFormField(
+                          titleText: 'Lesson Type',
+                          hintText: 'Please choose one',
+                          required: true,
+                          value: this._selectedlessionType.index,
+                          onSaved: (value) {
+                            setState(() {
+                              this._selectedlessionType =
+                                  LessonType.values[value];
+                            });
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              this._selectedlessionType =
+                                  LessonType.values[value];
+                            });
+                          },
+                          dataSource: LessonTypeOptions,
+                          textField: 'display',
+                          valueField: 'value',
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _diaryNotesController,
+                          decoration: InputDecoration(
+                              labelText: "Diary Notes",
+                              icon: Icon(EvaIcons.book),
+                              hintStyle: TextStyle(color: Colors.grey)),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          controller: _reportCardController,
+                          decoration: InputDecoration(
+                            labelText: "Report Card",
+                            icon: Icon(Icons.report),
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        TextFormField(
+                          controller: this._uploadLicenseController,
+                          readOnly: true,
+                          onTap: this._uploadLicense,
+                          decoration: InputDecoration(
+                              icon: Icon(FontAwesomeIcons.upload),
+                              labelText: "Upload License"),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(5.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            ButtonTheme(
-                              minWidth: 180.0,
-                              height: 50.0,
-                              child: RaisedButton(
-                                onPressed: () async {
-                                  if (_validateInputs()) {
-                                    await _saveData();
-                                    var instructor = await Instructor(
-                                            id: appData.instructor.id)
-                                        .getInstructor();
-                                    await PushNotificationSender.send(
-                                      userId: this._pupilId,
-                                      title: 'Driving Lesson Schedule',
-                                      body:
-                                          'You have a driving class with ${instructor.name} on ${this._lessonTimeController.text} for ${this._lessonDurationController.text} minutes.',
-                                    );
-                                  }
-                                },
-                                color: AppTheme.appThemeColor,
-                                child: Text(
-                                  "Save",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0),
-                                ),
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(8.0),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
+                ],
+              ),
             ),
           ),
         ),
@@ -310,8 +290,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
-    var documentDownloadUrl =
-        await storageUpload.uploadLessonFile(this._uploadLicenseController.text);
+    var documentDownloadUrl = await storageUpload
+        .uploadLessonFile(this._uploadLicenseController.text);
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
       id: this._lessionId,

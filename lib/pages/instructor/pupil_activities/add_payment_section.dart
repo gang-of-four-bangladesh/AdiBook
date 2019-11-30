@@ -2,6 +2,7 @@ import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/core/widgets/dropdown_formfield.dart';
 import 'package:adibook/models/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
@@ -20,10 +21,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   bool _autoValidate;
   FrequentWidgets _frequentWidgets;
   TextEditingController _amountController;
-  PaymentType _selectedPaymentType;
+  PaymentMode _selectedPaymentMode;
   DateTime _dateOfPayment;
   String _paymentId;
-  TextEditingController dateOfPaymentController = new TextEditingController();
+  TextEditingController dateOfPaymentController = TextEditingController();
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
     this._amountController = TextEditingController();
@@ -32,175 +33,106 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   @override
   void initState() {
     super.initState();
-    this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(DateTime.now());
+    this.dateOfPaymentController.text =
+        TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
-    _selectedPaymentType = PaymentType.Cash;
+    _selectedPaymentMode = PaymentMode.Cash;
   }
 
   @override
   Widget build(BuildContext context) {
     Validations validations = Validations();
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Column(
-        children: <Widget>[
-          Container(
-            child: Form(
-              key: _formKey,
-              autovalidate: _autoValidate,
-              child: Center(
-                child: Column(children: <Widget>[
-                  //  Date of Birth,
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            controller: this.dateOfPaymentController,
-                            readOnly: true,
-                            onTap: _selectDateOfBirth,
-                            decoration: InputDecoration(
-                                icon: Icon(FontAwesomeIcons.calendar),
-                                labelText: "Payment Date"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  //textBoxSection,
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-                    child: Wrap(
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.only(bottom: 5.0),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: _amountController,
-                                validator: validations.validateNumber,
-                                decoration: InputDecoration(
-                                  labelText: "Amount",
-                                  suffixIcon:
-                                      Icon(Icons.star, color: Colors.red[600]),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            //  Pickup TripLocation,
-                            Container(
-                              padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    /*1*/
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        /*2*/
-                                        Container(
-                                          child: Text(
-                                            'Type',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  /*3*/
-                                  DropdownButton<PaymentType>(
-                                      value: _selectedPaymentType,
-                                      onChanged: (PaymentType type) {
-                                        setState(() {
-                                          _selectedPaymentType = type;
-                                          print(_selectedPaymentType);
-                                        });
-                                      },
-                                      items: PaymentType.values
-                                          .map((PaymentType type) {
-                                        return new DropdownMenuItem<
-                                                PaymentType>(
-                                            value: type,
-                                            child: new Text(enumValueToString(
-                                                type.toString())));
-                                      }).toList())
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ), //  file Upload,
-                  //  addButton,
-                  Container(
-                    padding: EdgeInsets.all(5.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              ButtonTheme(
-                                minWidth: 180.0,
-                                height: 50.0,
-                                child: RaisedButton(
-                                  onPressed: () async {
-                                    if (_validateInputs()) {
-                                      if (appData.user.userType ==
-                                          UserType.Instructor)
-                                        await _saveData();
-                                    }
-                                  },
-                                  color: AppTheme.appThemeColor,
-                                  child: Text(
-                                    "Save",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
-                                  ),
-                                  shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(8.0),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]),
-              ),
-            ), //_logger.fine('Loading pupil payments listing page.');
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save),
+        backgroundColor: AppTheme.appThemeColor,
+        label: const Text(
+          'Save',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
           ),
-        ],
-      )),
+        ),
+        onPressed: () async {
+          if (_validateInputs()) {
+            if (appData.user.userType == UserType.Instructor) await _saveData();
+          }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Form(
+        key: _formKey,
+        autovalidate: _autoValidate,
+        child: Container(
+          padding:
+              EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+          child: Wrap(
+            children: <Widget>[
+              TextFormField(
+                controller: this.dateOfPaymentController,
+                readOnly: true,
+                onTap: _selectDateOfBirth,
+                decoration: InputDecoration(
+                    icon: Icon(FontAwesomeIcons.calendar),
+                    suffixIcon: Icon(
+                      Icons.star,
+                      color: Colors.red[600],
+                      size: 15,
+                    ),
+                    labelText: "Payment Date"),
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                controller: _amountController,
+                validator: validations.validateNumber,
+                decoration: InputDecoration(
+                  icon: Icon(FontAwesomeIcons.poundSign),
+                  suffixIcon: Icon(
+                    Icons.star,
+                    color: Colors.red[600],
+                    size: 15,
+                  ),
+                  labelText: "Amount",
+                ),
+              ),
+              DropDownFormField(
+                titleText: 'Payment Mode',
+                hintText: 'Please choose one',
+                required: true,
+                value: this._selectedPaymentMode.index,
+                onSaved: (value) {
+                  setState(() {
+                    this._selectedPaymentMode = PaymentMode.values[value];
+                  });
+                },
+                onChanged: (value) {
+                  setState(() {
+                    this._selectedPaymentMode = PaymentMode.values[value];
+                  });
+                },
+                dataSource: PaymentModeOptions,
+                textField: 'display',
+                valueField: 'value',
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Future<void> _saveData() async {
     var _amount = int.parse(_amountController.text);
     var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    Payment payment = new Payment(
+    Payment payment = Payment(
         id: this._paymentId,
         pupilId: pupilId,
         instructorId: appData.instructor.id,
         paymentDate: this._dateOfPayment,
         amount: _amount,
-        paymentType: this._selectedPaymentType);
+        paymentType: this._selectedPaymentMode);
     String message;
     payment.id == null
         ? message = isNotNullOrEmpty(await payment.add())
@@ -216,7 +148,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     _makeEmpty();
   }
 
-  
   Future<void> _selectDateOfBirth() async {
     var displayDob = this.dateOfPaymentController.text == EmptyString
         ? DateTime.now()
@@ -230,7 +161,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
-          this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(date);
+          this.dateOfPaymentController.text =
+              TypeConversion.toDateDisplayFormat(date);
         });
       },
     );
@@ -238,9 +170,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
 
   void _makeEmpty() {
     setState(() {
-      this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(DateTime.now());
+      this.dateOfPaymentController.text =
+          TypeConversion.toDateDisplayFormat(DateTime.now());
       _amountController.text = EmptyString;
-      _selectedPaymentType = PaymentType.Cash;
+      _selectedPaymentMode = PaymentMode.Cash;
     });
   }
 

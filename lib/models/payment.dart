@@ -29,7 +29,7 @@ class Payment {
   String instructorId;
   DateTime paymentDate;
   int amount;
-  PaymentType paymentType;
+  PaymentMode paymentType;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -46,7 +46,7 @@ class Payment {
   Future<void> _toObject(DocumentSnapshot snapshot) async {
     this.id = snapshot.documentID;
     this.amount = snapshot[Payment.AmountKey];
-    this.paymentType = PaymentType.values[snapshot[Payment.PaymentTypeKey]];
+    this.paymentType = PaymentMode.values[snapshot[Payment.PaymentTypeKey]];
     this.paymentDate = TypeConversion.timeStampToDateTime(snapshot[Payment.PaymentDateKey]);
     this.createdAt =
         TypeConversion.timeStampToDateTime(snapshot[Payment.CreatedAtKey]);

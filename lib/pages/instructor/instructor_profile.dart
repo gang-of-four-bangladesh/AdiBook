@@ -58,182 +58,86 @@ class _InstructorProfile extends State<InstructorProfile> {
   @override
   Widget build(BuildContext context) {
     Validations validations = new Validations();
-    return SingleChildScrollView(
-      child: Container(
-        child: Form(
-          key: _formKey,
-          autovalidate: _autoValidate,
-          child: Center(
-            child: Column(children: <Widget>[
-              //textBoxSection,
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save),
+        backgroundColor: AppTheme.appThemeColor,
+        label: const Text(
+          'Save',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+          ),
+        ),
+        onPressed: () async {
+          if (_validateInputs()) await _saveData();
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Form(
+        key: _formKey,
+        autovalidate: _autoValidate,
+        child: Center(
+          child: Column(
+            children: <Widget>[
               Container(
                 padding: EdgeInsets.only(
                     top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
                 child: Wrap(
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: nameController,
-                            validator: validations.validateText,
-                            decoration: InputDecoration(
-                                icon: Icon(EvaIcons.person),
-                                suffixIcon:
-                                    Icon(Icons.star, color: Colors.red[600]),
-                                hintStyle: TextStyle(color: Colors.grey),
-                                labelText: "Name"),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: nameController,
+                      validator: validations.validateText,
+                      decoration: InputDecoration(
+                          icon: Icon(EvaIcons.person),
+                          suffixIcon: Icon(
+                            Icons.star,
+                            color: Colors.red[600],
+                            size: 15,
                           ),
-                        ),
-                      ],
+                          hintStyle: TextStyle(color: Colors.grey),
+                          labelText: "Name"),
                     ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: addressController,
-                            decoration: InputDecoration(
-                                icon: Icon(EvaIcons.email),
-                                labelText: "Address"),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: addressController,
+                      decoration: InputDecoration(
+                          icon: Icon(EvaIcons.email), labelText: "Address"),
+                    ),
+                    TextFormField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      enabled: false,
+                      decoration: InputDecoration(
+                          icon: Icon(EvaIcons.phone), labelText: "Phone"),
+                    ),
+                    TextFormField(
+                      controller: drivingLicenseController,
+                      validator: validations.validateRequired,
+                      decoration: InputDecoration(
+                          icon: Icon(FontAwesomeIcons.book),
+                          suffixIcon: Icon(
+                            Icons.star,
+                            color: Colors.red[600],
+                            size: 15,
                           ),
-                        ),
-                      ],
+                          labelText: "License number"),
                     ),
-                    Column(
-                      children: [
-                        Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: appData.user.userType == UserType.Instructor
-                                ? TextFormField(
-                                    controller: phoneController,
-                                    keyboardType: TextInputType.phone,
-                                    enabled: false,
-                                    decoration: InputDecoration(
-                                        icon: Icon(EvaIcons.phone),
-                                        labelText: "Phone"),
-                                  )
-                                : TextFormField(
-                                    controller: phoneController,
-                                    keyboardType: TextInputType.phone,
-                                    enabled: false,
-                                    validator: validations.validatePhoneNumber,
-                                    decoration: InputDecoration(
-                                        icon: Icon(EvaIcons.phone),
-                                        labelText: "Phone"),
-                                  )),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            controller: drivingLicenseController,
-                            validator: validations.validateRequired,
-                            decoration: InputDecoration(
-                                icon: Icon(FontAwesomeIcons.book),
-                                suffixIcon:
-                                    Icon(Icons.star, color: Colors.red[600]),
-                                labelText: "License number"),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: TextFormField(
-                            controller: this.dateOfBirthController,
-                            readOnly: true,
-                            onTap: _selectDateOfBirth,
-                            decoration: InputDecoration(
-                                icon: Icon(FontAwesomeIcons.calendar),
-                                labelText: "Birth Date"),
-                          ),
-                        ),
-                      ],
+                    TextFormField(
+                      controller: this.dateOfBirthController,
+                      readOnly: true,
+                      onTap: _selectDateOfBirth,
+                      decoration: InputDecoration(
+                          icon: Icon(FontAwesomeIcons.calendar),
+                          labelText: "Birth Date"),
                     ),
                   ],
                 ),
               ),
-              //  Date of Birth,
-              // Container(
-              //   padding: EdgeInsets.only(left: 5.0, right: 20.0),
-              //   child: Row(
-              //     children: [
-              //       Expanded(
-              //         /*1*/
-              //         child: Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: [
-              //             /*2*/
-              //             Container(
-              //               child: Row(
-              //                 children: <Widget>[
-              //                   IconButton(
-              //                     icon: Icon(FontAwesomeIcons.calendar),
-              //                     onPressed: _selectDateOfBirth,
-              //                   ),
-              //                   Text(
-              //                     "Date Of Birth",
-              //                     style: TextStyle(fontWeight: FontWeight.bold),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //       Text(
-              //         "${TypeConversion.toDobFormat(this._dateOfBirth)}",
-              //         style: TextStyle(fontWeight: FontWeight.bold),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              Container(
-                padding: EdgeInsets.all(5.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          ButtonTheme(
-                            minWidth: 180.0,
-                            height: 50.0,
-                            child: RaisedButton(
-                              onPressed: () async {
-                                if (_validateInputs()) await _saveData();
-                              },
-                              color: AppTheme.appThemeColor,
-                              child: Text(
-                                "Update",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                              ),
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ]),
+            ],
           ),
         ),
       ),
@@ -256,7 +160,8 @@ class _InstructorProfile extends State<InstructorProfile> {
     instructor.address = addressController.text;
     instructor.licenseNo = drivingLicenseController.text;
     instructor.phoneNumber = phoneController.text;
-    instructor.dateOfBirth = TypeConversion.toDate(this.dateOfBirthController.text);
+    instructor.dateOfBirth =
+        TypeConversion.toDate(this.dateOfBirthController.text);
     var result = await instructor.update();
     String message = isNotNullOrEmpty(result)
         ? 'Instructor updated successfully.'
@@ -328,7 +233,8 @@ class _InstructorProfile extends State<InstructorProfile> {
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
-          this.dateOfBirthController.text = TypeConversion.toDateDisplayFormat(date);
+          this.dateOfBirthController.text =
+              TypeConversion.toDateDisplayFormat(date);
         });
       },
     );

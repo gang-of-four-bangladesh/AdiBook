@@ -31,7 +31,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
   String _paymentId;
   bool _autoValidate;
   TextEditingController _amountController;
-  PaymentType _selectedPaymentType;
+  PaymentMode _selectedPaymentType;
   DateTime _dateOfPayment;
 
   PaymentListSectionState() {
@@ -44,7 +44,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     super.initState();
     this._dateOfPayment = DateTime.now();
     this._autoValidate = false;
-    _selectedPaymentType = PaymentType.Cash;
+    _selectedPaymentType = PaymentMode.Cash;
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._logger.info('Payment in edit mode id ${this._paymentId}');
     if (appData.user.userType == UserType.Instructor) _loadPaymentsData();
@@ -126,7 +126,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
                         var paymentText =
-                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by ${PaymentType.values[document[Payment.PaymentTypeKey]]}.';
+                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by ${PaymentMode.values[document[Payment.PaymentTypeKey]]}.';
                         return Slidable(
                           actions: <Widget>[
                             IconSlideAction(
@@ -331,9 +331,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                             ),
                                           ),
                                           /*3*/
-                                          DropdownButton<PaymentType>(
+                                          DropdownButton<PaymentMode>(
                                               value: _selectedPaymentType,
-                                              onChanged: (PaymentType type) {
+                                              onChanged: (PaymentMode type) {
                                                 setState(() {
                                                   _selectedPaymentType = type;
                                                   print(_selectedPaymentType);
@@ -342,10 +342,10 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                                   _asyncInputDialog(context);
                                                 });
                                               },
-                                              items: PaymentType.values
-                                                  .map((PaymentType type) {
+                                              items: PaymentMode.values
+                                                  .map((PaymentMode type) {
                                                 return new DropdownMenuItem<
-                                                        PaymentType>(
+                                                        PaymentMode>(
                                                     value: type,
                                                     child: new Text(
                                                         enumValueToString(
@@ -493,7 +493,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     setState(() {
       this._dateOfPayment = DateTime.now();
       _amountController.text = EmptyString;
-      _selectedPaymentType = PaymentType.Cash;
+      _selectedPaymentType = PaymentMode.Cash;
     });
   }
 

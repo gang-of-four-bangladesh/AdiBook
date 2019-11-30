@@ -136,7 +136,7 @@ enum ProgressSubjectStatus {
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
-enum PaymentType { Cash, Card, Cheque }
+enum PaymentMode { None, Cash, Card, Cheque }
 
 enum OperationMode { New, Edit }
 
@@ -151,7 +151,7 @@ bool isNotNullOrEmpty<T>(T value) {
   return !isNullOrEmpty(value);
 }
 
-const TripLocationData = [
+const TripLocationOptions = [
   {
     "display": "Home",
     "value": 1,
@@ -170,7 +170,7 @@ const TripLocationData = [
   }
 ];
 
-const VehicleTypeData = [
+const VehicleTypeOptions = [
   {
     "display": "Manual",
     "value": 1,
@@ -181,7 +181,7 @@ const VehicleTypeData = [
   }
 ];
 
-const LessonTypeData = [
+const LessonTypeOptions = [
   {
     "display": "Lession",
     "value": 1,
@@ -205,5 +205,20 @@ const LessonTypeData = [
   {
     "display": "Motorway",
     "value": 6,
+  }
+];
+
+const PaymentModeOptions = [
+  {
+    "display": "Cash",
+    "value": 1,
+  },
+  {
+    "display": "Card",
+    "value": 2,
+  },
+  {
+    "display": "Cheque",
+    "value": 3,
   }
 ];
