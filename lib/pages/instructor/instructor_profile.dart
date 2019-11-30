@@ -51,7 +51,7 @@ class _InstructorProfile extends State<InstructorProfile> {
     if (!mounted) return;
     setState(() {
       this.dateOfBirthController.text =
-          TypeConversion.toDobFormat(instructor.dateOfBirth);
+          TypeConversion.toDateDisplayFormat(instructor.dateOfBirth);
     });
   }
 
@@ -256,7 +256,7 @@ class _InstructorProfile extends State<InstructorProfile> {
     instructor.address = addressController.text;
     instructor.licenseNo = drivingLicenseController.text;
     instructor.phoneNumber = phoneController.text;
-    instructor.dateOfBirth = TypeConversion.stringToDobFormat(this.dateOfBirthController.text);
+    instructor.dateOfBirth = TypeConversion.toDate(this.dateOfBirthController.text);
     var result = await instructor.update();
     String message = isNotNullOrEmpty(result)
         ? 'Instructor updated successfully.'
@@ -318,7 +318,7 @@ class _InstructorProfile extends State<InstructorProfile> {
   Future<void> _selectDateOfBirth() async {
     var displayDob = this.dateOfBirthController.text == EmptyString
         ? DateTime.now()
-        : TypeConversion.stringToDobFormat(this.dateOfBirthController.text);
+        : TypeConversion.toDate(this.dateOfBirthController.text);
     await DatePicker.showDatePicker(
       context,
       theme: DatePickerTheme(containerHeight: 210.0),
@@ -328,7 +328,7 @@ class _InstructorProfile extends State<InstructorProfile> {
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
-          this.dateOfBirthController.text = TypeConversion.toDobFormat(date);
+          this.dateOfBirthController.text = TypeConversion.toDateDisplayFormat(date);
         });
       },
     );

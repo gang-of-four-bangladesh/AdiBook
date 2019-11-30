@@ -46,7 +46,7 @@ class Lesson {
   TripLocation pickupLocation;
   TripLocation dropOffLocation;
   VehicleType vehicleType;
-  LessionType lessonType;
+  LessonType lessonType;
   String diaryNotes;
   String reportCard;
   String documentDownloadUrl;
@@ -86,7 +86,7 @@ class Lesson {
     this.dropOffLocation =
         TripLocation.values[snapshot[Lesson.DropOffLocationKey]];
     this.vehicleType = VehicleType.values[snapshot[Lesson.VehicleTypeKey]];
-    this.lessonType = LessionType.values[snapshot[Lesson.LessonTypeKey]];
+    this.lessonType = LessonType.values[snapshot[Lesson.LessonTypeKey]];
     this.diaryNotes = snapshot[Lesson.DiaryNotesKey];
     this.reportCard = snapshot[Lesson.ReportCardKey];
     this.documentDownloadUrl = snapshot[Lesson.DocumentDownloadUrlKey];

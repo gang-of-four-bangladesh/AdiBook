@@ -85,7 +85,7 @@ class LessonManager {
               .toLocal();
           var difference = DateTime.now().difference(lessonTime).inSeconds;
           var eventDescription =
-              'Lesson with ${item[LessonEvent.PupilNameKey]} at ${TypeConversion.toDisplayFormat(lessonTime)}.';
+              'Lesson with ${item[LessonEvent.PupilNameKey]} at ${TypeConversion.toDateTimeDisplayFormat(lessonTime)}.';
           events.add({
             LessonDescriptionKey: eventDescription,
             LessonHasCompletedKey: difference >= 0

@@ -50,7 +50,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     super.initState();
     this._autoValidate = false;
     this._switchOnEyeTest = false;
-    this.dateOfBirthController.text = TypeConversion.toDobFormat(DateTime.now());
+    this.dateOfBirthController.text = TypeConversion.toDateDisplayFormat(DateTime.now());
     if (appData.user.userType == UserType.Pupil) populatePupilInfo();
   }
 
@@ -463,14 +463,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       this.previousExperienceController.text = EmptyString;
       this.phoneController.text = EmptyString;
       this.drivingLicenseController.text = EmptyString;
-     this.dateOfBirthController.text = TypeConversion.toDobFormat(DateTime.now());
+     this.dateOfBirthController.text = TypeConversion.toDateDisplayFormat(DateTime.now());
       this._switchOnEyeTest = false;
     });
   }
 Future<void> _selectDateOfBirth() async {
     var displayDob = this.dateOfBirthController.text == EmptyString
         ? DateTime.now()
-        : TypeConversion.stringToDobFormat(this.dateOfBirthController.text);
+        : TypeConversion.toDate(this.dateOfBirthController.text);
     await DatePicker.showDatePicker(
       context,
       theme: DatePickerTheme(containerHeight: 210.0),
@@ -480,7 +480,7 @@ Future<void> _selectDateOfBirth() async {
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
-          this.dateOfBirthController.text = TypeConversion.toDobFormat(date);
+          this.dateOfBirthController.text = TypeConversion.toDateDisplayFormat(date);
         });
       },
     );

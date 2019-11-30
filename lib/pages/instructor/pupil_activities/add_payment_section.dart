@@ -3,15 +3,11 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/type_conversion.dart';
 import 'package:adibook/models/payment.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AddPaymentSection extends StatefulWidget {
   @override
@@ -26,9 +22,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   TextEditingController _amountController;
   PaymentType _selectedPaymentType;
   DateTime _dateOfPayment;
-  String _pupilId;
   String _paymentId;
-  Stream<QuerySnapshot> _querySnapshot;
   TextEditingController dateOfPaymentController = new TextEditingController();
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -38,7 +32,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   @override
   void initState() {
     super.initState();
-    this.dateOfPaymentController.text = TypeConversion.toDobFormat(DateTime.now());
+    this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
     _selectedPaymentType = PaymentType.Cash;
   }
@@ -226,7 +220,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   Future<void> _selectDateOfBirth() async {
     var displayDob = this.dateOfPaymentController.text == EmptyString
         ? DateTime.now()
-        : TypeConversion.stringToDobFormat(this.dateOfPaymentController.text);
+        : TypeConversion.toDate(this.dateOfPaymentController.text);
     await DatePicker.showDatePicker(
       context,
       theme: DatePickerTheme(containerHeight: 210.0),
@@ -236,7 +230,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
-          this.dateOfPaymentController.text = TypeConversion.toDobFormat(date);
+          this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(date);
         });
       },
     );
@@ -244,7 +238,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
 
   void _makeEmpty() {
     setState(() {
-      this.dateOfPaymentController.text = TypeConversion.toDobFormat(DateTime.now());
+      this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(DateTime.now());
       _amountController.text = EmptyString;
       _selectedPaymentType = PaymentType.Cash;
     });
@@ -266,21 +260,5 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     return enumvalue
         .toString()
         .substring(enumvalue.toString().indexOf('.') + 1);
-  }
-
-  Future<void> _selectDateOfpayment() async {
-    var selectedDateOfPayment = this._dateOfPayment;
-    this._dateOfPayment = await showDatePicker(
-      context: context,
-      initialDate: this._dateOfPayment,
-      firstDate: DateTime(1900, 8),
-      lastDate: DateTime(2101),
-    );
-    if (this._dateOfPayment == null)
-      this._dateOfPayment = selectedDateOfPayment;
-    setState(() {
-      //This is for update the UI. Please before remove check twice.
-      this._dateOfPayment = this._dateOfPayment;
-    });
   }
 }

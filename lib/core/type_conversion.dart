@@ -8,20 +8,26 @@ class TypeConversion {
     return timestamp.toDate();
   }
 
-  static String toDisplayFormat(DateTime dateTime) {
+  static String toDateTimeDisplayFormat(DateTime dateTime) {
     var format = DateFormat("MMM dd, yyyy hh:mm aaa");
     return format.format(dateTime);
   }
 
-  static String toDobFormat(DateTime dateTime) {
+  static String toDateDisplayFormat(DateTime dateTime) {
     if (dateTime == null) return EmptyString;
     var format = DateFormat("MMM dd, yyyy");
     return format.format(dateTime);
   }
 
-  static DateTime stringToDobFormat(String dateTime) {
+  static DateTime toDate(String dateTime) {
     if (dateTime == null) return null;
     var format = DateFormat("MMM dd, yyyy");
+    return format.parse(dateTime);
+  }
+
+  static DateTime toDateTime(String dateTime) {
+    if (dateTime == null) return null;
+    var format = DateFormat("MMM dd, yyyy hh:mm aaa");
     return format.parse(dateTime);
   }
 

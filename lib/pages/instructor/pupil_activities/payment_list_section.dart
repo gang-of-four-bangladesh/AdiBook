@@ -265,7 +265,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 ),
                                 /*3*/
                                 Text(
-                                  "${TypeConversion.toDobFormat(this._dateOfPayment)}",
+                                  "${TypeConversion.toDateDisplayFormat(this._dateOfPayment)}",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],

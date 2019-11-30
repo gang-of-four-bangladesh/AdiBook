@@ -109,7 +109,7 @@ enum VehicleType {
   Manual,
   Automatic,
 }
-enum LessionType {
+enum LessonType {
   None,
   Lession,
   DrivingTest,
@@ -150,3 +150,60 @@ bool isNullOrEmpty<T>(T value) {
 bool isNotNullOrEmpty<T>(T value) {
   return !isNullOrEmpty(value);
 }
+
+const TripLocationData = [
+  {
+    "display": "Home",
+    "value": 1,
+  },
+  {
+    "display": "Work",
+    "value": 2,
+  },
+  {
+    "display": "School",
+    "value": 3,
+  },
+  {
+    "display": "College",
+    "value": 4,
+  }
+];
+
+const VehicleTypeData = [
+  {
+    "display": "Manual",
+    "value": 1,
+  },
+  {
+    "display": "Automatic",
+    "value": 2,
+  }
+];
+
+const LessonTypeData = [
+  {
+    "display": "Lession",
+    "value": 1,
+  },
+  {
+    "display": "Driving Test",
+    "value": 2,
+  },
+  {
+    "display": "Mock Test",
+    "value": 3,
+  },
+  {
+    "display": "Pass Plus",
+    "value": 4,
+  },
+  {
+    "display": "Refresher",
+    "value": 5,
+  },
+  {
+    "display": "Motorway",
+    "value": 6,
+  }
+];

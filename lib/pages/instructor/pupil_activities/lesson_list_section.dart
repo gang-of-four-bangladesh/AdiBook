@@ -173,7 +173,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                enumValueToString(LessionType
+                                                enumValueToString(LessonType
                                                         .values[int.parse(
                                                             document[Lesson
                                                                     .LessonTypeKey]

@@ -5,6 +5,7 @@ import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/core/widgets/dropdown_formfield.dart';
 import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/lesson.dart';
@@ -12,6 +13,7 @@ import 'package:adibook/pages/validation.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 
@@ -26,15 +28,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TextEditingController _lessonDurationController;
   TextEditingController _diaryNotesController;
   TextEditingController _reportCardController;
+  TextEditingController _lessonTimeController;
+  TextEditingController _uploadLicenseController;
   FrequentWidgets _frequentWidgets;
   bool _autoValidate = false;
   TripLocation _selectedPickupLocation;
   TripLocation _selectedDropOffLocation;
-  LessionType _selectedlessionType;
+  LessonType _selectedlessionType;
   VehicleType _selectedVehicleType;
-  String _attachedDocPath;
-  DateTime _lessonDate;
-  TimeOfDay _lessonTime;
   String _pupilId;
   String _lessionId;
   OperationMode _operationMode;
@@ -44,9 +45,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     this._lessonDurationController = TextEditingController();
     this._diaryNotesController = TextEditingController();
     this._reportCardController = TextEditingController();
+    this._lessonTimeController = TextEditingController();
+    this._uploadLicenseController = TextEditingController();
     this._logger = Logger(this.runtimeType.toString());
-    this._lessonDate = DateTime.now();
-    this._lessonTime = TimeOfDay.now();
   }
 
   @override
@@ -54,8 +55,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     super.initState();
     _selectedPickupLocation = TripLocation.Home;
     _selectedDropOffLocation = TripLocation.Home;
-    _selectedVehicleType = VehicleType.None;
-    _selectedlessionType = LessionType.None;
+    _selectedVehicleType = VehicleType.Automatic;
+    _selectedlessionType = LessonType.Lession;
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];
     this._operationMode =
@@ -75,7 +76,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     this._reportCardController.text = lesson.reportCard;
     if (!mounted) return;
     setState(() {
-      this._lessonDate = lesson.lessonDate;
       this._selectedPickupLocation = lesson.pickupLocation;
       this._selectedDropOffLocation = lesson.dropOffLocation;
       this._selectedVehicleType = lesson.vehicleType;
@@ -100,343 +100,147 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                       top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
                   child: Wrap(
                     children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          //  Lesson Date,
-                          Container(
-                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  /*1*/
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /*2*/
-                                      Container(
-                                        child: Row(
-                                          children: <Widget>[
-                                            IconButton(
-                                              icon: Icon(Icons.date_range),
-                                              onPressed: _selectDate,
-                                            ),
-                                            Text(
-                                              "Lesson Date",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '${TypeConversion.toDisplayFormat(this._lessonDate)}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                      TextFormField(
+                        controller: this._lessonTimeController,
+                        validator: validations.validateRequired,
+                        readOnly: true,
+                        onTap: this._selectLessonTime,
+                        decoration: InputDecoration(
+                            icon: Icon(FontAwesomeIcons.calendar),
+                            suffixIcon: Icon(
+                              Icons.star,
+                              color: Colors.red[600],
+                              size: 15,
                             ),
-                          ),
-
-                          Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: _lessonDurationController,
-                              validator: validations.validateNumber,
-                              decoration: InputDecoration(
-                                labelText: "Lesson Duration(Minutes)",
-                                icon: Icon(EvaIcons.clock),
-                                suffixIcon: Icon(
-                                  Icons.star,
-                                  color: Colors.red[600],
-                                  size: 15,
-                                ),
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
+                            labelText: "Lesson At"),
                       ),
-                      Column(
-                        children: <Widget>[
-                          //  Pickup TripLocation,
-                          Container(
-                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  /*1*/
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /*2*/
-                                      Container(
-                                        child: Text(
-                                          'Pickup Location',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                /*3*/
-                                DropdownButton<TripLocation>(
-                                    value: _selectedPickupLocation,
-                                    onChanged: (TripLocation location) {
-                                      setState(() {
-                                        _selectedPickupLocation = location;
-                                        print(_selectedPickupLocation);
-                                      });
-                                    },
-                                    items: TripLocation.values
-                                        .map((TripLocation location) {
-                                      return new DropdownMenuItem<TripLocation>(
-                                          value: location,
-                                          child: new Text(enumValueToString(
-                                              location.toString())));
-                                    }).toList())
-                              ],
-                            ),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: _lessonDurationController,
+                        validator: validations.validateNumber,
+                        decoration: InputDecoration(
+                          labelText: "Lesson Duration(Minutes)",
+                          icon: Icon(EvaIcons.clock),
+                          suffixIcon: Icon(
+                            Icons.star,
+                            color: Colors.red[600],
+                            size: 15,
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  /*1*/
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /*2*/
-                                      Container(
-                                        child: Text(
-                                          'DropOff Location',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                /*3*/
-                                DropdownButton<TripLocation>(
-                                    value: _selectedDropOffLocation,
-                                    onChanged: (TripLocation location) {
-                                      setState(() {
-                                        _selectedDropOffLocation = location;
-                                        print(_selectedDropOffLocation);
-                                      });
-                                    },
-                                    items: TripLocation.values
-                                        .map((TripLocation location) {
-                                      return new DropdownMenuItem<TripLocation>(
-                                          value: location,
-                                          child: new Text(enumValueToString(
-                                              location.toString())));
-                                    }).toList())
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          //  Driving Type,
-                          Container(
-                            padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  /*1*/
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /*2*/
-                                      Container(
-                                        child: Text(
-                                          'Vehicle Type',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                /*3*/
-                                DropdownButton<VehicleType>(
-                                    value: _selectedVehicleType,
-                                    onChanged: (VehicleType vehicleType) {
-                                      setState(() {
-                                        _selectedVehicleType = vehicleType;
-                                        print(_selectedVehicleType);
-                                      });
-                                    },
-                                    items: VehicleType.values
-                                        .map((VehicleType classType) {
-                                      return new DropdownMenuItem<VehicleType>(
-                                          value: classType,
-                                          child: new Text(enumValueToString(
-                                              classType.toString())));
-                                    }).toList()),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          //  Driving Type,
-                          Container(
-                            padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  /*1*/
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /*2*/
-                                      Container(
-                                        child: Text(
-                                          'Lesson Type',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                /*3*/
-                                DropdownButton<LessionType>(
-                                    value: _selectedlessionType,
-                                    onChanged: (LessionType lessionType) {
-                                      setState(() {
-                                        _selectedlessionType = lessionType;
-                                        print(_selectedlessionType);
-                                      });
-                                    },
-                                    items: LessionType.values
-                                        .map((LessionType lessionType) {
-                                      return new DropdownMenuItem<LessionType>(
-                                          value: lessionType,
-                                          child: new Text(enumValueToString(
-                                              lessionType.toString())));
-                                    }).toList())
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              controller: _diaryNotesController,
-                              decoration: InputDecoration(
-                                  labelText: "Diary Notes(Optional)",
-                                  icon: Icon(EvaIcons.book),
-                                  suffixIcon: Icon(
-                                    Icons.star,
-                                    color: Colors.red[600],
-                                    size: 15,
-                                  ),
-                                  hintStyle: TextStyle(color: Colors.grey)),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.multiline,
-                              controller: _reportCardController,
-                              decoration: InputDecoration(
-                                labelText: "Diary Notes(Optional)",
-                                icon: Icon(Icons.report),
-                                suffixIcon: Icon(
-                                  Icons.star,
-                                  color: Colors.red[600],
-                                  size: 15,
-                                ),
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ), //  file Upload,
-                Container(
-                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        /*1*/
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /*2*/
-                            Container(
-                              child: Text(
-                                'File Upload (pdf)',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                          hintStyle: TextStyle(color: Colors.grey),
                         ),
                       ),
-                      /*3*/
-                      IconButton(
-                        icon: this._attachedDocPath == null
-                            ? Icon(
-                                FontAwesomeIcons.solidFilePdf,
-                                color: AppTheme.appThemeColor,
-                              )
-                            : Icon(
-                                FontAwesomeIcons.solidCheckSquare,
-                                color: AppTheme.appThemeColor,
-                              ),
-                        onPressed: () async {
-                          var _path = EmptyString;
-                          _path = await FilePicker.getFilePath(
-                              type: FileType.CUSTOM, fileExtension: "pdf");
-                          File file = File(_path);
-                          print(file.lengthSync());
-                          file.lengthSync() <= 500000
-                              ? setState(() {
-                                  this._attachedDocPath = _path;
-                                })
-                              : _frequentWidgets.getSnackbar(
-                                  message: "PDF file must be under 500kb",
-                                  context: context,
-                                  duration: 1);
+                      DropDownFormField(
+                        titleText: 'Pickup Location',
+                        hintText: 'Please choose one',
+                        required: true,
+                        value: this._selectedPickupLocation.index,
+                        onSaved: (value) {
+                          setState(() {
+                            this._selectedPickupLocation =
+                                TripLocation.values[value];
+                          });
                         },
-                      )
+                        onChanged: (value) {
+                          setState(() {
+                            this._selectedPickupLocation =
+                                TripLocation.values[value];
+                          });
+                        },
+                        dataSource: TripLocationData,
+                        textField: 'display',
+                        valueField: 'value',
+                      ),
+                      DropDownFormField(
+                        titleText: 'Drop Off Location',
+                        hintText: 'Please choose one',
+                        required: true,
+                        value: this._selectedDropOffLocation.index,
+                        onSaved: (value) {
+                          setState(() {
+                            this._selectedDropOffLocation =
+                                TripLocation.values[value];
+                          });
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            this._selectedDropOffLocation =
+                                TripLocation.values[value];
+                          });
+                        },
+                        dataSource: TripLocationData,
+                        textField: 'display',
+                        valueField: 'value',
+                      ),
+                      DropDownFormField(
+                        titleText: 'Vehicle Type',
+                        hintText: 'Please choose one',
+                        required: true,
+                        value: this._selectedVehicleType.index,
+                        onSaved: (value) {
+                          setState(() {
+                            this._selectedVehicleType =
+                                VehicleType.values[value];
+                          });
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            this._selectedVehicleType =
+                                VehicleType.values[value];
+                          });
+                        },
+                        dataSource: VehicleTypeData,
+                        textField: 'display',
+                        valueField: 'value',
+                      ),
+                      DropDownFormField(
+                        titleText: 'Lesson Type',
+                        hintText: 'Please choose one',
+                        required: true,
+                        value: this._selectedlessionType.index,
+                        onSaved: (value) {
+                          setState(() {
+                            this._selectedlessionType =
+                                LessonType.values[value];
+                          });
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            this._selectedlessionType =
+                                LessonType.values[value];
+                          });
+                        },
+                        dataSource: LessonTypeData,
+                        textField: 'display',
+                        valueField: 'value',
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: _diaryNotesController,
+                        decoration: InputDecoration(
+                            labelText: "Diary Notes",
+                            icon: Icon(EvaIcons.book),
+                            hintStyle: TextStyle(color: Colors.grey)),
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        controller: _reportCardController,
+                        decoration: InputDecoration(
+                          labelText: "Report Card",
+                          icon: Icon(Icons.report),
+                          hintStyle: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: this._uploadLicenseController,
+                        readOnly: true,
+                        onTap: this._uploadLicense,
+                        decoration: InputDecoration(
+                            icon: Icon(FontAwesomeIcons.upload),
+                            labelText: "Upload License"),
+                      ),
                     ],
                   ),
                 ),
-
-                //  addButton,
                 Container(
                   padding: EdgeInsets.all(5.0),
                   child: Row(
@@ -462,7 +266,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                       userId: this._pupilId,
                                       title: 'Driving Lesson Schedule',
                                       body:
-                                          'You have a driving class with ${instructor.name} on ${TypeConversion.toDisplayFormat(this._lessonDate)} for ${this._lessonDurationController.text} minutes.',
+                                          'You have a driving class with ${instructor.name} on ${this._lessonTimeController.text} for ${this._lessonDurationController.text} minutes.',
                                     );
                                   }
                                 },
@@ -493,10 +297,21 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     );
   }
 
+  Future<void> _uploadLicense() async {
+    this._uploadLicenseController.text = await FilePicker.getFilePath(
+        type: FileType.CUSTOM, fileExtension: "pdf");
+    File file = File(this._uploadLicenseController.text);
+    if (file.lengthSync() > 30000)
+      _frequentWidgets.getSnackbar(
+          message: "File size exceed. Maximum size 30KB allowed.",
+          context: context,
+          duration: 1);
+  }
+
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
     var documentDownloadUrl =
-        await storageUpload.uploadLessonFile(this._attachedDocPath);
+        await storageUpload.uploadLessonFile(this._uploadLicenseController.text);
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
       id: this._lessionId,
@@ -509,7 +324,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       documentDownloadUrl: documentDownloadUrl,
       pickupLocation: this._selectedPickupLocation,
       dropOffLocation: this._selectedDropOffLocation,
-      lessonDate: this._lessonDate,
       lessonDuration: _lessionDuration,
     );
     String message;
@@ -530,25 +344,17 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   void _makeEmpty() {
     setState(() {
       _lessonDurationController.text = EmptyString;
-      _diaryNotesController.text = null;
-      _reportCardController.text = null;
-      _selectedPickupLocation = TripLocation.None;
-      _selectedDropOffLocation = TripLocation.None;
-      _selectedVehicleType = VehicleType.None;
-      _selectedlessionType = LessionType.None;
-      _attachedDocPath = null;
+      _diaryNotesController.text = EmptyString;
+      _reportCardController.text = EmptyString;
+      _uploadLicenseController.text = EmptyString;
+      _selectedPickupLocation = TripLocation.Home;
+      _selectedDropOffLocation = TripLocation.Home;
+      _selectedVehicleType = VehicleType.Automatic;
+      _selectedlessionType = LessonType.Lession;
     });
   }
 
   bool _validateInputs() {
-    if (_lessonDate == null) {
-      _frequentWidgets.getSnackbar(
-        message: 'Date of Lesson is Required',
-        context: context,
-      );
-      return false;
-    }
-    this._logger.info('For validity ${_formKey.currentState.validate()}');
     return _formKey.currentState.validate();
   }
 
@@ -558,39 +364,28 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         .substring(enumvalue.toString().indexOf('.') + 1);
   }
 
-  Future _selectDate() async {
+  Future _selectLessonTime() async {
     if (this._operationMode == OperationMode.Edit) {
       await FrequentWidgets().dialogBox(context, 'Lesson Date',
           'Lesson date cannot be updated. You can delete this lesson and create a new one with the updated date.');
       return;
     }
-    var selectedLessonDate = this._lessonDate;
-    var selectedLessonTime = this._lessonTime;
-    this._lessonDate = await showDatePicker(
-      context: context,
-      initialDate: this._lessonDate,
-      firstDate: DateTime(1900, 8),
-      lastDate: DateTime(2101),
+    var displayLessonTime = this._lessonTimeController.text == EmptyString
+        ? DateTime.now()
+        : TypeConversion.toDateTime(this._lessonTimeController.text);
+    await DatePicker.showDateTimePicker(
+      context,
+      theme: DatePickerTheme(containerHeight: 210.0),
+      showTitleActions: true,
+      minTime: DateTime(1950, 1, 1),
+      maxTime: DateTime(2022, 12, 31),
+      currentTime: displayLessonTime,
+      onConfirm: (date) {
+        setState(() {
+          this._lessonTimeController.text =
+              TypeConversion.toDateTimeDisplayFormat(date);
+        });
+      },
     );
-    this._logger.info('Selected lesson date $_lessonDate');
-    if (this._lessonDate == null) {
-      setState(() {
-        this._lessonDate = selectedLessonDate;
-        this._lessonTime = selectedLessonTime;
-      });
-      return;
-    }
-
-    this._lessonTime =
-        await showTimePicker(context: context, initialTime: _lessonTime);
-    this._logger.info('Selected lesson time $_lessonTime');
-
-    if (this._lessonTime == null) _lessonTime = selectedLessonTime;
-
-    setState(() {
-      _lessonDate = DateTime(_lessonDate.year, _lessonDate.month,
-          _lessonDate.day, _lessonTime.hour, _lessonTime.minute);
-    });
-    this._logger.info('Selected date time for lesson $_lessonDate');
   }
 }
