@@ -260,7 +260,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                         TextFormField(
                           controller: this._uploadLicenseController,
                           readOnly: true,
-                          onTap: this._uploadLicense,
+                          onTap: this._onUploadLicenseTap,
                           decoration: InputDecoration(
                               icon: Icon(FontAwesomeIcons.upload),
                               labelText: "Upload License"),
@@ -277,15 +277,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     );
   }
 
-  Future<void> _uploadLicense() async {
+  Future<void> _onUploadLicenseTap() async {
     this._uploadLicenseController.text = await FilePicker.getFilePath(
         type: FileType.CUSTOM, fileExtension: "pdf");
-    File file = File(this._uploadLicenseController.text);
-    if (file.lengthSync() > 30000)
-      _frequentWidgets.getSnackbar(
-          message: "File size exceed. Maximum size 30KB allowed.",
-          context: context,
-          duration: 1);
   }
 
   Future<void> _saveData() async {

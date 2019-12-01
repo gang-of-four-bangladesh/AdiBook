@@ -30,28 +30,28 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   var _pupilManager = PupilManager();
   var _frequentWidgets = FrequentWidgets();
   final _formKey = GlobalKey<FormState>();
-  bool _switchOnEyeTest = false;
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController phoneController = new TextEditingController();
-  TextEditingController addressController = new TextEditingController();
-  TextEditingController theoryRecordController = new TextEditingController();
-  TextEditingController dateOfBirthController = new TextEditingController();
-  TextEditingController previousExperienceController =
-      new TextEditingController();
-  TextEditingController drivingLicenseController = new TextEditingController();
+  bool _hadEyeTest = false;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController theoryRecordController = TextEditingController();
+  TextEditingController dateOfBirthController = TextEditingController();
+  TextEditingController eyeTestController = TextEditingController();
+  TextEditingController previousExperienceController = TextEditingController();
+  TextEditingController drivingLicenseController = TextEditingController();
   int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
   bool _autoValidate;
   DateTime _dateOfBirth;
   String _attachedDocPath;
-  String _drivingLicenseImageUrl;
   @override
   void initState() {
     super.initState();
     this._autoValidate = false;
-    this._switchOnEyeTest = false;
+    this._hadEyeTest = false;
     this.dateOfBirthController.text =
         TypeConversion.toDateDisplayFormat(DateTime.now());
+    this.eyeTestController.text = 'TESTED';
     if (appData.user.userType == UserType.Pupil) populatePupilInfo();
   }
 
@@ -64,12 +64,22 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     phoneController.text = pupil.phoneNumber;
     drivingLicenseController.text = pupil.licenseNo;
     theoryRecordController.text = pupil.theoryRecord;
-    _drivingLicenseImageUrl = pupil.documentDownloadUrl;
     previousExperienceController.text = pupil.previousExperience;
     if (!mounted) return;
     setState(() {
       this._dateOfBirth = pupil.dateOfBirth;
-      this._switchOnEyeTest = pupil.eyeTest;
+      this._hadEyeTest = pupil.eyeTest;
+    });
+  }
+
+  String phoneNumber;
+  String phoneIsoCode;
+
+  void onPhoneNumberChange(
+      String number, String internationalizedPhoneNumber, String isoCode) {
+    setState(() {
+      phoneNumber = number;
+      phoneIsoCode = isoCode;
     });
   }
 
@@ -77,11 +87,26 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   Widget build(BuildContext context) {
     Validations validations = new Validations();
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save),
+        backgroundColor: AppTheme.appThemeColor,
+        label: const Text(
+          'Save',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+          ),
+        ),
+        onPressed: _saveData,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
-        child: Center(
-          child: Column(children: <Widget>[
+        child: ListView(
+          children: <Widget>[
             Container(
               padding: EdgeInsets.only(
                   top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
@@ -90,9 +115,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                   Column(
                     children: <Widget>[
                       TextFormField(
-                        enabled: appData.user.userType == UserType.Instructor
-                            ? true
-                            : false,
+                        enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,
                         controller: nameController,
                         validator: validations.validateText,
@@ -108,9 +131,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             labelText: "Name"),
                       ),
                       TextFormField(
-                        enabled: appData.user.userType == UserType.Instructor
-                            ? true
-                            : false,
+                        enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,
                         controller: addressController,
                         decoration: InputDecoration(
@@ -119,9 +140,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             labelText: "Address"),
                       ),
                       TextFormField(
-                        enabled: appData.user.userType == UserType.Instructor
-                            ? true
-                            : false,
+                        enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,
                         controller: theoryRecordController,
                         decoration: InputDecoration(
@@ -130,9 +149,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                             labelText: "Theory Record"),
                       ),
                       TextFormField(
-                        enabled: appData.user.userType == UserType.Instructor
-                            ? true
-                            : false,
+                        enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,
                         controller: previousExperienceController,
                         decoration: InputDecoration(
@@ -140,321 +157,87 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                           icon: Icon(EvaIcons.paperPlane),
                           hintStyle: TextStyle(color: Colors.grey),
                         ),
-                      )
-                    ],
-                  ),
-                  // Column(
-                  //   children: <Widget>[
-                  //     Container(
-                  //       padding: EdgeInsets.only(bottom: 5.0),
-                  //       child: TextFormField(
-                  //         enabled: appData.user.userType == UserType.Instructor
-                  //             ? true
-                  //             : false,
-                  //         keyboardType: TextInputType.text,
-                  //         controller: addressController,
-                  //         decoration: InputDecoration(
-                  //             icon: Icon(EvaIcons.email),
-                  //             hintStyle: TextStyle(color: Colors.grey),
-                  //             labelText: "Address"),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       padding: EdgeInsets.only(bottom: 5.0),
-                  //       child: TextFormField(
-                  //         enabled: appData.user.userType == UserType.Instructor
-                  //             ? true
-                  //             : false,
-                  //         keyboardType: TextInputType.text,
-                  //         controller: theoryRecordController,
-                  //         decoration: InputDecoration(
-                  //             icon: Icon(EvaIcons.emailOutline),
-                  //             hintStyle: TextStyle(color: Colors.grey),
-                  //             labelText: "Theory Record"),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       padding: EdgeInsets.only(bottom: 5.0),
-                  //       child: TextFormField(
-                  //         enabled: appData.user.userType == UserType.Instructor
-                  //             ? true
-                  //             : false,
-                  //         keyboardType: TextInputType.text,
-                  //         controller: previousExperienceController,
-                  //         decoration: InputDecoration(
-                  //           labelText: "Previous Experience",
-                  //           icon: Icon(EvaIcons.paperPlane),
-                  //           hintStyle: TextStyle(color: Colors.grey),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                        child: Row(
-                          children: [
-                            appData.user.userType == UserType.Pupil
-                                ? Column()
-                                : Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      /*2*/
-                                      DropdownButton<String>(
-                                          items: CountryWisePhoneCode.keys
-                                              .map((String country) {
-                                            return DropdownMenuItem<String>(
-                                              value: country,
-                                              child: Text(country),
-                                            );
-                                          }).toList(),
-                                          onChanged: (String value) {
-                                            setState(() {
-                                              _selectedCountry = value;
-                                            });
-                                          },
-                                          value: _selectedCountry),
-                                    ],
+                      ),
+                      TextFormField(
+                        enabled: appData.user.userType == UserType.Instructor,
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        validator: validations.validatePhoneNumber,
+                        decoration: InputDecoration(
+                            icon: Icon(EvaIcons.phone),
+                            suffixIcon: appData.user.userType == UserType.Pupil
+                                ? null
+                                : Icon(
+                                    Icons.star,
+                                    color: Colors.red[600],
+                                    size: 15,
                                   ),
-                            Flexible(
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                    left: 2.0, right: 2.0, bottom: 5.0),
-                                child: TextFormField(
-                                  enabled: appData.user.userType ==
-                                          UserType.Instructor
-                                      ? true
-                                      : false,
-                                  controller: phoneController,
-                                  keyboardType: TextInputType.phone,
-                                  validator: appData.user.userType ==
-                                          UserType.Instructor
-                                      ? validations.validatePhoneNumber
-                                      : null,
-                                  decoration: InputDecoration(
-                                      icon: Icon(EvaIcons.phone),
-                                      suffixIcon: appData.user.userType ==
-                                              UserType.Pupil
-                                          ? null
-                                          : Icon(
-                                              Icons.star,
-                                              color: Colors.red[600],
-                                              size: 15,
-                                            ),
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      labelText: "Phone"),
-                                ),
-                              ),
-                            )
-                          ],
+                            hintStyle: TextStyle(color: Colors.grey),
+                            hintText: 'Please start with +44',
+                            labelText: "Phone(+44)"),
+                      ),
+                      TextFormField(
+                        enabled: appData.user.userType == UserType.Instructor,
+                        controller: drivingLicenseController,
+                        validator: validations.validateRequired,
+                        decoration: InputDecoration(
+                            icon: Icon(EvaIcons.book),
+                            suffixIcon: Icon(
+                              Icons.star,
+                              color: Colors.red[600],
+                              size: 15,
+                            ),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            labelText: "License number"),
+                      ),
+                      TextFormField(
+                        controller: this.dateOfBirthController,
+                        readOnly: true,
+                        onTap: _selectDateOfBirth,
+                        decoration: InputDecoration(
+                            icon: Icon(FontAwesomeIcons.calendar),
+                            labelText: "Birth Date"),
+                      ),
+                      TextFormField(
+                        controller: this.eyeTestController,
+                        readOnly: true,
+                        onTap: _onEyeTestChecked,
+                        decoration: InputDecoration(
+                          icon: Icon(FontAwesomeIcons.eye),
+                          labelText: "Eye Test",
+                          suffixIcon: Icon(
+                            this._hadEyeTest
+                                ? FontAwesomeIcons.toggleOn
+                                : FontAwesomeIcons.toggleOff,
+                            color: this._hadEyeTest
+                                ? Colors.green[600]
+                                : Colors.grey[600],
+                            size: 30,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(bottom: 5.0),
-                        child: TextFormField(
-                          enabled: appData.user.userType == UserType.Instructor
-                              ? true
-                              : false,
-                          controller: drivingLicenseController,
-                          validator: validations.validateRequired,
-                          decoration: InputDecoration(
-                              icon: Icon(EvaIcons.book),
-                              suffixIcon: Icon(
-                                Icons.star,
-                                color: Colors.red[600],
-                                size: 15,
-                              ),
-                              hintStyle: TextStyle(color: Colors.grey),
-                              labelText: "License number"),
-                        ),
+                      TextFormField(
+                        controller: this.drivingLicenseController,
+                        readOnly: true,
+                        onTap: _onDrivingLicenseUploadTap,
+                        decoration: InputDecoration(
+                            icon: Icon(FontAwesomeIcons.upload),
+                            labelText: "Upload License"),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            //  Date of Birth,
-            Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: this.dateOfBirthController,
-                    readOnly: true,
-                    onTap: _selectDateOfBirth,
-                    decoration: InputDecoration(
-                        icon: Icon(FontAwesomeIcons.calendar),
-                        labelText: "Birth Date"),
-                  ),
-                ),
-              ],
-            ),
-            //  Eye test,
-            Container(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    /*1*/
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /*2*/
-                        Container(
-                          child: Text(
-                            'Eye test',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  /*3*/
-                  Switch(
-                      value: _switchOnEyeTest,
-                      onChanged: (val) => setState(() =>
-                          appData.user.userType == UserType.Instructor
-                              ? _switchOnEyeTest = val
-                              : null),
-                      activeColor: AppTheme.appThemeColor)
-                ],
-              ),
-            ),
-
-            //Driving License image upload
-            Container(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    /*1*/
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /*2*/ Container(
-                          child: Text(
-                            this._drivingLicenseImageUrl == null
-                                ? 'Upload Driving License Picture'
-                                : 'Driving License Picture',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  /*3*/
-                  _drivingLicenseImageUrl == null
-                      ? IconButton(
-                          icon: this._attachedDocPath == null
-                              ? Icon(
-                                  FontAwesomeIcons.solidFileImage,
-                                  color: AppTheme.appThemeColor,
-                                )
-                              : Icon(
-                                  FontAwesomeIcons.solidCheckSquare,
-                                  color: AppTheme.appThemeColor,
-                                ),
-                          onPressed: () async {
-                            var _path = EmptyString;
-                            _path = await FilePicker.getFilePath(
-                                type: FileType.IMAGE);
-                            File file = File(_path);
-                            print(file.lengthSync());
-                            file.lengthSync() <= 500000
-                                ? setState(() {
-                                    this._attachedDocPath = _path;
-                                  })
-                                : _frequentWidgets.getSnackbar(
-                                    message: "Image must be under 500kb",
-                                    context: context,
-                                    duration: 1);
-                          },
-                        )
-                      : GestureDetector(
-                          child: Hero(
-                            tag: 'imageHero',
-                            child: Image.network(
-                              this._drivingLicenseImageUrl,
-                              width: 50,
-                              height: 50,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return DetailScreen(
-                                      downloadUrl:
-                                          this._drivingLicenseImageUrl);
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                ],
-              ),
-            ),
-
-            //  addButton,
-            Container(
-              padding: EdgeInsets.all(5.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        ButtonTheme(
-                          minWidth: 180.0,
-                          height: 50.0,
-                          child: appData.user.userType == UserType.Instructor
-                              ? RaisedButton(
-                                  onPressed: () async {
-                                    if (_validateInputs()) {
-                                      if (appData.user.userType ==
-                                          UserType.Instructor)
-                                        await _saveData();
-                                    }
-                                  },
-                                  color: AppTheme.appThemeColor,
-                                  child: Text(
-                                    "Save",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
-                                  ),
-                                  shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(8.0),
-                                  ),
-                                )
-                              : Container(),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ]),
+          ],
         ),
       ),
     );
+  }
+
+  Future<void> _onDrivingLicenseUploadTap() async {
+    this.drivingLicenseController.text = await FilePicker.getFilePath(
+        type: FileType.CUSTOM, fileExtension: "pdf");
   }
 
   bool _validateInputs() {
@@ -484,7 +267,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       this.drivingLicenseController.text = EmptyString;
       this.dateOfBirthController.text =
           TypeConversion.toDateDisplayFormat(DateTime.now());
-      this._switchOnEyeTest = false;
+      this._hadEyeTest = false;
     });
   }
 
@@ -527,6 +310,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   // }
 
   Future<void> _saveData() async {
+    if (!_validateInputs()) return;
     var id = '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     StorageUpload storageUpload = StorageUpload();
     var documentDownloadUrl =
@@ -539,7 +323,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseController.text;
     pupil.dateOfBirth = this._dateOfBirth;
-    pupil.eyeTest = _switchOnEyeTest;
+    pupil.eyeTest = _hadEyeTest;
     pupil.previousExperience = theoryRecordController.text;
     pupil.documentDownloadUrl = documentDownloadUrl;
     pupil.theoryRecord = previousExperienceController.text;
@@ -556,6 +340,13 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       context: context,
     );
     _resetPageData();
+  }
+
+  Future<void> _onEyeTestChecked() async {
+    setState(() {
+      this._hadEyeTest = !this._hadEyeTest;
+      this.eyeTestController.text = this._hadEyeTest ? "TESTED" : "NOT TESTED";
+    });
   }
 
   File img;
