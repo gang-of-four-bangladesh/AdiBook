@@ -3,12 +3,15 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/core/push_notification_manager.dart';
+import 'package:adibook/core/widgets/toogle_switch.dart';
 import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
+import 'package:adibook/pages/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,174 +27,116 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _smsCodeController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   String verificationId;
-  String _selectedCountry = CountryWisePhoneCode.keys.first;
   Logger _logger;
   UserType _selectedUserType = UserType.Instructor;
   bool _showProgressBar = false;
 
   _LoginPageState() {
-    // if (!DeviceInfo.isOnPhysicalDevice) {
-    this._phoneNumberController.text = "1234567890";
-    this._smsCodeController.text = "654321";
-    //}
+    //this._phoneNumberController.text = "1234567890";
     _logger = Logger(this.runtimeType.toString());
   }
   @override
   Widget build(BuildContext context) {
     var _screenWidth = MediaQuery.of(context).size.width;
-    var _oneFourthWidth = _screenWidth / 6;
+    var _oneSixthWidth = _screenWidth / 8;
+    var pageWidth = _screenWidth - (_oneSixthWidth * 2);
     this._countryCodeController.text = "+44";
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: AppTheme.appThemeColor,
-          title: Text("AdiBook"),
-        ),
-        body: SingleChildScrollView(
-          child: Builder(
-            builder: (BuildContext _context) {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: _oneFourthWidth,
-                    right: _oneFourthWidth,
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: AppTheme.appThemeColor,
+        title: Text("AdiBook"),
+      ),
+      body: Builder(
+        builder: (BuildContext _context) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: _oneSixthWidth,
+                right: _oneSixthWidth,
+              ),
+              child: ListView(
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Image.asset("assets/images/logo.png",
-                          width: 100, height: 100),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Radio(
-                            value: UserType.Instructor,
-                            groupValue: _selectedUserType,
-                            onChanged: _onUserTypeSelected,
-                            activeColor: AppTheme.appThemeColor,
-                          ),
-                          Text(
-                            'Instructor',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          Radio(
-                            value: UserType.Pupil,
-                            groupValue: _selectedUserType,
-                            onChanged: _onUserTypeSelected,
-                            activeColor: AppTheme.appThemeColor,
-                          ),
-                          Text(
-                            'Pupil',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                        ],
-                      ),
-                      DropdownButton<String>(
-                        items: CountryWisePhoneCode.keys.map((String country) {
-                          return DropdownMenuItem<String>(
-                            value: country,
-                            child: Text(country),
-                          );
-                        }).toList(),
-                        onChanged: (String value) {
-                          setState(() {
-                            _selectedCountry = value;
-                          });
-                        },
-                        value: _selectedCountry,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        child: Text(
-                          "Please enter your phone number and press Send OTP Code button.\nA sms will be sent with OTP code.",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      TextField(
-                        controller: _phoneNumberController,
-                        keyboardType: TextInputType.number,
-                        textAlignVertical: TextAlignVertical.bottom,
-                        maxLength: 11,
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.grey),
-                          hintText: "Your Phone Number",
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: RaisedButton(
-                          onPressed: () {
-                            _onPressSendOTPCode(_context);
-                          },
-                          color: Colors.green,
-                          child: Text(
-                            "Send OTP Code",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      TextField(
-                        controller: _smsCodeController,
-                        keyboardType: TextInputType.number,
-                        textAlignVertical: TextAlignVertical.bottom,
-                        maxLength: 6,
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.grey),
-                          hintText: "Enter OTP Code",
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: RaisedButton(
-                          onPressed: _onPressLoginButton,
-                          child: Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          color: Colors.green,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: _showProgressBar == true
-                            ? SizedBox(
-                                child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                        AppTheme.appThemeColor),
-                                    strokeWidth: 5.0),
-                                height: 30.0,
-                                width: 30.0,
-                              )
-                            : Container(),
-                      ),
+                  Image.asset(
+                    "assets/images/logo.png",
+                    width: 100,
+                    height: 100,
+                  ),
+                  SizedBox(height: 20),
+                  ToggleSwitch(
+                    minWidth: pageWidth / 2,
+                    initialLabelIndex: 0,
+                    activeBgColor: AppTheme.appThemeColor.withOpacity(0.6),
+                    activeTextColor: Colors.white,
+                    inactiveBgColor: Colors.grey,
+                    inactiveTextColor: Colors.grey[900],
+                    labels: ['Instructor', 'Pupil'],
+                    icons: [
+                      FontAwesomeIcons.solidUserCircle,
+                      FontAwesomeIcons.userGraduate
                     ],
+                    onToggle: (index) {
+                      if (index == 0) {
+                        this._selectedUserType = UserType.Instructor;
+                      } else if (index == 1) {
+                        this._selectedUserType = UserType.Pupil;
+                      }
+                    },
                   ),
-                ),
-              );
-            },
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-        ));
-  }
-
-  Future _onUserTypeSelected(value) async {
-    setState(() {
-      this._selectedUserType = value;
-      _logger.info('User type $value selected.');
-    });
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _phoneNumberController,
+                    keyboardType: TextInputType.phone,
+                    validator: Validations().validatePhoneNumber,
+                    maxLength: 13,
+                    decoration: InputDecoration(
+                        icon: Icon(FontAwesomeIcons.phoneAlt),
+                        suffixIcon: Icon(
+                          Icons.star,
+                          color: Colors.red[600],
+                          size: 15,
+                        ),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'Please start with +44',
+                        labelText: "Phone(+44)"),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: RaisedButton(
+                      onPressed: () {
+                        _onPressSendOTPCode(_context);
+                      },
+                      elevation: 1,
+                      color: AppTheme.appThemeColor.withOpacity(0.6),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: _showProgressBar == true
+                        ? SizedBox(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                    AppTheme.appThemeColor),
+                                strokeWidth: 5.0),
+                            height: 30.0,
+                            width: 30.0,
+                          )
+                        : Container(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   /// Sign in using an sms code as input.
@@ -310,25 +255,31 @@ class _LoginPageState extends State<LoginPage> {
     this.verificationId = verificationId;
     FrequentWidgets().getSnackbar(
       message:
-          'OTP code auto retrieval failed. Please enter the OTP code sent by sms.',
+          'We were unable to retrieve OTP code. Please check your phone number is correct!',
       context: context,
       duration: 5,
     );
   }
 
   Future<void> _onPressSendOTPCode(BuildContext context) async {
-    await _displayProgressBar(true);
+    if (!this._phoneNumberController.text.startsWith("+44")) {
+      this._phoneNumberController.text =
+          "+44${this._phoneNumberController.text}";
+    }
+    this._logger.info(this._phoneNumberController.text);
     if (!await _checkUserInput()) return;
-    var phoneNumber =
-        '${CountryWisePhoneCode[_selectedCountry]}${_phoneNumberController.text}';
-    this._logger.info("User phone number $phoneNumber");
+    await _displayProgressBar(true);
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
+        phoneNumber: this._phoneNumberController.text,
         timeout: const Duration(seconds: 5),
         verificationCompleted: this._verificationCompleted,
         verificationFailed: this._verificationFailed,
         codeSent: (String verificationId, [int forceResendingToken]) async {
           await this._codeSent(verificationId, forceResendingToken, context);
+          if (this._phoneNumberController.text == "+441234567890") {
+            this._smsCodeController.text = "654321";
+            await _onPressLoginButton();
+          }
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           this._codeAutoRetrievalTimeout(verificationId, context);
@@ -347,17 +298,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<bool> _checkUserInput() async {
-    this._logger.info("""User provided country code $_selectedCountry, 
-    User entered phone number ${_phoneNumberController.text}, 
-    Selected user type ${this._selectedUserType}.""");
     if (this._phoneNumberController.text.isEmpty) {
       await FrequentWidgets()
           .dialogBox(context, 'Phone number', 'Phone number cannot be empty.');
       return false;
     }
-    if (this._phoneNumberController.text.length < 9) {
-      await FrequentWidgets()
-          .dialogBox(context, 'Phone number', "Phone number isn't correct.");
+    if (this._phoneNumberController.text.length < 13) {
+      await FrequentWidgets().dialogBox(context, 'Phone number',
+          "Phone number should be either 10 characters without country code or 13 characters including country code.");
       return false;
     }
     return true;

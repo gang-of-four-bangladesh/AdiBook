@@ -56,51 +56,62 @@ class _ToggleSwitchState extends State<ToggleSwitch>
       borderRadius: BorderRadius.circular(widget.cornerRadius),
       child: Container(
         height: 50,
-        width: MediaQuery.of(context).size.width,
         color: widget.inactiveBgColor,
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(widget.labels.length * 2 - 1, (index) {
-            final active = index ~/ 2 == current;
-            final textColor =
-                active ? widget.activeTextColor : widget.inactiveTextColor;
-            var bgColor = Colors.transparent;
-            if (active) {
-              bgColor = widget.activeColors == null
-                  ? widget.activeBgColor
-                  : widget.activeColors[index ~/ 2];
-            }
-            if (index % 2 == 1) {
-              final activeDivider = active || index ~/ 2 == current - 1;
-              return Container(
-                width: 2,
-                color: activeDivider ? widget.activeBgColor : Colors.white30,
-                margin: EdgeInsets.symmetric(vertical: activeDivider ? 0 : 8),
-              );
-            } else {
-              return GestureDetector(
-                onTap: () => _handleOnTap(index ~/ 2),
-                child: Container(
-                  constraints: BoxConstraints(minWidth: widget.minWidth),
-                  alignment: Alignment.center,
-                  color: bgColor,
-                  child: widget.icons == null
-                      ? Text(widget.labels[index ~/ 2],
-                          style: TextStyle(color: textColor))
-                      : Row(
-                          children: <Widget>[
-                            Icon(widget.icons[index ~/ 2],
-                                color: textColor, size: 30.0),
-                            Padding(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+            widget.labels.length * 2 - 1,
+            (index) {
+              final active = index ~/ 2 == current;
+              final textColor =
+                  active ? widget.activeTextColor : widget.inactiveTextColor;
+              var bgColor = Colors.transparent;
+              if (active) {
+                bgColor = widget.activeColors == null
+                    ? widget.activeBgColor
+                    : widget.activeColors[index ~/ 2];
+              }
+              if (index % 2 == 1) {
+                final activeDivider = active || index ~/ 2 == current - 1;
+                return Container(
+                  width: 0,
+                  color: activeDivider ? widget.activeBgColor : Colors.white30,
+                  margin: EdgeInsets.symmetric(vertical: activeDivider ? 0 : 8),
+                );
+              } else {
+                return GestureDetector(
+                  onTap: () => _handleOnTap(index ~/ 2),
+                  child: Container(
+                    constraints: BoxConstraints(minWidth: widget.minWidth),
+                    alignment: Alignment.center,
+                    color: bgColor,
+                    child: widget.icons == null
+                        ? Text(
+                            widget.labels[index ~/ 2],
+                            style: TextStyle(color: textColor),
+                          )
+                        : Row(
+                            children: <Widget>[
+                              Icon(
+                                widget.icons[index ~/ 2],
+                                color: textColor,
+                                size: 30.0,
+                              ),
+                              Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
-                                child: Text(widget.labels[index ~/ 2],
-                                    style: TextStyle(color: textColor)))
-                          ],
-                        ),
-                ),
-              );
-            }
-          }),
+                                child: Text(
+                                  widget.labels[index ~/ 2],
+                                  style: TextStyle(color: textColor),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

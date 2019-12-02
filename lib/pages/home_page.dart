@@ -32,8 +32,8 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   List<Tab> _tabs = [];
   List<Widget> _linkItems = [];
-  String userName=EmptyString;
-  String phoneNo=EmptyString;
+  String userName = EmptyString;
+  String phoneNo = EmptyString;
   Instructor instructor;
   @override
   void initState() {
@@ -46,13 +46,6 @@ class _HomePageState extends State<HomePage>
     });
     super.initState();
     _initialize();
-    getInstructorInfo();
-  }
-
-  void getInstructorInfo() async {
-    if (!mounted) return;
-    setState(() {
-    });
   }
 
   @override
@@ -83,46 +76,42 @@ class _HomePageState extends State<HomePage>
         context, PageRoutes.LoginPage, (r) => false);
   }
 
-  void _initialize() async {
-    setState(() {
-      var widgetsConfig = PageManager().getWidgetConfigurations(
-        this.widget.userType,
-        this.widget.sectionType,
-      );
+  void _initialize() {
+    if (!mounted) return;
+    var widgetsConfig = PageManager().getWidgetConfigurations(
+      this.widget.userType,
+      this.widget.sectionType,
+    );
+    this._tabbarWidgetsConfig = widgetsConfig
+        .where((w) => w.displayArea.any((d) => d == DisplayArea.Tab))
+        .toList();
+    this._drawerWidgetsConfig = widgetsConfig
+        .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer))
+        .toList();
+    var isTabBarWidget = this._tabbarWidgetsConfig.any((t) =>
+        t.sectionWidget.runtimeType == this.widget.toDisplay.runtimeType);
+    var defaultSectionIndex = 0;
+    if (isTabBarWidget) {
+      defaultSectionIndex = this
+          ._tabbarWidgetsConfig
+          .firstWhere((t) =>
+              t.sectionWidget.runtimeType == this.widget.toDisplay.runtimeType)
+          .index;
+    } else {
       this._tabbarWidgetsConfig = widgetsConfig
-          .where((w) => w.displayArea.any((d) => d == DisplayArea.Tab))
+          .where((w) =>
+              w.sectionWidget.runtimeType == this.widget.toDisplay.runtimeType)
           .toList();
-      this._drawerWidgetsConfig = widgetsConfig
-          .where((w) => w.displayArea.any((d) => d == DisplayArea.Drawer))
-          .toList();
-      var isTabBarWidget = this._tabbarWidgetsConfig.any((t) =>
-          t.sectionWidget.runtimeType == this.widget.toDisplay.runtimeType);
-      var defaultSectionIndex = 0;
-      if (isTabBarWidget) {
-        defaultSectionIndex = this
-            ._tabbarWidgetsConfig
-            .firstWhere((t) =>
-                t.sectionWidget.runtimeType ==
-                this.widget.toDisplay.runtimeType)
-            .index;
-      } else {
-        this._tabbarWidgetsConfig = widgetsConfig
-            .where((w) =>
-                w.sectionWidget.runtimeType ==
-                this.widget.toDisplay.runtimeType)
-            .toList();
-      }
-      this._tabWidgets =
-          this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
-      this._getTabs();
-      this._getDrawerLinks();
-      this.getInstructorInfo();
-      _tabController = TabController(
-        vsync: this,
-        initialIndex: defaultSectionIndex,
-        length: this._tabWidgets.length,
-      );
-    });
+    }
+    this._tabWidgets =
+        this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
+    this._getTabs();
+    this._getDrawerLinks();
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: defaultSectionIndex,
+      length: this._tabWidgets.length,
+    );
   }
 
   @override
@@ -236,8 +225,11 @@ class _HomePageState extends State<HomePage>
                   width: 20,
                 ),
                 Text(
-                  appData.user.userType == UserType.Instructor ? appData.instructor.name+"\n\n"+appData.instructor.phoneNumber:
-                  appData.pupil.name+"\n\n"+appData.pupil.phoneNumber,
+                  appData.user.userType == UserType.Instructor
+                      ? appData.instructor.name +
+                          "\n\n" +
+                          appData.instructor.phoneNumber
+                      : appData.pupil.name + "\n\n" + appData.pupil.phoneNumber,
                   //appData.user.userType == UserType.Instructor ? appData.pupil.phoneNumber:appData.pupil.phoneNumber,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),

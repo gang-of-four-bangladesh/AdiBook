@@ -18,7 +18,7 @@ class FrequentWidgets {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: AppTheme.appThemeColor.withOpacity(0.9),
       ),
     );
   }

@@ -120,7 +120,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         controller: nameController,
                         validator: validations.validateText,
                         decoration: InputDecoration(
-                            icon: Icon(EvaIcons.person),
+                            icon: Icon(FontAwesomeIcons.userGraduate),
                             border: UnderlineInputBorder(),
                             suffixIcon: Icon(
                               Icons.star,
@@ -135,7 +135,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         keyboardType: TextInputType.text,
                         controller: addressController,
                         decoration: InputDecoration(
-                            icon: Icon(EvaIcons.email),
+                            icon: Icon(FontAwesomeIcons.addressCard),
                             hintStyle: TextStyle(color: Colors.grey),
                             labelText: "Address"),
                       ),
@@ -144,7 +144,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         keyboardType: TextInputType.text,
                         controller: theoryRecordController,
                         decoration: InputDecoration(
-                            icon: Icon(EvaIcons.emailOutline),
+                            icon: Icon(FontAwesomeIcons.stickyNote),
                             hintStyle: TextStyle(color: Colors.grey),
                             labelText: "Theory Record"),
                       ),
@@ -154,7 +154,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         controller: previousExperienceController,
                         decoration: InputDecoration(
                           labelText: "Previous Experience",
-                          icon: Icon(EvaIcons.paperPlane),
+                          icon: Icon(FontAwesomeIcons.paperPlane),
                           hintStyle: TextStyle(color: Colors.grey),
                         ),
                       ),
@@ -163,8 +163,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
                         validator: validations.validatePhoneNumber,
+                        maxLength: 13,
                         decoration: InputDecoration(
-                            icon: Icon(EvaIcons.phone),
+                            icon: Icon(FontAwesomeIcons.phone),
                             suffixIcon: appData.user.userType == UserType.Pupil
                                 ? null
                                 : Icon(
