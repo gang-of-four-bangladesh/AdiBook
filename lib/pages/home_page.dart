@@ -77,7 +77,6 @@ class _HomePageState extends State<HomePage>
   }
 
   void _initialize() {
-    if (!mounted) return;
     var widgetsConfig = PageManager().getWidgetConfigurations(
       this.widget.userType,
       this.widget.sectionType,
@@ -106,12 +105,15 @@ class _HomePageState extends State<HomePage>
     this._tabWidgets =
         this._tabbarWidgetsConfig.map((f) => f.sectionWidget).toList();
     this._getTabs();
-    this._getDrawerLinks();
     _tabController = TabController(
       vsync: this,
       initialIndex: defaultSectionIndex,
       length: this._tabWidgets.length,
     );
+    if (!mounted) return;
+    setState(() {
+      this._getDrawerLinks();
+    });
   }
 
   @override
@@ -226,11 +228,8 @@ class _HomePageState extends State<HomePage>
                 ),
                 Text(
                   appData.user.userType == UserType.Instructor
-                      ? appData.instructor.name +
-                          "\n\n" +
-                          appData.instructor.phoneNumber
-                      : appData.pupil.name + "\n\n" + appData.pupil.phoneNumber,
-                  //appData.user.userType == UserType.Instructor ? appData.pupil.phoneNumber:appData.pupil.phoneNumber,
+                      ? "${appData.instructor.name}\n\n${appData.instructor.phoneNumber}"
+                      : "${appData.pupil.name}\n\n${appData.pupil.phoneNumber}",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],

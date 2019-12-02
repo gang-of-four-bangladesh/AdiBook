@@ -56,7 +56,9 @@ class UserManager {
         userType: userType,
         userToken: token,
       ).update();
-      this._logger.info('Updated user logged in type $userType and token $token.');
+      this
+          ._logger
+          .info('Updated user logged in type $userType and token $token.');
       return;
     }
     await User(
@@ -85,7 +87,7 @@ class UserManager {
 
   Future<void> updateAppDataByUserId(String userId) async {
     var adiBookUser = await User(id: userId).getUser();
-    updateAppDataByUser(adiBookUser);
+    await updateAppDataByUser(adiBookUser);
   }
 
   bool hasExpired(DateTime expiryDate) {
