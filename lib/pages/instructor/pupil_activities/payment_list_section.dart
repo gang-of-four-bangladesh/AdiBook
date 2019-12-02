@@ -1,7 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
-import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/core/formatter.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/payment.dart';
 import 'package:adibook/pages/validation.dart';

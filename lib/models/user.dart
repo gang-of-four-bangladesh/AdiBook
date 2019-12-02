@@ -1,5 +1,5 @@
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/core/formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logging/logging.dart';
 

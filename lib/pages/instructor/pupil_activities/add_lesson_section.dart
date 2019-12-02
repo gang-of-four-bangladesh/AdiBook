@@ -3,7 +3,7 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/push_notification_manager.dart';
 import 'package:adibook/core/storage_upload.dart';
-import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/core/formatter.dart';
 import 'package:adibook/core/widgets/dropdown_formfield.dart';
 import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/models/instructor.dart';

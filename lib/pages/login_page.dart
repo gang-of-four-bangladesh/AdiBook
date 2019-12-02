@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _phoneNumberController = TextEditingController();
   String verificationId;
   Logger _logger;
+  String countryCode = "+44";
   UserType _selectedUserType = UserType.Instructor;
   bool _showProgressBar = false;
 
@@ -57,9 +58,23 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: ListView(
                 children: <Widget>[
-                  SizedBox(
-                    height: 40,
+                  ToggleSwitch(
+                    minWidth: pageWidth / 2,
+                    initialLabelIndex: 0,
+                    activeBgColor: Colors.grey[100].withOpacity(0.6),
+                    activeTextColor: Colors.grey[100].withOpacity(0.1),
+                    inactiveBgColor: Colors.grey[100].withOpacity(0.1),
+                    inactiveTextColor: Colors.grey[100].withOpacity(0.1),
+                    labels: ['UK', 'BD'],
+                    icons: [FontAwesomeIcons.airbnb, FontAwesomeIcons.flag],
+                    onToggle: (index) async {
+                      this.countryCode = index == 0 ? "+44" : "+880";
+                      this
+                          ._logger
+                          .info('Selected Country Code ${this.countryCode}');
+                    },
                   ),
+                  //SizedBox(height: 40),
                   Image.asset(
                     "assets/images/logo.png",
                     width: 100,
@@ -91,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _phoneNumberController,
                     keyboardType: TextInputType.phone,
                     validator: Validations().validatePhoneNumber,
-                    maxLength: 13,
+                    maxLength: 10,
                     decoration: InputDecoration(
                         icon: Icon(FontAwesomeIcons.phoneAlt),
                         suffixIcon: Icon(
@@ -100,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                           size: 15,
                         ),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: 'Please start with +44',
+                        hintText: '+44 will be prepended.',
                         labelText: "Phone(+44)"),
                   ),
                   Align(
@@ -231,10 +246,16 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _verificationFailed(AuthException authException) async {
+  Future<void> _verificationFailed(
+      AuthException authException, BuildContext context) async {
     await _displayProgressBar(false);
     this._logger.shout(
         "PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}");
+    FrequentWidgets().getSnackbar(
+      message: authException.message,
+      context: context,
+      duration: 5,
+    );
   }
 
   Future<void> _codeSent(String verificationId, int forceResendingToken,
@@ -261,29 +282,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Future<String> _addCountryCodeToPhoneNumber() async {
+    if (this._phoneNumberController.text.startsWith(this.countryCode))
+      return this._phoneNumberController.text;
+    return "${this.countryCode}${this._phoneNumberController.text}";
+  }
+
   Future<void> _onPressSendOTPCode(BuildContext context) async {
-    if (!this._phoneNumberController.text.startsWith("+44")) {
-      this._phoneNumberController.text =
-          "+44${this._phoneNumberController.text}";
-    }
-    this._logger.info(this._phoneNumberController.text);
-    if (!await _checkUserInput()) return;
+    if (!await _hasValidInput()) return;
+    var phoneNumber = await _addCountryCodeToPhoneNumber();
+    this._logger.info(phoneNumber);
     await _displayProgressBar(true);
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: this._phoneNumberController.text,
-        timeout: const Duration(seconds: 5),
-        verificationCompleted: this._verificationCompleted,
-        verificationFailed: this._verificationFailed,
-        codeSent: (String verificationId, [int forceResendingToken]) async {
-          await this._codeSent(verificationId, forceResendingToken, context);
-          if (this._phoneNumberController.text == "+441234567890") {
-            this._smsCodeController.text = "654321";
-            await _onPressLoginButton();
-          }
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          this._codeAutoRetrievalTimeout(verificationId, context);
-        });
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 5),
+      verificationCompleted: this._verificationCompleted,
+      verificationFailed: (AuthException authException) async {
+        await this._verificationFailed(authException, context);
+      },
+      codeSent: (String verificationId, [int forceResendingToken]) async {
+        await this._codeSent(verificationId, forceResendingToken, context);
+        if (phoneNumber == "+441234567890") {
+          this._smsCodeController.text = "654321";
+          await _onPressLoginButton();
+        }
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        this._codeAutoRetrievalTimeout(verificationId, context);
+      },
+    );
   }
 
   Future _handleExpiredUser() async {
@@ -297,17 +324,11 @@ class _LoginPageState extends State<LoginPage> {
         context, PageRoutes.LoginPage, (r) => false);
   }
 
-  Future<bool> _checkUserInput() async {
-    if (this._phoneNumberController.text.isEmpty) {
-      await FrequentWidgets()
-          .dialogBox(context, 'Phone number', 'Phone number cannot be empty.');
-      return false;
-    }
-    if (this._phoneNumberController.text.length < 13) {
-      await FrequentWidgets().dialogBox(context, 'Phone number',
-          "Phone number should be either 10 characters without country code or 13 characters including country code.");
-      return false;
-    }
-    return true;
+  Future<bool> _hasValidInput() async {
+    var message =
+        Validations().validatePhoneNumber(this._phoneNumberController.text);
+    if (message == EmptyString) return true;
+    await FrequentWidgets().dialogBox(context, 'Phone number', message);
+    return false;
   }
 }

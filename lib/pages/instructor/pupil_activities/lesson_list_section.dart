@@ -1,6 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/frequent_widgets.dart';
-import 'package:adibook/core/type_conversion.dart';
+import 'package:adibook/core/formatter.dart';
 import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';

@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage>
           ListTile(
             title: Text("HOME"),
             onTap: () {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                   builder: (context) => HomePage(
@@ -253,6 +253,7 @@ class _HomePageState extends State<HomePage>
                         : StatusSection(),
                   ),
                 ),
+                (r) => false,
               );
             },
           ),
@@ -262,7 +263,7 @@ class _HomePageState extends State<HomePage>
                 ListTile(
                   title: Text(f.drawerLinkText.toUpperCase()),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomePage(
@@ -271,6 +272,7 @@ class _HomePageState extends State<HomePage>
                           toDisplay: f.sectionWidget,
                         ),
                       ),
+                      (r) => false,
                     );
                   },
                 ),

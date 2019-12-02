@@ -1,3 +1,5 @@
+import 'package:adibook/core/constants.dart';
+
 class Validations {
   String validateRequired(String value) {
     if (value.isEmpty) return 'Required field';
@@ -17,7 +19,8 @@ class Validations {
     if (value.isEmpty) return 'Please choose a password.';
     return null;
   }
-String validateNumber(String value) {
+
+  String validateNumber(String value) {
     if (value.isEmpty) return 'Required field';
     String patttern = r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]';
     RegExp regExp = new RegExp(patttern);
@@ -30,15 +33,16 @@ String validateNumber(String value) {
   }
 
   String validatePhoneNumber(String value) {
-    if (value.isEmpty) return 'Required field';
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    if (isNullOrEmpty(value)) return 'Please enter phone number.';
+    String patttern = r'(^[0-9]{10}$)';
     RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return 'Please enter phone number';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid phone number';
+    if (!regExp.hasMatch(value)) {
+      return 'Phone number invalid. Please enter valid phone number.';
     }
-    return null;
+    if (value.length != 10) {
+      return 'Phone number must be 10 characters in length.';
+    }
+    return EmptyString;
   }
 
   String validateEmail(String value) {
