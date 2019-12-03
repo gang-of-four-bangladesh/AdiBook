@@ -64,7 +64,12 @@ class LessonListSectionState extends State<LessonListSection> {
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         if (snapshot.data.documents.length == 0)
-          return Card(child: Text("No Lessons Found"));
+            return Card(
+              child: Center(
+                  child: Text(
+            "No Lesson Found",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )));
         return ListView(
           children: snapshot.data.documents.map(
             (DocumentSnapshot document) {

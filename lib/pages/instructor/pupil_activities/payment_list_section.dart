@@ -69,43 +69,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     _logger.fine('Loading pupil payments listing page.');
     return Container(
         child: Column(
-      children: <Widget>[
-        // Container(
-        //   child: Column(
-        //     children: <Widget>[
-        //       SizedBox(
-        //         height: 8,
-        //       ),
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         crossAxisAlignment: CrossAxisAlignment.center,
-        //         children: <Widget>[
-        //           ButtonTheme(
-        //             minWidth: 180.0,
-        //             height: 50.0,
-        //             child: RaisedButton(
-        //               onPressed: () {
-        //                 _makeEmpty();
-        //                 _asyncInputDialog(context);
-        //               },
-        //               color: AppTheme.appThemeColor,
-        //               child: Text(
-        //                 "Add Payment",
-        //                 style: TextStyle(
-        //                     color: Colors.white,
-        //                     fontWeight: FontWeight.bold,
-        //                     fontSize: 16.0),
-        //               ),
-        //               shape: new RoundedRectangleBorder(
-        //                 borderRadius: new BorderRadius.circular(8.0),
-        //               ),
-        //             ),
-        //           )
-        //         ],
-        //       )
-        //     ],
-        //   ),
-        // ),
+      children: <Widget>[        
         SizedBox(
           height: 15,
         ),
@@ -126,7 +90,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
                         var paymentText =
-                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by ${PaymentMode.values[document[Payment.PaymentTypeKey]]}.';
+                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by '+ enumValueToString(PaymentMode.values[document[Payment.PaymentTypeKey]].toString());
                         return Slidable(
                           actions: <Widget>[
                             IconSlideAction(

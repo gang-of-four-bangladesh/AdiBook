@@ -7,6 +7,7 @@ import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,7 +49,12 @@ class PupilPistSectionState extends State<PupilListSection> {
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         if (snapshot.data.documents.length == 0)
-          return Card(child: Text("No Pupils Found"));
+          return Card(
+              child: Center(
+                  child: Text(
+            "No Pupil Found",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )));
         return ListView(
           children: snapshot.data.documents.map(
             (DocumentSnapshot document) {
@@ -107,30 +113,49 @@ class PupilPistSectionState extends State<PupilListSection> {
                     },
                   ),
                 ],
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                  title: Text(document[Pupil.NameKey]),
-                  subtitle: document[Pupil.PhoneNumberKey] == null
-                      ? Text(EmptyString)
-                      : Text(document[Pupil.PhoneNumberKey].toString()),
-                  onTap: () {
-                    appData.contextualInfo = {
-                      DataSharingKeys.PupilIdKey: document.documentID
-                    };
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(
-                          sectionType: SectionType.InstructorActivityForPupil,
-                          userType: UserType.Instructor,
-                          toDisplay: LessonListSection(),
+                child: Container(
+                    child: 
+                    ListTile(
+                      leading: CircleAvatar(
+                        radius: 40,
+                        child: Container(
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 36,
+                          ),
                         ),
+                        backgroundColor: Colors.grey[200],
                       ),
-                    );
-                  },
-                ),
+                      title: Text(
+                        document[Pupil.NameKey],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: document[Pupil.PhoneNumberKey] == null
+                          ? Text(Pupil.PhoneNumberKey)
+                          : Text(document[Pupil.PhoneNumberKey].toString()),
+                          isThreeLine: true,
+                      onTap: () {
+                        appData.contextualInfo = {
+                          DataSharingKeys.PupilIdKey: document.documentID
+                        };
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(
+                              sectionType:
+                                  SectionType.InstructorActivityForPupil,
+                              userType: UserType.Instructor,
+                              toDisplay: LessonListSection(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.grey[200]))
+                  ),
+                )
               );
             },
           ).toList(),

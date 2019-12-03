@@ -39,6 +39,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController eyeTestController = TextEditingController();
   TextEditingController previousExperienceController = TextEditingController();
   TextEditingController drivingLicenseController = TextEditingController();
+  TextEditingController drivingLicenseNoController = TextEditingController();
   int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
   bool _autoValidate;
@@ -62,7 +63,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     nameController.text = pupil.name;
     addressController.text = pupil.address;
     phoneController.text = pupil.phoneNumber;
-    drivingLicenseController.text = pupil.licenseNo;
+    drivingLicenseNoController.text = pupil.licenseNo;
     theoryRecordController.text = pupil.theoryRecord;
     previousExperienceController.text = pupil.previousExperience;
     if (!mounted) return;
@@ -179,7 +180,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       ),
                       TextFormField(
                         enabled: appData.user.userType == UserType.Instructor,
-                        controller: drivingLicenseController,
+                        controller: drivingLicenseNoController,
                         validator: validations.validateRequired,
                         decoration: InputDecoration(
                             icon: Icon(EvaIcons.book),
@@ -322,7 +323,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     pupil.phoneNumber =
         '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     pupil.address = addressController.text;
-    pupil.licenseNo = drivingLicenseController.text;
+    pupil.licenseNo = drivingLicenseNoController.text;
     pupil.dateOfBirth = this._dateOfBirth;
     pupil.eyeTest = _hadEyeTest;
     pupil.previousExperience = theoryRecordController.text;
