@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -116,25 +117,26 @@ class PupilPistSectionState extends State<PupilListSection> {
                 child: Container(
                     child: 
                     ListTile(
+                      //contentPadding: EdgeInsets.only(left: 0),
                       leading: CircleAvatar(
-                        radius: 40,
+                        radius: 42,
                         child: Container(
                           child: Icon(
                             Icons.person,
                             color: Colors.white,
-                            size: 36,
+                            size: 42,
                           ),
                         ),
-                        backgroundColor: Colors.grey[200],
+                        backgroundColor: AppTheme.appThemeColor,
+
                       ),
+                      contentPadding: EdgeInsets.only(left: 0,right: 10),
                       title: Text(
                         document[Pupil.NameKey],
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: document[Pupil.PhoneNumberKey] == null
-                          ? Text(Pupil.PhoneNumberKey)
-                          : Text(document[Pupil.PhoneNumberKey].toString()),
-                          isThreeLine: true,
+                      subtitle: Text("Phone Number"),                          
+                      trailing: Text(DateFormat('dd/mm/yyyy').format(DateTime.now())),
                       onTap: () {
                         appData.contextualInfo = {
                           DataSharingKeys.PupilIdKey: document.documentID
@@ -153,7 +155,8 @@ class PupilPistSectionState extends State<PupilListSection> {
                       },
                     ),
                   decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey[200]))
+                    border: Border(bottom: BorderSide(color: AppTheme.appThemeColor)),
+                    
                   ),
                 )
               );
