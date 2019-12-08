@@ -132,6 +132,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                               caption: 'Edit',
                               color: AppTheme.appThemeColor,
                               icon: EvaIcons.edit,
+                              
                               onTap: () {
                                 populatePaymentInfo(document.documentID);
                                 _asyncInputDialog(context);
@@ -141,6 +142,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                           actionPane: SlidableScrollActionPane(),
                           actionExtentRatio: 0.12,
                           child: Card(
+                            color: AppTheme.appThemeColor,
                             child: ListTile(
                               onTap: () {
                                 print("clicked");
@@ -150,6 +152,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
+                                  color: Colors.white
                                 ),
                               ),
                             ),

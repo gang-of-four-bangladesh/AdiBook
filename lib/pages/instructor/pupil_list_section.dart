@@ -7,6 +7,7 @@ import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/add_pupil_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -64,7 +65,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                 actions: <Widget>[
                   IconSlideAction(
                     caption: 'Remove',
-                    color: AppTheme.appThemeColor,
+                    color: Colors.red,
                     icon: FontAwesomeIcons.trash,
                     onTap: () {
                       showDialog<ConfirmAction>(
@@ -100,8 +101,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                   IconSlideAction(
                     caption: 'Edit',
                     color: AppTheme.appThemeColor,
-                    icon: FontAwesomeIcons.edit,
-                    foregroundColor: Colors.white,
+                    icon: EvaIcons.edit,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -114,26 +114,26 @@ class PupilPistSectionState extends State<PupilListSection> {
                   ),
                 ],
                 child: Container(
-                  child: ListTile(
-                    //contentPadding: EdgeInsets.only(left: 0),
-                    leading: CircleAvatar(
-                      radius: 35,
-                      child: Container(
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 42,
-                        ),
+                    child: ListTile(
+                  //contentPadding: EdgeInsets.only(left: 0),
+                  leading: CircleAvatar(
+                    radius: 33,
+                    child: Container(
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 42,
                       ),
-                      backgroundColor: AppTheme.appThemeColor,
                     ),
-                    contentPadding:
-                        EdgeInsets.only(left: 0, right: 10, top: 15),
-                    // title: Text(
-                    //   document[Pupil.NameKey],
-                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                    // ),
-                    subtitle: Column(
+                    backgroundColor: AppTheme.appThemeColor,
+                  ),
+                  contentPadding: EdgeInsets.only(left: 0, right: 10, top: 15),
+                  // title: Text(
+                  //   document[Pupil.NameKey],
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                  subtitle: Container(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -158,26 +158,27 @@ class PupilPistSectionState extends State<PupilListSection> {
                         ),
                       ],
                     ),
-                    onTap: () {
-                      appData.contextualInfo = {
-                        DataSharingKeys.PupilIdKey: document.documentID
-                      };
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(
-                            sectionType: SectionType.InstructorActivityForPupil,
-                            userType: UserType.Instructor,
-                            toDisplay: LessonListSection(),
-                          ),
-                        ),
-                      );
-                    },
                   ),
-                  // decoration: BoxDecoration(
-                  //   border: Border(bottom: BorderSide(color: Colors.grey[300])),
-                  // ),
-                ),
+                  onTap: () {
+                    appData.contextualInfo = {
+                      DataSharingKeys.PupilIdKey: document.documentID
+                    };
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(
+                          sectionType: SectionType.InstructorActivityForPupil,
+                          userType: UserType.Instructor,
+                          toDisplay: LessonListSection(),
+                        ),
+                      ),
+                    );
+                  },
+                )
+                    // decoration: BoxDecoration(
+                    //   border: Border(bottom: BorderSide(color: Colors.grey[300])),
+                    // ),
+                    ),
               );
             },
           ).toList(),
