@@ -137,18 +137,19 @@ class PupilPistSectionState extends State<PupilListSection> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Text(
+                          document[Pupil.NameKey],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              document[Pupil.NameKey],
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            Text("Phone Number"),
                             Text(DateFormat('dd/mm/yyyy')
                                 .format(DateTime.now())),
                           ],
                         ),
-                        Text("Phone Number"),
                         SizedBox(
                           height: 20,
                         ),

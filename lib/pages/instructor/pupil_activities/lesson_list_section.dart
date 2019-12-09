@@ -58,7 +58,7 @@ class LessonListSectionState extends State<LessonListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        var format = DateFormat("EEEE dd MMMM @ HH:mm aaa");
+        var format = DateFormat("EEEE dd MMMM");
         if (snapshot.connectionState == ConnectionState.waiting)
           return this.frequentWidgets.getProgressBar();
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();

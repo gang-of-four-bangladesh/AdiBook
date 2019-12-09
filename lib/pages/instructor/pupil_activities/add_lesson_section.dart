@@ -155,89 +155,101 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
                         ),
-                        DropDownFormField(
-                          titleText: 'Pickup Location',
-                          hintText: 'Please choose one',
-                          required: true,
-                          value: this._selectedPickupLocation.index,
-                          onSaved: (value) {
-                            setState(() {
-                              this._selectedPickupLocation =
-                                  TripLocation.values[value];
-                            });
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              this._selectedPickupLocation =
-                                  TripLocation.values[value];
-                            });
-                          },
-                          dataSource: TripLocationOptions,
-                          textField: 'display',
-                          valueField: 'value',
+                        Container(
+                          color: Colors.white,
+                          child: DropDownFormField(
+                            titleText: 'Pickup Location',
+                            hintText: 'Please choose one',
+                            required: true,
+                            value: this._selectedPickupLocation.index,
+                            onSaved: (value) {
+                              setState(() {
+                                this._selectedPickupLocation =
+                                    TripLocation.values[value];
+                              });
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                this._selectedPickupLocation =
+                                    TripLocation.values[value];
+                              });
+                            },
+                            dataSource: TripLocationOptions,
+                            textField: 'display',
+                            valueField: 'value',
+                          ),
                         ),
-                        DropDownFormField(
-                          titleText: 'Drop Off Location',
-                          hintText: 'Please choose one',
-                          required: true,
-                          value: this._selectedDropOffLocation.index,
-                          onSaved: (value) {
-                            setState(() {
-                              this._selectedDropOffLocation =
-                                  TripLocation.values[value];
-                            });
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              this._selectedDropOffLocation =
-                                  TripLocation.values[value];
-                            });
-                          },
-                          dataSource: TripLocationOptions,
-                          textField: 'display',
-                          valueField: 'value',
+                        Container(
+                          color: Colors.white,
+                          child: DropDownFormField(
+                            titleText: 'Drop Off Location',
+                            hintText: 'Please choose one',
+                            required: true,
+                            value: this._selectedDropOffLocation.index,
+                            onSaved: (value) {
+                              setState(() {
+                                this._selectedDropOffLocation =
+                                    TripLocation.values[value];
+                              });
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                this._selectedDropOffLocation =
+                                    TripLocation.values[value];
+                              });
+                            },
+                            dataSource: TripLocationOptions,
+                            textField: 'display',
+                            valueField: 'value',
+                          ),
                         ),
-                        DropDownFormField(
-                          titleText: 'Vehicle Type',
-                          hintText: 'Please choose one',
-                          required: true,
-                          value: this._selectedVehicleType.index,
-                          onSaved: (value) {
-                            setState(() {
-                              this._selectedVehicleType =
-                                  VehicleType.values[value];
-                            });
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              this._selectedVehicleType =
-                                  VehicleType.values[value];
-                            });
-                          },
-                          dataSource: VehicleTypeOptions,
-                          textField: 'display',
-                          valueField: 'value',
+                        Container(
+                          color: Colors.white,
+                          child: DropDownFormField(
+                            titleText: 'Vehicle Type',
+                            hintText: 'Please choose one',
+                            required: true,
+                            value: this._selectedVehicleType.index,
+                            onSaved: (value) {
+                              setState(() {
+                                this._selectedVehicleType =
+                                    VehicleType.values[value];
+                              });
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                this._selectedVehicleType =
+                                    VehicleType.values[value];
+                              });
+                            },
+                            dataSource: VehicleTypeOptions,
+                            textField: 'display',
+                            valueField: 'value',
+                          ),
                         ),
-                        DropDownFormField(
-                          titleText: 'Lesson Type',
-                          hintText: 'Please choose one',
-                          required: true,
-                          value: this._selectedlessionType.index,
-                          onSaved: (value) {
-                            setState(() {
-                              this._selectedlessionType =
-                                  LessonType.values[value];
-                            });
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              this._selectedlessionType =
-                                  LessonType.values[value];
-                            });
-                          },
-                          dataSource: LessonTypeOptions,
-                          textField: 'display',
-                          valueField: 'value',
+                        Container(
+                         color: Colors.white,
+                          child: DropDownFormField(
+                            titleText: 'Lesson Type',
+                            hintText: 'Please choose one',
+                            required: true,
+                            value: this._selectedlessionType.index,
+                            onSaved: (value) {
+                              setState(() {
+                                this._selectedlessionType =
+                                    LessonType.values[value];
+                              });
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                this._selectedlessionType =
+                                    LessonType.values[value];
+                              });
+                            },
+                            dataSource: LessonTypeOptions,
+                            textField: 'display',
+                            valueField: 'value',
+                          ),
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
@@ -283,8 +295,11 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
-    var documentDownloadUrl = await storageUpload
-        .uploadLessonFile(this._uploadLicenseController.text);
+    String documentDownloadUrl = EmptyString;
+    if (storageUpload != null) {
+      documentDownloadUrl = await storageUpload
+          .uploadLessonFile(this._uploadLicenseController.text);
+    }
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
       id: this._lessionId,

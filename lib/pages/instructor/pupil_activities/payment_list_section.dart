@@ -142,7 +142,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                           actionPane: SlidableScrollActionPane(),
                           actionExtentRatio: 0.12,
                           child: Card(
-                            color: AppTheme.appThemeColor,
+                            color: Colors.tealAccent[100],
                             child: ListTile(
                               onTap: () {
                                 print("clicked");
@@ -152,7 +152,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  color: Colors.white
                                 ),
                               ),
                             ),
