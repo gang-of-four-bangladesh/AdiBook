@@ -80,9 +80,18 @@ class PaymentListSectionState extends State<PaymentListSection> {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               var format = DateFormat("EEEE dd MMMM");
-              if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return FrequentWidgets().getProgressBar();
               if (snapshot.data == null)
                 return FrequentWidgets().getProgressBar();
+              if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+              if (snapshot.data.documents.length == 0)
+                return Card(
+                    child: Center(
+                        child: Text(
+                  "No Payment Found",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )));
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return FrequentWidgets().getProgressBar();
