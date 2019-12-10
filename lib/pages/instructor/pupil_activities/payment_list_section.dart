@@ -10,7 +10,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -105,82 +104,62 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                     .values[document[Payment.PaymentTypeKey]]
                                     .toString());
                         return Slidable(
-                            actions: <Widget>[
-                              IconSlideAction(
-                                caption: 'Remove',
-                                color: Colors.red,
-                                icon: EvaIcons.trash,
-                                onTap: () {
-                                  showDialog<ConfirmAction>(
-                                    context: context,
-                                    barrierDismissible:
-                                        false, // user must tap button for close dialog!
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text("Delete"),
-                                        content:
-                                            Text("Do you want to delete ?"),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: const Text('CANCEL'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(ConfirmAction.CANCEL);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: const Text('ACCEPT'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(ConfirmAction.ACCEPT);
-                                              _deleteData(document.documentID);
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              IconSlideAction(
-                                caption: 'Edit',
-                                color: AppTheme.appThemeColor,
-                                icon: EvaIcons.edit,
-                                onTap: () {
-                                  populatePaymentInfo(document.documentID);
-                                  _asyncInputDialog(context);
-                                },
-                              ),
-                            ],
-                            actionPane: SlidableScrollActionPane(),
-                            actionExtentRatio: 0.12,
-                            child:
-                                // Card(
-                                //   // color: Colors.tealAccent[100],
-                                //   child: Container(
-                                //     decoration: BoxDecoration(
-                                //         gradient: LinearGradient(colors: [
-                                //       Colors.teal[300],
-                                //       Colors.teal[200],
-                                //       Colors.teal[100],
-                                //       Colors.teal[50]
-                                //     ])),
-                                //   child: ListTile(
-                                //     onTap: () {
-                                //       print("clicked");
-                                //     },
-                                //     title: Text(
-                                //       paymentText,
-                                //       style: TextStyle(
-                                //         fontWeight: FontWeight.bold,
-                                //         fontSize: 16,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-                                // ),
-                                GradientCard(
-                              gradient: Gradients.listItem,
+                          actions: <Widget>[
+                            IconSlideAction(
+                              caption: 'Remove',
+                              color: Colors.red,
+                              icon: EvaIcons.trash,
+                              onTap: () {
+                                showDialog<ConfirmAction>(
+                                  context: context,
+                                  barrierDismissible:
+                                      false, // user must tap button for close dialog!
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Delete"),
+                                      content: Text("Do you want to delete ?"),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: const Text('CANCEL'),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(ConfirmAction.CANCEL);
+                                          },
+                                        ),
+                                        FlatButton(
+                                          child: const Text('ACCEPT'),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(ConfirmAction.ACCEPT);
+                                            _deleteData(document.documentID);
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            IconSlideAction(
+                              caption: 'Edit',
+                              color: AppTheme.appThemeColor,
+                              icon: EvaIcons.edit,
+                              onTap: () {
+                                populatePaymentInfo(document.documentID);
+                                _asyncInputDialog(context);
+                              },
+                            ),
+                          ],
+                          actionPane: SlidableScrollActionPane(),
+                          actionExtentRatio: 0.12,
+                          child: Card(
+                            // color: Colors.tealAccent[100],
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                Color(0xFFB2DFDB),
+                                Color(0xFFE0F2F1)
+                              ])),
                               child: ListTile(
                                 onTap: () {
                                   print("clicked");
@@ -193,7 +172,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                   ),
                                 ),
                               ),
-                            ));
+                            ),
+                          ),
+                        );
                       },
                     ).toList(),
                   );

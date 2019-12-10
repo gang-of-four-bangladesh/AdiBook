@@ -39,7 +39,6 @@ dependencies:
   percent_indicator: ^2.1.1+1
 
   flutter_slidable:
-  gradient_widgets:
   
   firebase_messaging:
   flutter_local_notifications: ^0.8.4
