@@ -10,6 +10,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -144,26 +145,42 @@ class PaymentListSectionState extends State<PaymentListSection> {
                             ],
                             actionPane: SlidableScrollActionPane(),
                             actionExtentRatio: 0.12,
-                            child: Card(
-                              // color: Colors.tealAccent[100],
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                  Colors.teal[300],
-                                  Colors.teal[200],
-                                  Colors.teal[100],
-                                  Colors.teal[50]
-                                ])),
-                                child: ListTile(
-                                  onTap: () {
-                                    print("clicked");
-                                  },
-                                  title: Text(
-                                    paymentText,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
+                            child:
+                                // Card(
+                                //   // color: Colors.tealAccent[100],
+                                //   child: Container(
+                                //     decoration: BoxDecoration(
+                                //         gradient: LinearGradient(colors: [
+                                //       Colors.teal[300],
+                                //       Colors.teal[200],
+                                //       Colors.teal[100],
+                                //       Colors.teal[50]
+                                //     ])),
+                                //   child: ListTile(
+                                //     onTap: () {
+                                //       print("clicked");
+                                //     },
+                                //     title: Text(
+                                //       paymentText,
+                                //       style: TextStyle(
+                                //         fontWeight: FontWeight.bold,
+                                //         fontSize: 16,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                // ),
+                                GradientCard(
+                              gradient: Gradients.coralCandyGradient,
+                              child: ListTile(
+                                onTap: () {
+                                  print("clicked");
+                                },
+                                title: Text(
+                                  paymentText,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),
