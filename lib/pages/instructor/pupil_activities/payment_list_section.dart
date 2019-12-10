@@ -171,7 +171,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 // ),
                                 // ),
                                 GradientCard(
-                              gradient: Gradients.coralCandyGradient,
+                              gradient: Gradients.listItem,
                               child: ListTile(
                                 onTap: () {
                                   print("clicked");
