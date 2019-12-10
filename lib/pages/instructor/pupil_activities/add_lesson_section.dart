@@ -296,7 +296,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   Future<void> _saveData() async {
     StorageUpload storageUpload = StorageUpload();
     String documentDownloadUrl = EmptyString;
-    if (storageUpload != null) {
+    if (this._uploadLicenseController.text != EmptyString) {
       documentDownloadUrl = await storageUpload
           .uploadLessonFile(this._uploadLicenseController.text);
     }

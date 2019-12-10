@@ -149,7 +149,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   }
 
   Future<void> _selectDateOfBirth() async {
-    var displayDob = this.dateOfPaymentController.text == EmptyString
+    _dateOfPayment = this.dateOfPaymentController.text == EmptyString
         ? DateTime.now()
         : TypeConversion.toDate(this.dateOfPaymentController.text);
     await DatePicker.showDatePicker(
@@ -158,7 +158,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
       maxTime: DateTime(2022, 12, 31),
-      currentTime: displayDob,
+      currentTime: _dateOfPayment,
       onConfirm: (date) {
         setState(() {
           this.dateOfPaymentController.text =
@@ -177,7 +177,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     });
   }
 
-  bool _validateInputs() {
+  bool _validateInputs() { 
+    _dateOfPayment = this.dateOfPaymentController.text == EmptyString
+        ? DateTime.now()
+        : TypeConversion.toDate(this.dateOfPaymentController.text);   
     if (_dateOfPayment == null) {
       _frequentWidgets.getSnackbar(
         message: 'Date of Payment is Required',
