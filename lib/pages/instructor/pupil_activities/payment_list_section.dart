@@ -69,7 +69,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     _logger.fine('Loading pupil payments listing page.');
     return Container(
         child: Column(
-      children: <Widget>[        
+      children: <Widget>[
         SizedBox(
           height: 15,
         ),
@@ -90,73 +90,84 @@ class PaymentListSectionState extends State<PaymentListSection> {
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
                         var paymentText =
-                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by '+ enumValueToString(PaymentMode.values[document[Payment.PaymentTypeKey]].toString());
+                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by ' +
+                                enumValueToString(PaymentMode
+                                    .values[document[Payment.PaymentTypeKey]]
+                                    .toString());
                         return Slidable(
-                          actions: <Widget>[
-                            IconSlideAction(
-                              caption: 'Remove',
-                              color: Colors.red,
-                              icon: EvaIcons.trash,
-                              onTap: () {
-                                showDialog<ConfirmAction>(
-                                  context: context,
-                                  barrierDismissible:
-                                      false, // user must tap button for close dialog!
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text("Delete"),
-                                      content: Text("Do you want to delete ?"),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: const Text('CANCEL'),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(ConfirmAction.CANCEL);
-                                          },
-                                        ),
-                                        FlatButton(
-                                          child: const Text('ACCEPT'),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(ConfirmAction.ACCEPT);
-                                            _deleteData(document.documentID);
-                                          },
-                                        )
-                                      ],
-                                    );
+                            actions: <Widget>[
+                              IconSlideAction(
+                                caption: 'Remove',
+                                color: Colors.red,
+                                icon: EvaIcons.trash,
+                                onTap: () {
+                                  showDialog<ConfirmAction>(
+                                    context: context,
+                                    barrierDismissible:
+                                        false, // user must tap button for close dialog!
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Delete"),
+                                        content:
+                                            Text("Do you want to delete ?"),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: const Text('CANCEL'),
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(ConfirmAction.CANCEL);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: const Text('ACCEPT'),
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(ConfirmAction.ACCEPT);
+                                              _deleteData(document.documentID);
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                              IconSlideAction(
+                                caption: 'Edit',
+                                color: AppTheme.appThemeColor,
+                                icon: EvaIcons.edit,
+                                onTap: () {
+                                  populatePaymentInfo(document.documentID);
+                                  _asyncInputDialog(context);
+                                },
+                              ),
+                            ],
+                            actionPane: SlidableScrollActionPane(),
+                            actionExtentRatio: 0.12,
+                            child: Card(
+                              // color: Colors.tealAccent[100],
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                  Colors.teal[300],
+                                  Colors.teal[200],
+                                  Colors.teal[100],
+                                  Colors.teal[50]
+                                ])),
+                                child: ListTile(
+                                  onTap: () {
+                                    print("clicked");
                                   },
-                                );
-                              },
-                            ),
-                            IconSlideAction(
-                              caption: 'Edit',
-                              color: AppTheme.appThemeColor,
-                              icon: EvaIcons.edit,
-                              
-                              onTap: () {
-                                populatePaymentInfo(document.documentID);
-                                _asyncInputDialog(context);
-                              },
-                            ),
-                          ],
-                          actionPane: SlidableScrollActionPane(),
-                          actionExtentRatio: 0.12,
-                          child: Card(
-                            color: Colors.tealAccent[100],
-                            child: ListTile(
-                              onTap: () {
-                                print("clicked");
-                              },
-                              title: Text(
-                                paymentText,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  title: Text(
+                                    paymentText,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
+                            ));
                       },
                     ).toList(),
                   );
