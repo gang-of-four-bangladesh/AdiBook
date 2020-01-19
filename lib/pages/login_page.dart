@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _phoneNumberController,
                     keyboardType: TextInputType.phone,
                     validator: Validations().validatePhoneNumber,
-                    maxLength: 10,
+                    maxLength: 11,
                     decoration: InputDecoration(
                         icon: Icon(FontAwesomeIcons.phoneAlt),
                         suffixIcon: Icon(

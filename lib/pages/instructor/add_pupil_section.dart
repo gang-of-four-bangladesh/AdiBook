@@ -164,7 +164,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
                         validator: validations.validatePhoneNumber,
-                        maxLength: 13,
+                        maxLength: 11,
                         decoration: InputDecoration(
                             icon: Icon(FontAwesomeIcons.phone),
                             suffixIcon: appData.user.userType == UserType.Pupil

@@ -74,6 +74,7 @@ class _PupilRegistrationState extends State<PupilRegistration> {
                           Container(
                             padding: EdgeInsets.only(bottom: 5.0),
                             child: TextField(
+                              maxLength: 11,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide:
