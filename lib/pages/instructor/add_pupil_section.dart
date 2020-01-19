@@ -245,7 +245,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   bool _validateInputs() {
     if (_formKey.currentState.validate()) {
       //If all data are correct then save data to out variables
-      if (this._dateOfBirth == null) {
+      if (this.dateOfBirthController.text == EmptyString) {
         _frequentWidgets.getSnackbar(
           message: 'Date of Birth is Required',
           context: context,
@@ -324,7 +324,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
         '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseNoController.text;
-    pupil.dateOfBirth = this._dateOfBirth;
+    pupil.dateOfBirth = TypeConversion.toDate(this.dateOfBirthController.text);
     pupil.eyeTest = _hadEyeTest;
     pupil.previousExperience = theoryRecordController.text;
     pupil.documentDownloadUrl = documentDownloadUrl;

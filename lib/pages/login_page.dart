@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextFormField(
                     controller: _phoneNumberController,
                     keyboardType: TextInputType.phone,
-                    validator: Validations().validatePhoneNumber,
+                    //validator: Validations().validatePhoneNumber,
                     maxLength: 11,
                     decoration: InputDecoration(
                         icon: Icon(FontAwesomeIcons.phoneAlt),
