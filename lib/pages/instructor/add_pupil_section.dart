@@ -43,7 +43,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   int countryCodeIndex;
   var _selectedCountry = CountryWisePhoneCode.keys.first;
   bool _autoValidate;
-  DateTime _dateOfBirth;
   String _attachedDocPath;
   @override
   void initState() {
@@ -68,7 +67,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     previousExperienceController.text = pupil.previousExperience;
     if (!mounted) return;
     setState(() {
-      this._dateOfBirth = pupil.dateOfBirth;
       this._hadEyeTest = pupil.eyeTest;
     });
   }

@@ -73,7 +73,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
               TextFormField(
                 controller: this.dateOfPaymentController,
                 readOnly: true,
-                onTap: _selectDateOfBirth,
+                onTap: _selectDateOfPayment,
                 decoration: InputDecoration(
                     icon: Icon(FontAwesomeIcons.calendar),
                     suffixIcon: Icon(
@@ -148,7 +148,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     _makeEmpty();
   }
 
-  Future<void> _selectDateOfBirth() async {
+  Future<void> _selectDateOfPayment() async {
     _dateOfPayment = this.dateOfPaymentController.text == EmptyString
         ? DateTime.now()
         : TypeConversion.toDate(this.dateOfPaymentController.text);

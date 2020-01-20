@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
@@ -239,7 +240,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                             icon: Icon(Icons.date_range),
                                             onPressed: appData.user.userType ==
                                                     UserType.Instructor
-                                                ? _selectDateOfpayment
+                                                ? _selectDateOfPayment
                                                 : null,
                                           )
                                         ],
@@ -492,22 +493,26 @@ class PaymentListSectionState extends State<PaymentListSection> {
     this._logger.info('For validity ${_formKey.currentState.validate()}');
     return _formKey.currentState.validate();
   }
-
-  Future<void> _selectDateOfpayment() async {
-    var selectedDateOfPayment = this._dateOfPayment;
-    this._dateOfPayment = await showDatePicker(
-      context: context,
-      initialDate: this._dateOfPayment,
-      firstDate: DateTime(1900, 8),
-      lastDate: DateTime(2101),
+  
+  Future<void> _selectDateOfPayment() async {
+    var displayDob = this._dateOfPayment.toString() == EmptyString
+        ? DateTime.now()
+        : TypeConversion.toDate(
+            TypeConversion.toDateDisplayFormat(this._dateOfPayment));
+    await DatePicker.showDatePicker(
+      context,
+      theme: DatePickerTheme(containerHeight: 210.0),
+      showTitleActions: true,
+      minTime: DateTime(1950, 1, 1),
+      maxTime: DateTime(2022, 12, 31),
+      currentTime: displayDob,
+      onConfirm: (date) {
+        setState(() {
+          this._dateOfPayment = date;
+          Navigator.of(context).pop(paymentdialogBox);
+          _asyncInputDialog(context);
+        });
+      },
     );
-    if (this._dateOfPayment == null)
-      this._dateOfPayment = selectedDateOfPayment;
-    setState(() {
-      //This is for update the UI. Please before remove check twice.
-      this._dateOfPayment = this._dateOfPayment;
-      Navigator.of(context).pop(paymentdialogBox);
-      _asyncInputDialog(context);
-    });
   }
 }

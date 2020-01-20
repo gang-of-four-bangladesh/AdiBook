@@ -98,20 +98,20 @@ class PupilPistSectionState extends State<PupilListSection> {
                       );
                     },
                   ),
-                  IconSlideAction(
-                    caption: 'Edit',
-                    color: AppTheme.appThemeColor,
-                    icon: EvaIcons.edit,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddPupilSection(userType: appData.user.userType),
-                        ),
-                      );
-                    },
-                  ),
+                  // IconSlideAction(
+                  //   caption: 'Edit',
+                  //   color: AppTheme.appThemeColor,
+                  //   icon: EvaIcons.edit,
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             AddPupilSection(userType: appData.user.userType),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ],
                 child: Container(
                     child: ListTile(
@@ -191,8 +191,8 @@ class PupilPistSectionState extends State<PupilListSection> {
   Future<void> _deleteData(String pupilId) async {
     Pupil pupil = Pupil(id: pupilId);
     String message = isNotNullOrEmpty(await pupil.delete())
-        ? 'Payment deleted successfully.'
-        : 'Payment deleted failed.';
+        ? 'Pupil deleted successfully.'
+        : 'Pupil deleted failed.';
     FrequentWidgets _frequentWidgets = FrequentWidgets();
     _frequentWidgets.getSnackbar(
       message: message,
