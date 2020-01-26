@@ -285,7 +285,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<String> _addCountryCodeToPhoneNumber() async {
     if (this._phoneNumberController.text.startsWith(this.countryCode))
       return this._phoneNumberController.text;
-    return "${this.countryCode}${this._phoneNumberController.text}";
+    return "+88"+"${this._phoneNumberController.text}";
   }
 
   Future<void> _onPressSendOTPCode(BuildContext context) async {
@@ -327,7 +327,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> _hasValidInput() async {
     var message =
         Validations().validatePhoneNumber(this._phoneNumberController.text);
-    if (message == EmptyString) return true;
+    if (message == null) return true;
     await FrequentWidgets().dialogBox(context, 'Phone number', message);
     return false;
   }

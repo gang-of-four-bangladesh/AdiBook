@@ -2,7 +2,7 @@ import 'package:adibook/core/constants.dart';
 
 class Validations {
   String validateRequired(String value) {
-    if (value.isEmpty) return 'Required field';
+    if (value.isEmpty || value == null) return 'Required field';
     return null;
   }
 
