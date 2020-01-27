@@ -1,4 +1,5 @@
 import 'package:adibook/core/app_data.dart';
+import 'package:adibook/core/constants.dart';
 import 'package:adibook/data/progress_plan_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -19,9 +20,9 @@ class _StatusSectionState extends State<StatusSection> {
   }
 
   void _initialize() async {
-    var _progress = await ProgressPlanManager().getProgressPercentage();
     var _progressDetails = await ProgressPlanManager().getProgressDetails(
         pupilId: appData.pupil.id, instructorId: appData.instructor.id);
+    var _progress = await ProgressPlanManager().getProgressPercentage(_progressDetails);
     if (!mounted) return;
     setState(() {
       this._progressPercentage = _progress;
@@ -34,7 +35,7 @@ class _StatusSectionState extends State<StatusSection> {
     return Column(
       children: <Widget>[
         CircularPercentIndicator(
-          radius: 60.0,
+          radius: 80.0,
           lineWidth: 10.0,
           animation: true,
           percent: this._progressPercentage,
@@ -53,7 +54,7 @@ class _StatusSectionState extends State<StatusSection> {
             ),
           ),
           circularStrokeCap: CircularStrokeCap.round,
-          progressColor: Colors.purple,
+          progressColor: AppTheme.appThemeColor,
         ),
         Container(
           child: Text(

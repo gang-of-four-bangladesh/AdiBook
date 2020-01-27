@@ -42,11 +42,10 @@ class ProgressPlanManager {
     return _data;
   }
 
-  Future<double> getProgressPercentage() async {
-    var progressDetails = await this.getProgressDetails();
+  Future<double> getProgressPercentage(List<ProgressPlanViewModel> progressDetails) async {   
     int ratingSum = 0;
     progressDetails.forEach((p) => ratingSum += p.status.index);
-    var percent = ratingSum / (progressPlanSubjects.length * 5);
+    var percent = ratingSum / (progressPlanSubjects.length * 4);
     this._logger.info(
         'Total Subjects are ${progressPlanSubjects.length}, and rating summation is $ratingSum.');
     return percent;

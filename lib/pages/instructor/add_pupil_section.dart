@@ -59,15 +59,16 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     this._logger.info(" Pupil Id >>>> : ${appData.pupil.id}");
     Pupil pupil = await Pupil(id: appData.pupil.id).getPupil();
     this._logger.info("Pupil Model >>>> : $pupil");
-    nameController.text = pupil.name;
-    addressController.text = pupil.address;
-    phoneController.text = pupil.phoneNumber;
-    drivingLicenseNoController.text = pupil.licenseNo;
-    theoryRecordController.text = pupil.theoryRecord;
-    previousExperienceController.text = pupil.previousExperience;
-    if (!mounted) return;
+    nameController.text = pupil.name == null ? EmptyString:pupil.name;
+    addressController.text = pupil.address == null ? EmptyString:pupil.address;
+    phoneController.text = pupil.phoneNumber == null ?EmptyString:pupil.phoneNumber;
+    drivingLicenseNoController.text = pupil.licenseNo == null ? EmptyString:pupil.licenseNo;
+    theoryRecordController.text = pupil.theoryRecord == null ? EmptyString:pupil.theoryRecord;
+    previousExperienceController.text = pupil.previousExperience == null ? EmptyString:pupil.previousExperience;
+    // this._hadEyeTest = pupil.eyeTest == null ?? FontAwesomeIcons.toggleOff;
+    //if (!mounted) return;
     setState(() {
-      this._hadEyeTest = pupil.eyeTest;
+      this._hadEyeTest = pupil.eyeTest == null ? false: true;
     });
   }
 
@@ -264,6 +265,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       this.theoryRecordController.text = EmptyString;
       this.previousExperienceController.text = EmptyString;
       this.phoneController.text = EmptyString;
+      this.drivingLicenseNoController.text = EmptyString;
       this.drivingLicenseController.text = EmptyString;
       this.dateOfBirthController.text =
           TypeConversion.toDateDisplayFormat(DateTime.now());
