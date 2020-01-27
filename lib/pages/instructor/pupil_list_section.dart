@@ -145,7 +145,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text("Phone Number"),
+                            Text(document[Pupil.PhoneNumberKey]),
                             Text(DateFormat('dd/mm/yyyy')
                                 .format(DateTime.now())),
                           ],
