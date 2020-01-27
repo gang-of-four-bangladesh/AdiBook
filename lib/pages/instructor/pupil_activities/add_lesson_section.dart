@@ -38,6 +38,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   String _pupilId;
   String _lessionId;
   OperationMode _operationMode;
+  DateTime displayLessonDateTime;
 
   _AddLessonSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -52,6 +53,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   @override
   void initState() {
     super.initState();
+    this._lessonTimeController.text =
+        TypeConversion.toDateTimeDisplayFormat(DateTime.now());
     _selectedPickupLocation = TripLocation.Home;
     _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.Automatic;
@@ -228,7 +231,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                           ),
                         ),
                         Container(
-                         color: Colors.white,
+                          color: Colors.white,
                           child: DropDownFormField(
                             titleText: 'Lesson Type',
                             hintText: 'Please choose one',
@@ -305,6 +308,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       id: this._lessionId,
       pupilId: this._pupilId,
       instructorId: appData.instructor.id,
+      lessonDate: TypeConversion.toDateTime(this._lessonTimeController.text),
       vehicleType: this._selectedVehicleType,
       lessonType: this._selectedlessionType,
       diaryNotes: this._diaryNotesController.text,
@@ -339,6 +343,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       _selectedDropOffLocation = TripLocation.Home;
       _selectedVehicleType = VehicleType.Automatic;
       _selectedlessionType = LessonType.Lession;
+      this._lessonTimeController.text =
+          TypeConversion.toDateTimeDisplayFormat(DateTime.now());
     });
   }
 
@@ -358,7 +364,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
           'Lesson date cannot be updated. You can delete this lesson and create a new one with the updated date.');
       return;
     }
-    var displayLessonTime = this._lessonTimeController.text == EmptyString
+    displayLessonDateTime = this._lessonTimeController.text == EmptyString
         ? DateTime.now()
         : TypeConversion.toDateTime(this._lessonTimeController.text);
     await DatePicker.showDateTimePicker(
@@ -367,7 +373,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
       maxTime: DateTime(2022, 12, 31),
-      currentTime: displayLessonTime,
+      currentTime: displayLessonDateTime,
       onConfirm: (date) {
         setState(() {
           this._lessonTimeController.text =

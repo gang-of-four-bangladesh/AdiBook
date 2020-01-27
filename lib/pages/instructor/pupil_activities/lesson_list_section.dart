@@ -64,7 +64,7 @@ class LessonListSectionState extends State<LessonListSection> {
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         if (snapshot.data.documents.length == 0)
-            return Card(
+          return Card(
               child: Center(
                   child: Text(
             "No Lesson Found",
@@ -141,8 +141,9 @@ class LessonListSectionState extends State<LessonListSection> {
                 actionExtentRatio: 0.12,
                 child: ListTile(
                   onTap: () {
-                    appData.user.userType == UserType.Pupil ??
-                        _updateData(document.documentID);
+                    appData.user.userType == UserType.Pupil
+                        ? _updateData(document.documentID)
+                        : null;
                   },
                   title: Container(
                     padding: EdgeInsets.all(10),
