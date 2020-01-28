@@ -219,13 +219,29 @@ class LessonListSectionState extends State<LessonListSection> {
                                                       TextStyle(fontSize: 14)),
                                               SizedBox(
                                                 height: 1,
-                                              ),
+                                              ),                                             
+                              //Null should be fix up   
+                                          //Text("Diary : "
+                                        //  +
+                                              //document[Lesson.DiaryNotesKey] ==
+                                                  //    null
+                                                 // ? EmptyString
+                                                //  : 
+                                                  //    document[Lesson
+                                                  //            .DiaryNotesKey]
+                                                        //  .toString(),
+                                            //  style: TextStyle(fontSize: 14)),
+                                             //  Text("Report : "+
+                                             // document[Lesson.ReportCardKey] ==
+                                                     // null
+                                                 // ? EmptyString
+                                                //  : ' ' +
+                                             //         document[Lesson
+                                                           //   .ReportCardKey]
+                                                         // .toString(),
+                                             // style: TextStyle(fontSize: 14)),
                                             ],
                                           ),
-                                          Text(
-                                              document[Lesson.DiaryNotesKey]
-                                                  .toString(),
-                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),

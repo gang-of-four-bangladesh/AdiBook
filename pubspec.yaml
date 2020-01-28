@@ -41,7 +41,7 @@ dependencies:
   flutter_slidable:
   
   firebase_messaging:
-  flutter_local_notifications: ^0.8.4
+  flutter_local_notifications:
   
   flutter:
     sdk: flutter

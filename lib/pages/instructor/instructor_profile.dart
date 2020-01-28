@@ -50,8 +50,9 @@ class _InstructorProfile extends State<InstructorProfile> {
     this._logger.info('Instructor date of birth ${instructor.dateOfBirth}');
     if (!mounted) return;
     setState(() {
-      this.dateOfBirthController.text =
-          TypeConversion.toDateDisplayFormat(instructor.dateOfBirth);
+      this.dateOfBirthController.text = instructor.dateOfBirth == null
+          ? TypeConversion.toDateDisplayFormat(DateTime.now())
+          : TypeConversion.toDateDisplayFormat(instructor.dateOfBirth);
     });
   }
 
@@ -79,7 +80,8 @@ class _InstructorProfile extends State<InstructorProfile> {
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
-        child: Center(
+        child: SingleChildScrollView(
+          child: Center(
           child: Column(
             children: <Widget>[
               Container(
@@ -138,6 +140,7 @@ class _InstructorProfile extends State<InstructorProfile> {
                 ),
               ),
             ],
+          ),
           ),
         ),
       ),

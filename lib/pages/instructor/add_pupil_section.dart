@@ -87,20 +87,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   Widget build(BuildContext context) {
     Validations validations = new Validations();
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        elevation: 4.0,
-        icon: const Icon(Icons.save),
-        backgroundColor: AppTheme.appThemeColor,
-        label: const Text(
-          'Save',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-          ),
-        ),
-        onPressed: _saveData,
-      ),
+      floatingActionButton: getFloatButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Form(
         key: _formKey,
@@ -397,5 +384,24 @@ class AddPupilSectionstate extends State<AddPupilSection> {
         );
       },
     );
+  }
+
+  Widget getFloatButton(){
+    if(appData.user.userType == UserType.Instructor)
+   return FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save),
+        backgroundColor: AppTheme.appThemeColor,
+        label: const Text(
+          'Save',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+          ),
+        ),
+        onPressed: _saveData,
+      
+      );
   }
 }

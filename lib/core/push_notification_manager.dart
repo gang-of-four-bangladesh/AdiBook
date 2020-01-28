@@ -44,7 +44,7 @@ class FirebaseCloudMessaging {
     var body = data['body'];
     var android = new AndroidNotificationDetails(
         'com.gofbd.adibook', 'gofbd', 'default',
-        importance: Importance.Max, priority: Priority.High);
+        importance: Importance.Max, priority: Priority.High, enableVibration: true,ongoing: true);
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android, iOS);
     await _localNotification.show(0, title, body, platform);

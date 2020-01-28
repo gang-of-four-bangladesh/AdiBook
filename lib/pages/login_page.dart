@@ -120,17 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: RaisedButton(
-                      onPressed: () {
-                        _onPressSendOTPCode(_context);
-                      },
-                      elevation: 1,
-                      color: AppTheme.appThemeColor.withOpacity(0.6),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+                    child: this._showProgressBar == false
+                        ? SizedBox(child: saveButton(_context))
+                        : Container(),
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -260,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _codeSent(String verificationId, int forceResendingToken,
       BuildContext context) async {
-    await _displayProgressBar(false);
+    //await _displayProgressBar(false);
     this.verificationId = verificationId;
     FrequentWidgets().getSnackbar(
       message:
@@ -285,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<String> _addCountryCodeToPhoneNumber() async {
     if (this._phoneNumberController.text.startsWith(this.countryCode))
       return this._phoneNumberController.text;
-    return "+88"+"${this._phoneNumberController.text}";
+    return "+88" + "${this._phoneNumberController.text}";
   }
 
   Future<void> _onPressSendOTPCode(BuildContext context) async {
@@ -330,5 +322,19 @@ class _LoginPageState extends State<LoginPage> {
     if (message == null) return true;
     await FrequentWidgets().dialogBox(context, 'Phone number', message);
     return false;
+  }
+
+  Widget saveButton(BuildContext _context) {
+    return RaisedButton(
+      onPressed: () {
+        if (this._showProgressBar == false) _onPressSendOTPCode(_context);
+      },
+      elevation: 1,
+      color: AppTheme.appThemeColor.withOpacity(0.6),
+      child: Text(
+        "Login",
+        style: TextStyle(color: Colors.white),
+      ),
+    );
   }
 }

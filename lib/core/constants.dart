@@ -111,7 +111,7 @@ enum VehicleType {
 }
 enum LessonType {
   None,
-  Lession,
+  Lesson,
   DrivingTest,
   MockTest,
   PassPlus,

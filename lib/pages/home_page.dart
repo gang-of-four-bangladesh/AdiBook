@@ -118,7 +118,8 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       key: this._scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -193,7 +194,7 @@ class _HomePageState extends State<HomePage>
         controller: _tabController,
         children: this._tabWidgets,
       ),
-    );
+    ));
   }
 
   void _getTabs() {
@@ -228,7 +229,7 @@ class _HomePageState extends State<HomePage>
                 ),
                 Text(
                   appData.user.userType == UserType.Instructor
-                      ? "${appData.instructor.name}\n\n${appData.instructor.phoneNumber}"
+                      ? "${appData.instructor.name == null ? "Add Name" : appData.instructor.name}\n\n${appData.instructor.phoneNumber}"
                       : "${appData.pupil.name}\n\n${appData.pupil.phoneNumber}",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),

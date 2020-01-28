@@ -58,7 +58,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     _selectedPickupLocation = TripLocation.Home;
     _selectedDropOffLocation = TripLocation.Home;
     _selectedVehicleType = VehicleType.Automatic;
-    _selectedlessionType = LessonType.Lession;
+    _selectedlessionType = LessonType.Lesson;
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];
     this._operationMode =
@@ -112,6 +112,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
               body:
                   'You have a driving class with ${instructor.name} on ${this._lessonTimeController.text} for ${this._lessonDurationController.text} minutes.',
             );
+            _makeEmpty();
           }
         },
       ),
@@ -330,7 +331,6 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       message: message,
       context: context,
     );
-    _makeEmpty();
   }
 
   void _makeEmpty() {
@@ -342,13 +342,13 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       _selectedPickupLocation = TripLocation.Home;
       _selectedDropOffLocation = TripLocation.Home;
       _selectedVehicleType = VehicleType.Automatic;
-      _selectedlessionType = LessonType.Lession;
+      _selectedlessionType = LessonType.Lesson;
       this._lessonTimeController.text =
           TypeConversion.toDateTimeDisplayFormat(DateTime.now());
     });
   }
 
-  bool _validateInputs() {
+    bool _validateInputs() {
     return _formKey.currentState.validate();
   }
 
