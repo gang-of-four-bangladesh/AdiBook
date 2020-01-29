@@ -71,9 +71,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
     return Container(
         child: Column(
       children: <Widget>[
-        SizedBox(
-          height: 15,
-        ),
         Expanded(
           child: StreamBuilder<QuerySnapshot>(
             stream: _querySnapshot,

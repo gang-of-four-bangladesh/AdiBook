@@ -31,7 +31,7 @@ class FirebaseCloudMessaging {
         _logger.info("Settings registered: $settings");
       },
     );
-    var android = AndroidInitializationSettings('logo');
+    var android = AndroidInitializationSettings('@asstes/images/ic_notification.jpg');
     var ios = IOSInitializationSettings();
     var platform = InitializationSettings(android, ios);
     _localNotification.initialize(platform);

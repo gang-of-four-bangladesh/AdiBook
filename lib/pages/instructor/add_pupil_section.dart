@@ -59,17 +59,19 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     this._logger.info(" Pupil Id >>>> : ${appData.pupil.id}");
     Pupil pupil = await Pupil(id: appData.pupil.id).getPupil();
     this._logger.info("Pupil Model >>>> : $pupil");
-    nameController.text = pupil.name == null ? EmptyString:pupil.name;
-    addressController.text = pupil.address == null ? EmptyString:pupil.address;
-    phoneController.text = pupil.phoneNumber == null ?EmptyString:pupil.phoneNumber;
-    drivingLicenseNoController.text = pupil.licenseNo == null ? EmptyString:pupil.licenseNo;
-    theoryRecordController.text = pupil.theoryRecord == null ? EmptyString:pupil.theoryRecord;
-    previousExperienceController.text = pupil.previousExperience == null ? EmptyString:pupil.previousExperience;
-    // this._hadEyeTest = pupil.eyeTest == null ?? FontAwesomeIcons.toggleOff;
-    //if (!mounted) return;
-    setState(() {
-      this._hadEyeTest = pupil.eyeTest == null ? false: true;
-    });
+    nameController.text = pupil.name == null ? EmptyString : pupil.name;
+    addressController.text =
+        pupil.address == null ? EmptyString : pupil.address;
+    phoneController.text =
+        pupil.phoneNumber == null ? EmptyString : pupil.phoneNumber;
+    drivingLicenseNoController.text =
+        pupil.licenseNo == null ? EmptyString : pupil.licenseNo;
+    theoryRecordController.text =
+        pupil.theoryRecord == null ? EmptyString : pupil.theoryRecord;
+    previousExperienceController.text = pupil.previousExperience == null
+        ? EmptyString
+        : pupil.previousExperience;
+    this.eyeTestController.text = pupil.eyeTest ? "TESTED" : "NOT TESTED";
   }
 
   String phoneNumber;
@@ -181,7 +183,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       TextFormField(
                         controller: this.dateOfBirthController,
                         readOnly: true,
-                        onTap: _selectDateOfBirth,
+                        onTap: appData.user.userType == UserType.Instructor
+                            ? _selectDateOfBirth
+                            : null,
                         decoration: InputDecoration(
                             icon: Icon(FontAwesomeIcons.calendar),
                             labelText: "Birth Date"),
@@ -189,11 +193,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       TextFormField(
                         controller: this.eyeTestController,
                         readOnly: true,
-                        onTap: _onEyeTestChecked,
+                        onTap: appData.user.userType == UserType.Instructor ? _onEyeTestChecked:null,
                         decoration: InputDecoration(
                           icon: Icon(FontAwesomeIcons.eye),
                           labelText: "Eye Test",
-                          suffixIcon: Icon(
+                          suffixIcon: appData.user.userType == UserType.Instructor ? Icon(
                             this._hadEyeTest
                                 ? FontAwesomeIcons.toggleOn
                                 : FontAwesomeIcons.toggleOff,
@@ -201,7 +205,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                 ? Colors.green[600]
                                 : Colors.grey[600],
                             size: 30,
-                          ),
+                          ): null,
                         ),
                       ),
                       TextFormField(
@@ -300,7 +304,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   Future<void> _saveData() async {
     if (!_validateInputs()) return;
-    var id = '+88'+'${phoneController.text}';
+    var id = '+88' + '${phoneController.text}';
     StorageUpload storageUpload = StorageUpload();
     var documentDownloadUrl =
         await storageUpload.uploadDrivingLicenseFile(this._attachedDocPath);
@@ -386,9 +390,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     );
   }
 
-  Widget getFloatButton(){
-    if(appData.user.userType == UserType.Instructor)
-   return FloatingActionButton.extended(
+  Widget getFloatButton() {
+    if (appData.user.userType == UserType.Instructor)
+      return FloatingActionButton.extended(
         elevation: 4.0,
         icon: const Icon(Icons.save),
         backgroundColor: AppTheme.appThemeColor,
@@ -401,7 +405,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
           ),
         ),
         onPressed: _saveData,
-      
       );
   }
 }

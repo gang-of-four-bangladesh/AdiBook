@@ -140,11 +140,6 @@ class LessonListSectionState extends State<LessonListSection> {
                 actionPane: SlidableScrollActionPane(),
                 actionExtentRatio: 0.12,
                 child: ListTile(
-                  onTap: () {
-                    appData.user.userType == UserType.Pupil
-                        ? _updateData(document.documentID)
-                        : null;
-                  },
                   title: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
@@ -218,28 +213,16 @@ class LessonListSectionState extends State<LessonListSection> {
                                                   style:
                                                       TextStyle(fontSize: 14)),
                                               SizedBox(
-                                                height: 1,
-                                              ),                                             
-                              //Null should be fix up   
-                                          //Text("Diary : "
-                                        //  +
-                                              //document[Lesson.DiaryNotesKey] ==
-                                                  //    null
-                                                 // ? EmptyString
-                                                //  : 
-                                                  //    document[Lesson
-                                                  //            .DiaryNotesKey]
-                                                        //  .toString(),
-                                            //  style: TextStyle(fontSize: 14)),
-                                             //  Text("Report : "+
-                                             // document[Lesson.ReportCardKey] ==
-                                                     // null
-                                                 // ? EmptyString
-                                                //  : ' ' +
-                                             //         document[Lesson
-                                                           //   .ReportCardKey]
-                                                         // .toString(),
-                                             // style: TextStyle(fontSize: 14)),
+                                                height: .2,
+                                              ),
+                                                document[Lesson.DiaryNotesKey] == null || document[Lesson.DiaryNotesKey].toString() == EmptyString ? Container():
+                                              Text("Diary : " + document[Lesson.DiaryNotesKey].toString(),
+                                            style: TextStyle(fontSize: 14),
+                                              ),                                                
+                                            document[Lesson.ReportCardKey] == null || document[Lesson.ReportCardKey].toString() == EmptyString ? Container():
+                                              Text("Report : " + document[Lesson.ReportCardKey].toString(),
+                                              style: TextStyle(fontSize: 14),
+                                              )
                                             ],
                                           ),
                                         ],
@@ -250,7 +233,13 @@ class LessonListSectionState extends State<LessonListSection> {
                               ),
                               Checkbox(
                                 value: document[Lesson.HasAcknowledgedKey],
-                                onChanged: (check) {},
+                                onChanged: (check) {
+                                  document[Lesson.HasAcknowledgedKey] == false
+                                      ? appData.user.userType == UserType.Pupil
+                                          ? _updateData(document.documentID)
+                                          : null
+                                      : null;
+                                },
                                 activeColor: AppTheme.appThemeColor,
                               ),
                             ],

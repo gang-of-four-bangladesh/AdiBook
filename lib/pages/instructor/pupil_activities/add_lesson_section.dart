@@ -110,7 +110,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
               userId: this._pupilId,
               title: 'Driving Lesson Schedule',
               body:
-                  'You have a driving class with ${instructor.name} on ${this._lessonTimeController.text} for ${this._lessonDurationController.text} minutes.',
+                  'You have a driving class with ${instructor.name == null || instructor.name == EmptyString ? instructor.phoneNumber : instructor.name} on ${this._lessonTimeController.text} for ${this._lessonDurationController.text} minutes.',
             );
             _makeEmpty();
           }
@@ -348,7 +348,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     });
   }
 
-    bool _validateInputs() {
+  bool _validateInputs() {
     return _formKey.currentState.validate();
   }
 
