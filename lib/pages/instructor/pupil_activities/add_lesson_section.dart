@@ -371,8 +371,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       context,
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
-      minTime: DateTime(1950, 1, 1),
-      maxTime: DateTime(2022, 12, 31),
+      minTime: DateTime(DateTime.now().year, DateTime.now().month,DateTime.now().day),
+      maxTime: DateTime(2050, 12, 31),
       currentTime: displayLessonDateTime,
       onConfirm: (date) {
         setState(() {

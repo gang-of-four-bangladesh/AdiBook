@@ -273,7 +273,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
-      maxTime: DateTime(2022, 12, 31),
+      maxTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
@@ -312,7 +312,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     Pupil pupil = Pupil(id: id);
     pupil.name = nameController.text;
     pupil.phoneNumber =
-        '${CountryWisePhoneCode[_selectedCountry]}${phoneController.text}';
+        '+88'+'${phoneController.text}';
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseNoController.text;
     pupil.dateOfBirth = TypeConversion.toDate(this.dateOfBirthController.text);

@@ -157,7 +157,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
-      maxTime: DateTime(2022, 12, 31),
+      maxTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
       currentTime: _dateOfPayment,
       onConfirm: (date) {
         setState(() {

@@ -44,6 +44,14 @@ class UserManager {
     return true;
   }
 
+  Future<bool> pupilExists(String id, UserType userType) async {
+    var pupil = await Pupil(id: id).get();
+    if (!pupil.exists)
+      return false;
+    else
+      return true;
+  }
+
   Future<void> createUser(
       {String id,
       UserType userType = UserType.Instructor,
@@ -68,9 +76,12 @@ class UserManager {
       userToken: token,
       isVerified: true,
     ).add();
-    userType == UserType.Instructor
-        ? await Instructor(id: id, phoneNumber: id).add()
-        : await Pupil(id: id, phoneNumber: id).add();
+    if (userType == UserType.Instructor) {
+      await Instructor(id: id, phoneNumber: id).add();
+    } else {
+      if(!await pupilExists(id,userType))
+      await Pupil(id: id, phoneNumber: id).add();
+    }
     this._logger.info('User of type $userType with $id created.');
   }
 

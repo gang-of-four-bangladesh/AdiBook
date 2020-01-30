@@ -232,7 +232,7 @@ class _InstructorProfile extends State<InstructorProfile> {
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
-      maxTime: DateTime(2022, 12, 31),
+      maxTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
