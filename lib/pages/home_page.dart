@@ -229,8 +229,8 @@ class _HomePageState extends State<HomePage>
                 ),
                 Text(
                   appData.user.userType == UserType.Instructor
-                      ? "${appData.instructor.name == null || appData.instructor.name == EmptyString ? "Add Name" : appData.instructor.name}\n\n${appData.instructor.phoneNumber}"
-                      : "${appData.pupil.name = null || appData.pupil.name == EmptyString ? "Add Name" : appData.pupil.name}\n\n${appData.pupil.phoneNumber}",
+                      ? "${appData.instructor.name == null || appData.instructor.name == EmptyString ? 'Add Name' : appData.instructor.name}\n\n${appData.instructor.phoneNumber}"
+                      : "${appData.pupil.name == null || appData.pupil.name == EmptyString ? 'Add Name' : appData.pupil.name}\n\n${appData.pupil.phoneNumber}",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],

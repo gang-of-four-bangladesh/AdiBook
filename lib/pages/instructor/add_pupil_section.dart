@@ -51,7 +51,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     this._hadEyeTest = false;
     this.dateOfBirthController.text =
         TypeConversion.toDateDisplayFormat(DateTime.now());
-    this.eyeTestController.text = 'TESTED';
+    this.eyeTestController.text = 'NOT TESTED';
     if (appData.user.userType == UserType.Pupil) populatePupilInfo();
   }
 

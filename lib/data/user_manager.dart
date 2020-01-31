@@ -79,7 +79,8 @@ class UserManager {
     if (userType == UserType.Instructor) {
       await Instructor(id: id, phoneNumber: id).add();
     } else {
-      if(!await pupilExists(id,userType))
+      var result = await pupilExists(id,userType);
+      if(result == false)
       await Pupil(id: id, phoneNumber: id).add();
     }
     this._logger.info('User of type $userType with $id created.');
