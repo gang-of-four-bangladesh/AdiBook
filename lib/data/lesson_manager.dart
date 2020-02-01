@@ -31,7 +31,7 @@ class LessonManager {
     );
     var snap = await lessonEvent.get();
     if (snap.exists) await lessonEvent.delete();
-    return isNotNullOrEmpty(await lessonEvent.add());
+    return isNotNullOrEmpty(await lessonEvent.update());
   }
 
   Future deleteLesson({
@@ -45,11 +45,13 @@ class LessonManager {
       id: lessonId,
     ).getLession();
     await lesson.delete();
+    var pupil = await Pupil(id: lesson.pupilId).getPupil();
     LessonEvent lessonEvent = LessonEvent(
         id: DateFormat(_lessonIdDateFormat).format(lesson.lessonDate),
         day: lesson.lessonDate.day.toString(),
         instructorId: lesson.instructorId,
         lessonAt: lesson.lessonDate,
+        pupilName: pupil.name,
         pupilId: lesson.pupilId);
     var snap = await lessonEvent.get();
     if (snap.exists) {

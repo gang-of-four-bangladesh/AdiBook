@@ -26,7 +26,7 @@ class LessonEvent {
   DateTime lessonAt;
   String pupilId;
 
-  Map<String, dynamic> _toJson() {
+  Map<String, dynamic> _toJson({bool isRemove = false}) {
     var ref = Firestore.instance
         .collection(FirestorePath.PupilCollection)
         .document(this.pupilId);
@@ -34,6 +34,13 @@ class LessonEvent {
     if (isNotNullOrEmpty(pupilName)) json[PupilNameKey] = pupilName;
     if (isNotNullOrEmpty(lessonAt)) json[LessonTimeKey] = lessonAt.toUtc();
     if (isNotNullOrEmpty(ref)) json[PupilReferenceTaggedAtKey] = ref;
+    if (isRemove)
+      return {
+        this.day: FieldValue.arrayRemove(
+          [json],
+        ),
+      };
+
     return {
       this.day: FieldValue.arrayUnion(
         [json],
@@ -89,6 +96,6 @@ class LessonEvent {
     await Firestore.instance
         .collection(path)
         .document(this.id)
-        .updateData(json);
+        .updateData(this._toJson(isRemove: true));
   }
 }
