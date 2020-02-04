@@ -24,7 +24,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   PaymentMode _selectedPaymentMode;
   DateTime _dateOfPayment;
   String _pupilId;
-  String _lessionId;
   String _paymentId;
   OperationMode _operationMode;
   TextEditingController dateOfPaymentController = TextEditingController();
@@ -40,8 +39,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
         TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
     _selectedPaymentMode = PaymentMode.Cash;
-    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];    
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey]; 
     this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     this._operationMode =
         isNullOrEmpty(this._paymentId) ? OperationMode.New : OperationMode.Edit;
