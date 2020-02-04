@@ -5,6 +5,7 @@ import 'package:adibook/data/lesson_manager.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/home_page.dart';
+import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/payment_list_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -130,7 +131,7 @@ class LessonListSectionState extends State<LessonListSection> {
                           builder: (context) => HomePage(
                             sectionType: SectionType.InstructorActivityForPupil,
                             userType: UserType.Instructor,
-                            toDisplay: PaymentListSection(),
+                            toDisplay: AddLessonSection(),
                           ),
                         ),
                       );
@@ -139,7 +140,16 @@ class LessonListSectionState extends State<LessonListSection> {
                 ],
                 actionPane: SlidableScrollActionPane(),
                 actionExtentRatio: 0.12,
-                child: ListTile(
+                child: Card(
+                            // color: Colors.tealAccent[100],
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                  gradient: LinearGradient(colors: [
+                                Color(0xFFB2DFDB),
+                                Color(0xFFE0F2F1)
+                              ])), 
+                              child:ListTile(
                   title: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
@@ -249,7 +259,18 @@ class LessonListSectionState extends State<LessonListSection> {
                     ),
                   ),
                 ),
-              ): ListTile(
+                ),
+                )
+              ):   Card(
+                            // color: Colors.tealAccent[100],
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                  gradient: LinearGradient(colors: [
+                                Color(0xFFB2DFDB),
+                                Color(0xFFE0F2F1)
+                              ])), 
+                              child:ListTile(
                   title: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
@@ -357,6 +378,8 @@ class LessonListSectionState extends State<LessonListSection> {
                         ),
                       ],
                     ),
+                  ),
+                  ),
                   ),
                 );
             },

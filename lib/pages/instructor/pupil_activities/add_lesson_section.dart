@@ -31,6 +31,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TextEditingController _uploadLicenseController;
   FrequentWidgets _frequentWidgets;
   bool _autoValidate = false;
+  bool _hasAcknoledgment = false;
   TripLocation _selectedPickupLocation;
   TripLocation _selectedDropOffLocation;
   LessonType _selectedlessionType;
@@ -76,6 +77,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     this._lessonDurationController.text = lesson.lessonDuration.toString();
     this._diaryNotesController.text = lesson.diaryNotes;
     this._reportCardController.text = lesson.reportCard;
+    this._hasAcknoledgment = lesson.hasAcknowledged;
     if (!mounted) return;
     setState(() {
       this._selectedPickupLocation = lesson.pickupLocation;
@@ -306,19 +308,19 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     }
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
-      id: this._lessionId,
-      pupilId: this._pupilId,
-      instructorId: appData.instructor.id,
-      lessonDate: TypeConversion.toDateTime(this._lessonTimeController.text),
-      vehicleType: this._selectedVehicleType,
-      lessonType: this._selectedlessionType,
-      diaryNotes: this._diaryNotesController.text,
-      reportCard: this._reportCardController.text,
-      documentDownloadUrl: documentDownloadUrl,
-      pickupLocation: this._selectedPickupLocation,
-      dropOffLocation: this._selectedDropOffLocation,
-      lessonDuration: _lessionDuration,
-    );
+        id: this._lessionId,
+        pupilId: this._pupilId,
+        instructorId: appData.instructor.id,
+        lessonDate: TypeConversion.toDateTime(this._lessonTimeController.text),
+        vehicleType: this._selectedVehicleType,
+        lessonType: this._selectedlessionType,
+        diaryNotes: this._diaryNotesController.text,
+        reportCard: this._reportCardController.text,
+        documentDownloadUrl: documentDownloadUrl,
+        pickupLocation: this._selectedPickupLocation,
+        dropOffLocation: this._selectedDropOffLocation,
+        lessonDuration: _lessionDuration,
+        hasAcknowledged: this._hasAcknoledgment);
     String message;
     lesson.id == null
         ? message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
@@ -371,7 +373,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       context,
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
-      minTime: DateTime(DateTime.now().year, DateTime.now().month,DateTime.now().day),
+      minTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       maxTime: DateTime(2050, 12, 31),
       currentTime: displayLessonDateTime,
       onConfirm: (date) {

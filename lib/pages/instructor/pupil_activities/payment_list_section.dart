@@ -4,6 +4,8 @@ import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/formatter.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/payment.dart';
+import 'package:adibook/pages/home_page.dart';
+import 'package:adibook/pages/instructor/pupil_activities/add_payment_section.dart';
 import 'package:adibook/pages/validation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -54,7 +56,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
 
   void _loadPaymentsData() async {
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
-    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     if (isNullOrEmpty(this._pupilId)) return;
     if (!mounted) return;
     setState(() {
@@ -143,8 +144,22 @@ class PaymentListSectionState extends State<PaymentListSection> {
                               color: AppTheme.appThemeColor,
                               icon: EvaIcons.edit,
                               onTap: () {
-                                populatePaymentInfo(document.documentID);
-                                _asyncInputDialog(context);
+                                appData.contextualInfo = {
+                        DataSharingKeys.PupilIdKey: this._pupilId,
+                        DataSharingKeys.PaymentIdKey:document.documentID
+                      };
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(
+                            sectionType: SectionType.InstructorActivityForPupil,
+                            userType: UserType.Instructor,
+                            toDisplay: AddPaymentSection(),
+                          ),
+                        ),
+                      );
+                                // populatePaymentInfo(document.documentID);
+                                // _asyncInputDialog(context);
                               },
                             ),
                           ],

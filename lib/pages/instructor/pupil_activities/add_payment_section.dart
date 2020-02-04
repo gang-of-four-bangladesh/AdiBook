@@ -23,7 +23,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   TextEditingController _amountController;
   PaymentMode _selectedPaymentMode;
   DateTime _dateOfPayment;
+  String _pupilId;
+  String _lessionId;
   String _paymentId;
+  OperationMode _operationMode;
   TextEditingController dateOfPaymentController = TextEditingController();
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -37,6 +40,28 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
         TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
     _selectedPaymentMode = PaymentMode.Cash;
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._lessionId = appData.contextualInfo[DataSharingKeys.LessonIdKey];    
+    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
+    this._operationMode =
+        isNullOrEmpty(this._paymentId) ? OperationMode.New : OperationMode.Edit;
+    if (this._operationMode == OperationMode.Edit) populatePaymentInfo(this._paymentId);
+  }
+
+  void populatePaymentInfo(String paymentId) async {
+    Payment payment = await Payment(
+            pupilId: this._pupilId,
+            instructorId: appData.instructor.id,
+            id: paymentId)
+        .getPayment();
+    this._logger.info("Payment Model >>>> : ${this._paymentId}");
+    this._amountController.text = payment.amount.toString();
+    if (!mounted) return;
+    setState(() {
+      this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(payment.paymentDate);;
+      this._selectedPaymentMode = payment.paymentType;
+      this._paymentId = paymentId;
+    });
   }
 
   @override
@@ -157,7 +182,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
-      maxTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      maxTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       currentTime: _dateOfPayment,
       onConfirm: (date) {
         setState(() {
@@ -177,10 +203,10 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     });
   }
 
-  bool _validateInputs() { 
+  bool _validateInputs() {
     _dateOfPayment = this.dateOfPaymentController.text == EmptyString
         ? DateTime.now()
-        : TypeConversion.toDate(this.dateOfPaymentController.text);   
+        : TypeConversion.toDate(this.dateOfPaymentController.text);
     if (_dateOfPayment == null) {
       _frequentWidgets.getSnackbar(
         message: 'Date of Payment is Required',
