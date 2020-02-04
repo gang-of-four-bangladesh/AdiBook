@@ -10,7 +10,7 @@ class Pupil {
   static const String LicenseKey = 'lno';
   static const String DateOfBirthKey = 'dob';
   static const String EyeTestKey = 'ets';
-  static const String TheoryRecordKey = 'thr';  
+  static const String TheoryRecordKey = 'thr';
   static const String DocumentDownloadUrlKey = 'url';
   static const String PreviousExperiencehKey = 'pex';
   static const String CreatedAtKey = 'cat';
@@ -51,9 +51,12 @@ class Pupil {
     if (isNotNullOrEmpty(licenseNo)) json[LicenseKey] = licenseNo;
     if (isNotNullOrEmpty(eyeTest)) json[EyeTestKey] = eyeTest;
     if (isNotNullOrEmpty(theoryRecord)) json[TheoryRecordKey] = theoryRecord;
-    if (isNotNullOrEmpty(documentDownloadUrl)) json[DocumentDownloadUrlKey] = documentDownloadUrl;
-    if (isNotNullOrEmpty(previousExperience)) json[PreviousExperiencehKey] = previousExperience;
-    if (isNotNullOrEmpty(dateOfBirth)) json[DateOfBirthKey] = dateOfBirth.toUtc();
+    if (isNotNullOrEmpty(documentDownloadUrl))
+      json[DocumentDownloadUrlKey] = documentDownloadUrl;
+    if (isNotNullOrEmpty(previousExperience))
+      json[PreviousExperiencehKey] = previousExperience;
+    if (isNotNullOrEmpty(dateOfBirth))
+      json[DateOfBirthKey] = dateOfBirth.toUtc();
     if (isNotNullOrEmpty(createdAt)) json[CreatedAtKey] = createdAt.toUtc();
     if (isNotNullOrEmpty(updatedAt)) json[UpdatedAtKey] = updatedAt.toUtc();
     return json;
@@ -125,9 +128,17 @@ class Pupil {
   }
 
   Future<void> delete() async {
-    return Firestore.instance
-        .collection(FirestorePath.PupilCollection)
-        .document(this.id)
-        .delete();
+    try {
+      this.updatedAt = DateTime.now();
+      Firestore.instance
+          .collection(FirestorePath.PupilCollection)
+          .document(this.id)
+          .delete();
+      this._logger.info('Pupil deleted successfully.');
+      return this;
+    } catch (e) {
+      this._logger.shout('Pupil update failed. Reason $e');
+      return null;
+    }
   }
 }

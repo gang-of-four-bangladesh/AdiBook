@@ -1,5 +1,6 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:adibook/core/formatter.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
@@ -97,64 +98,78 @@ class PupilPistSectionState extends State<PupilListSection> {
                     },
                   ),
                 ],
-                child: Container(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 33,
-                      child: Container(
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 42,
-                        ),
+                child: Container(                  
+                      margin: EdgeInsets.only(left: 2,right: 2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5)
                       ),
-                      backgroundColor: AppTheme.appThemeColor,
-                    ),
-                    contentPadding:
-                        EdgeInsets.only(left: 0, right: 10, top: 15),
-                    subtitle: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            document[Pupil.NameKey],
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                  child: Card(
+                    // color: Colors.tealAccent[100],
+                    child: Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Color(0xFFB2DFDB), Color(0xFFE0F2F1)])),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 33,
+                          child: Container(
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 42,
+                            ),
                           ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          backgroundColor: AppTheme.appThemeColor,
+                        ),
+                        contentPadding:
+                            EdgeInsets.all(5),
+                        subtitle: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Phone Number"),
-                              Text(DateFormat('dd/mm/yyyy')
-                                  .format(DateTime.now())),
+                              Text(
+                                document[Pupil.NameKey],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(document.documentID),
+                                  Text(DateFormat('MMM dd, yyyy')
+                                      .format(DateTime.now())),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                color: Colors.grey[300],
+                                height: .5,
+                              ),
                             ],
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            color: Colors.grey[300],
-                            height: .5,
-                          ),
-                        ],
+                        ),
+                        onTap: () {
+                          appData.contextualInfo = {
+                            DataSharingKeys.PupilIdKey: document.documentID
+                          };
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                sectionType:
+                                    SectionType.InstructorActivityForPupil,
+                                userType: UserType.Instructor,
+                                toDisplay: LessonListSection(),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    onTap: () {
-                      appData.contextualInfo = {
-                        DataSharingKeys.PupilIdKey: document.documentID
-                      };
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(
-                            sectionType: SectionType.InstructorActivityForPupil,
-                            userType: UserType.Instructor,
-                            toDisplay: LessonListSection(),
-                          ),
-                        ),
-                      );
-                    },
                   ),
                 ),
               );

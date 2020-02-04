@@ -74,6 +74,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
             id: _lessionId)
         .getLession();
     this._logger.info("Leeson Model >>>> : $_lessionId");
+    this._lessonTimeController.text = TypeConversion.toDateTimeDisplayFormat(lesson.lessonDate);
     this._lessonDurationController.text = lesson.lessonDuration.toString();
     this._diaryNotesController.text = lesson.diaryNotes;
     this._reportCardController.text = lesson.reportCard;
