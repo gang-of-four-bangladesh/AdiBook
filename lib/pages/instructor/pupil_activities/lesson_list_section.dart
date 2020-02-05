@@ -74,314 +74,397 @@ class LessonListSectionState extends State<LessonListSection> {
         return ListView(
           children: snapshot.data.documents.map(
             (DocumentSnapshot document) {
-           return appData.user.userType == UserType.Instructor ? Slidable(
-                actions: <Widget>[
-                  IconSlideAction(
-                    caption: 'Remove',
-                    color: AppTheme.appThemeColor,
-                    icon: EvaIcons.trash,
-                    onTap: () async {
-                      showDialog<ConfirmAction>(
-                        context: context,
-                        barrierDismissible:
-                            false, // user must tap button for close dialog!
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Delete"),
-                            content: Text("Do you want to delete ?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: const Text('CANCEL'),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(ConfirmAction.CANCEL);
-                                },
-                              ),
-                              FlatButton(
-                                child: const Text('ACCEPT'),
-                                onPressed: () async {
-                                  Navigator.of(context)
-                                      .pop(ConfirmAction.ACCEPT);
-                                  LessonManager().deleteLesson(
-                                    instructorId: appData.instructor.id,
-                                    pupilId: this._pupilId,
-                                    lessonId: document.documentID,
+              return appData.user.userType == UserType.Instructor
+                  ? Slidable(
+                      actions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Remove',
+                            color: AppTheme.appThemeColor,
+                            icon: EvaIcons.trash,
+                            onTap: () async {
+                              showDialog<ConfirmAction>(
+                                context: context,
+                                barrierDismissible:
+                                    false, // user must tap button for close dialog!
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Delete"),
+                                    content: Text("Do you want to delete ?"),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: const Text('CANCEL'),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(ConfirmAction.CANCEL);
+                                        },
+                                      ),
+                                      FlatButton(
+                                        child: const Text('ACCEPT'),
+                                        onPressed: () async {
+                                          Navigator.of(context)
+                                              .pop(ConfirmAction.ACCEPT);
+                                          LessonManager().deleteLesson(
+                                            instructorId: appData.instructor.id,
+                                            pupilId: this._pupilId,
+                                            lessonId: document.documentID,
+                                          );
+                                          _loadLessonsData();
+                                        },
+                                      )
+                                    ],
                                   );
-                                  _loadLessonsData();
                                 },
+                              );
+                            },
+                          ),
+                          IconSlideAction(
+                            caption: 'Edit',
+                            color: AppTheme.appThemeColor,
+                            icon: EvaIcons.edit,
+                            onTap: () {
+                              appData.contextualInfo = {
+                                DataSharingKeys.LessonIdKey:
+                                    document.documentID,
+                                DataSharingKeys.PupilIdKey: this._pupilId
+                              };
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(
+                                    sectionType:
+                                        SectionType.InstructorActivityForPupil,
+                                    userType: UserType.Instructor,
+                                    toDisplay: AddLessonSection(),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      actionPane: SlidableScrollActionPane(),
+                      actionExtentRatio: 0.12,
+                      child: Card(
+                         shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                        // color: Colors.tealAccent[100],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 13.0,
+                                color: Colors.black.withOpacity(.5),
+                                offset: Offset(6.0, 7.0),
                               )
                             ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  IconSlideAction(
-                    caption: 'Edit',
-                    color: AppTheme.appThemeColor,
-                    icon: EvaIcons.edit,
-                    onTap: () {
-                      appData.contextualInfo = {
-                        DataSharingKeys.LessonIdKey: document.documentID,
-                        DataSharingKeys.PupilIdKey: this._pupilId
-                      };
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(
-                            sectionType: SectionType.InstructorActivityForPupil,
-                            userType: UserType.Instructor,
-                            toDisplay: AddLessonSection(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-                actionPane: SlidableScrollActionPane(),
-                actionExtentRatio: 0.12,
-                child: Card(
-                            // color: Colors.tealAccent[100],
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                  gradient: LinearGradient(colors: [
-                                Color(0xFFB2DFDB),
-                                Color(0xFFE0F2F1)
-                              ])), 
-                              child:ListTile(
-                  title: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: <Widget>[
-                        //  Lesson Date,
-                        Container(
-                          padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                /*1*/
-                                child: Column(
-                                  children: [
-                                    /*2*/
-                                    Container(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Column(
-                                            children: <Widget>[
-                                              Text(
-                                                (format
-                                                    .format(TypeConversion
-                                                        .timeStampToDateTime(
-                                                            document[Lesson
-                                                                .LessonDateKey]))
-                                                    .toString()),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                enumValueToString(LessonType
-                                                        .values[int.parse(
-                                                            document[Lesson
-                                                                    .LessonTypeKey]
-                                                                .toString())]
-                                                        .toString() +
-                                                    ' - ' +
-                                                    document[Lesson.LessonDurationKey]
-                                                        .toString() +
-                                                    ' minutes - ' +
-                                                    enumValueToString(VehicleType
-                                                        .values[int.parse(
-                                                            document[Lesson
-                                                                    .VehicleTypeKey]
-                                                                .toString())]
-                                                        .toString()) +
-                                                    " Drive"),
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                  enumValueToString(TripLocation
-                                                          .values[int.parse(
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: LinearGradient(colors: [
+                              Color(0xFFB2DFDB),
+                              Color(0xFFE0F2F1)
+                            ])),
+                          child: ListTile(
+                            title: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                children: <Widget>[
+                                  //  Lesson Date,
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(left: 2.0, right: 2.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          /*1*/
+                                          child: Column(
+                                            children: [
+                                              /*2*/
+                                              Container(
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Column(
+                                                      children: <Widget>[
+                                                        Text(
+                                                          (format
+                                                              .format(TypeConversion
+                                                                  .timeStampToDateTime(
+                                                                      document[
+                                                                          Lesson
+                                                                              .LessonDateKey]))
+                                                              .toString()),
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 14),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                          enumValueToString(LessonType
+                                                                  .values[int.parse(document[
+                                                                          Lesson
+                                                                              .LessonTypeKey]
+                                                                      .toString())]
+                                                                  .toString() +
+                                                              ' - ' +
                                                               document[Lesson
-                                                                      .PickUpLocationKey]
-                                                                  .toString())]
-                                                          .toString()) +
-                                                      ' : ' +
-                                                      enumValueToString(TripLocation
-                                                          .values[int.parse(
-                                                              document[Lesson
-                                                                      .DropOffLocationKey]
-                                                                  .toString())]
-                                                          .toString()),
-                                                  style:
-                                                      TextStyle(fontSize: 14)),
-                                              SizedBox(
-                                                height: .2,
+                                                                      .LessonDurationKey]
+                                                                  .toString() +
+                                                              ' minutes - ' +
+                                                              enumValueToString(VehicleType
+                                                                  .values[int.parse(
+                                                                      document[Lesson.VehicleTypeKey]
+                                                                          .toString())]
+                                                                  .toString()) +
+                                                              " Drive"),
+                                                          style: TextStyle(
+                                                              fontSize: 14),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                            enumValueToString(TripLocation
+                                                                    .values[int.parse(document[Lesson
+                                                                            .PickUpLocationKey]
+                                                                        .toString())]
+                                                                    .toString()) +
+                                                                ' : ' +
+                                                                enumValueToString(TripLocation
+                                                                    .values[int.parse(
+                                                                        document[Lesson.DropOffLocationKey]
+                                                                            .toString())]
+                                                                    .toString()),
+                                                            style: TextStyle(
+                                                                fontSize: 14)),
+                                                        SizedBox(
+                                                          height: .2,
+                                                        ),
+                                                        document[Lesson.DiaryNotesKey] ==
+                                                                    null ||
+                                                                document[Lesson
+                                                                            .DiaryNotesKey]
+                                                                        .toString() ==
+                                                                    EmptyString
+                                                            ? Container()
+                                                            : Text(
+                                                                "Diary : " +
+                                                                    document[Lesson
+                                                                            .DiaryNotesKey]
+                                                                        .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14),
+                                                              ),
+                                                        document[Lesson.ReportCardKey] ==
+                                                                    null ||
+                                                                document[Lesson
+                                                                            .ReportCardKey]
+                                                                        .toString() ==
+                                                                    EmptyString
+                                                            ? Container()
+                                                            : Text(
+                                                                "Report : " +
+                                                                    document[Lesson
+                                                                            .ReportCardKey]
+                                                                        .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14),
+                                                              )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                                document[Lesson.DiaryNotesKey] == null || document[Lesson.DiaryNotesKey].toString() == EmptyString ? Container():
-                                              Text("Diary : " + document[Lesson.DiaryNotesKey].toString(),
-                                            style: TextStyle(fontSize: 14),
-                                              ),                                                
-                                            document[Lesson.ReportCardKey] == null || document[Lesson.ReportCardKey].toString() == EmptyString ? Container():
-                                              Text("Report : " + document[Lesson.ReportCardKey].toString(),
-                                              style: TextStyle(fontSize: 14),
-                                              )
                                             ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        Checkbox(
+                                          value: document[
+                                              Lesson.HasAcknowledgedKey],
+                                          onChanged: (check) {
+                                            document[Lesson
+                                                        .HasAcknowledgedKey] ==
+                                                    false
+                                                ? appData.user.userType ==
+                                                        UserType.Pupil
+                                                    ? _updateData(
+                                                        document.documentID)
+                                                    : null
+                                                : null;
+                                          },
+                                          activeColor: AppTheme.appThemeColor,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Checkbox(
-                                value: document[Lesson.HasAcknowledgedKey],
-                                onChanged: (check) {
-                                  document[Lesson.HasAcknowledgedKey] == false
-                                      ? appData.user.userType == UserType.Pupil
-                                          ? _updateData(document.documentID)
-                                          : null
-                                      : null;
-                                },
-                                activeColor: AppTheme.appThemeColor,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                ),
-                )
-              ):   Card(
-                            // color: Colors.tealAccent[100],
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                  gradient: LinearGradient(colors: [
-                                Color(0xFFB2DFDB),
-                                Color(0xFFE0F2F1)
-                              ])), 
-                              child:ListTile(
-                  title: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: <Widget>[
-                        //  Lesson Date,
-                        Container(
-                          padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                /*1*/
-                                child: Column(
-                                  children: [
-                                    /*2*/
-                                    Container(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Column(
-                                            children: <Widget>[
-                                              Text(
-                                                (format
-                                                    .format(TypeConversion
-                                                        .timeStampToDateTime(
-                                                            document[Lesson
-                                                                .LessonDateKey]))
-                                                    .toString()),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                enumValueToString(LessonType
-                                                        .values[int.parse(
-                                                            document[Lesson
-                                                                    .LessonTypeKey]
-                                                                .toString())]
-                                                        .toString() +
-                                                    ' - ' +
-                                                    document[Lesson.LessonDurationKey]
-                                                        .toString() +
-                                                    ' minutes - ' +
-                                                    enumValueToString(VehicleType
-                                                        .values[int.parse(
-                                                            document[Lesson
-                                                                    .VehicleTypeKey]
-                                                                .toString())]
-                                                        .toString()) +
-                                                    " Drive"),
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                  enumValueToString(TripLocation
-                                                          .values[int.parse(
-                                                              document[Lesson
-                                                                      .PickUpLocationKey]
-                                                                  .toString())]
-                                                          .toString()) +
-                                                      ' : ' +
-                                                      enumValueToString(TripLocation
-                                                          .values[int.parse(
-                                                              document[Lesson
-                                                                      .DropOffLocationKey]
-                                                                  .toString())]
-                                                          .toString()),
-                                                  style:
-                                                      TextStyle(fontSize: 14)),
-                                              SizedBox(
-                                                height: .2,
-                                              ),
-                                                document[Lesson.DiaryNotesKey] == null || document[Lesson.DiaryNotesKey].toString() == EmptyString ? Container():
-                                              Text("Diary : " + document[Lesson.DiaryNotesKey].toString(),
-                                            style: TextStyle(fontSize: 14),
-                                              ),                                                
-                                            document[Lesson.ReportCardKey] == null || document[Lesson.ReportCardKey].toString() == EmptyString ? Container():
-                                              Text("Report : " + document[Lesson.ReportCardKey].toString(),
-                                              style: TextStyle(fontSize: 14),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Checkbox(
-                                value: document[Lesson.HasAcknowledgedKey],
-                                onChanged: (check) {
-                                  document[Lesson.HasAcknowledgedKey] == false
-                                      ? appData.user.userType == UserType.Pupil
-                                          ? _updateData(document.documentID)
-                                          : null
-                                      : null;
-                                },
-                                activeColor: AppTheme.appThemeColor,
-                              ),
+                      ))
+                  : Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      // color: Colors.tealAccent[100],
+                      child: Container(
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 13.0,
+                                color: Colors.black.withOpacity(.5),
+                                offset: Offset(6.0, 7.0),
+                              )
                             ],
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: LinearGradient(colors: [
+                              Color(0xFFB2DFDB),
+                              Color(0xFFE0F2F1)
+                            ])),
+                        child: ListTile(
+                          title: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: <Widget>[
+                                //  Lesson Date,
+                                Container(
+                                  padding:
+                                      EdgeInsets.only(left: 2.0, right: 2.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        /*1*/
+                                        child: Column(
+                                          children: [
+                                            /*2*/
+                                            Container(
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Column(
+                                                    children: <Widget>[
+                                                      Text(
+                                                        (format
+                                                            .format(TypeConversion
+                                                                .timeStampToDateTime(
+                                                                    document[Lesson
+                                                                        .LessonDateKey]))
+                                                            .toString()),
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 14),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        enumValueToString(LessonType
+                                                                .values[int.parse(
+                                                                    document[Lesson.LessonTypeKey]
+                                                                        .toString())]
+                                                                .toString() +
+                                                            ' - ' +
+                                                            document[Lesson
+                                                                    .LessonDurationKey]
+                                                                .toString() +
+                                                            ' minutes - ' +
+                                                            enumValueToString(VehicleType
+                                                                .values[int.parse(
+                                                                    document[Lesson
+                                                                            .VehicleTypeKey]
+                                                                        .toString())]
+                                                                .toString()) +
+                                                            " Drive"),
+                                                        style: TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                          enumValueToString(TripLocation
+                                                                  .values[int.parse(document[
+                                                                          Lesson
+                                                                              .PickUpLocationKey]
+                                                                      .toString())]
+                                                                  .toString()) +
+                                                              ' : ' +
+                                                              enumValueToString(TripLocation
+                                                                  .values[int.parse(
+                                                                      document[Lesson.DropOffLocationKey]
+                                                                          .toString())]
+                                                                  .toString()),
+                                                          style: TextStyle(
+                                                              fontSize: 14)),
+                                                      SizedBox(
+                                                        height: .2,
+                                                      ),
+                                                      document[Lesson.DiaryNotesKey] ==
+                                                                  null ||
+                                                              document[Lesson
+                                                                          .DiaryNotesKey]
+                                                                      .toString() ==
+                                                                  EmptyString
+                                                          ? Container()
+                                                          : Text(
+                                                              "Diary : " +
+                                                                  document[Lesson
+                                                                          .DiaryNotesKey]
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 14),
+                                                            ),
+                                                      document[Lesson.ReportCardKey] ==
+                                                                  null ||
+                                                              document[Lesson
+                                                                          .ReportCardKey]
+                                                                      .toString() ==
+                                                                  EmptyString
+                                                          ? Container()
+                                                          : Text(
+                                                              "Report : " +
+                                                                  document[Lesson
+                                                                          .ReportCardKey]
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 14),
+                                                            )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Checkbox(
+                                        value:
+                                            document[Lesson.HasAcknowledgedKey],
+                                        onChanged: (check) {
+                                          document[Lesson.HasAcknowledgedKey] ==
+                                                  false
+                                              ? appData.user.userType ==
+                                                      UserType.Pupil
+                                                  ? _updateData(
+                                                      document.documentID)
+                                                  : null
+                                              : null;
+                                        },
+                                        activeColor: AppTheme.appThemeColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  ),
-                  ),
-                );
+                      ),
+                    );
             },
           ).toList(),
         );

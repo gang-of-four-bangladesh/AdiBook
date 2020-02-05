@@ -27,6 +27,8 @@ class Instructor {
         this._logger = Logger('mode->instructor');
   String id;
   String name;
+  String pupilId;
+  String instructorId;
   String address;
   String phoneNumber;
   String licenseNo;
@@ -120,5 +122,11 @@ class Instructor {
         .collection(FirestorePath.InstructorCollection)
         .document(this.id)
         .delete();
+  }
+
+   Future<void> deletePupilOfAnInstructor() async {
+    var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection,
+        [this.pupilId, this.instructorId]);
+    return Firestore.instance.collection(path).document(this.id).delete();
   }
 }

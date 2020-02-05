@@ -71,6 +71,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     previousExperienceController.text = pupil.previousExperience == null
         ? EmptyString
         : pupil.previousExperience;
+    dateOfBirthController.text = TypeConversion.toDateDisplayFormat(pupil.dateOfBirth);
     this.eyeTestController.text = pupil.eyeTest ? "TESTED" : "NOT TESTED";
   }
 

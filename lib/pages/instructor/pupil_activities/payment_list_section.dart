@@ -85,11 +85,13 @@ class PaymentListSectionState extends State<PaymentListSection> {
               if (snapshot.hasError) return Text('Error: ${snapshot.error}');
               if (snapshot.data.documents.length == 0)
                 return Card(
-                    child: Center(
-                        child: Text(
-                  "No Payment Found",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )));
+                  child:Center(
+                      child: Text(
+                        "No Payment Found",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  );
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return FrequentWidgets().getProgressBar();
@@ -145,19 +147,21 @@ class PaymentListSectionState extends State<PaymentListSection> {
                               icon: EvaIcons.edit,
                               onTap: () {
                                 appData.contextualInfo = {
-                        DataSharingKeys.PupilIdKey: this._pupilId,
-                        DataSharingKeys.PaymentIdKey:document.documentID
-                      };
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(
-                            sectionType: SectionType.InstructorActivityForPupil,
-                            userType: UserType.Instructor,
-                            toDisplay: AddPaymentSection(),
-                          ),
-                        ),
-                      );
+                                  DataSharingKeys.PupilIdKey: this._pupilId,
+                                  DataSharingKeys.PaymentIdKey:
+                                      document.documentID
+                                };
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(
+                                      sectionType: SectionType
+                                          .InstructorActivityForPupil,
+                                      userType: UserType.Instructor,
+                                      toDisplay: AddPaymentSection(),
+                                    ),
+                                  ),
+                                );
                                 // populatePaymentInfo(document.documentID);
                                 // _asyncInputDialog(context);
                               },
@@ -166,13 +170,24 @@ class PaymentListSectionState extends State<PaymentListSection> {
                           actionPane: SlidableScrollActionPane(),
                           actionExtentRatio: 0.12,
                           child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                             // color: Colors.tealAccent[100],
                             child: Container(
                               decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                Color(0xFFB2DFDB),
-                                Color(0xFFE0F2F1)
-                              ])),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 13.0,
+                                color: Colors.black.withOpacity(.5),
+                                offset: Offset(6.0, 7.0),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: LinearGradient(colors: [
+                              Color(0xFFB2DFDB),
+                              Color(0xFFE0F2F1)
+                            ])),
                               child: ListTile(
                                 onTap: () {
                                   print("clicked");
@@ -505,7 +520,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
     this._logger.info('For validity ${_formKey.currentState.validate()}');
     return _formKey.currentState.validate();
   }
-  
+
   Future<void> _selectDateOfPayment() async {
     var displayDob = this._dateOfPayment.toString() == EmptyString
         ? DateTime.now()
