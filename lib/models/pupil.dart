@@ -128,14 +128,13 @@ class Pupil {
     }
   }
 
-  Future<void> delete() async {
+  Future<void> delete(String pupilId) async {
     try {
       this.updatedAt = DateTime.now();
-      Firestore.instance
-          .collection(FirestorePath.PupilCollection)
-          .document(this.id)
-          .delete();
-      this._logger.info('Pupil deleted successfully.');
+      var path = sprintf(
+        FirestorePath.PupilCollection, [pupilId]);
+    Firestore.instance.collection(path).document(this.id).delete();
+      this._logger.info('Pupil updated successfully.');
       return this;
     } catch (e) {
       this._logger.shout('Pupil update failed. Reason $e');

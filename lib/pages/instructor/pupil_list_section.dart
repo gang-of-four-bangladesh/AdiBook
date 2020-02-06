@@ -179,11 +179,11 @@ class PupilPistSectionState extends State<PupilListSection> {
 
   Future<void> _deleteData(String pupilId) async {
     Pupil pupil = Pupil(id: pupilId);
-    if (pupil.id != null)
-      await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
-    String message = isNotNullOrEmpty(await pupil.delete())
+    String message = isNotNullOrEmpty(await pupil.delete(pupilId))
         ? 'Pupil deleted successfully.'
         : 'Pupil deleted failed.';
+    if (pupil.id != null)
+      await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
     FrequentWidgets _frequentWidgets = FrequentWidgets();
     _frequentWidgets.getSnackbar(
       message: message,
