@@ -144,27 +144,27 @@ class LessonListSectionState extends State<LessonListSection> {
                       actionPane: SlidableScrollActionPane(),
                       actionExtentRatio: 0.12,
                       child: Card(
-                         shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
                         // color: Colors.tealAccent[100],
                         child: Container(
                           decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 13.0,
-                                color: Colors.black.withOpacity(.5),
-                                offset: Offset(6.0, 7.0),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(colors: [
-                              Color(0xFFB2DFDB),
-                              Color(0xFFE0F2F1)
-                            ])),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 13.0,
+                                  color: Colors.black.withOpacity(.5),
+                                  offset: Offset(6.0, 7.0),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(5),
+                              gradient: LinearGradient(colors: [
+                                Color(0xFFB2DFDB),
+                                Color(0xFFE0F2F1)
+                              ])),
                           child: ListTile(
                             title: Container(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.all(5),
                               child: Column(
                                 children: <Widget>[
                                   //  Lesson Date,
@@ -297,18 +297,23 @@ class LessonListSectionState extends State<LessonListSection> {
                                           },
                                           activeColor: AppTheme.appThemeColor,
                                         ),
+                                        IconButton(
+                              icon: Icon(Icons.more_vert),
+                              color: AppTheme.appThemeColor,
+                              onPressed: () => {},
+                            ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
+                            ),
                         ),
                       ))
                   : Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
                       // color: Colors.tealAccent[100],
                       child: Container(
@@ -320,7 +325,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                 offset: Offset(6.0, 7.0),
                               )
                             ],
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(5),
                             gradient: LinearGradient(colors: [
                               Color(0xFFB2DFDB),
                               Color(0xFFE0F2F1)

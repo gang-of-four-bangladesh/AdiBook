@@ -57,56 +57,25 @@ class PupilPistSectionState extends State<PupilListSection> {
         return ListView(
           children: snapshot.data.documents.map(
             (DocumentSnapshot document) {
-              return Slidable(
-                actionPane: SlidableStrechActionPane(),
-                actionExtentRatio: 0.15,
-                actions: <Widget>[
-                  IconSlideAction(
-                    caption: 'Remove',
-                    color: Colors.red,
-                    icon: FontAwesomeIcons.trash,
-                    onTap: () {
-                      showDialog<ConfirmAction>(
-                        context: context,
-                        barrierDismissible:
-                            false, // user must tap button for close dialog!
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Delete"),
-                            content: Text("Do you want to delete ?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: const Text('CANCEL'),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(ConfirmAction.CANCEL);
-                                },
-                              ),
-                              FlatButton(
-                                child: const Text('ACCEPT'),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(ConfirmAction.ACCEPT);
-                                  _deleteData(document.documentID);
-                                },
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-                child: Container(
-                  margin: EdgeInsets.only(left: 2, right: 2),
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
+              return Container(
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),),
                     // color: Colors.tealAccent[100],
                     child: Container(
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [Color(0xFFB2DFDB), Color(0xFFE0F2F1)])),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 13.0,
+                                color: Colors.black.withOpacity(.5),
+                                offset: Offset(6.0, 7.0),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(5),
+                            gradient: LinearGradient(colors: [
+                              Color(0xFFB2DFDB),
+                              Color(0xFFE0F2F1)
+                            ])),
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: 33,
@@ -120,15 +89,15 @@ class PupilPistSectionState extends State<PupilListSection> {
                           backgroundColor: AppTheme.appThemeColor,
                         ),
                         contentPadding: EdgeInsets.all(5),
+                        title: Text(
+                          document[Pupil.NameKey],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         subtitle: Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                document[Pupil.NameKey],
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
                               SizedBox(height: 8),
                               Row(
                                 mainAxisAlignment:
@@ -165,11 +134,46 @@ class PupilPistSectionState extends State<PupilListSection> {
                             ),
                           );
                         },
+                        trailing: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            showDialog<ConfirmAction>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button for close dialog!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Delete"),
+                                  content: Text("Do you want to delete ?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: const Text('CANCEL'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(ConfirmAction.CANCEL);
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: const Text('ACCEPT'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(ConfirmAction.ACCEPT);
+                                        _deleteData(document.documentID);
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
+                );
             },
           ).toList(),
         );
