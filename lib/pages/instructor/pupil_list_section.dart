@@ -97,11 +97,10 @@ class PupilPistSectionState extends State<PupilListSection> {
                     },
                   ),
                 ],
-                child: Container(                  
-                      margin: EdgeInsets.only(left: 2,right: 2),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5)
-                      ),
+                child: Container(
+                  margin: EdgeInsets.only(left: 2, right: 2),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
                   child: Card(
                     // color: Colors.tealAccent[100],
                     child: Container(
@@ -120,8 +119,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                           ),
                           backgroundColor: AppTheme.appThemeColor,
                         ),
-                        contentPadding:
-                            EdgeInsets.all(5),
+                        contentPadding: EdgeInsets.all(5),
                         subtitle: Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -181,6 +179,8 @@ class PupilPistSectionState extends State<PupilListSection> {
 
   Future<void> _deleteData(String pupilId) async {
     Pupil pupil = Pupil(id: pupilId);
+    if (pupil.id != null)
+      await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
     String message = isNotNullOrEmpty(await pupil.delete())
         ? 'Pupil deleted successfully.'
         : 'Pupil deleted failed.';

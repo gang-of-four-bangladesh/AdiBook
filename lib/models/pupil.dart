@@ -2,6 +2,7 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logging/logging.dart';
+import 'package:sprintf/sprintf.dart';
 
 class Pupil {
   static const String NameKey = 'nam';
@@ -140,5 +141,11 @@ class Pupil {
       this._logger.shout('Pupil update failed. Reason $e');
       return null;
     }
+  }
+
+  Future<void> deleteOfAnInstructor(String pupilId, String instructorId) async {
+    var path = sprintf(
+        FirestorePath.PupilsOfAnInstructorCollection, [instructorId,pupilId]);
+    return Firestore.instance.collection(path).document(this.id).delete();
   }
 }
