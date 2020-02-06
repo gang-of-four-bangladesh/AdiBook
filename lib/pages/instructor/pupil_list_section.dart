@@ -1,6 +1,5 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
-import 'package:adibook/core/formatter.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';

@@ -31,7 +31,7 @@ class LessonManager {
     );
     var snap = await lessonEvent.get();
     if (snap.exists) await lessonEvent.delete();
-    return isNotNullOrEmpty(await lessonEvent.update());
+    return isNotNullOrEmpty(await lessonEvent.add());
   }
 
   Future deleteLesson({
