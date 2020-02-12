@@ -296,12 +296,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                 : null;
                                           },
                                           activeColor: AppTheme.appThemeColor,
-                                        ),
-                                        IconButton(
-                              icon: Icon(Icons.more_vert),
-                              color: AppTheme.appThemeColor,
-                              onPressed: () => {},
-                            ),
+                                        ),                                       
                                       ],
                                     ),
                                   ),
