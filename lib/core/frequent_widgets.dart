@@ -1,5 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class FrequentWidgets {
   getSnackbar({
@@ -58,9 +59,27 @@ class FrequentWidgets {
     );
   }
 
- 
-
+  //  ProgressDialog getLoadingProgressBar(BuildContext context,ProgressDialog pr) {
+  //   ProgressDialog(context,
+  //       type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+  //   pr.update(
+  //     progress: 50.0,
+  //     message: "Please wait...",
+  //     progressWidget: Container(
+  //         padding: EdgeInsets.all(8.0),
+  //         child: CircularProgressIndicator(
+  //             valueColor: AlwaysStoppedAnimation(AppTheme.appThemeColor),
+  //             strokeWidth: 5.0)),
+  //     maxProgress: 100.0,
+  //     progressTextStyle: TextStyle(
+  //         color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+  //     messageTextStyle: TextStyle(
+  //         color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+  //   );
+  //   return pr;
+  // }
 }
+
 class DetailScreen extends StatelessWidget {
   final downloadUrl;
   DetailScreen({this.downloadUrl});
@@ -83,4 +102,5 @@ class DetailScreen extends StatelessWidget {
       ),
     );
   }
+ 
 }

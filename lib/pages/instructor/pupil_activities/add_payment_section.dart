@@ -38,7 +38,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   @override
   void initState() {
     super.initState();
-    pr = new ProgressDialog(context,
+    pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.update(
       progress: 50.0,
@@ -53,6 +53,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
+    
     this.dateOfPaymentController.text =
         TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;

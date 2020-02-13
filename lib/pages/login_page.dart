@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -28,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _phoneNumberController = TextEditingController();
   String verificationId;
   Logger _logger;
+  ProgressDialog pr;
   String countryCode = "+44";
   UserType _selectedUserType = UserType.Instructor;
   bool _showProgressBar = false;
@@ -36,6 +38,26 @@ class _LoginPageState extends State<LoginPage> {
     //this._phoneNumberController.text = "1234567890";
     _logger = Logger(this.runtimeType.toString());
   }
+  @override
+  void initState() {
+    super.initState();
+      pr = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.update(
+      progress: 50.0,
+      message: "Please wait...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(
+                                    AppTheme.appThemeColor),
+                                strokeWidth: 5.0)),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w600),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var _screenWidth = MediaQuery.of(context).size.width;
@@ -148,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Sign in using an sms code as input.
   Future _onPressLoginButton() async {
-    await _displayProgressBar(true);
+    await pr.show();
     if (this._smsCodeController.text.isEmpty) {
       await FrequentWidgets()
           .dialogBox(context, 'OTP Code', 'OTP code cannot be empty');
@@ -175,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     await UserManager().updateAppDataByUserId(user.phoneNumber);
-    await _displayProgressBar(false);
+    await pr.dismiss();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -223,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     await UserManager().updateAppDataByUserId(currentUser.phoneNumber);
-    await _displayProgressBar(false);
+    await pr.dismiss();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -240,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _verificationFailed(
       AuthException authException, BuildContext context) async {
-    await _displayProgressBar(false);
+    await pr.dismiss();
     this._logger.shout(
         "PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}");
     FrequentWidgets().getSnackbar(
@@ -264,7 +286,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _codeAutoRetrievalTimeout(
       String verificationId, BuildContext context) async {
-    await _displayProgressBar(false);
+    await pr.dismiss();
     this.verificationId = verificationId;
     FrequentWidgets().getSnackbar(
       message:
@@ -284,7 +306,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!await _hasValidInput()) return;
     var phoneNumber = await _addCountryCodeToPhoneNumber();
     this._logger.info(phoneNumber);
-    await _displayProgressBar(true);
+    await pr.show();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 5),

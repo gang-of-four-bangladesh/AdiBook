@@ -66,9 +66,9 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                                 strokeWidth: 5.0)),
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
-          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+          color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w400),
       messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+          color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w600),
     );
     this._lessonTimeController.text =
         TypeConversion.toDateTimeDisplayFormat(DateTime.now());
