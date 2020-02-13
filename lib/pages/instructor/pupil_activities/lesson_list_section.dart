@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
 import 'package:logging/logging.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:intl/intl.dart';
@@ -154,16 +155,13 @@ class LessonListSectionState extends State<LessonListSection> {
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
-                                  blurRadius: 13.0,
-                                  color: Colors.black.withOpacity(.5),
+                                  blurRadius: 5.0,
+                                  color: Colors.black.withOpacity(.1),
                                   offset: Offset(6.0, 7.0),
                                 )
                               ],
                               borderRadius: BorderRadius.circular(5),
-                              gradient: LinearGradient(colors: [
-                                Color(0xFFB2DFDB),
-                                Color(0xFFE0F2F1)
-                              ])),
+                              gradient: LinearGradient(colors: GradientColors.cloud)),
                           child: ListTile(
                             title: Container(
                               padding: EdgeInsets.all(5),

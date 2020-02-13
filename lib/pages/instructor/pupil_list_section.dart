@@ -8,6 +8,7 @@ import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.da
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -66,16 +67,13 @@ class PupilPistSectionState extends State<PupilListSection> {
                       decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
-                                blurRadius: 13.0,
-                                color: Colors.black.withOpacity(.5),
+                                blurRadius: 5.0,
+                                color: Colors.black.withOpacity(.1),
                                 offset: Offset(6.0, 7.0),
                               )
                             ],
                             borderRadius: BorderRadius.circular(5),
-                            gradient: LinearGradient(colors: [
-                              Color(0xFFB2DFDB),
-                              Color(0xFFE0F2F1)
-                            ])),
+                            gradient: LinearGradient(colors: GradientColors.cloud)),
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: 33,
@@ -111,10 +109,10 @@ class PupilPistSectionState extends State<PupilListSection> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Container(
-                                color: Colors.grey[300],
-                                height: .5,
-                              ),
+                              // Container(
+                              //   color: Colors.grey[300],
+                              //   height: .5,
+                              // ),
                             ],
                           ),
                         ),

@@ -37,6 +37,7 @@ dependencies:
   file_picker:
   pull_to_refresh:
   percent_indicator:
+  flutter_gradient_colors:
 
   flutter_slidable:
   
