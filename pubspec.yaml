@@ -38,6 +38,7 @@ dependencies:
   pull_to_refresh:
   percent_indicator:
   flutter_gradient_colors:
+  progress_dialog:
 
   flutter_slidable:
   

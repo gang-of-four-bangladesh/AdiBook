@@ -9,6 +9,7 @@ import 'package:adibook/pages/validation.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class AddPaymentSection extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Logger _logger;
   bool _autoValidate;
+  bool _showProgressBar = false;
   FrequentWidgets _frequentWidgets;
   TextEditingController _amountController;
   PaymentMode _selectedPaymentMode;
@@ -26,6 +28,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   String _pupilId;
   String _paymentId;
   OperationMode _operationMode;
+  ProgressDialog pr;
   TextEditingController dateOfPaymentController = TextEditingController();
   _AddPaymentSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -35,6 +38,21 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   @override
   void initState() {
     super.initState();
+    pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.update(
+      progress: 50.0,
+      message: "Please wait...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(
+                                    AppTheme.appThemeColor),
+                                strokeWidth: 5.0)),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
     this.dateOfPaymentController.text =
         TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
@@ -59,7 +77,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     setState(() {
       this.dateOfPaymentController.text =
           TypeConversion.toDateDisplayFormat(payment.paymentDate);
-      ;
       this._selectedPaymentMode = payment.paymentType;
       this._paymentId = paymentId;
     });
@@ -67,9 +84,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
 
   @override
   Widget build(BuildContext context) {
-    Validations validations = Validations();
-    return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
+    Widget saveButton(BuildContext _context) {
+      return FloatingActionButton.extended(
         elevation: 4.0,
         icon: const Icon(Icons.save),
         backgroundColor: AppTheme.appThemeColor,
@@ -81,12 +97,21 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
             fontSize: 16.0,
           ),
         ),
-        onPressed: () async {
+        onPressed: ()
+            // {
+            //   this._displayProgressBar(true);
+            // }
+            async {
           if (_validateInputs()) {
             if (appData.user.userType == UserType.Instructor) await _saveData();
           }
         },
-      ),
+      );
+    }
+
+    Validations validations = Validations();
+    return Scaffold(
+      floatingActionButton: saveButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Form(
         key: _formKey,
@@ -150,6 +175,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   }
 
   Future<void> _saveData() async {
+    await pr.show();
     var _amount = int.parse(_amountController.text);
     var pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     Payment payment = Payment(
@@ -167,6 +193,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
         : message = isNotNullOrEmpty(await payment.update())
             ? 'Payment Updated successfully.'
             : 'Payment update failed.';
+
+    pr.dismiss();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

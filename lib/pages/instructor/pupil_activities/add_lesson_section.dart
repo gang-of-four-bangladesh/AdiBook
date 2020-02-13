@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class AddLessonSection extends StatefulWidget {
   @override
@@ -29,6 +30,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TextEditingController _reportCardController;
   TextEditingController _lessonTimeController;
   TextEditingController _uploadLicenseController;
+  ProgressDialog pr;
   FrequentWidgets _frequentWidgets;
   bool _autoValidate = false;
   bool _hasAcknoledgment = false;
@@ -54,6 +56,20 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   @override
   void initState() {
     super.initState();
+    pr = new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.update(
+      progress: 50.0,
+      message: "Please wait...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(
+                                    AppTheme.appThemeColor),
+                                strokeWidth: 5.0)),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
     this._lessonTimeController.text =
         TypeConversion.toDateTimeDisplayFormat(DateTime.now());
     _selectedPickupLocation = TripLocation.Home;
@@ -302,6 +318,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   }
 
   Future<void> _saveData() async {
+    await pr.show();
     StorageUpload storageUpload = StorageUpload();
     String documentDownloadUrl = EmptyString;
     if (this._uploadLicenseController.text != EmptyString) {
@@ -331,6 +348,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         : message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
             ? 'Lesson updated successfully.'
             : 'Lesson updated failed.';
+    pr.dismiss();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

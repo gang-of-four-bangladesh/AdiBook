@@ -15,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class AddPupilSection extends StatefulWidget {
   final UserType userType;
@@ -26,6 +27,7 @@ class AddPupilSection extends StatefulWidget {
 }
 
 class AddPupilSectionstate extends State<AddPupilSection> {
+  ProgressDialog pr;
   var _logger = Logger("pupil->profile");
   var _pupilManager = PupilManager();
   var _frequentWidgets = FrequentWidgets();
@@ -47,6 +49,24 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   @override
   void initState() {
     super.initState();
+    pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.update(
+      progress: 50.0,
+      message: "Please wait...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(AppTheme.appThemeColor),
+              strokeWidth: 5.0)),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
     this._autoValidate = false;
     this._hadEyeTest = false;
     this.dateOfBirthController.text =
@@ -71,7 +91,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     previousExperienceController.text = pupil.previousExperience == null
         ? EmptyString
         : pupil.previousExperience;
-    dateOfBirthController.text = TypeConversion.toDateDisplayFormat(pupil.dateOfBirth);
+    dateOfBirthController.text =
+        TypeConversion.toDateDisplayFormat(pupil.dateOfBirth);
     this.eyeTestController.text = pupil.eyeTest ? "TESTED" : "NOT TESTED";
   }
 
@@ -194,19 +215,24 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                       TextFormField(
                         controller: this.eyeTestController,
                         readOnly: true,
-                        onTap: appData.user.userType == UserType.Instructor ? _onEyeTestChecked:null,
+                        onTap: appData.user.userType == UserType.Instructor
+                            ? _onEyeTestChecked
+                            : null,
                         decoration: InputDecoration(
                           icon: Icon(FontAwesomeIcons.eye),
                           labelText: "Eye Test",
-                          suffixIcon: appData.user.userType == UserType.Instructor ? Icon(
-                            this._hadEyeTest
-                                ? FontAwesomeIcons.toggleOn
-                                : FontAwesomeIcons.toggleOff,
-                            color: this._hadEyeTest
-                                ? Colors.green[600]
-                                : Colors.grey[600],
-                            size: 30,
-                          ): null,
+                          suffixIcon:
+                              appData.user.userType == UserType.Instructor
+                                  ? Icon(
+                                      this._hadEyeTest
+                                          ? FontAwesomeIcons.toggleOn
+                                          : FontAwesomeIcons.toggleOff,
+                                      color: this._hadEyeTest
+                                          ? Colors.green[600]
+                                          : Colors.grey[600],
+                                      size: 30,
+                                    )
+                                  : null,
                         ),
                       ),
                       TextFormField(
@@ -274,7 +300,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
-      maxTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      maxTime: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       currentTime: displayDob,
       onConfirm: (date) {
         setState(() {
@@ -305,6 +332,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   Future<void> _saveData() async {
     if (!_validateInputs()) return;
+    await pr.show();
     var id = '+88' + '${phoneController.text}';
     StorageUpload storageUpload = StorageUpload();
     var documentDownloadUrl =
@@ -312,8 +340,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     this._logger.info('Saving pupil information $id.');
     Pupil pupil = Pupil(id: id);
     pupil.name = nameController.text;
-    pupil.phoneNumber =
-        '+88'+'${phoneController.text}';
+    pupil.phoneNumber = '+88' + '${phoneController.text}';
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseNoController.text;
     pupil.dateOfBirth = TypeConversion.toDate(this.dateOfBirthController.text);
@@ -329,6 +356,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     String message = isNotNullOrEmpty(result)
         ? 'Pupil created successfully.'
         : 'Pupil creation failed.';
+    pr.dismiss();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,
