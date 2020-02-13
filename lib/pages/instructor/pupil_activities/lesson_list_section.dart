@@ -76,10 +76,11 @@ class LessonListSectionState extends State<LessonListSection> {
             (DocumentSnapshot document) {
               return appData.user.userType == UserType.Instructor
                   ? Slidable(
+                    secondaryActions: <Widget>[],
                       actions: <Widget>[
                           IconSlideAction(
                             caption: 'Remove',
-                            color: AppTheme.appThemeColor,
+                            color: Colors.red,
                             icon: EvaIcons.trash,
                             onTap: () async {
                               showDialog<ConfirmAction>(
@@ -141,6 +142,7 @@ class LessonListSectionState extends State<LessonListSection> {
                             },
                           ),
                         ],
+                      
                       actionPane: SlidableScrollActionPane(),
                       actionExtentRatio: 0.12,
                       child: Card(

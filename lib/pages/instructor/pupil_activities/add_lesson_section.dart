@@ -74,7 +74,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
             id: _lessionId)
         .getLession();
     this._logger.info("Leeson Model >>>> : $_lessionId");
-    this._lessonTimeController.text = TypeConversion.toDateTimeDisplayFormat(lesson.lessonDate);
+    this._lessonTimeController.text =
+        TypeConversion.toDateTimeDisplayFormat(lesson.lessonDate);
     this._lessonDurationController.text = lesson.lessonDuration.toString();
     this._diaryNotesController.text = lesson.diaryNotes;
     this._reportCardController.text = lesson.reportCard;
@@ -323,7 +324,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         lessonDuration: _lessionDuration,
         hasAcknowledged: this._hasAcknoledgment);
     String message;
-    lesson.id == null
+    this._operationMode == OperationMode.New
         ? message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
             ? 'Lesson created successfully.'
             : 'Lesson creation failed.'
@@ -334,6 +335,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       message: message,
       context: context,
     );
+    this._operationMode = OperationMode.New;
+    this._lessionId = null;
   }
 
   void _makeEmpty() {

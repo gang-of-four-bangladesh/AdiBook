@@ -36,6 +36,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
   TextEditingController _amountController;
   PaymentMode _selectedPaymentType;
   DateTime _dateOfPayment;
+  OperationMode _operationMode;
 
   PaymentListSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -49,9 +50,11 @@ class PaymentListSectionState extends State<PaymentListSection> {
     this._autoValidate = false;
     _selectedPaymentType = PaymentMode.Cash;
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     this._logger.info('Payment in edit mode id ${this._paymentId}');
+    this._operationMode =
+        isNullOrEmpty(this._paymentId) ? OperationMode.New : OperationMode.Edit;
     if (appData.user.userType == UserType.Instructor) _loadPaymentsData();
-    _loadPaymentsData();
   }
 
   void _loadPaymentsData() async {

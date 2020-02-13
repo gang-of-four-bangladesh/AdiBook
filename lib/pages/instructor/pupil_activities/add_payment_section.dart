@@ -39,11 +39,12 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
         TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
     _selectedPaymentMode = PaymentMode.Cash;
-    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey]; 
+    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     this._operationMode =
         isNullOrEmpty(this._paymentId) ? OperationMode.New : OperationMode.Edit;
-    if (this._operationMode == OperationMode.Edit) populatePaymentInfo(this._paymentId);
+    if (this._operationMode == OperationMode.Edit)
+      populatePaymentInfo(this._paymentId);
   }
 
   void populatePaymentInfo(String paymentId) async {
@@ -56,7 +57,9 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
     this._amountController.text = payment.amount.toString();
     if (!mounted) return;
     setState(() {
-      this.dateOfPaymentController.text = TypeConversion.toDateDisplayFormat(payment.paymentDate);;
+      this.dateOfPaymentController.text =
+          TypeConversion.toDateDisplayFormat(payment.paymentDate);
+      ;
       this._selectedPaymentMode = payment.paymentType;
       this._paymentId = paymentId;
     });
@@ -157,7 +160,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
         amount: _amount,
         paymentType: this._selectedPaymentMode);
     String message;
-    payment.id == null
+    this._operationMode == OperationMode.New
         ? message = isNotNullOrEmpty(await payment.add())
             ? 'Payment created successfully.'
             : 'Payment creation failed.'
@@ -169,6 +172,8 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       context: context,
     );
     _makeEmpty();
+    this._operationMode = OperationMode.New;
+    this._paymentId = EmptyString;
   }
 
   Future<void> _selectDateOfPayment() async {
