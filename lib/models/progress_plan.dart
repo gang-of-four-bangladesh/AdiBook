@@ -75,7 +75,24 @@ class ProgressPlan {
       return false;
     }
   }
+
+  Future<bool> delete() async {
+    try {
+      var path = sprintf(FirestorePath.ProgressPlanOfAPupilCollection,
+          [this.pupilId, this.instructorId]);
+      await Firestore.instance
+          .collection(path)
+          .document(ProgressPlanKey)
+          .delete();
+      this._logger.info('$this updated successfully.');
+      return true;
+    } catch (e) {
+      this._logger.shout('progress plan update failed. $e');
+      return false;
+    }
+  }
 }
+
 
 class ProgressPlanSubject {
   static const String StatusKey = 'sts';

@@ -133,7 +133,7 @@ class Pupil {
       this.updatedAt = DateTime.now();
       var path = sprintf(
         FirestorePath.PupilCollection, [pupilId]);
-    Firestore.instance.collection(path).document(this.id).delete();
+   await Firestore.instance.collection(path).document(this.id).delete();
       this._logger.info('Pupil updated successfully.');
       return this;
     } catch (e) {
@@ -146,5 +146,11 @@ class Pupil {
     var path = sprintf(
         FirestorePath.PupilsOfAnInstructorCollection, [instructorId,pupilId]);
     return Firestore.instance.collection(path).document(this.id).delete();
+  }  
+
+  Future<void> deleteInstructorOfAnPupil(String pupilId, String instructorId) async {
+    var path = sprintf(FirestorePath.InstructorsOfAPupilColection,
+        [pupilId, instructorId]);
+    return Firestore.instance.collection(path).document(instructorId).delete();
   }
 }

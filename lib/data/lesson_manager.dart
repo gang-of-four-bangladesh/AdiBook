@@ -4,8 +4,10 @@ import 'package:adibook/core/formatter.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/models/lesson_event.dart';
 import 'package:adibook/models/pupil.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
+import 'package:sprintf/sprintf.dart';
 
 class LessonManager {
   static const String LessonDescriptionKey = 'description';
@@ -98,5 +100,16 @@ class LessonManager {
       }
     }
     return eventDetails;
+  }
+
+  Future<void> deleteAllLessonOfPupil(
+      String pupilId, String instructorId) async {
+    var path = sprintf(
+        FirestorePath.LessonsOfAPupilColection, [pupilId, instructorId]);
+   return Firestore.instance.collection(path).getDocuments().then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.documents) {
+        doc.reference.delete();
+      }
+    });
   }
 }

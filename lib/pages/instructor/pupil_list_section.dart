@@ -1,7 +1,10 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
+import 'package:adibook/data/lesson_manager.dart';
+import 'package:adibook/data/payment_manager.dart';
 import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/progress_plan.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
@@ -59,119 +62,119 @@ class PupilPistSectionState extends State<PupilListSection> {
           children: snapshot.data.documents.map(
             (DocumentSnapshot document) {
               return Container(
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),),
-                    // color: Colors.tealAccent[100],
-                    child: Container(
-                      decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 5.0,
-                                color: Colors.black.withOpacity(.1),
-                                offset: Offset(6.0, 7.0),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(5),
-                            gradient: LinearGradient(colors: GradientColors.cloud)),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 33,
-                          child: Container(
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 42,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  // color: Colors.tealAccent[100],
+                  child: Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5.0,
+                            color: Colors.black.withOpacity(.1),
+                            offset: Offset(6.0, 7.0),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(5),
+                        gradient: LinearGradient(colors: GradientColors.cloud)),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 33,
+                        child: Container(
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 42,
+                          ),
+                        ),
+                        backgroundColor: AppTheme.appThemeColor,
+                      ),
+                      contentPadding: EdgeInsets.all(5),
+                      title: Text(
+                        document[Pupil.NameKey],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(document.documentID),
+                                Text(DateFormat('MMM dd, yyyy')
+                                    .format(DateTime.now())),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            // Container(
+                            //   color: Colors.grey[300],
+                            //   height: .5,
+                            // ),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        appData.contextualInfo = {
+                          DataSharingKeys.PupilIdKey: document.documentID
+                        };
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(
+                              sectionType:
+                                  SectionType.InstructorActivityForPupil,
+                              userType: UserType.Instructor,
+                              toDisplay: LessonListSection(),
                             ),
                           ),
-                          backgroundColor: AppTheme.appThemeColor,
+                        );
+                      },
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.black,
                         ),
-                        contentPadding: EdgeInsets.all(5),
-                        title: Text(
-                          document[Pupil.NameKey],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(document.documentID),
-                                  Text(DateFormat('MMM dd, yyyy')
-                                      .format(DateTime.now())),
+                        onPressed: () {
+                          showDialog<ConfirmAction>(
+                            context: context,
+                            barrierDismissible:
+                                false, // user must tap button for close dialog!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Delete"),
+                                content: Text("Do you want to delete ?"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: const Text('CANCEL'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(ConfirmAction.CANCEL);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: const Text('ACCEPT'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(ConfirmAction.ACCEPT);
+                                      _deleteData(document.documentID);
+                                    },
+                                  )
                                 ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              // Container(
-                              //   color: Colors.grey[300],
-                              //   height: .5,
-                              // ),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          appData.contextualInfo = {
-                            DataSharingKeys.PupilIdKey: document.documentID
-                          };
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(
-                                sectionType:
-                                    SectionType.InstructorActivityForPupil,
-                                userType: UserType.Instructor,
-                                toDisplay: LessonListSection(),
-                              ),
-                            ),
+                              );
+                            },
                           );
                         },
-                        trailing: IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            showDialog<ConfirmAction>(
-                              context: context,
-                              barrierDismissible:
-                                  false, // user must tap button for close dialog!
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Delete"),
-                                  content: Text("Do you want to delete ?"),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: const Text('CANCEL'),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(ConfirmAction.CANCEL);
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: const Text('ACCEPT'),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(ConfirmAction.ACCEPT);
-                                        _deleteData(document.documentID);
-                                      },
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
                       ),
                     ),
                   ),
-                );
+                ),
+              );
             },
           ).toList(),
         );
@@ -181,11 +184,15 @@ class PupilPistSectionState extends State<PupilListSection> {
 
   Future<void> _deleteData(String pupilId) async {
     Pupil pupil = Pupil(id: pupilId);
+    await ProgressPlan(pupilId: pupilId, instructorId: appData.instructor.id)
+        .delete();
+    await LessonManager().deleteAllLessonOfPupil(pupilId, appData.instructor.id);
+    await PaymentManager().deleteAllPaymentOfPupil(pupilId, appData.instructor.id);
+    await pupil.deleteInstructorOfAnPupil(pupilId, appData.instructor.id);
+    await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
     String message = isNotNullOrEmpty(await pupil.delete(pupilId))
         ? 'Pupil deleted successfully.'
         : 'Pupil deleted failed.';
-    if (pupil.id != null)
-      await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
     FrequentWidgets _frequentWidgets = FrequentWidgets();
     _frequentWidgets.getSnackbar(
       message: message,
