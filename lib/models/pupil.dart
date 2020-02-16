@@ -81,7 +81,7 @@ class Pupil {
         TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
   }
 
-  Future<Pupil> getPupil() async {
+   Future<Pupil> getPupil() async {
     var pupil = await this.get();
     if (!pupil.exists) {
       this._logger.severe('${this.id} pupil does not exists.');
@@ -131,9 +131,8 @@ class Pupil {
   Future<void> delete(String pupilId) async {
     try {
       this.updatedAt = DateTime.now();
-      var path = sprintf(
-        FirestorePath.PupilCollection, [pupilId]);
-   await Firestore.instance.collection(path).document(this.id).delete();
+      var path = sprintf(FirestorePath.PupilCollection, [pupilId]);
+      await Firestore.instance.collection(path).document(this.id).delete();
       this._logger.info('Pupil updated successfully.');
       return this;
     } catch (e) {
@@ -144,13 +143,14 @@ class Pupil {
 
   Future<void> deleteOfAnInstructor(String pupilId, String instructorId) async {
     var path = sprintf(
-        FirestorePath.PupilsOfAnInstructorCollection, [instructorId,pupilId]);
+        FirestorePath.PupilsOfAnInstructorCollection, [instructorId, pupilId]);
     return Firestore.instance.collection(path).document(this.id).delete();
-  }  
+  }
 
-  Future<void> deleteInstructorOfAnPupil(String pupilId, String instructorId) async {
-    var path = sprintf(FirestorePath.InstructorsOfAPupilColection,
-        [pupilId, instructorId]);
+  Future<void> deleteInstructorOfAnPupil(
+      String pupilId, String instructorId) async {
+    var path = sprintf(
+        FirestorePath.InstructorsOfAPupilColection, [pupilId, instructorId]);
     return Firestore.instance.collection(path).document(instructorId).delete();
   }
 }

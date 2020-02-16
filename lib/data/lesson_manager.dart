@@ -32,7 +32,9 @@ class LessonManager {
         pupilId: pupil.id,
       );
       var snap = await lessonEvent.get();
-      if (snap.exists) await lessonEvent.delete();
+      if (snap.exists) {
+        return isNullOrEmpty(await lessonEvent.update());
+      }
       return isNotNullOrEmpty(await lessonEvent.add());
     }
   }
@@ -106,7 +108,7 @@ class LessonManager {
       String pupilId, String instructorId) async {
     var path = sprintf(
         FirestorePath.LessonsOfAPupilColection, [pupilId, instructorId]);
-   return Firestore.instance.collection(path).getDocuments().then((snapshot) {
+    return Firestore.instance.collection(path).getDocuments().then((snapshot) {
       for (DocumentSnapshot doc in snapshot.documents) {
         doc.reference.delete();
       }
