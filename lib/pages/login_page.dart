@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                     labels: ['UK', 'BD'],
                     icons: [FontAwesomeIcons.airbnb, FontAwesomeIcons.flag],
                     onToggle: (index) async {
-                      this.countryCode = index == 0 ? "+44" : "+880";
+                      this.countryCode = index == 0 ? "+44" : "+88";
                       this
                           ._logger
                           .info('Selected Country Code ${this.countryCode}');
@@ -299,7 +299,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<String> _addCountryCodeToPhoneNumber() async {
     if (this._phoneNumberController.text.startsWith(this.countryCode))
       return this._phoneNumberController.text;
-    return "+88" + "${this._phoneNumberController.text}";
+    return "$countryCode" + "${this._phoneNumberController.text}";
   }
 
   Future<void> _onPressSendOTPCode(BuildContext context) async {

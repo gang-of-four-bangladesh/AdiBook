@@ -3,6 +3,7 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/formatter.dart';
+import 'package:adibook/core/widgets/toogle_switch.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
@@ -43,7 +44,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController drivingLicenseController = TextEditingController();
   TextEditingController drivingLicenseNoController = TextEditingController();
   int countryCodeIndex;
-  var _selectedCountry = CountryWisePhoneCode.keys.first;
+  //var _selectedCountry = CountryWisePhoneCode.keys.first;
+  String countryCode = "+44";
   bool _autoValidate;
   String _attachedDocPath;
   @override
@@ -109,6 +111,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   @override
   Widget build(BuildContext context) {
+    var _screenWidth = MediaQuery.of(context).size.width;
+    var _oneSixthWidth = _screenWidth / 8;
+    var pageWidth = _screenWidth - (_oneSixthWidth * 2);
     Validations validations = new Validations();
     return Scaffold(
       floatingActionButton: getFloatButton(),
@@ -125,6 +130,29 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                 children: <Widget>[
                   Column(
                     children: <Widget>[
+                      appData.user.userType == UserType.Instructor
+                          ? ToggleSwitch(
+                              minWidth: pageWidth / 2,
+                              initialLabelIndex: 0,
+                              activeBgColor: Colors.grey[100].withOpacity(0.6),
+                              activeTextColor:
+                                  Colors.grey[100].withOpacity(0.1),
+                              inactiveBgColor:
+                                  Colors.grey[100].withOpacity(0.1),
+                              inactiveTextColor:
+                                  Colors.grey[100].withOpacity(0.1),
+                              labels: ['UK', 'BD'],
+                              icons: [
+                                FontAwesomeIcons.airbnb,
+                                FontAwesomeIcons.flag
+                              ],
+                              onToggle: (index) async {
+                                this.countryCode = index == 0 ? "+44" : "+88";
+                                this._logger.info(
+                                    'Selected Country Code ${this.countryCode}');
+                              },
+                            )
+                          : null,
                       TextFormField(
                         enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,
@@ -276,6 +304,13 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     }
   }
 
+    Future<String> _addCountryCodeToPhoneNumber() async {
+    if (this.phoneController.text.startsWith(this.countryCode))
+      return this.phoneController.text;
+    return "$countryCode" + "${this.phoneController.text}";
+  }
+
+
   void _resetPageData() {
     setState(() {
       this.nameController.text = EmptyString;
@@ -288,6 +323,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
       this.dateOfBirthController.text =
           TypeConversion.toDateDisplayFormat(DateTime.now());
       this._hadEyeTest = false;
+      this.eyeTestController.text = 'NOT TESTED';
     });
   }
 
@@ -333,14 +369,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   Future<void> _saveData() async {
     if (!_validateInputs()) return;
     await pr.show();
-    var id = '+88' + '${phoneController.text}';
+    var id = await _addCountryCodeToPhoneNumber();
     StorageUpload storageUpload = StorageUpload();
     var documentDownloadUrl =
         await storageUpload.uploadDrivingLicenseFile(this._attachedDocPath);
     this._logger.info('Saving pupil information $id.');
     Pupil pupil = Pupil(id: id);
     pupil.name = nameController.text;
-    pupil.phoneNumber = '+88' + '${phoneController.text}';
+    pupil.phoneNumber = await _addCountryCodeToPhoneNumber();
     pupil.address = addressController.text;
     pupil.licenseNo = drivingLicenseNoController.text;
     pupil.dateOfBirth = TypeConversion.toDate(this.dateOfBirthController.text);
