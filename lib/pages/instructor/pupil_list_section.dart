@@ -26,6 +26,7 @@ class PupilPistSectionState extends State<PupilListSection> {
   Stream<QuerySnapshot> _querySnapshot;
   FrequentWidgets frequentWidgets = FrequentWidgets();
   Logger _logger = Logger('page->pupil_list');
+  Pupil pupil;
 
   @override
   void initState() {
@@ -105,6 +106,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(document.documentID),
+                                //getPupilInfo(document.documentID)
                                 Text(DateFormat('MMM dd, yyyy')
                                     .format(DateTime.now())),
                               ],
@@ -182,12 +184,19 @@ class PupilPistSectionState extends State<PupilListSection> {
     );
   }
 
+
+   getPupilInfo(String pupilId) async {     
+      pupil = await Pupil(id: pupilId).getPupil();
+   }
+
   Future<void> _deleteData(String pupilId) async {
     Pupil pupil = Pupil(id: pupilId);
     await ProgressPlan(pupilId: pupilId, instructorId: appData.instructor.id)
         .delete();
-    await LessonManager().deleteAllLessonOfPupil(pupilId, appData.instructor.id);
-    await PaymentManager().deleteAllPaymentOfPupil(pupilId, appData.instructor.id);
+    await LessonManager()
+        .deleteAllLessonOfPupil(pupilId, appData.instructor.id);
+    await PaymentManager()
+        .deleteAllPaymentOfPupil(pupilId, appData.instructor.id);
     await pupil.deleteInstructorOfAnPupil(pupilId, appData.instructor.id);
     await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
     String message = isNotNullOrEmpty(await pupil.delete(pupilId))
