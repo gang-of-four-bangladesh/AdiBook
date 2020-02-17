@@ -451,6 +451,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                         },
                                         activeColor: AppTheme.appThemeColor,
                                       ),
+                                      Text("acknowledgement")
                                     ],
                                   ),
                                 ),
