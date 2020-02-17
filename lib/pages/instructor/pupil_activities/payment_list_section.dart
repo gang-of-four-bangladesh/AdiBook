@@ -166,8 +166,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                     ),
                                   ),
                                 );
-                                // populatePaymentInfo(document.documentID);
-                                // _asyncInputDialog(context);
                               },
                             ),
                           ],
@@ -177,7 +175,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
-                            // color: Colors.tealAccent[100],
                             child: Container(
                               decoration: BoxDecoration(
                             boxShadow: [
@@ -187,17 +184,15 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 offset: Offset(6.0, 7.0),
                               )
                             ],
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(5),
                             gradient: LinearGradient(colors: GradientColors.cloud,)),
                               child: ListTile(
-                                onTap: () {
-                                  print("clicked");
-                                },
+                                contentPadding: EdgeInsets.all(13),
                                 title: Text(
                                   paymentText,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
