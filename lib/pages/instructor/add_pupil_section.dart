@@ -152,7 +152,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                     'Selected Country Code ${this.countryCode}');
                               },
                             )
-                          : null,
+                          : Container(),
                       TextFormField(
                         enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,
