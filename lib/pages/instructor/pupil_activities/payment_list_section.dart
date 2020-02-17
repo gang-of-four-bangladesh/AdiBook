@@ -81,7 +81,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
             stream: _querySnapshot,
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              var format = DateFormat("EEEE dd MMMM");
+              var format = DateFormat("EE, MMM dd, yyyy");
               if (snapshot.connectionState == ConnectionState.waiting)
                 return FrequentWidgets().getProgressBar();
               if (snapshot.data == null)
@@ -188,12 +188,13 @@ class PaymentListSectionState extends State<PaymentListSection> {
                             gradient: LinearGradient(colors: GradientColors.cloud,)),
                               child: ListTile(
                                 contentPadding: EdgeInsets.all(13),
-                                title: Text(
+                                title: Center(child: Text(
                                   paymentText,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
+                                ),
                                 ),
                               ),
                             ),
@@ -370,7 +371,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                           //  addButton,
                           Container(
                             padding: EdgeInsets.all(5.0),
-                            child: Row(
+                            child: Center(child:Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -437,6 +438,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                   ),
                                 ),
                               ],
+                            ),
                             ),
                           ),
                         ]),

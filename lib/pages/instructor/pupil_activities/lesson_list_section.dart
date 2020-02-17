@@ -60,7 +60,7 @@ class LessonListSectionState extends State<LessonListSection> {
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        var format = DateFormat("EEEE dd MMMM");
+        var format = DateFormat("EE, MMM dd, yyyy @ hh:mm aaa");
         if (snapshot.connectionState == ConnectionState.waiting)
           return this.frequentWidgets.getProgressBar();
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
@@ -77,7 +77,7 @@ class LessonListSectionState extends State<LessonListSection> {
             (DocumentSnapshot document) {
               return appData.user.userType == UserType.Instructor
                   ? Slidable(
-                    secondaryActions: <Widget>[],
+                      secondaryActions: <Widget>[],
                       actions: <Widget>[
                           IconSlideAction(
                             caption: 'Remove',
@@ -105,7 +105,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                         onPressed: () async {
                                           Navigator.of(context)
                                               .pop(ConfirmAction.ACCEPT);
-                                              _deleteData(document.documentID);
+                                          _deleteData(document.documentID);
                                         },
                                       )
                                     ],
@@ -138,7 +138,6 @@ class LessonListSectionState extends State<LessonListSection> {
                             },
                           ),
                         ],
-                      
                       actionPane: SlidableScrollActionPane(),
                       actionExtentRatio: 0.12,
                       child: Card(
@@ -156,10 +155,11 @@ class LessonListSectionState extends State<LessonListSection> {
                                 )
                               ],
                               borderRadius: BorderRadius.circular(5),
-                              gradient: LinearGradient(colors: GradientColors.cloud)),
+                              gradient:
+                                  LinearGradient(colors: GradientColors.cloud)),
                           child: ListTile(
                             title: Container(
-                              padding: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(10),
                               child: Column(
                                 children: <Widget>[
                                   //  Lesson Date,
@@ -179,95 +179,54 @@ class LessonListSectionState extends State<LessonListSection> {
                                                     Column(
                                                       children: <Widget>[
                                                         Text(
-                                                          (format
+                                                          enumValueToString(
+                                                            (format
                                                               .format(TypeConversion
                                                                   .timeStampToDateTime(
                                                                       document[
                                                                           Lesson
                                                                               .LessonDateKey]))
-                                                              .toString()),
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 14),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                          enumValueToString(LessonType
-                                                                  .values[int.parse(document[
-                                                                          Lesson
-                                                                              .LessonTypeKey]
-                                                                      .toString())]
-                                                                  .toString() +
-                                                              ' - ' +
-                                                              document[Lesson
-                                                                      .LessonDurationKey]
-                                                                  .toString() +
-                                                              ' minutes - ' +
-                                                              enumValueToString(VehicleType
-                                                                  .values[int.parse(
-                                                                      document[Lesson.VehicleTypeKey]
-                                                                          .toString())]
-                                                                  .toString()) +
-                                                              " Drive"),
-                                                          style: TextStyle(
-                                                              fontSize: 14),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                            enumValueToString(TripLocation
-                                                                    .values[int.parse(document[Lesson
-                                                                            .PickUpLocationKey]
-                                                                        .toString())]
-                                                                    .toString()) +
-                                                                ' : ' +
-                                                                enumValueToString(TripLocation
-                                                                    .values[int.parse(
-                                                                        document[Lesson.DropOffLocationKey]
-                                                                            .toString())]
-                                                                    .toString()),
-                                                            style: TextStyle(
-                                                                fontSize: 14)),
-                                                        SizedBox(
-                                                          height: .2,
-                                                        ),
-                                                        document[Lesson.DiaryNotesKey] ==
-                                                                    null ||
-                                                                document[Lesson
+                                                              .toString())
+                                                            +'\nDuration: ' +
+                                                                  document[Lesson
+                                                                          .LessonDurationKey]
+                                                                      .toString() +
+                                                                  ' minutes \n' +
+                                                                  'Pickup: ' +
+                                                                  enumValueToString(TripLocation
+                                                                      .values[int.parse(
+                                                                          document[Lesson.PickUpLocationKey]
+                                                                              .toString())]
+                                                                      .toString()) +
+                                                                  '\nDrop Off: ') +
+                                                              enumValueToString(
+                                                                TripLocation
+                                                                        .values[
+                                                                            int.parse(document[Lesson.DropOffLocationKey].toString())]
+                                                                        .toString() +
+                                                                    '\nLesson Type: ' +
+                                                                    enumValueToString(
+                                                                      LessonType.values[int.parse(document[Lesson.LessonTypeKey].toString())]
+                                                                              .toString() +
+                                                                          '\nVehicle Type:' +
+                                                                          enumValueToString(VehicleType
+                                                                              .values[int.parse(document[Lesson.VehicleTypeKey].toString())]
+                                                                              .toString()
+                                                                          +'\nNotes: '+document[Lesson
                                                                             .DiaryNotesKey]
-                                                                        .toString() ==
-                                                                    EmptyString
-                                                            ? Container()
-                                                            : Text(
-                                                                "Diary : " +
-                                                                    document[Lesson
-                                                                            .DiaryNotesKey]
-                                                                        .toString(),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
+                                                                        .toString()+'\nReport: '+document[Lesson
+                                                                           .ReportCardKey]
+                                                                        .toString(),),                                                                          
+                                                                    ),                                                                                                                                 
                                                               ),
-                                                        document[Lesson.ReportCardKey] ==
-                                                                    null ||
-                                                                document[Lesson
-                                                                            .ReportCardKey]
-                                                                        .toString() ==
-                                                                    EmptyString
-                                                            ? Container()
-                                                            : Text(
-                                                                "Report : " +
-                                                                    document[Lesson
-                                                                            .ReportCardKey]
-                                                                        .toString(),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
-                                                              )
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 14,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
@@ -291,14 +250,14 @@ class LessonListSectionState extends State<LessonListSection> {
                                                 : null;
                                           },
                                           activeColor: AppTheme.appThemeColor,
-                                        ),                                       
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            ),
+                          ),
                         ),
                       ))
                   : Card(
@@ -362,11 +321,11 @@ class LessonListSectionState extends State<LessonListSection> {
                                                                     document[Lesson.LessonTypeKey]
                                                                         .toString())]
                                                                 .toString() +
-                                                            ' - ' +
+                                                            ' Duration: ' +
                                                             document[Lesson
                                                                     .LessonDurationKey]
                                                                 .toString() +
-                                                            ' minutes - ' +
+                                                            ' minutes' +
                                                             enumValueToString(VehicleType
                                                                 .values[int.parse(
                                                                     document[Lesson
@@ -494,12 +453,12 @@ class LessonListSectionState extends State<LessonListSection> {
     _loadLessonsData();
   }
 
-    Future<void> _deleteData(String lessonId) async {     
+  Future<void> _deleteData(String lessonId) async {
     String message = isNotNullOrEmpty(await LessonManager().deleteLesson(
-                                            instructorId: appData.instructor.id,
-                                            pupilId: this._pupilId,
-                                            lessonId: lessonId,
-                                          ))
+      instructorId: appData.instructor.id,
+      pupilId: this._pupilId,
+      lessonId: lessonId,
+    ))
         ? 'Lesson deleted successfully.'
         : 'Lesson deleted failed.';
     frequentWidgets.getSnackbar(
