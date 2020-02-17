@@ -235,7 +235,11 @@ class LessonListSectionState extends State<LessonListSection> {
                                             ],
                                           ),
                                         ),
-                                        Checkbox(
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Checkbox(
                                           value: document[
                                               Lesson.HasAcknowledgedKey],
                                           onChanged: (check) {
@@ -251,6 +255,9 @@ class LessonListSectionState extends State<LessonListSection> {
                                           },
                                           activeColor: AppTheme.appThemeColor,
                                         ),
+                                        Text('Acknowledge',style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),)
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
@@ -267,158 +274,125 @@ class LessonListSectionState extends State<LessonListSection> {
                       // color: Colors.tealAccent[100],
                       child: Container(
                         decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 13.0,
-                                color: Colors.black.withOpacity(.5),
-                                offset: Offset(6.0, 7.0),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(5),
-                            gradient: LinearGradient(colors: [
-                              Color(0xFFB2DFDB),
-                              Color(0xFFE0F2F1)
-                            ])),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 5.0,
+                                  color: Colors.black.withOpacity(.1),
+                                  offset: Offset(6.0, 7.0),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(5),
+                              gradient:
+                                  LinearGradient(colors: GradientColors.cloud)),
                         child: ListTile(
-                          title: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: <Widget>[
-                                //  Lesson Date,
-                                Container(
-                                  padding:
-                                      EdgeInsets.only(left: 2.0, right: 2.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        /*1*/
-                                        child: Column(
-                                          children: [
-                                            /*2*/
-                                            Container(
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Column(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        (format
-                                                            .format(TypeConversion
-                                                                .timeStampToDateTime(
-                                                                    document[Lesson
-                                                                        .LessonDateKey]))
-                                                            .toString()),
-                                                        style: TextStyle(
+                            title: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                children: <Widget>[
+                                  //  Lesson Date,
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(left: 2.0, right: 2.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          /*1*/
+                                          child: Column(
+                                            children: [
+                                              /*2*/
+                                              Container(
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Column(
+                                                      children: <Widget>[
+                                                        Text(
+                                                          enumValueToString(
+                                                            (format
+                                                              .format(TypeConversion
+                                                                  .timeStampToDateTime(
+                                                                      document[
+                                                                          Lesson
+                                                                              .LessonDateKey]))
+                                                              .toString())
+                                                            +'\nDuration: ' +
+                                                                  document[Lesson
+                                                                          .LessonDurationKey]
+                                                                      .toString() +
+                                                                  ' minutes \n' +
+                                                                  'Pickup: ' +
+                                                                  enumValueToString(TripLocation
+                                                                      .values[int.parse(
+                                                                          document[Lesson.PickUpLocationKey]
+                                                                              .toString())]
+                                                                      .toString()) +
+                                                                  '\nDrop Off: ') +
+                                                              enumValueToString(
+                                                                TripLocation
+                                                                        .values[
+                                                                            int.parse(document[Lesson.DropOffLocationKey].toString())]
+                                                                        .toString() +
+                                                                    '\nLesson Type: ' +
+                                                                    enumValueToString(
+                                                                      LessonType.values[int.parse(document[Lesson.LessonTypeKey].toString())]
+                                                                              .toString() +
+                                                                          '\nVehicle Type:' +
+                                                                          enumValueToString(VehicleType
+                                                                              .values[int.parse(document[Lesson.VehicleTypeKey].toString())]
+                                                                              .toString()
+                                                                          +'\nNotes: '+document[Lesson
+                                                                            .DiaryNotesKey]
+                                                                        .toString()+'\nReport: '+document[Lesson
+                                                                           .ReportCardKey]
+                                                                        .toString(),),                                                                          
+                                                                    ),                                                                                                                                 
+                                                              ),
+                                                          style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                            fontSize: 14),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Text(
-                                                        enumValueToString(LessonType
-                                                                .values[int.parse(
-                                                                    document[Lesson.LessonTypeKey]
-                                                                        .toString())]
-                                                                .toString() +
-                                                            ' Duration: ' +
-                                                            document[Lesson
-                                                                    .LessonDurationKey]
-                                                                .toString() +
-                                                            ' minutes' +
-                                                            enumValueToString(VehicleType
-                                                                .values[int.parse(
-                                                                    document[Lesson
-                                                                            .VehicleTypeKey]
-                                                                        .toString())]
-                                                                .toString()) +
-                                                            " Drive"),
-                                                        style: TextStyle(
-                                                            fontSize: 14),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Text(
-                                                          enumValueToString(TripLocation
-                                                                  .values[int.parse(document[
-                                                                          Lesson
-                                                                              .PickUpLocationKey]
-                                                                      .toString())]
-                                                                  .toString()) +
-                                                              ' : ' +
-                                                              enumValueToString(TripLocation
-                                                                  .values[int.parse(
-                                                                      document[Lesson.DropOffLocationKey]
-                                                                          .toString())]
-                                                                  .toString()),
-                                                          style: TextStyle(
-                                                              fontSize: 14)),
-                                                      SizedBox(
-                                                        height: .2,
-                                                      ),
-                                                      document[Lesson.DiaryNotesKey] ==
-                                                                  null ||
-                                                              document[Lesson
-                                                                          .DiaryNotesKey]
-                                                                      .toString() ==
-                                                                  EmptyString
-                                                          ? Container()
-                                                          : Text(
-                                                              "Diary : " +
-                                                                  document[Lesson
-                                                                          .DiaryNotesKey]
-                                                                      .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                            ),
-                                                      document[Lesson.ReportCardKey] ==
-                                                                  null ||
-                                                              document[Lesson
-                                                                          .ReportCardKey]
-                                                                      .toString() ==
-                                                                  EmptyString
-                                                          ? Container()
-                                                          : Text(
-                                                              "Report : " +
-                                                                  document[Lesson
-                                                                          .ReportCardKey]
-                                                                      .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                            )
-                                                    ],
-                                                  ),
-                                                ],
+                                                            fontSize: 14,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Checkbox(
-                                        value:
-                                            document[Lesson.HasAcknowledgedKey],
-                                        onChanged: (check) {
-                                          document[Lesson.HasAcknowledgedKey] ==
-                                                  false
-                                              ? appData.user.userType ==
-                                                      UserType.Pupil
-                                                  ? _updateData(
-                                                      document.documentID)
-                                                  : null
-                                              : null;
-                                        },
-                                        activeColor: AppTheme.appThemeColor,
-                                      ),
-                                      Text("Acknowledgement")
-                                    ],
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Checkbox(
+                                          value: document[
+                                              Lesson.HasAcknowledgedKey],
+                                          onChanged: (check) {
+                                            document[Lesson
+                                                        .HasAcknowledgedKey] ==
+                                                    false
+                                                ? appData.user.userType ==
+                                                        UserType.Pupil
+                                                    ? _updateData(
+                                                        document.documentID)
+                                                    : null
+                                                : null;
+                                          },
+                                          activeColor: AppTheme.appThemeColor,
+                                        ),
+                                        Text('Acknowledge',style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),)
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     );
             },
           ).toList(),
