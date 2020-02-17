@@ -40,7 +40,7 @@ class LessonManager {
     }
   }
 
-  Future deleteLesson({
+  Future<bool> deleteLesson({
     String instructorId,
     String pupilId,
     String lessonId,
@@ -62,6 +62,10 @@ class LessonManager {
     var snap = await lessonEvent.get();
     if (snap.exists) {
       await lessonEvent.delete();
+      return true;
+    }
+    else{
+      return false;
     }
   }
 

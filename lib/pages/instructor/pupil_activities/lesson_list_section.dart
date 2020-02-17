@@ -105,12 +105,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                         onPressed: () async {
                                           Navigator.of(context)
                                               .pop(ConfirmAction.ACCEPT);
-                                          LessonManager().deleteLesson(
-                                            instructorId: appData.instructor.id,
-                                            pupilId: this._pupilId,
-                                            lessonId: document.documentID,
-                                          );
-                                          _loadLessonsData();
+                                              _deleteData(document.documentID);
                                         },
                                       )
                                     ],
@@ -496,5 +491,20 @@ class LessonListSectionState extends State<LessonListSection> {
       context: context,
     );
     _loadLessonsData();
+  }
+
+    Future<void> _deleteData(String lessonId) async {     
+    String message = isNotNullOrEmpty(await LessonManager().deleteLesson(
+                                            instructorId: appData.instructor.id,
+                                            pupilId: this._pupilId,
+                                            lessonId: lessonId,
+                                          ))
+        ? 'Lesson deleted successfully.'
+        : 'Lesson deleted failed.';
+    frequentWidgets.getSnackbar(
+      message: message,
+      context: context,
+    );
+    this._loadLessonsData();
   }
 }
