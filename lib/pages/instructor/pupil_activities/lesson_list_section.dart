@@ -208,7 +208,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                                     enumValueToString(
                                                                       LessonType.values[int.parse(document[Lesson.LessonTypeKey].toString())]
                                                                               .toString() +
-                                                                          '\nVehicle Type:' +
+                                                                          '\nVehicle Type: ' +
                                                                           enumValueToString(VehicleType
                                                                               .values[int.parse(document[Lesson.VehicleTypeKey].toString())]
                                                                               .toString()
@@ -335,7 +335,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                                                     enumValueToString(
                                                                       LessonType.values[int.parse(document[Lesson.LessonTypeKey].toString())]
                                                                               .toString() +
-                                                                          '\nVehicle Type:' +
+                                                                          '\nVehicle Type: ' +
                                                                           enumValueToString(VehicleType
                                                                               .values[int.parse(document[Lesson.VehicleTypeKey].toString())]
                                                                               .toString()
