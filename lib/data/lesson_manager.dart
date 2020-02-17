@@ -18,9 +18,10 @@ class LessonManager {
 
   Future<bool> createLesson(Lesson lesson) async {
     var lessonSnap = await lesson.get();
-    if (lessonSnap.exists)
+    if (lessonSnap.exists) {
       await lesson.update();
-    else {
+      return true;
+    } else {
       await lesson.add();
       var pupil = await Pupil(id: lesson.pupilId).getPupil();
       LessonEvent lessonEvent = LessonEvent(
