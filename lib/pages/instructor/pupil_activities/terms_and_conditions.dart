@@ -58,9 +58,9 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   @override
   Widget build(BuildContext context) {
     return 
-    //SingleChildScrollView(
-     // child: Center(
-      //  child: 
+    SingleChildScrollView(
+     child: Center(
+       child: 
         Column(
           children: <Widget>[
             if (path != null)
@@ -76,8 +76,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                 ),
               )
           ],
-       // ),
-      //),
+       ),
+      ),
     );
   }
 }
