@@ -39,11 +39,11 @@ dependencies:
   percent_indicator:
   flutter_gradient_colors:
   progress_dialog:
-
   flutter_slidable:
   
   firebase_messaging:
   flutter_local_notifications:
+  pdf_viewer_plugin:
   
   flutter:
     sdk: flutter

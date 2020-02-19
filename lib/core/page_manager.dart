@@ -7,6 +7,7 @@ import 'package:adibook/pages/instructor/pupil_activities/add_payment_section.da
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/payment_list_section.dart';
 import 'package:adibook/pages/instructor/pupil_activities/progress_planner_section.dart';
+import 'package:adibook/pages/instructor/pupil_activities/terms_and_conditions.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -114,6 +115,16 @@ class PageManager {
         drawerLinkText: 'Payments',
         availableFor: UserType.Pupil,
         sectionWidget: PaymentListSection(),
+        bottomNavIcon:
+            Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
+        sectionType: SectionType.PupilActivity,
+        displayArea: [DisplayArea.Drawer]),
+        WidgetConfiguration(
+        index: 4,
+        appBarText: 'Terms and Conditions',
+        drawerLinkText: 'Terms and Conditions',
+        availableFor: UserType.Pupil,
+        sectionWidget: TermsAndConditions(),
         bottomNavIcon:
             Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
         sectionType: SectionType.PupilActivity,
