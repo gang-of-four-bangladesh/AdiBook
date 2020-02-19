@@ -108,6 +108,16 @@ class PageManager {
             Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
         sectionType: SectionType.PupilActivity,
         displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
+         WidgetConfiguration(
+        index: 3,
+        appBarText: 'Payments',
+        drawerLinkText: 'Payments',
+        availableFor: UserType.Pupil,
+        sectionWidget: PaymentListSection(),
+        bottomNavIcon:
+            Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
+        sectionType: SectionType.PupilActivity,
+        displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
     WidgetConfiguration(
         index: 0,
         appBarText: 'Lessons',

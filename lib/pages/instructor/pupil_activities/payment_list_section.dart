@@ -50,6 +50,10 @@ class PaymentListSectionState extends State<PaymentListSection> {
     this._dateOfPayment = DateTime.now();
     this._autoValidate = false;
     _selectedPaymentType = PaymentMode.Cash;
+    if (appData.user.userType == UserType.Pupil) {
+      _loadPaymentsData();
+      return;
+    }
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     this._logger.info('Payment in edit mode id ${this._paymentId}');
@@ -59,7 +63,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
   }
 
   void _loadPaymentsData() async {
-    this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
+    this._pupilId = appData.user.userType == UserType.Pupil
+        ? _getPupilId()
+        : appData.contextualInfo[DataSharingKeys.PupilIdKey];
     if (isNullOrEmpty(this._pupilId)) return;
     if (!mounted) return;
     setState(() {
@@ -68,6 +74,14 @@ class PaymentListSectionState extends State<PaymentListSection> {
               instructorId: appData.instructor.id, pupilId: this._pupilId)
           .asStream();
     });
+  }
+
+  String _getPupilId() {
+    if (isNotNullOrEmpty(appData.pupil)) return appData.pupil.id;
+    if (appData.contextualInfo != null &&
+        appData.contextualInfo.containsKey(DataSharingKeys.PupilIdKey))
+      return appData.contextualInfo[DataSharingKeys.PupilIdKey].toString();
+    return null;
   }
 
   @override
@@ -89,13 +103,13 @@ class PaymentListSectionState extends State<PaymentListSection> {
               if (snapshot.hasError) return Text('Error: ${snapshot.error}');
               if (snapshot.data.documents.length == 0)
                 return Card(
-                  child:Center(
-                      child: Text(
-                        "No Payment Found",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                  child: Center(
+                    child: Text(
+                      "No Payment Found",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  );
+                  ),
+                );
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return FrequentWidgets().getProgressBar();
@@ -109,6 +123,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                     .values[document[Payment.PaymentTypeKey]]
                                     .toString());
                         return Slidable(
+                          enabled: appData.user.userType == UserType.Instructor
+                              ? true
+                              : false,
                           actions: <Widget>[
                             IconSlideAction(
                               caption: 'Remove',
@@ -177,24 +194,27 @@ class PaymentListSectionState extends State<PaymentListSection> {
                             ),
                             child: Container(
                               decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 5.0,
-                                color: Colors.black.withOpacity(.1),
-                                offset: Offset(6.0, 7.0),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(5),
-                            gradient: LinearGradient(colors: GradientColors.cloud,)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 5.0,
+                                      color: Colors.black.withOpacity(.1),
+                                      offset: Offset(6.0, 7.0),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(5),
+                                  gradient: LinearGradient(
+                                    colors: GradientColors.cloud,
+                                  )),
                               child: ListTile(
                                 contentPadding: EdgeInsets.all(13),
-                                title: Center(child: Text(
-                                  paymentText,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                title: Center(
+                                  child: Text(
+                                    paymentText,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
                                 ),
                               ),
                             ),
@@ -371,74 +391,77 @@ class PaymentListSectionState extends State<PaymentListSection> {
                           //  addButton,
                           Container(
                             padding: EdgeInsets.all(5.0),
-                            child: Center(child:Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      ButtonTheme(
-                                        minWidth: 100.0,
-                                        height: 40.0,
-                                        child: RaisedButton(
-                                          onPressed: () async {
-                                            if (_validateInputs()) {
-                                              if (appData.user.userType ==
-                                                  UserType.Instructor)
-                                                await _saveData();
+                            child: Center(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        ButtonTheme(
+                                          minWidth: 100.0,
+                                          height: 40.0,
+                                          child: RaisedButton(
+                                            onPressed: () async {
+                                              if (_validateInputs()) {
+                                                if (appData.user.userType ==
+                                                    UserType.Instructor)
+                                                  await _saveData();
+                                                Navigator.of(context)
+                                                    .pop(paymentdialogBox);
+                                                _loadPaymentsData();
+                                              }
+                                            },
+                                            color: AppTheme.appThemeColor,
+                                            child: Text(
+                                              "Save",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16.0),
+                                            ),
+                                            shape: new RoundedRectangleBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      8.0),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ButtonTheme(
+                                          minWidth: 100.0,
+                                          height: 40.0,
+                                          child: RaisedButton(
+                                            onPressed: () {
                                               Navigator.of(context)
                                                   .pop(paymentdialogBox);
-                                              _loadPaymentsData();
-                                            }
-                                          },
-                                          color: AppTheme.appThemeColor,
-                                          child: Text(
-                                            "Save",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16.0),
+                                            },
+                                            color: AppTheme.appThemeColor,
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16.0),
+                                            ),
+                                            shape: new RoundedRectangleBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      8.0),
+                                            ),
                                           ),
-                                          shape: new RoundedRectangleBorder(
-                                            borderRadius:
-                                                new BorderRadius.circular(8.0),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      ButtonTheme(
-                                        minWidth: 100.0,
-                                        height: 40.0,
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(paymentdialogBox);
-                                          },
-                                          color: AppTheme.appThemeColor,
-                                          child: Text(
-                                            "Cancel",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16.0),
-                                          ),
-                                          shape: new RoundedRectangleBorder(
-                                            borderRadius:
-                                                new BorderRadius.circular(8.0),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
                             ),
                           ),
                         ]),
