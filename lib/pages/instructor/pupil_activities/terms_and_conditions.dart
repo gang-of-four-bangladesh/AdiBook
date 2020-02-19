@@ -23,7 +23,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/teste.pdf');
+    return File('$path/exemplo.pdf');
   }
 
   Future<File> writeCounter(Uint8List stream) async {
@@ -32,16 +32,16 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
     return file.writeAsBytes(stream);
   }
 
-  // Future<Uint8List> fetchPost() async {
-  //   final response = await http.get(
-  //       'https://expoforest.com.br/wp-content/uploads/2017/05/exemplo.pdf');
-  //   final responseJson = response.bodyBytes;
+  Future<Uint8List> fetchPost() async {
+    final response = await http.get(
+        'https://firebasestorage.googleapis.com/v0/b/gofbd-adibook.appspot.com/o/app_docs%2Fpupils%2Fexemplo.pdf?alt=media&token=14c9ec91-1d73-4243-9c06-a98724e567b4');
+    final responseJson = response.bodyBytes;
 
-  //   return responseJson;
-  // }
+    return responseJson;
+  }
 
   loadPdf() async {
-    //writeCounter(await fetchPost());
+    writeCounter(await fetchPost());
     path = (await _localFile).path;
 
     if (!mounted) return;
@@ -65,11 +65,11 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
           children: <Widget>[
             if (path != null)
               Container(
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   border: Border.all(width: 3,color: Colors.black)
                 ),
-                height: MediaQuery.of(context).size.height/1.26,
+                height: MediaQuery.of(context).size.height/1.32,
                 width: MediaQuery.of(context).size.width,
                 child: PdfViewer(
                   filePath: path,
