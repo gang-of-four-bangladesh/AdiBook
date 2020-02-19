@@ -34,7 +34,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
 
   Future<Uint8List> fetchPost() async {
     final response = await http.get(
-        'https://firebasestorage.googleapis.com/v0/b/gofbd-adibook.appspot.com/o/app_docs%2Fpupils%2Fexemplo.pdf?alt=media&token=14c9ec91-1d73-4243-9c06-a98724e567b4');
+        'https://firebasestorage.googleapis.com/v0/b/gofbd-adibook.appspot.com/o/app_docs%2Fpupils%2Fpc_configuration.pdf?alt=media&token=3c4f8489-d3e7-42e2-914c-0d5a38721724');
     final responseJson = response.bodyBytes;
 
     return responseJson;
