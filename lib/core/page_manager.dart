@@ -117,7 +117,7 @@ class PageManager {
         bottomNavIcon:
             Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
         sectionType: SectionType.PupilActivity,
-        displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
+        displayArea: [DisplayArea.Drawer]),
     WidgetConfiguration(
         index: 0,
         appBarText: 'Lessons',
