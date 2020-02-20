@@ -67,7 +67,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               Container(
                 margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 3,color: Colors.black)
+                  border: Border.all(width: 3,color: AppTheme.appThemeColor)
                 ),
                 height: MediaQuery.of(context).size.height/1.32,
                 width: MediaQuery.of(context).size.width,

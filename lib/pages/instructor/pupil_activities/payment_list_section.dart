@@ -122,77 +122,14 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 enumValueToString(PaymentMode
                                     .values[document[Payment.PaymentTypeKey]]
                                     .toString());
-                        return Slidable(
-                          enabled: appData.user.userType == UserType.Instructor
-                              ? true
-                              : false,
-                          actions: <Widget>[
-                            IconSlideAction(
-                              caption: 'Remove',
-                              color: Colors.red,
-                              icon: EvaIcons.trash,
-                              onTap: () {
-                                showDialog<ConfirmAction>(
-                                  context: context,
-                                  barrierDismissible:
-                                      false, // user must tap button for close dialog!
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text("Delete"),
-                                      content: Text("Do you want to delete ?"),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: const Text('CANCEL'),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(ConfirmAction.CANCEL);
-                                          },
-                                        ),
-                                        FlatButton(
-                                          child: const Text('ACCEPT'),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(ConfirmAction.ACCEPT);
-                                            _deleteData(document.documentID);
-                                          },
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            IconSlideAction(
-                              caption: 'Edit',
-                              color: AppTheme.appThemeColor,
-                              icon: EvaIcons.edit,
-                              onTap: () {
-                                appData.contextualInfo = {
-                                  DataSharingKeys.PupilIdKey: this._pupilId,
-                                  DataSharingKeys.PaymentIdKey:
-                                      document.documentID
-                                };
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(
-                                      sectionType: SectionType
-                                          .InstructorActivityForPupil,
-                                      userType: UserType.Instructor,
-                                      toDisplay: AddPaymentSection(),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                          actionPane: SlidableScrollActionPane(),
-                          actionExtentRatio: 0.12,
-                          child: Card(
+                        return Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
-                            child: Container(
+                            child:
+                                // Column(
+                                // children: <Widget>[
+                                Container(
                               decoration: BoxDecoration(
                                   boxShadow: [
                                     BoxShadow(
@@ -206,10 +143,77 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                     colors: GradientColors.cloud,
                                   )),
                               child: ListTile(
+                                leading: appData.user.userType ==
+                                        UserType.Instructor
+                                    ? IconButton(
+                                        icon: Icon(
+                                          EvaIcons.edit,
+                                          color: AppTheme.appThemeColor,
+                                        ),
+                                        onPressed: () {
+                                          appData.contextualInfo = {
+                                            DataSharingKeys.PupilIdKey:
+                                                this._pupilId,
+                                            DataSharingKeys.PaymentIdKey:
+                                                document.documentID
+                                          };
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => HomePage(
+                                                sectionType: SectionType
+                                                    .InstructorActivityForPupil,
+                                                userType: UserType.Instructor,
+                                                toDisplay: AddPaymentSection(),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : null,
+                                trailing: appData.user.userType == UserType.Instructor ? IconButton(
+                                  icon: Icon(
+                                    EvaIcons.trash,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    showDialog<ConfirmAction>(
+                                      context: context,
+                                      barrierDismissible:
+                                          false, // user must tap button for close dialog!
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("Delete"),
+                                          content:
+                                              Text("Do you want to delete ?"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: const Text('CANCEL'),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(ConfirmAction.CANCEL);
+                                              },
+                                            ),
+                                            FlatButton(
+                                              child: const Text('ACCEPT'),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(ConfirmAction.ACCEPT);
+                                                _deleteData(
+                                                    document.documentID);
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ): null,
                                 contentPadding: EdgeInsets.all(13),
                                 title: Center(
                                   child: Text(
                                     paymentText,
+                                    textAlign: TextAlign.justify,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
@@ -218,7 +222,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                 ),
                               ),
                             ),
-                          ),
                         );
                       },
                     ).toList(),
