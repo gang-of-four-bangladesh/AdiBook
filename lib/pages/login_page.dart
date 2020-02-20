@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/page_manager.dart';
 import 'package:adibook/core/push_notification_manager.dart';
@@ -9,11 +15,11 @@ import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:adibook/pages/validation.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -23,6 +29,42 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //terms and condition start
+  String path;
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/exemplo.pdf');
+  }
+
+  Future<File> writeCounter(Uint8List stream) async {
+    final file = await _localFile;
+    // Write the file
+    return file.writeAsBytes(stream);
+  }
+
+  Future<Uint8List> fetchPost() async {
+    final response = await http.get(
+        'https://firebasestorage.googleapis.com/v0/b/gofbd-adibook.appspot.com/o/app_docs%2Fpupils%2Fpc_configuration.pdf?alt=media&token=3c4f8489-d3e7-42e2-914c-0d5a38721724');
+    final responseJson = response.bodyBytes;
+
+    return responseJson;
+  }
+
+  loadPdf() async {
+    writeCounter(await fetchPost());
+    path = (await _localFile).path;
+
+    if (!mounted) return;
+
+    setState(() {});
+  }
+
   PageManager _pageManager = PageManager();
   TextEditingController _countryCodeController = TextEditingController();
   TextEditingController _smsCodeController = TextEditingController();
@@ -41,21 +83,23 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-      pr = ProgressDialog(context,
+    pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.update(
       progress: 50.0,
       message: "Please wait...",
       progressWidget: Container(
-          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(
-                                    AppTheme.appThemeColor),
-                                strokeWidth: 5.0)),
+          padding: EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(AppTheme.appThemeColor),
+              strokeWidth: 5.0)),
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
           color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w400),
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w600),
     );
+    loadPdf();
   }
 
   @override
@@ -303,7 +347,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onPressSendOTPCode(BuildContext context) async {
-    if (!await _hasValidInput()) return;
+    if (this._selectedUserType ==
+        UserType.Instructor) if (!await _hasValidInput()) return;
     var phoneNumber = await _addCountryCodeToPhoneNumber();
     this._logger.info(phoneNumber);
     await pr.show();
@@ -346,10 +391,70 @@ class _LoginPageState extends State<LoginPage> {
     return false;
   }
 
+  Future<void> _confirmation(BuildContext _context) async {
+    if (!await _hasValidInput()) return;
+    showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+              child: Text(
+            "Terms and Conditions",
+            style: TextStyle(color: Colors.red),
+          )),
+          content:
+              //SingleChildScrollView(
+              //child:
+              Center(
+            child: Column(
+              children: <Widget>[
+                if (path != null)
+                  Container(
+                    margin: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border:
+                          Border.all(width: 3, color: AppTheme.appThemeColor),
+                    ),
+                    height: MediaQuery.of(context).size.height / 1.48,
+                    width: MediaQuery.of(context).size.width,
+                    child: PdfViewer(
+                      filePath: path,
+                    ),
+                  )
+              ],
+            ),
+            //),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('REJECT'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+              },
+            ),
+            FlatButton(
+              child: const Text('ACCEPT'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+                _onPressSendOTPCode(_context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   Widget saveButton(BuildContext _context) {
     return RaisedButton(
       onPressed: () {
-        if (this._showProgressBar == false) _onPressSendOTPCode(_context);
+        if (this._showProgressBar == false)
+         if (this._selectedUserType == UserType.Pupil)
+          _confirmation(_context);
+        else
+          _onPressSendOTPCode(_context);
       },
       elevation: 1,
       color: AppTheme.appThemeColor.withOpacity(0.6),
