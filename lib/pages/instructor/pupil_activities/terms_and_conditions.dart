@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
+import 'package:flutter_pdf_viewer/flutter_pdf_viewer.dart';
 
 class TermsAndConditions extends StatefulWidget {
   @override
@@ -15,6 +16,14 @@ class TermsAndConditions extends StatefulWidget {
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
   String path;
+
+  Future<String>get getfilePath async {
+    final filename = 'exemplo.pdf';
+    var bytes = await rootBundle.load("assets/exemplo.pdf");
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    return dir;
+  }
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -22,7 +31,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   }
 
   Future<File> get _localFile async {
-    final path = await _localPath;
+    //final path = await _localPath;
+    final path = await getfilePath;
     return File('$path/exemplo.pdf');
   }
 
@@ -40,8 +50,10 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
     return responseJson;
   }
 
+  
+
   loadPdf() async {
-    writeCounter(await fetchPost());
+   // writeCounter(await fetchPost());
     path = (await _localFile).path;
 
     if (!mounted) return;
@@ -57,26 +69,24 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    SingleChildScrollView(
-     child: Center(
-       child: 
-        Column(
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
           children: <Widget>[
             if (path != null)
               Container(
                 margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 3,color: AppTheme.appThemeColor)
-                ),
-                height: MediaQuery.of(context).size.height/1.32,
+                    border:
+                        Border.all(width: 3, color: AppTheme.appThemeColor)),
+                height: MediaQuery.of(context).size.height / 1.32,
                 width: MediaQuery.of(context).size.width,
-                child: PdfViewer(
-                  filePath: path,
-                ),
+                // child: PdfViewer(
+                //   filePath: path,
+                // ),
               )
           ],
-       ),
+        ),
       ),
     );
   }

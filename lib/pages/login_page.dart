@@ -57,10 +57,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loadPdf() async {
-    writeCounter(await fetchPost());
-    path = (await _localFile).path;
+   writeCounter(await fetchPost());
+   //path = (await _localFile).path;
 
-    if (!mounted) return;
+   if (!mounted) return;
 
     setState(() {});
   }
@@ -393,6 +393,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _confirmation(BuildContext _context) async {
     if (!await _hasValidInput()) return;
+    loadPdf();
     showDialog<ConfirmAction>(
       context: context,
       barrierDismissible: false, // user must tap button for close dialog!
