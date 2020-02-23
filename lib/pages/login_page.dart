@@ -57,10 +57,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loadPdf() async {
-   writeCounter(await fetchPost());
-   path = (await _localFile).path;
+    writeCounter(await fetchPost());
+    path = (await _localFile).path;
 
-   if (!mounted) return;
+    if (!mounted) return;
 
     setState(() {});
   }
@@ -108,108 +108,109 @@ class _LoginPageState extends State<LoginPage> {
     var _oneSixthWidth = _screenWidth / 8;
     var pageWidth = _screenWidth - (_oneSixthWidth * 2);
     this._countryCodeController.text = "+44";
-    return SafeArea(child:Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppTheme.appThemeColor,
-        title: Text("AdiBook"),
-      ),
-      body: Builder(
-        builder: (BuildContext _context) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: _oneSixthWidth,
-                right: _oneSixthWidth,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: AppTheme.appThemeColor,
+          title: Text("AdiBook"),
+        ),
+        body: Builder(
+          builder: (BuildContext _context) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: _oneSixthWidth,
+                  right: _oneSixthWidth,
+                ),
+                child: ListView(
+                  children: <Widget>[
+                    ToggleSwitch(
+                      minWidth: pageWidth / 2,
+                      initialLabelIndex: 0,
+                      activeBgColor: Colors.grey[100].withOpacity(0.6),
+                      activeTextColor: Colors.grey[100].withOpacity(0.1),
+                      inactiveBgColor: Colors.grey[100].withOpacity(0.1),
+                      inactiveTextColor: Colors.grey[100].withOpacity(0.1),
+                      labels: ['UK', 'BD'],
+                      icons: [FontAwesomeIcons.airbnb, FontAwesomeIcons.flag],
+                      onToggle: (index) async {
+                        this.countryCode = index == 0 ? "+44" : "+88";
+                        this
+                            ._logger
+                            .info('Selected Country Code ${this.countryCode}');
+                      },
+                    ),
+                    //SizedBox(height: 40),
+                    Image.asset(
+                      "assets/images/logo.png",
+                      width: 100,
+                      height: 100,
+                    ),
+                    SizedBox(height: 20),
+                    ToggleSwitch(
+                      minWidth: pageWidth / 2,
+                      initialLabelIndex: 0,
+                      activeBgColor: AppTheme.appThemeColor.withOpacity(0.6),
+                      activeTextColor: Colors.white,
+                      inactiveBgColor: Colors.grey,
+                      inactiveTextColor: Colors.grey[900],
+                      labels: ['Instructor', 'Pupil'],
+                      icons: [
+                        FontAwesomeIcons.solidUserCircle,
+                        FontAwesomeIcons.userGraduate
+                      ],
+                      onToggle: (index) {
+                        if (index == 0) {
+                          this._selectedUserType = UserType.Instructor;
+                        } else if (index == 1) {
+                          this._selectedUserType = UserType.Pupil;
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      //validator: Validations().validatePhoneNumber,
+                      maxLength: 11,
+                      decoration: InputDecoration(
+                          icon: Icon(FontAwesomeIcons.phoneAlt),
+                          suffixIcon: Icon(
+                            Icons.star,
+                            color: Colors.red[600],
+                            size: 15,
+                          ),
+                          hintStyle: TextStyle(color: Colors.grey),
+                          hintText: '+44 will be prepended.',
+                          labelText: "Phone(+44)"),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: this._showProgressBar == false
+                          ? SizedBox(child: saveButton(_context))
+                          : Container(),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: _showProgressBar == true
+                          ? SizedBox(
+                              child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation(
+                                      AppTheme.appThemeColor),
+                                  strokeWidth: 5.0),
+                              height: 30.0,
+                              width: 30.0,
+                            )
+                          : Container(),
+                    ),
+                  ],
+                ),
               ),
-              child: ListView(
-                children: <Widget>[
-                  ToggleSwitch(
-                    minWidth: pageWidth / 2,
-                    initialLabelIndex: 0,
-                    activeBgColor: Colors.grey[100].withOpacity(0.6),
-                    activeTextColor: Colors.grey[100].withOpacity(0.1),
-                    inactiveBgColor: Colors.grey[100].withOpacity(0.1),
-                    inactiveTextColor: Colors.grey[100].withOpacity(0.1),
-                    labels: ['UK', 'BD'],
-                    icons: [FontAwesomeIcons.airbnb, FontAwesomeIcons.flag],
-                    onToggle: (index) async {
-                      this.countryCode = index == 0 ? "+44" : "+88";
-                      this
-                          ._logger
-                          .info('Selected Country Code ${this.countryCode}');
-                    },
-                  ),
-                  //SizedBox(height: 40),
-                  Image.asset(
-                    "assets/images/logo.png",
-                    width: 100,
-                    height: 100,
-                  ),
-                  SizedBox(height: 20),
-                  ToggleSwitch(
-                    minWidth: pageWidth / 2,
-                    initialLabelIndex: 0,
-                    activeBgColor: AppTheme.appThemeColor.withOpacity(0.6),
-                    activeTextColor: Colors.white,
-                    inactiveBgColor: Colors.grey,
-                    inactiveTextColor: Colors.grey[900],
-                    labels: ['Instructor', 'Pupil'],
-                    icons: [
-                      FontAwesomeIcons.solidUserCircle,
-                      FontAwesomeIcons.userGraduate
-                    ],
-                    onToggle: (index) {
-                      if (index == 0) {
-                        this._selectedUserType = UserType.Instructor;
-                      } else if (index == 1) {
-                        this._selectedUserType = UserType.Pupil;
-                      }
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _phoneNumberController,
-                    keyboardType: TextInputType.phone,
-                    //validator: Validations().validatePhoneNumber,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                        icon: Icon(FontAwesomeIcons.phoneAlt),
-                        suffixIcon: Icon(
-                          Icons.star,
-                          color: Colors.red[600],
-                          size: 15,
-                        ),
-                        hintStyle: TextStyle(color: Colors.grey),
-                        hintText: '+44 will be prepended.',
-                        labelText: "Phone(+44)"),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: this._showProgressBar == false
-                        ? SizedBox(child: saveButton(_context))
-                        : Container(),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: _showProgressBar == true
-                        ? SizedBox(
-                            child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(
-                                    AppTheme.appThemeColor),
-                                strokeWidth: 5.0),
-                            height: 30.0,
-                            width: 30.0,
-                          )
-                        : Container(),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
-    ),
     );
   }
 
@@ -452,8 +453,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget saveButton(BuildContext _context) {
     return RaisedButton(
       onPressed: () {
-        if (this._showProgressBar == false)
-         if (this._selectedUserType == UserType.Pupil)
+        if (this._showProgressBar == false) if (this._selectedUserType ==
+            UserType.Pupil)
           _confirmation(_context);
         else
           _onPressSendOTPCode(_context);
