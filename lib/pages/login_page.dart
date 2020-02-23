@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
   loadPdf() async {
    writeCounter(await fetchPost());
-   //path = (await _localFile).path;
+   path = (await _localFile).path;
 
    if (!mounted) return;
 
