@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
     var _oneSixthWidth = _screenWidth / 8;
     var pageWidth = _screenWidth - (_oneSixthWidth * 2);
     this._countryCodeController.text = "+44";
-    return Scaffold(
+    return SafeArea(child:Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppTheme.appThemeColor,
@@ -209,6 +209,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
       ),
+    ),
     );
   }
 
