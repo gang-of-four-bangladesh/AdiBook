@@ -188,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: this._showProgressBar == false
-                          ? SizedBox(child: saveButton(_context))
+                          ? SizedBox(child: logInButton(_context))
                           : Container(),
                     ),
                     Align(
@@ -450,7 +450,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget saveButton(BuildContext _context) {
+  Widget logInButton(BuildContext _context) {
     return RaisedButton(
       onPressed: () {
         if (this._showProgressBar == false) if (this._selectedUserType ==
