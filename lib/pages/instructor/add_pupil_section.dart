@@ -334,7 +334,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
         : TypeConversion.toDate(this.dateOfBirthController.text);
     await DatePicker.showDatePicker(
       context,
-      theme: DatePickerTheme(containerHeight: 210.0),
+      //theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
       maxTime: DateTime(

@@ -393,7 +393,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         : TypeConversion.toDateTime(this._lessonTimeController.text);
     await DatePicker.showDateTimePicker(
       context,
-      theme: DatePickerTheme(containerHeight: 210.0),
+      //theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day),

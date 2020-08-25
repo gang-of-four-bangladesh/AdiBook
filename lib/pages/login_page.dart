@@ -412,7 +412,6 @@ class _LoginPageState extends State<LoginPage> {
               Center(
             child: Column(
               children: <Widget>[
-                if (path != null)
                   Container(
                     margin: EdgeInsets.all(2),
                     decoration: BoxDecoration(

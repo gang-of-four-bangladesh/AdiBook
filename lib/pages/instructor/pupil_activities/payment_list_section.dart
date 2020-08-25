@@ -552,7 +552,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
             TypeConversion.toDateDisplayFormat(this._dateOfPayment));
     await DatePicker.showDatePicker(
       context,
-      theme: DatePickerTheme(containerHeight: 210.0),
+      //theme: DatePickerTheme(containerHeight: 210.0),
       showTitleActions: true,
       minTime: DateTime(1950, 1, 1),
       maxTime: DateTime(2022, 12, 31),

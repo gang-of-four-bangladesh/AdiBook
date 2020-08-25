@@ -17,7 +17,7 @@ class TermsAndConditions extends StatefulWidget {
 class _TermsAndConditionsState extends State<TermsAndConditions> {
   String path;
 
-  Future<String>get getfilePath async {
+  Future<String> get getfilePath async {
     final filename = 'exemplo.pdf';
     var bytes = await rootBundle.load("assets/exemplo.pdf");
     String dir = (await getApplicationDocumentsDirectory()).path;
@@ -50,10 +50,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
     return responseJson;
   }
 
-  
-
   loadPdf() async {
-   // writeCounter(await fetchPost());
+    // writeCounter(await fetchPost());
     path = (await _localFile).path;
 
     if (!mounted) return;
@@ -73,18 +71,16 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
       child: Center(
         child: Column(
           children: <Widget>[
-            if (path != null)
-              Container(
-                margin: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border:
-                        Border.all(width: 3, color: AppTheme.appThemeColor)),
-                height: MediaQuery.of(context).size.height / 1.32,
-                width: MediaQuery.of(context).size.width,
-                // child: PdfViewer(
-                //   filePath: path,
-                // ),
-              )
+            Container(
+              margin: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 3, color: AppTheme.appThemeColor)),
+              height: MediaQuery.of(context).size.height / 1.32,
+              width: MediaQuery.of(context).size.width,
+              // child: PdfViewer(
+              //   filePath: path,
+              // ),
+            )
           ],
         ),
       ),
