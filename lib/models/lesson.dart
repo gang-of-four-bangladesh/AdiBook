@@ -77,24 +77,25 @@ class Lesson {
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
-    this.id = snapshot.documentID;
-    this.lessonDate =
-        TypeConversion.timeStampToDateTime(snapshot[Lesson.LessonDateKey]);
-    this.lessonDuration = snapshot[Lesson.LessonDurationKey];
+    this.id = snapshot.id;
+    this.lessonDate = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Lesson.LessonDateKey]);
+    this.lessonDuration = snapshot.data()[Lesson.LessonDurationKey];
     this.pickupLocation =
-        TripLocation.values[snapshot[Lesson.PickUpLocationKey]];
+        TripLocation.values[snapshot.data()[Lesson.PickUpLocationKey]];
     this.dropOffLocation =
-        TripLocation.values[snapshot[Lesson.DropOffLocationKey]];
-    this.vehicleType = VehicleType.values[snapshot[Lesson.VehicleTypeKey]];
-    this.lessonType = LessonType.values[snapshot[Lesson.LessonTypeKey]];
-    this.diaryNotes = snapshot[Lesson.DiaryNotesKey];
-    this.reportCard = snapshot[Lesson.ReportCardKey];
-    this.documentDownloadUrl = snapshot[Lesson.DocumentDownloadUrlKey];
-    this.hasAcknowledged = snapshot[Lesson.HasAcknowledgedKey];
-    this.createdAt =
-        TypeConversion.timeStampToDateTime(snapshot[Lesson.CreatedAtKey]);
-    this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot[Lesson.UpdatedAtKey]);
+        TripLocation.values[snapshot.data()[Lesson.DropOffLocationKey]];
+    this.vehicleType =
+        VehicleType.values[snapshot.data()[Lesson.VehicleTypeKey]];
+    this.lessonType = LessonType.values[snapshot.data()[Lesson.LessonTypeKey]];
+    this.diaryNotes = snapshot.data()[Lesson.DiaryNotesKey];
+    this.reportCard = snapshot.data()[Lesson.ReportCardKey];
+    this.documentDownloadUrl = snapshot.data()[Lesson.DocumentDownloadUrlKey];
+    this.hasAcknowledged = snapshot.data()[Lesson.HasAcknowledgedKey];
+    this.createdAt = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Lesson.CreatedAtKey]);
+    this.updatedAt = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Lesson.UpdatedAtKey]);
   }
 
   Future<Lesson> getLession() async {

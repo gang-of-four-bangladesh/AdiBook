@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,7 +16,7 @@ import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:adibook/pages/validation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as Firebase;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -243,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     await UserManager().updateAppDataByUserId(user.phoneNumber);
-    await pr.dismiss();
+    await pr.hide();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -258,10 +259,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<FirebaseUser> _signInUser(AuthCredential authCredential) async {
+  Future<Firebase.User> _signInUser(AuthCredential authCredential) async {
     var authResult =
         await FirebaseAuth.instance.signInWithCredential(authCredential);
-    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    final Firebase.User currentUser = FirebaseAuth.instance.currentUser;
     assert(authResult.user.phoneNumber == currentUser.phoneNumber);
     var message =
         'signed in with phone number successful. sms code -> ${this._smsCodeController.text}, user -> ${authResult.user}';
@@ -278,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _verificationCompleted(AuthCredential authCredential) async {
     var authResult =
         await FirebaseAuth.instance.signInWithCredential(authCredential);
-    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    final Firebase.User currentUser = FirebaseAuth.instance.currentUser;
     assert(authResult.user.phoneNumber == currentUser.phoneNumber);
     var _userToken = await FirebaseCloudMessaging.getToken();
     await UserManager().createUser(
@@ -307,7 +308,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _verificationFailed(
-      AuthException authException, BuildContext context) async {
+      dynamic authException, BuildContext context) async {
     await pr.dismiss();
     this._logger.shout(
         "PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}");
@@ -412,19 +413,18 @@ class _LoginPageState extends State<LoginPage> {
               Center(
             child: Column(
               children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border:
-                          Border.all(width: 3, color: AppTheme.appThemeColor),
-                    ),
-                    height: MediaQuery.of(context).size.height / 1.48,
-                    width: MediaQuery.of(context).size.width,
-                    child: PdfViewer(
-                      filePath: path,
-                    ),
-                  )
+                Container(
+                  margin: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(width: 3, color: AppTheme.appThemeColor),
+                  ),
+                  height: MediaQuery.of(context).size.height / 1.48,
+                  width: MediaQuery.of(context).size.width,
+                  child: PdfViewer(
+                    filePath: path,
+                  ),
+                )
               ],
             ),
             //),

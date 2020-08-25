@@ -4,13 +4,13 @@ import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/models/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as Firebase;
 import 'package:logging/logging.dart';
 
 class UserManager {
   Logger _logger = Logger('UserManager=>createUser');
   Future<String> get currentUserId async {
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = Firebase.FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     return user.phoneNumber;
   }
@@ -27,7 +27,7 @@ class UserManager {
   }
 
   Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
+    await Firebase.FirebaseAuth.instance.signOut();
   }
 
   Future<bool> userExists(String id, UserType userType) async {
@@ -79,9 +79,8 @@ class UserManager {
     if (userType == UserType.Instructor) {
       await Instructor(id: id, phoneNumber: id).add();
     } else {
-      var result = await pupilExists(id,userType);
-      if(result == false)
-      await Pupil(id: id, phoneNumber: id).add();
+      var result = await pupilExists(id, userType);
+      if (result == false) await Pupil(id: id, phoneNumber: id).add();
     }
     this._logger.info('User of type $userType with $id created.');
   }

@@ -179,45 +179,44 @@ class LessonListSectionState extends State<LessonListSection> {
                                                     Column(
                                                       children: <Widget>[
                                                         Text(
-                                                          enumValueToString(
-                                                            (format
-                                                              .format(TypeConversion
-                                                                  .timeStampToDateTime(
-                                                                      document[
+                                                          enumValueToString((format
+                                                                  .format(TypeConversion.timeStampToDateTime(
+                                                                      document.get(
                                                                           Lesson
-                                                                              .LessonDateKey]))
-                                                              .toString())
-                                                            +'\nDuration: ' +
-                                                                  document[Lesson
-                                                                          .LessonDurationKey]
+                                                                              .LessonDateKey)))
+                                                                  .toString())) +
+                                                              '\nDuration: ' +
+                                                              document.get(Lesson
+                                                                          .LessonDurationKey
                                                                       .toString() +
                                                                   ' minutes \n' +
                                                                   'Pickup: ' +
-                                                                  enumValueToString(TripLocation
-                                                                      .values[int.parse(
-                                                                          document[Lesson.PickUpLocationKey]
-                                                                              .toString())]
-                                                                      .toString()) +
+                                                                  enumValueToString(
+                                                                      TripLocation
+                                                                          .values[
+                                                                              int.parse(document.get(Lesson.PickUpLocationKey.toString()))]
+                                                                          .toString()) +
                                                                   '\nDrop Off: ') +
                                                               enumValueToString(
                                                                 TripLocation
-                                                                        .values[
-                                                                            int.parse(document[Lesson.DropOffLocationKey].toString())]
+                                                                        .values[int.parse(document
+                                                                            .get(Lesson.DropOffLocationKey)
+                                                                            .toString())]
                                                                         .toString() +
                                                                     '\nLesson Type: ' +
                                                                     enumValueToString(
-                                                                      LessonType.values[int.parse(document[Lesson.LessonTypeKey].toString())]
+                                                                      LessonType
+                                                                              .values[int.parse(document[Lesson.LessonTypeKey].toString())]
                                                                               .toString() +
                                                                           '\nVehicle Type: ' +
-                                                                          enumValueToString(VehicleType
-                                                                              .values[int.parse(document[Lesson.VehicleTypeKey].toString())]
-                                                                              .toString()
-                                                                          +'\nNotes: '+document[Lesson
-                                                                            .DiaryNotesKey]
-                                                                        .toString()+'\nReport: '+document[Lesson
-                                                                           .ReportCardKey]
-                                                                        .toString(),),                                                                          
-                                                                    ),                                                                                                                                 
+                                                                          enumValueToString(
+                                                                            VehicleType.values[int.parse(document[Lesson.VehicleTypeKey].toString())].toString() +
+                                                                                '\nNotes: ' +
+                                                                                document[Lesson.DiaryNotesKey].toString() +
+                                                                                '\nReport: ' +
+                                                                                document[Lesson.ReportCardKey].toString(),
+                                                                          ),
+                                                                    ),
                                                               ),
                                                           style: TextStyle(
                                                             fontWeight:
@@ -236,26 +235,34 @@ class LessonListSectionState extends State<LessonListSection> {
                                           ),
                                         ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: <Widget>[
                                             Checkbox(
-                                          value: document[
-                                              Lesson.HasAcknowledgedKey],
-                                          onChanged: (check) {
-                                            document[Lesson
-                                                        .HasAcknowledgedKey] ==
-                                                    false
-                                                ? appData.user.userType ==
-                                                        UserType.Pupil
-                                                    ? _updateData(
-                                                        document.documentID)
-                                                    : null
-                                                : null;
-                                          },
-                                          activeColor: AppTheme.appThemeColor,
-                                        ),
-                                        Text('Acknowledge',style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),)
+                                              value: document[
+                                                  Lesson.HasAcknowledgedKey],
+                                              onChanged: (check) {
+                                                document[Lesson
+                                                            .HasAcknowledgedKey] ==
+                                                        false
+                                                    ? appData.user.userType ==
+                                                            UserType.Pupil
+                                                        ? _updateData(
+                                                            document.documentID)
+                                                        : null
+                                                    : null;
+                                              },
+                                              activeColor:
+                                                  AppTheme.appThemeColor,
+                                            ),
+                                            Text(
+                                              'Acknowledge',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            )
                                           ],
                                         )
                                       ],
@@ -274,125 +281,130 @@ class LessonListSectionState extends State<LessonListSection> {
                       // color: Colors.tealAccent[100],
                       child: Container(
                         decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 5.0,
-                                  color: Colors.black.withOpacity(.1),
-                                  offset: Offset(6.0, 7.0),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(5),
-                              gradient:
-                                  LinearGradient(colors: GradientColors.cloud)),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5.0,
+                                color: Colors.black.withOpacity(.1),
+                                offset: Offset(6.0, 7.0),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(5),
+                            gradient:
+                                LinearGradient(colors: GradientColors.cloud)),
                         child: ListTile(
-                            title: Container(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                children: <Widget>[
-                                  //  Lesson Date,
-                                  Container(
-                                    padding:
-                                        EdgeInsets.only(left: 2.0, right: 2.0),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          /*1*/
-                                          child: Column(
-                                            children: [
-                                              /*2*/
-                                              Container(
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Column(
-                                                      children: <Widget>[
-                                                        Text(
-                                                          enumValueToString(
-                                                            (format
-                                                              .format(TypeConversion
-                                                                  .timeStampToDateTime(
-                                                                      document[
-                                                                          Lesson
-                                                                              .LessonDateKey]))
-                                                              .toString())
-                                                            +'\nDuration: ' +
-                                                                  document[Lesson
-                                                                          .LessonDurationKey]
-                                                                      .toString() +
-                                                                  ' minutes \n' +
-                                                                  'Pickup: ' +
-                                                                  enumValueToString(TripLocation
+                          title: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: <Widget>[
+                                //  Lesson Date,
+                                Container(
+                                  padding:
+                                      EdgeInsets.only(left: 2.0, right: 2.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        /*1*/
+                                        child: Column(
+                                          children: [
+                                            /*2*/
+                                            Container(
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Column(
+                                                    children: <Widget>[
+                                                      Text(
+                                                        enumValueToString((format
+                                                                    .format(TypeConversion
+                                                                        .timeStampToDateTime(document[Lesson
+                                                                            .LessonDateKey]))
+                                                                    .toString()) +
+                                                                '\nDuration: ' +
+                                                                document[Lesson
+                                                                        .LessonDurationKey]
+                                                                    .toString() +
+                                                                ' minutes \n' +
+                                                                'Pickup: ' +
+                                                                enumValueToString(TripLocation
+                                                                    .values[int.parse(
+                                                                        document[Lesson.PickUpLocationKey]
+                                                                            .toString())]
+                                                                    .toString()) +
+                                                                '\nDrop Off: ') +
+                                                            enumValueToString(
+                                                              TripLocation
                                                                       .values[int.parse(
-                                                                          document[Lesson.PickUpLocationKey]
+                                                                          document[Lesson.DropOffLocationKey]
                                                                               .toString())]
-                                                                      .toString()) +
-                                                                  '\nDrop Off: ') +
-                                                              enumValueToString(
-                                                                TripLocation
-                                                                        .values[
-                                                                            int.parse(document[Lesson.DropOffLocationKey].toString())]
-                                                                        .toString() +
-                                                                    '\nLesson Type: ' +
-                                                                    enumValueToString(
-                                                                      LessonType.values[int.parse(document[Lesson.LessonTypeKey].toString())]
-                                                                              .toString() +
-                                                                          '\nVehicle Type: ' +
-                                                                          enumValueToString(VehicleType
-                                                                              .values[int.parse(document[Lesson.VehicleTypeKey].toString())]
-                                                                              .toString()
-                                                                          +'\nNotes: '+document[Lesson
-                                                                            .DiaryNotesKey]
-                                                                        .toString()+'\nReport: '+document[Lesson
-                                                                           .ReportCardKey]
-                                                                        .toString(),),                                                                          
-                                                                    ),                                                                                                                                 
-                                                              ),
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 14,
-                                                          ),
-                                                          textAlign:
-                                                              TextAlign.left,
+                                                                      .toString() +
+                                                                  '\nLesson Type: ' +
+                                                                  enumValueToString(
+                                                                    LessonType
+                                                                            .values[int.parse(document[Lesson.LessonTypeKey].toString())]
+                                                                            .toString() +
+                                                                        '\nVehicle Type: ' +
+                                                                        enumValueToString(
+                                                                          VehicleType.values[int.parse(document[Lesson.VehicleTypeKey].toString())].toString() +
+                                                                              '\nNotes: ' +
+                                                                              document[Lesson.DiaryNotesKey].toString() +
+                                                                              '\nReport: ' +
+                                                                              document[Lesson.ReportCardKey].toString(),
+                                                                        ),
+                                                                  ),
+                                                            ),
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 14,
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Checkbox(
-                                          value: document[
-                                              Lesson.HasAcknowledgedKey],
-                                          onChanged: (check) {
-                                            document[Lesson
-                                                        .HasAcknowledgedKey] ==
-                                                    false
-                                                ? appData.user.userType ==
-                                                        UserType.Pupil
-                                                    ? _updateData(
-                                                        document.documentID)
-                                                    : null
-                                                : null;
-                                          },
-                                          activeColor: AppTheme.appThemeColor,
-                                        ),
-                                        Text('Acknowledge',style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),)
+                                            ),
                                           ],
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Checkbox(
+                                            value: document[
+                                                Lesson.HasAcknowledgedKey],
+                                            onChanged: (check) {
+                                              document[Lesson
+                                                          .HasAcknowledgedKey] ==
+                                                      false
+                                                  ? appData.user.userType ==
+                                                          UserType.Pupil
+                                                      ? _updateData(
+                                                          document.documentID)
+                                                      : null
+                                                  : null;
+                                            },
+                                            activeColor: AppTheme.appThemeColor,
+                                          ),
+                                          Text(
+                                            'Acknowledge',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
+                      ),
                     );
             },
           ).toList(),

@@ -29,32 +29,32 @@ class EventListSectionState extends State<EventListSection> {
   void _initialize() async {
     this._events = await LessonManager().getLessonEvents(date: _selectedDay);
     if (!mounted) return;
-      setState(() {
-        _selectedEvents = _events[_selectedDay] ?? [];
-      });
+    setState(() {
+      _selectedEvents = _events[_selectedDay] ?? [];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Calendar(
-                  events: _events,
-                  onRangeSelected: (range) =>
-                      this._logger.info("Range is ${range.from}, ${range.to}"),
-                  onDateSelected: (date) => _onDateSelected(date),
-                  isExpanded: true,
-                  isExpandable: true,
-                  showTodayIcon: true,
-                  eventColor: AppTheme.calendarEventPendingColor),
-              _buildEventList()
-            ],
-          ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Calendar(
+                events: _events,
+                onRangeSelected: (range) =>
+                    this._logger.info("Range is ${range.from}, ${range.to}"),
+                onDateSelected: (date) => _onDateSelected(date),
+                isExpanded: true,
+                isExpandable: true,
+                hideTodayIcon: false,
+                eventColor: AppTheme.calendarEventPendingColor),
+            _buildEventList()
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Widget _buildEventList() {

@@ -49,17 +49,17 @@ class Instructor {
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
-    this.id = snapshot.documentID;
-    this.name = snapshot[Instructor.NameKey];
-    this.address = snapshot[Instructor.AddressKey];
-    this.phoneNumber = snapshot[Instructor.PhoneNumberKey];
-    this.licenseNo = snapshot[Instructor.LicenseKey];
+    this.id = snapshot.id;
+    this.name = snapshot.data()[Instructor.NameKey];
+    this.address = snapshot.data()[Instructor.AddressKey];
+    this.phoneNumber = snapshot.data()[Instructor.PhoneNumberKey];
+    this.licenseNo = snapshot.data()[Instructor.LicenseKey];
     this.dateOfBirth =
-        TypeConversion.timeStampToDateTime(snapshot[Instructor.DateOfBirthKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Instructor.DateOfBirthKey]);
     this.createdAt =
-        TypeConversion.timeStampToDateTime(snapshot[Instructor.CreatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Instructor.CreatedAtKey]);
     this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot[Instructor.UpdatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Instructor.UpdatedAtKey]);
   }
 
   Future<Instructor> getInstructor() async {

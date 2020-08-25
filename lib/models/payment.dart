@@ -44,14 +44,14 @@ class Payment {
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
-    this.id = snapshot.documentID;
-    this.amount = snapshot[Payment.AmountKey];
-    this.paymentType = PaymentMode.values[snapshot[Payment.PaymentTypeKey]];
-    this.paymentDate = TypeConversion.timeStampToDateTime(snapshot[Payment.PaymentDateKey]);
+    this.id = snapshot.id;
+    this.amount = snapshot.data()[Payment.AmountKey];
+    this.paymentType = PaymentMode.values[snapshot.data()[Payment.PaymentTypeKey]];
+    this.paymentDate = TypeConversion.timeStampToDateTime(snapshot.data()[Payment.PaymentDateKey]);
     this.createdAt =
-        TypeConversion.timeStampToDateTime(snapshot[Payment.CreatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Payment.CreatedAtKey]);
     this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot[Payment.UpdatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Payment.UpdatedAtKey]);
   }
 
   Future<DocumentSnapshot> get() async {

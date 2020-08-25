@@ -215,7 +215,7 @@ class _ProgressPlannerSectionState extends State<ProgressPlannerSection> {
                     ),
                     SmoothStarRating(
                       allowHalfRating: false,
-                      onRatingChanged: (v) async {
+                      onRated: (v) async {
                         setState(() {
                           _progressPlanDetails[index].status =
                               ProgressSubjectStatus.values[v.toInt()];

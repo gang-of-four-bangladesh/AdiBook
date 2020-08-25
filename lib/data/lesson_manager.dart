@@ -88,7 +88,7 @@ class LessonManager {
       if (snap.data == null) continue;
       for (var i = 1; i <= lastDayOfMonth; i++) {
         List<Map> events = new List();
-        var data = snap.data[i.toString()];
+        var data = snap.data()[i.toString()];
         if (data == null) continue;
         var key = DateTime(year, month, i);
         for (var item in data) {

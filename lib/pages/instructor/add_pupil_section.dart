@@ -202,8 +202,9 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
                         validator: validations.validatePhoneNumber,
-                        maxLength: appData.user.userType == UserType.Instructor ? 11 : null,
-                        
+                        maxLength: appData.user.userType == UserType.Instructor
+                            ? 11
+                            : null,
                         decoration: InputDecoration(
                             icon: Icon(FontAwesomeIcons.phone),
                             suffixIcon: appData.user.userType == UserType.Pupil
@@ -285,7 +286,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   Future<void> _onDrivingLicenseUploadTap() async {
     this.drivingLicenseController.text = await FilePicker.getFilePath(
-        type: FileType.CUSTOM, fileExtension: "pdf");
+        type: FileType.custom, allowedExtensions: ["pdf"]);
   }
 
   bool _validateInputs() {
@@ -305,12 +306,11 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     }
   }
 
-    Future<String> _addCountryCodeToPhoneNumber() async {
+  Future<String> _addCountryCodeToPhoneNumber() async {
     if (this.phoneController.text.startsWith(this.countryCode))
       return this.phoneController.text;
     return "$countryCode" + "${this.phoneController.text}";
   }
-
 
   void _resetPageData() {
     setState(() {
@@ -393,7 +393,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     String message = isNotNullOrEmpty(result)
         ? 'Pupil created successfully.'
         : 'Pupil creation failed.';
-    pr.dismiss();
+    pr.hide();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

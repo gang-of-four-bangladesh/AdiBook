@@ -1,6 +1,7 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 
 class User {
@@ -47,18 +48,18 @@ class User {
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
-    this.id = snapshot.documentID;
-    this.name = snapshot[User.NameKey];
-    this.phoneNumber = snapshot[User.PhoneNumberKey];
-    this.userType = UserType.values[snapshot[User.UserTypeKey]];
-    this.userToken = snapshot[User.UserTokenKey];
-    this.isVerified = snapshot[User.IsVerifiedKey];
+    this.id = snapshot.id;
+    this.name = snapshot.data()[User.NameKey];
+    this.phoneNumber = snapshot.data()[User.PhoneNumberKey];
+    this.userType = UserType.values[snapshot.data()[User.UserTypeKey]];
+    this.userToken = snapshot.data()[User.UserTokenKey];
+    this.isVerified = snapshot.data()[User.IsVerifiedKey];
     this.expiryDate =
-        TypeConversion.timeStampToDateTime(snapshot[User.ExpiryDateKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[User.ExpiryDateKey]);
     this.createdAt =
-        TypeConversion.timeStampToDateTime(snapshot[User.CreatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[User.CreatedAtKey]);
     this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot[User.UpdatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[User.UpdatedAtKey]);
   }
 
   Future<User> getUser() async {
@@ -72,10 +73,10 @@ class User {
   }
 
   Future<DocumentSnapshot> get() async {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection(FirestorePath.UserCollection)
-        .document(this.id)
-        .get(source: Source.serverAndCache);
+        .doc(this.id)
+        .get(GetOptions(source: Source.serverAndCache));
   }
 
   Future<bool> add() async {
@@ -83,10 +84,10 @@ class User {
       this.createdAt = DateTime.now();
       this.expiryDate = this.createdAt.add(Duration(days: 30));
       var json = this._toJson();
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(FirestorePath.UserCollection)
-          .document(this.id)
-          .setData(json);
+          .doc(this.id)
+          .set(json);
       this._logger.info('User created successfully with data $json.');
       return true;
     } catch (e) {

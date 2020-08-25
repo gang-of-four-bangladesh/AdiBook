@@ -44,16 +44,17 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
       progress: 50.0,
       message: "Please wait...",
       progressWidget: Container(
-          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(
-                                    AppTheme.appThemeColor),
-                                strokeWidth: 5.0)),
+          padding: EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(AppTheme.appThemeColor),
+              strokeWidth: 5.0)),
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
           color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
-    
+
     this.dateOfPaymentController.text =
         TypeConversion.toDateDisplayFormat(DateTime.now());
     this._autoValidate = false;
@@ -195,7 +196,7 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
             ? 'Payment Updated successfully.'
             : 'Payment update failed.';
 
-    pr.dismiss();
+    pr.hide();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

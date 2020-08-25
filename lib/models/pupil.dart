@@ -64,24 +64,24 @@ class Pupil {
   }
 
   Future<void> _toObject(DocumentSnapshot snapshot) async {
-    this.id = snapshot.documentID;
-    this.name = snapshot[Pupil.NameKey];
-    this.address = snapshot[Pupil.AddressKey];
-    this.phoneNumber = snapshot[Pupil.PhoneNumberKey];
-    this.licenseNo = snapshot[Pupil.LicenseKey];
-    this.dateOfBirth =
-        TypeConversion.timeStampToDateTime(snapshot[Pupil.DateOfBirthKey]);
-    this.eyeTest = snapshot[Pupil.EyeTestKey];
-    this.theoryRecord = snapshot[Pupil.TheoryRecordKey];
-    this.documentDownloadUrl = snapshot[Pupil.DocumentDownloadUrlKey];
-    this.previousExperience = snapshot[Pupil.PreviousExperiencehKey];
+    this.id = snapshot.id;
+    this.name = snapshot.data()[Pupil.NameKey];
+    this.address = snapshot.data()[Pupil.AddressKey];
+    this.phoneNumber = snapshot.data()[Pupil.PhoneNumberKey];
+    this.licenseNo = snapshot.data()[Pupil.LicenseKey];
+    this.dateOfBirth = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Pupil.DateOfBirthKey]);
+    this.eyeTest = snapshot.data()[Pupil.EyeTestKey];
+    this.theoryRecord = snapshot.data()[Pupil.TheoryRecordKey];
+    this.documentDownloadUrl = snapshot.data()[Pupil.DocumentDownloadUrlKey];
+    this.previousExperience = snapshot.data()[Pupil.PreviousExperiencehKey];
     this.createdAt =
-        TypeConversion.timeStampToDateTime(snapshot[Pupil.CreatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Pupil.CreatedAtKey]);
     this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot[Pupil.UpdatedAtKey]);
+        TypeConversion.timeStampToDateTime(snapshot.data()[Pupil.UpdatedAtKey]);
   }
 
-   Future<Pupil> getPupil() async {
+  Future<Pupil> getPupil() async {
     var pupil = await this.get();
     if (!pupil.exists) {
       this._logger.severe('${this.id} pupil does not exists.');

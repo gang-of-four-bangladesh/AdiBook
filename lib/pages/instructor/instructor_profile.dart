@@ -188,7 +188,7 @@ class _InstructorProfile extends State<InstructorProfile> {
     String message = isNotNullOrEmpty(result)
         ? 'Instructor updated successfully.'
         : 'Instructor update failed.';
-    pr.dismiss();
+    pr.hide();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

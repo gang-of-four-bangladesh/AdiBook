@@ -52,7 +52,7 @@ class PupilPistSectionState extends State<PupilListSection> {
           return this.frequentWidgets.getProgressBar();
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-        if (snapshot.data.documents.length == 0)
+        if (snapshot.data.docs.length == 0)
           return Card(
               child: Center(
                   child: Text(
@@ -184,10 +184,9 @@ class PupilPistSectionState extends State<PupilListSection> {
     );
   }
 
-
-   getPupilInfo(String pupilId) async {     
-      pupil = await Pupil(id: pupilId).getPupil();
-   }
+  getPupilInfo(String pupilId) async {
+    pupil = await Pupil(id: pupilId).getPupil();
+  }
 
   Future<void> _deleteData(String pupilId) async {
     Pupil pupil = Pupil(id: pupilId);

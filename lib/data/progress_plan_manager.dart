@@ -29,14 +29,14 @@ class ProgressPlanManager {
       _data.add(progressData);
       if (!progressSnap.exists) continue;
 
-      var subjectDeatils = progressSnap[progressPlanSubject.keys.first];
+      var subjectDeatils = progressSnap.data()[progressPlanSubject.keys.first];
       this._logger.info('Subject details from firestore $subjectDeatils');
       if (subjectDeatils == null) continue;
 
       this._logger.info(
-          'Progress status for ${progressData.subjectDisplayName} is ${progressSnap[progressPlanSubject.keys.first][ProgressPlanSubject.StatusKey]}');
+          'Progress status for ${progressData.subjectDisplayName} is ${progressSnap.data()[progressPlanSubject.keys.first][ProgressPlanSubject.StatusKey]}');
       progressData.status = ProgressSubjectStatus.values[
-          progressSnap[progressPlanSubject.keys.first]
+          progressSnap.data()[progressPlanSubject.keys.first]
               [ProgressPlanSubject.StatusKey]];
     }
     return _data;

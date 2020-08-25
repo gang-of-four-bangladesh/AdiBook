@@ -28,8 +28,8 @@ class ProgressPlan {
       this.progressPlanSubject =
           await this.progressPlanSubject.toObject(snapshot);
     }
-    this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot[ProgressPlan.UpdatedAtKey]);
+    this.updatedAt = TypeConversion.timeStampToDateTime(
+        snapshot.data()[ProgressPlan.UpdatedAtKey]);
   }
 
   Future<ProgressPlan> getProgressPlan() async {
@@ -93,7 +93,6 @@ class ProgressPlan {
   }
 }
 
-
 class ProgressPlanSubject {
   static const String StatusKey = 'sts';
   static const String UpdatedAtKey = 'uat';
@@ -103,16 +102,14 @@ class ProgressPlanSubject {
   }) : updatedAt = null;
 
   Map<String, dynamic> toJson() {
-    return {
-      StatusKey: this.subjectStatus.index,
-      UpdatedAtKey: this.updatedAt
-    };
+    return {StatusKey: this.subjectStatus.index, UpdatedAtKey: this.updatedAt};
   }
 
   Future<ProgressPlanSubject> toObject(DocumentSnapshot snapshot) async {
-    this.subjectStatus = ProgressSubjectStatus.values[snapshot[StatusKey]];
+    this.subjectStatus =
+        ProgressSubjectStatus.values[snapshot.data()[StatusKey]];
     this.updatedAt = TypeConversion.timeStampToDateTime(
-            snapshot[ProgressPlanSubject.UpdatedAtKey]);
+        snapshot.data()[ProgressPlanSubject.UpdatedAtKey]);
     return this;
   }
 
