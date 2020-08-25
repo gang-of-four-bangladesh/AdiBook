@@ -292,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     await UserManager().updateAppDataByUserId(currentUser.phoneNumber);
-    await pr.dismiss();
+    await pr.hide();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -309,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _verificationFailed(
       dynamic authException, BuildContext context) async {
-    await pr.dismiss();
+    await pr.hide();
     this._logger.shout(
         "PhoneVerificationFailed. Code: ${authException.code}. Message: ${authException.message}");
     FrequentWidgets().getSnackbar(
@@ -333,7 +333,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _codeAutoRetrievalTimeout(
       String verificationId, BuildContext context) async {
-    await pr.dismiss();
+    await pr.hide();
     this.verificationId = verificationId;
     FrequentWidgets().getSnackbar(
       message:
@@ -359,7 +359,7 @@ class _LoginPageState extends State<LoginPage> {
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 5),
       verificationCompleted: this._verificationCompleted,
-      verificationFailed: (AuthException authException) async {
+      verificationFailed: (dynamic authException) async {
         await this._verificationFailed(authException, context);
       },
       codeSent: (String verificationId, [int forceResendingToken]) async {

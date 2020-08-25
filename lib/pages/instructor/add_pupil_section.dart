@@ -286,7 +286,7 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   Future<void> _onDrivingLicenseUploadTap() async {
     this.drivingLicenseController.text = await FilePicker.getFilePath(
-        type: FileType.custom, allowedExtensions: ["pdf"]);
+        type: FileType.custom, allowedExtensions: ['pdf']);
   }
 
   bool _validateInputs() {

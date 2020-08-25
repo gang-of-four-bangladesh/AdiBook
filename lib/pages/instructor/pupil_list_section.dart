@@ -93,7 +93,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                       ),
                       contentPadding: EdgeInsets.all(5),
                       title: Text(
-                        document[Pupil.NameKey],
+                        document.get([Pupil.NameKey]),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Container(

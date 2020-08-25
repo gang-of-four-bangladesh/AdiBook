@@ -118,9 +118,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
                         var paymentText =
-                            'Paid £${document[Payment.AmountKey]} on ${format.format(TypeConversion.timeStampToDateTime(document[Payment.PaymentDateKey]))} by ' +
+                            'Paid £${document.get([Payment.AmountKey])} on ${format.format(TypeConversion.timeStampToDateTime(document.get([Payment.PaymentDateKey])))} by ' +
                                 enumValueToString(PaymentMode
-                                    .values[document[Payment.PaymentTypeKey]]
+                                    .values[document.get([Payment.PaymentTypeKey])]
                                     .toString());
                         return Card(
                             shape: RoundedRectangleBorder(

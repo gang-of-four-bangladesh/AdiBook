@@ -56,14 +56,16 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   @override
   void initState() {
     super.initState();
-    pr = new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.update(
       progress: 50.0,
       message: "Please wait...",
       progressWidget: Container(
-          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(
-                                    AppTheme.appThemeColor),
-                                strokeWidth: 5.0)),
+          padding: EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(AppTheme.appThemeColor),
+              strokeWidth: 5.0)),
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
           color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w400),
@@ -314,7 +316,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
 
   Future<void> _onUploadLicenseTap() async {
     this._uploadLicenseController.text = await FilePicker.getFilePath(
-        type: FileType.CUSTOM, fileExtension: "pdf");
+        type: FileType.custom, allowedExtensions: ["pdf"]);
   }
 
   Future<void> _saveData() async {
@@ -348,7 +350,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
         : message = isNotNullOrEmpty(await LessonManager().createLesson(lesson))
             ? 'Lesson updated successfully.'
             : 'Lesson updated failed.';
-    pr.dismiss();
+    pr.hide();
     _frequentWidgets.getSnackbar(
       message: message,
       context: context,

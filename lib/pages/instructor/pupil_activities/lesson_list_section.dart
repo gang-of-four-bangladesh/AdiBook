@@ -206,15 +206,15 @@ class LessonListSectionState extends State<LessonListSection> {
                                                                     '\nLesson Type: ' +
                                                                     enumValueToString(
                                                                       LessonType
-                                                                              .values[int.parse(document[Lesson.LessonTypeKey].toString())]
+                                                                              .values[int.parse(document.get([Lesson.LessonTypeKey].toString()))]
                                                                               .toString() +
                                                                           '\nVehicle Type: ' +
                                                                           enumValueToString(
-                                                                            VehicleType.values[int.parse(document[Lesson.VehicleTypeKey].toString())].toString() +
+                                                                            VehicleType.values[int.parse(document.get([Lesson.VehicleTypeKey].toString()))].toString() +
                                                                                 '\nNotes: ' +
-                                                                                document[Lesson.DiaryNotesKey].toString() +
+                                                                                document.get([Lesson.DiaryNotesKey].toString()) +
                                                                                 '\nReport: ' +
-                                                                                document[Lesson.ReportCardKey].toString(),
+                                                                                document.get([Lesson.ReportCardKey].toString()),
                                                                           ),
                                                                     ),
                                                               ),
@@ -241,11 +241,11 @@ class LessonListSectionState extends State<LessonListSection> {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Checkbox(
-                                              value: document[
-                                                  Lesson.HasAcknowledgedKey],
+                                              value: document.get([
+                                                  Lesson.HasAcknowledgedKey]),
                                               onChanged: (check) {
-                                                document[Lesson
-                                                            .HasAcknowledgedKey] ==
+                                                document.get([Lesson
+                                                            .HasAcknowledgedKey]) ==
                                                         false
                                                     ? appData.user.userType ==
                                                             UserType.Pupil
@@ -315,39 +315,39 @@ class LessonListSectionState extends State<LessonListSection> {
                                                       Text(
                                                         enumValueToString((format
                                                                     .format(TypeConversion
-                                                                        .timeStampToDateTime(document[Lesson
-                                                                            .LessonDateKey]))
+                                                                        .timeStampToDateTime(document.get([Lesson
+                                                                            .LessonDateKey])))
                                                                     .toString()) +
                                                                 '\nDuration: ' +
-                                                                document[Lesson
+                                                                document.get([Lesson
                                                                         .LessonDurationKey]
-                                                                    .toString() +
+                                                                    .toString()) +
                                                                 ' minutes \n' +
                                                                 'Pickup: ' +
                                                                 enumValueToString(TripLocation
                                                                     .values[int.parse(
-                                                                        document[Lesson.PickUpLocationKey]
-                                                                            .toString())]
+                                                                        document.get([Lesson.PickUpLocationKey]
+                                                                            .toString()))]
                                                                     .toString()) +
                                                                 '\nDrop Off: ') +
                                                             enumValueToString(
                                                               TripLocation
                                                                       .values[int.parse(
-                                                                          document[Lesson.DropOffLocationKey]
-                                                                              .toString())]
+                                                                          document.get([Lesson.DropOffLocationKey]
+                                                                              .toString()))]
                                                                       .toString() +
                                                                   '\nLesson Type: ' +
                                                                   enumValueToString(
                                                                     LessonType
-                                                                            .values[int.parse(document[Lesson.LessonTypeKey].toString())]
+                                                                            .values[int.parse(document.get([Lesson.LessonTypeKey].toString()))]
                                                                             .toString() +
                                                                         '\nVehicle Type: ' +
                                                                         enumValueToString(
-                                                                          VehicleType.values[int.parse(document[Lesson.VehicleTypeKey].toString())].toString() +
+                                                                          VehicleType.values[int.parse(document.get([Lesson.VehicleTypeKey].toString()))].toString() +
                                                                               '\nNotes: ' +
-                                                                              document[Lesson.DiaryNotesKey].toString() +
+                                                                              document.get([Lesson.DiaryNotesKey].toString()) +
                                                                               '\nReport: ' +
-                                                                              document[Lesson.ReportCardKey].toString(),
+                                                                              document.get([Lesson.ReportCardKey].toString()),
                                                                         ),
                                                                   ),
                                                             ),
@@ -374,11 +374,11 @@ class LessonListSectionState extends State<LessonListSection> {
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           Checkbox(
-                                            value: document[
-                                                Lesson.HasAcknowledgedKey],
+                                            value: document.get([
+                                                Lesson.HasAcknowledgedKey]),
                                             onChanged: (check) {
-                                              document[Lesson
-                                                          .HasAcknowledgedKey] ==
+                                              document.get([Lesson
+                                                          .HasAcknowledgedKey]) ==
                                                       false
                                                   ? appData.user.userType ==
                                                           UserType.Pupil
