@@ -1,6 +1,5 @@
 import 'package:adibook/core/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class ImageUpload extends StatefulWidget {
@@ -13,12 +12,12 @@ class ImageUpload extends StatefulWidget {
 class ImageUploadState extends State<ImageUpload> {
   File img;
   Future imagePickerCamera() async {
-    img = await ImagePicker.pickImage(source: ImageSource.camera);
+    img = await imagePickerCamera();
     setState(() {});
   }
 
   Future imagePickerGallary() async {
-    img = await ImagePicker.pickImage(source: ImageSource.gallery);
+    img = await imagePickerGallary();
     setState(() {});
   }
 
@@ -44,14 +43,16 @@ class ImageUploadState extends State<ImageUpload> {
                             width: 320.0,
                             height: 220.0,
                             child: Center(
-                              child:      
-                                  ClipRRect(
-                                   borderRadius: BorderRadius.circular(5.0),
-                                    child: img == null? 
-                                    Text("No Image",style: TextStyle(fontWeight: FontWeight.bold),)                                
-                                   : Image.file(img),
-                                  )
-                            )),
+                                child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5.0),
+                              child: img == null
+                                  ? Text(
+                                      "No Image",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Image.file(img),
+                            ))),
                       ]),
                   Container(
                     padding: EdgeInsets.only(top: 13.0),
@@ -117,5 +118,4 @@ class ImageUploadState extends State<ImageUpload> {
       ),
     );
   }
-
 }

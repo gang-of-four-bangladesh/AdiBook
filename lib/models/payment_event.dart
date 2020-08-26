@@ -27,9 +27,9 @@ class PaymentEvent {
   String pupilId;
 
   Map<String, dynamic> _toJson() {
-    var ref = Firestore.instance
+    var ref = FirebaseFirestore.instance
         .collection(FirestorePath.PupilCollection)
-        .document(this.pupilId);
+        .doc(this.pupilId);
     return {
       this.day: FieldValue.arrayUnion(
         [
@@ -46,7 +46,7 @@ class PaymentEvent {
   Future<DocumentSnapshot> get() async {
     var path = sprintf(FirestorePath.PaymentsOfAPupilColection,
         [this.instructorId, this.id]);
-    return Firestore.instance.collection(path).document(this.id).get();
+    return FirebaseFirestore.instance.collection(path).doc(this.id).get();
   }
 
   Future<bool> add() async {
@@ -55,7 +55,7 @@ class PaymentEvent {
           [this.instructorId, this.id]);
       this._logger.info(path);
       var json = this._toJson();
-      await Firestore.instance.collection(path).document(this.id).setData(json);
+      await FirebaseFirestore.instance.collection(path).doc(this.id).set(json);
       this._logger.info('Payment event created successfully with data $json.');
       return true;
     } catch (e) {
@@ -70,10 +70,10 @@ class PaymentEvent {
           [this.instructorId, this.id]);
       this._logger.info(path);
       var json = this._toJson();
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(path)
-          .document(this.id)
-          .updateData(json);
+          .doc(this.id)
+          .update(json);
       this._logger.info('Payment event updated successfully with data $json.');
       return true;
     } catch (e) {
@@ -95,9 +95,9 @@ class PaymentEvent {
         ],
       ),
     };
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection(path)
-        .document(this.id)
-        .updateData(json);
+        .doc(this.id)
+        .update(json);
   }
 }

@@ -228,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
           .dialogBox(context, 'OTP Code', 'OTP code should be six characters.');
       return;
     }
-    AuthCredential authCredential = PhoneAuthProvider.getCredential(
+    AuthCredential authCredential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: this._smsCodeController.text,
     );
@@ -270,11 +270,11 @@ class _LoginPageState extends State<LoginPage> {
     return currentUser;
   }
 
-  Future<void> _displayProgressBar(bool status) async {
-    setState(() {
-      this._showProgressBar = status;
-    });
-  }
+  // Future<void> _displayProgressBar(bool status) async {
+  //   setState(() {
+  //     this._showProgressBar = status;
+  //   });
+  // }
 
   Future<void> _verificationCompleted(AuthCredential authCredential) async {
     var authResult =

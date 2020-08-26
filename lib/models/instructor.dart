@@ -74,26 +74,26 @@ class Instructor {
 
   Future<QuerySnapshot> getPupils() async {
     var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [this.id]);
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection(path)
         .orderBy(Pupil.NameKey)
-        .getDocuments();
+        .get();
   }
 
   Future<DocumentSnapshot> get() async {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection(FirestorePath.InstructorCollection)
-        .document(this.id)
+        .doc(this.id)
         .get();
   }
 
   Future<Instructor> add() async {
     try {
       this.createdAt = DateTime.now();
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(FirestorePath.InstructorCollection)
-          .document(this.id)
-          .setData(this.toJson());
+          .doc(this.id)
+          .set(this.toJson());
       this._logger.info('Instructor created succussfully.');
       return this;
     } catch (e) {
@@ -105,10 +105,10 @@ class Instructor {
   Future<Instructor> update() async {
     try {
       this.updatedAt = DateTime.now();
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(FirestorePath.InstructorCollection)
-          .document(this.id)
-          .updateData(this.toJson());
+          .doc(this.id)
+          .update(this.toJson());
       this._logger.info('Instructor updated successfully.');
       return this;
     } catch (e) {
@@ -118,15 +118,15 @@ class Instructor {
   }
 
   Future<void> delete() async {
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection(FirestorePath.InstructorCollection)
-        .document(this.id)
+        .doc(this.id)
         .delete();
   }
 
    Future<void> deletePupilOfAnInstructor() async {
     var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection,
         [this.pupilId, this.instructorId]);
-    return Firestore.instance.collection(path).document(this.id).delete();
+    return FirebaseFirestore.instance.collection(path).doc(this.id).delete();
   }
 }

@@ -12,8 +12,8 @@ class PaymentManager {
       String pupilId, String instructorId) async {
     var path = sprintf(
         FirestorePath.PaymentsOfAPupilColection, [pupilId, instructorId]);
-    return Firestore.instance.collection(path).getDocuments().then((snapshot) {
-      for (DocumentSnapshot doc in snapshot.documents) {
+    return FirebaseFirestore.instance.collection(path).get().then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
         doc.reference.delete();
       }
     });

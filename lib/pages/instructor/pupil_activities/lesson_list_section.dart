@@ -6,7 +6,6 @@ import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/lesson.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/pupil_activities/add_lesson_section.dart';
-import 'package:adibook/pages/instructor/pupil_activities/payment_list_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +64,7 @@ class LessonListSectionState extends State<LessonListSection> {
           return this.frequentWidgets.getProgressBar();
         if (snapshot.data == null) return FrequentWidgets().getProgressBar();
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-        if (snapshot.data.documents.length == 0)
+        if (snapshot.data.docs.length == 0)
           return Card(
               child: Center(
                   child: Text(
@@ -73,7 +72,7 @@ class LessonListSectionState extends State<LessonListSection> {
             style: TextStyle(fontWeight: FontWeight.bold),
           )));
         return ListView(
-          children: snapshot.data.documents.map(
+          children: snapshot.data.docs.map(
             (DocumentSnapshot document) {
               return appData.user.userType == UserType.Instructor
                   ? Slidable(
@@ -105,7 +104,7 @@ class LessonListSectionState extends State<LessonListSection> {
                                         onPressed: () async {
                                           Navigator.of(context)
                                               .pop(ConfirmAction.ACCEPT);
-                                          _deleteData(document.documentID);
+                                          _deleteData(document.id);
                                         },
                                       )
                                     ],
@@ -121,7 +120,7 @@ class LessonListSectionState extends State<LessonListSection> {
                             onTap: () {
                               appData.contextualInfo = {
                                 DataSharingKeys.LessonIdKey:
-                                    document.documentID,
+                                    document.id,
                                 DataSharingKeys.PupilIdKey: this._pupilId
                               };
                               Navigator.push(
@@ -250,9 +249,9 @@ class LessonListSectionState extends State<LessonListSection> {
                                                     ? appData.user.userType ==
                                                             UserType.Pupil
                                                         ? _updateData(
-                                                            document.documentID)
-                                                        : null
-                                                    : null;
+                                                            document.id)
+                                                        : Container()
+                                                    : Container();
                                               },
                                               activeColor:
                                                   AppTheme.appThemeColor,
@@ -383,9 +382,9 @@ class LessonListSectionState extends State<LessonListSection> {
                                                   ? appData.user.userType ==
                                                           UserType.Pupil
                                                       ? _updateData(
-                                                          document.documentID)
-                                                      : null
-                                                  : null;
+                                                          document.id)
+                                                      : Container()
+                                                  : Container();
                                             },
                                             activeColor: AppTheme.appThemeColor,
                                           ),

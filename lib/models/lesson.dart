@@ -112,7 +112,7 @@ class Lesson {
   Future<DocumentSnapshot> get() async {
     var path = sprintf(FirestorePath.LessonsOfAPupilColection,
         [this.pupilId, this.instructorId]);
-    return Firestore.instance.collection(path).document(this.id).get();
+    return FirebaseFirestore.instance.collection(path).doc(this.id).get();
   }
 
   Future<Lesson> add() async {
@@ -121,10 +121,10 @@ class Lesson {
           [this.pupilId, this.instructorId]);
       this.createdAt = DateTime.now();
       this.id = TypeConversion.toNumberFormat(this.createdAt);
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection(path)
-          .document(this.id)
-          .setData(this.toJson());
+          .doc(this.id)
+          .set(this.toJson());
       this._logger.info('Lesson created successfully.');
       return this;
     } catch (e) {
@@ -138,10 +138,10 @@ class Lesson {
       var path = sprintf(FirestorePath.LessonsOfAPupilColection,
           [this.pupilId, this.instructorId]);
       this.updatedAt = DateTime.now();
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection(path)
-          .document(this.id)
-          .updateData(this.toJson());
+          .doc(this.id)
+          .update(this.toJson());
       this._logger.info('Lesson updated successfully.');
       return this;
     } catch (e) {
@@ -153,6 +153,6 @@ class Lesson {
   Future<void> delete() async {
     var path = sprintf(FirestorePath.LessonsOfAPupilColection,
         [this.pupilId, this.instructorId]);
-    return Firestore.instance.collection(path).document(this.id).delete();
+    return FirebaseFirestore.instance.collection(path).doc(this.id).delete();
   }
 }

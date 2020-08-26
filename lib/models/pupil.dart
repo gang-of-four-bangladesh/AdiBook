@@ -92,19 +92,19 @@ class Pupil {
   }
 
   Future<DocumentSnapshot> get() async {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection(FirestorePath.PupilCollection)
-        .document(this.id)
+        .doc(this.id)
         .get();
   }
 
   Future<Pupil> add() async {
     try {
       this.createdAt = DateTime.now();
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection(FirestorePath.PupilCollection)
-          .document(this.id)
-          .setData(this.toJson());
+          .doc(this.id)
+          .set(this.toJson());
       this._logger.info('Pupil created successfully.');
       return this;
     } catch (e) {
@@ -116,10 +116,10 @@ class Pupil {
   Future<Pupil> update() async {
     try {
       this.updatedAt = DateTime.now();
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection(FirestorePath.PupilCollection)
-          .document(this.id)
-          .updateData(this.toJson());
+          .doc(this.id)
+          .update(this.toJson());
       this._logger.info('Pupil updated successfully.');
       return this;
     } catch (e) {
@@ -132,7 +132,7 @@ class Pupil {
     try {
       this.updatedAt = DateTime.now();
       var path = sprintf(FirestorePath.PupilCollection, [pupilId]);
-      await Firestore.instance.collection(path).document(this.id).delete();
+      await FirebaseFirestore.instance.collection(path).doc(this.id).delete();
       this._logger.info('Pupil updated successfully.');
       return this;
     } catch (e) {
@@ -144,13 +144,13 @@ class Pupil {
   Future<void> deleteOfAnInstructor(String pupilId, String instructorId) async {
     var path = sprintf(
         FirestorePath.PupilsOfAnInstructorCollection, [instructorId, pupilId]);
-    return Firestore.instance.collection(path).document(this.id).delete();
+    return FirebaseFirestore.instance.collection(path).doc(this.id).delete();
   }
 
   Future<void> deleteInstructorOfAnPupil(
       String pupilId, String instructorId) async {
     var path = sprintf(
         FirestorePath.InstructorsOfAPupilColection, [pupilId, instructorId]);
-    return Firestore.instance.collection(path).document(instructorId).delete();
+    return FirebaseFirestore.instance.collection(path).doc(instructorId).delete();
   }
 }

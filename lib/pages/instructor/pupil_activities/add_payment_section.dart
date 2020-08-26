@@ -20,7 +20,6 @@ class _AddPaymentSectionState extends State<AddPaymentSection> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Logger _logger;
   bool _autoValidate;
-  bool _showProgressBar = false;
   FrequentWidgets _frequentWidgets;
   TextEditingController _amountController;
   PaymentMode _selectedPaymentMode;

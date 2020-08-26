@@ -1,7 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 
 class User {
@@ -101,10 +100,10 @@ class User {
       this.updatedAt = DateTime.now();
       var json = this._toJson();
       json[UpdatedAtKey] = this.updatedAt.toUtc();
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(FirestorePath.UserCollection)
-          .document(this.id)
-          .updateData(json);
+          .doc(this.id)
+          .update(json);
       this._logger.info('User updated successfully with data $json.');
       return true;
     } catch (e) {
@@ -114,9 +113,9 @@ class User {
   }
 
   Future<void> delete() async {
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection(FirestorePath.UserCollection)
-        .document(this.id)
+        .doc(this.id)
         .delete();
   }
 }

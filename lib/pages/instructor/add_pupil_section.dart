@@ -14,7 +14,6 @@ import 'package:adibook/pages/validation.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -410,12 +409,12 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   File img;
   Future imagePickerCamera() async {
-    img = await ImagePicker.pickImage(source: ImageSource.camera);
+    img = await imagePickerCamera();
     setState(() {});
   }
 
   Future imagePickerGallary() async {
-    img = await ImagePicker.pickImage(source: ImageSource.gallery);
+    img = await imagePickerGallary();
     setState(() {});
   }
 
@@ -457,20 +456,20 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   }
 
   Widget getFloatButton() {
-    if (appData.user.userType == UserType.Instructor)
-      return FloatingActionButton.extended(
-        elevation: 4.0,
-        icon: const Icon(Icons.save),
-        backgroundColor: AppTheme.appThemeColor,
-        label: const Text(
-          'Save',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-          ),
+    //if (appData.user.userType == UserType.Instructor)
+    return FloatingActionButton.extended(
+      elevation: 4.0,
+      icon: const Icon(Icons.save),
+      backgroundColor: AppTheme.appThemeColor,
+      label: const Text(
+        'Save',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,
         ),
-        onPressed: _saveData,
-      );
+      ),
+      onPressed: _saveData,
+    );
   }
 }

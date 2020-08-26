@@ -16,7 +16,6 @@ import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class PaymentListSection extends StatefulWidget {
   @override
@@ -37,7 +36,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
   TextEditingController _amountController;
   PaymentMode _selectedPaymentType;
   DateTime _dateOfPayment;
-  OperationMode _operationMode;
+  //OperationMode _operationMode;
 
   PaymentListSectionState() {
     this._frequentWidgets = FrequentWidgets();
@@ -57,9 +56,9 @@ class PaymentListSectionState extends State<PaymentListSection> {
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     this._logger.info('Payment in edit mode id ${this._paymentId}');
-    this._operationMode =
-        isNullOrEmpty(this._paymentId) ? OperationMode.New : OperationMode.Edit;
-    if (appData.user.userType == UserType.Instructor) _loadPaymentsData();
+    // this._operationMode =
+    //     isNullOrEmpty(this._paymentId) ? OperationMode.New : OperationMode.Edit;
+    // if (appData.user.userType == UserType.Instructor) _loadPaymentsData();
   }
 
   void _loadPaymentsData() async {
@@ -101,7 +100,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
               if (snapshot.data == null)
                 return FrequentWidgets().getProgressBar();
               if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-              if (snapshot.data.documents.length == 0)
+              if (snapshot.data.docs.length == 0)
                 return Card(
                   child: Center(
                     child: Text(
@@ -115,113 +114,118 @@ class PaymentListSectionState extends State<PaymentListSection> {
                   return FrequentWidgets().getProgressBar();
                 default:
                   return ListView(
-                    children: snapshot.data.documents.map(
+                    children: snapshot.data.docs.map(
                       (DocumentSnapshot document) {
-                        var paymentText =
-                            'Paid £${document.get([Payment.AmountKey])} on ${format.format(TypeConversion.timeStampToDateTime(document.get([Payment.PaymentDateKey])))} by ' +
-                                enumValueToString(PaymentMode
-                                    .values[document.get([Payment.PaymentTypeKey])]
-                                    .toString());
+                        var paymentText = 'Paid £${document.get([
+                              Payment.AmountKey
+                            ])} on ${format.format(TypeConversion.timeStampToDateTime(document.get([
+                              Payment.PaymentDateKey
+                            ])))} by ' +
+                            enumValueToString(PaymentMode
+                                .values[document.get([Payment.PaymentTypeKey])]
+                                .toString());
                         return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child:
-                                // Column(
-                                // children: <Widget>[
-                                Container(
-                              decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 5.0,
-                                      color: Colors.black.withOpacity(.1),
-                                      offset: Offset(6.0, 7.0),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(5),
-                                  gradient: LinearGradient(
-                                    colors: GradientColors.cloud,
-                                  )),
-                              child: ListTile(
-                                leading: appData.user.userType ==
-                                        UserType.Instructor
-                                    ? IconButton(
-                                        icon: Icon(
-                                          EvaIcons.edit,
-                                          color: AppTheme.appThemeColor,
-                                        ),
-                                        onPressed: () {
-                                          appData.contextualInfo = {
-                                            DataSharingKeys.PupilIdKey:
-                                                this._pupilId,
-                                            DataSharingKeys.PaymentIdKey:
-                                                document.documentID
-                                          };
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => HomePage(
-                                                sectionType: SectionType
-                                                    .InstructorActivityForPupil,
-                                                userType: UserType.Instructor,
-                                                toDisplay: AddPaymentSection(),
-                                              ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child:
+                              // Column(
+                              // children: <Widget>[
+                              Container(
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 5.0,
+                                    color: Colors.black.withOpacity(.1),
+                                    offset: Offset(6.0, 7.0),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(5),
+                                gradient: LinearGradient(
+                                  colors: GradientColors.cloud,
+                                )),
+                            child: ListTile(
+                              leading: appData.user.userType ==
+                                      UserType.Instructor
+                                  ? IconButton(
+                                      icon: Icon(
+                                        EvaIcons.edit,
+                                        color: AppTheme.appThemeColor,
+                                      ),
+                                      onPressed: () {
+                                        appData.contextualInfo = {
+                                          DataSharingKeys.PupilIdKey:
+                                              this._pupilId,
+                                          DataSharingKeys.PaymentIdKey:
+                                              document.id
+                                        };
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => HomePage(
+                                              sectionType: SectionType
+                                                  .InstructorActivityForPupil,
+                                              userType: UserType.Instructor,
+                                              toDisplay: AddPaymentSection(),
                                             ),
-                                          );
-                                        },
-                                      )
-                                    : null,
-                                trailing: appData.user.userType == UserType.Instructor ? IconButton(
-                                  icon: Icon(
-                                    EvaIcons.trash,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {
-                                    showDialog<ConfirmAction>(
-                                      context: context,
-                                      barrierDismissible:
-                                          false, // user must tap button for close dialog!
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("Delete"),
-                                          content:
-                                              Text("Do you want to delete ?"),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              child: const Text('CANCEL'),
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(ConfirmAction.CANCEL);
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: const Text('ACCEPT'),
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(ConfirmAction.ACCEPT);
-                                                _deleteData(
-                                                    document.documentID);
-                                              },
-                                            )
-                                          ],
+                                          ),
                                         );
                                       },
-                                    );
-                                  },
-                                ): null,
-                                contentPadding: EdgeInsets.all(13),
-                                title: Center(
-                                  child: Text(
-                                    paymentText,
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
+                                    )
+                                  : null,
+                              trailing: appData.user.userType ==
+                                      UserType.Instructor
+                                  ? IconButton(
+                                      icon: Icon(
+                                        EvaIcons.trash,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        showDialog<ConfirmAction>(
+                                          context: context,
+                                          barrierDismissible:
+                                              false, // user must tap button for close dialog!
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("Delete"),
+                                              content: Text(
+                                                  "Do you want to delete ?"),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: const Text('CANCEL'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(
+                                                        ConfirmAction.CANCEL);
+                                                  },
+                                                ),
+                                                FlatButton(
+                                                  child: const Text('ACCEPT'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(
+                                                        ConfirmAction.ACCEPT);
+                                                    _deleteData(document.id);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    )
+                                  : null,
+                              contentPadding: EdgeInsets.all(13),
+                              title: Center(
+                                child: Text(
+                                  paymentText,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
                             ),
+                          ),
                         );
                       },
                     ).toList(),

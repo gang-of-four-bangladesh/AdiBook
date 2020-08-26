@@ -1,13 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
-import 'package:flutter_pdf_viewer/flutter_pdf_viewer.dart';
 
 class TermsAndConditions extends StatefulWidget {
   @override
@@ -18,17 +14,17 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   String path;
 
   Future<String> get getfilePath async {
-    final filename = 'exemplo.pdf';
-    var bytes = await rootBundle.load("assets/exemplo.pdf");
+    //final filename = 'exemplo.pdf';
+    //var bytes = await rootBundle.load("assets/exemplo.pdf");
     String dir = (await getApplicationDocumentsDirectory()).path;
     return dir;
   }
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
+  // Future<String> get _localPath async {
+  //   final directory = await getApplicationDocumentsDirectory();
 
-    return directory.path;
-  }
+  //   return directory.path;
+  // }
 
   Future<File> get _localFile async {
     //final path = await _localPath;

@@ -27,9 +27,9 @@ class LessonEvent {
   String pupilId;
 
   Map<String, dynamic> _toJson({bool isRemove = false}) {
-    var ref = Firestore.instance
+    var ref = FirebaseFirestore.instance
         .collection(FirestorePath.PupilCollection)
-        .document(this.pupilId);
+        .doc(this.pupilId);
     var json = Map<String, dynamic>();
     if (isNotNullOrEmpty(pupilName)) json[PupilNameKey] = pupilName;
     if (isNotNullOrEmpty(lessonAt)) json[LessonTimeKey] = lessonAt.toUtc();
@@ -51,14 +51,14 @@ class LessonEvent {
   Future<DocumentSnapshot> get() async {
     var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
         [this.instructorId, this.id]);
-    return Firestore.instance.collection(path).document(this.id).get();
+    return FirebaseFirestore.instance.collection(path).doc(this.id).get();
   }
 
   Future<LessonEvent> add() async {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      await Firestore.instance.collection(path).document(this.id).setData(this._toJson());
+      await FirebaseFirestore.instance.collection(path).doc(this.id).set(this._toJson());
       this._logger.info('Lesson event created successfully.');
       return this;
     } catch (e) {
@@ -71,7 +71,7 @@ class LessonEvent {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      await Firestore.instance.collection(path).document(this.id).updateData(this._toJson());
+      await FirebaseFirestore.instance.collection(path).doc(this.id).update(this._toJson());
       this._logger.info('Lesson event updated successfully.');
       return this;
     } catch (e) {
@@ -83,19 +83,19 @@ class LessonEvent {
   Future<void> delete() async {
     var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
         [this.instructorId, this.id]);
-    var json = {
-      this.day: FieldValue.arrayRemove(
-        [
-          {
-            PupilNameKey: this.pupilName,
-            LessonTimeKey: this.lessonAt,
-          }
-        ],
-      ),
-    };
-    await Firestore.instance
+    // var json = {
+    //   this.day: FieldValue.arrayRemove(
+    //     [
+    //       {
+    //         PupilNameKey: this.pupilName,
+    //         LessonTimeKey: this.lessonAt,
+    //       }
+    //     ],
+    //   ),
+    // };
+    await FirebaseFirestore.instance
         .collection(path)
-        .document(this.id)
-        .updateData(this._toJson(isRemove: true));
+        .doc(this.id)
+        .update(this._toJson(isRemove: true));
   }
 }

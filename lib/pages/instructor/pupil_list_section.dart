@@ -1,10 +1,7 @@
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
-import 'package:adibook/data/lesson_manager.dart';
-import 'package:adibook/data/payment_manager.dart';
 import 'package:adibook/models/instructor.dart';
-import 'package:adibook/models/progress_plan.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:adibook/pages/home_page.dart';
 import 'package:adibook/pages/instructor/pupil_activities/lesson_list_section.dart';
@@ -12,9 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
 class PupilListSection extends StatefulWidget {
@@ -60,7 +55,7 @@ class PupilPistSectionState extends State<PupilListSection> {
             style: TextStyle(fontWeight: FontWeight.bold),
           )));
         return ListView(
-          children: snapshot.data.documents.map(
+          children: snapshot.data.docs.map(
             (DocumentSnapshot document) {
               return Container(
                 child: Card(
@@ -105,7 +100,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text(document.documentID),
+                                Text(document.id),
                                 //getPupilInfo(document.documentID)
                                 Text(DateFormat('MMM dd, yyyy')
                                     .format(DateTime.now())),
@@ -123,7 +118,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                       ),
                       onTap: () {
                         appData.contextualInfo = {
-                          DataSharingKeys.PupilIdKey: document.documentID
+                          DataSharingKeys.PupilIdKey: document.id
                         };
                         Navigator.push(
                           context,
@@ -188,24 +183,25 @@ class PupilPistSectionState extends State<PupilListSection> {
     pupil = await Pupil(id: pupilId).getPupil();
   }
 
-  Future<void> _deleteData(String pupilId) async {
-    Pupil pupil = Pupil(id: pupilId);
-    await ProgressPlan(pupilId: pupilId, instructorId: appData.instructor.id)
-        .delete();
-    await LessonManager()
-        .deleteAllLessonOfPupil(pupilId, appData.instructor.id);
-    await PaymentManager()
-        .deleteAllPaymentOfPupil(pupilId, appData.instructor.id);
-    await pupil.deleteInstructorOfAnPupil(pupilId, appData.instructor.id);
-    await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
-    String message = isNotNullOrEmpty(await pupil.delete(pupilId))
-        ? 'Pupil deleted successfully.'
-        : 'Pupil deleted failed.';
-    FrequentWidgets _frequentWidgets = FrequentWidgets();
-    _frequentWidgets.getSnackbar(
-      message: message,
-      context: context,
-    );
-    this._loadPupilsData();
-  }
+//   Future<void> _deleteData(String pupilId) async {
+//     Pupil pupil = Pupil(id: pupilId);
+//     await ProgressPlan(pupilId: pupilId, instructorId: appData.instructor.id)
+//         .delete();
+//     await LessonManager()
+//         .deleteAllLessonOfPupil(pupilId, appData.instructor.id);
+//     await PaymentManager()
+//         .deleteAllPaymentOfPupil(pupilId, appData.instructor.id);
+//     await pupil.deleteInstructorOfAnPupil(pupilId, appData.instructor.id);
+//     await pupil.deleteOfAnInstructor(pupilId, appData.instructor.id);
+//     String message = isNotNullOrEmpty(await pupil.delete(pupilId))
+//         ? 'Pupil deleted successfully.'
+//         : 'Pupil deleted failed.';
+//     FrequentWidgets _frequentWidgets = FrequentWidgets();
+//     _frequentWidgets.getSnackbar(
+//       message: message,
+//       context: context,
+//     );
+//     this._loadPupilsData();
+//   }
+// }
 }

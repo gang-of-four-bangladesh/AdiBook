@@ -12,39 +12,39 @@ class PupilManager {
   static const String InstructorReferenceTaggedAtKey = 'iRef';
   Future<void> tagPupil(Pupil pupil, Instructor instructor) async {
     var _logger = Logger(this.runtimeType.toString());
-    var ref = Firestore.instance
+    var ref = FirebaseFirestore.instance
         .collection(FirestorePath.PupilCollection)
-        .document(pupil.id);
+        .doc(pupil.id);
     var path =
         sprintf(FirestorePath.PupilsOfAnInstructorCollection, [instructor.id]);
     var data = {
       PupilReferenceTaggedAtKey: ref,
       Pupil.NameKey: pupil.name,
     };
-    await Firestore.instance.collection(path).document(pupil.id).setData(data);
+    await FirebaseFirestore.instance.collection(path).doc(pupil.id).set(data);
     _logger.fine('pupil ${pupil.id} tagged to instructor ${instructor.id}.');
   }
 
   Future<void> tagInstructor(Pupil pupil, Instructor instructor) async {
     var _logger = Logger(this.runtimeType.toString());
-    var ref = Firestore.instance
+    var ref = FirebaseFirestore.instance
         .collection(FirestorePath.InstructorCollection)
-        .document(instructor.id);
+        .doc(instructor.id);
     var path = sprintf(FirestorePath.InstructorsOfAPupilColection, [pupil.id]);
     var data = {
       InstructorReferenceTaggedAtKey: ref,
       Instructor.NameKey: instructor.name,
     };
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection(path)
-        .document(instructor.id)
-        .setData(data);
-    await Firestore.instance
+        .doc(instructor.id)
+        .set(data);
+    await FirebaseFirestore.instance
         .collection(path)
-        .document(instructor.id)
+        .doc(instructor.id)
         .collection(FirestorePath.ProgressPlanCollection)
-        .document(ProgressPlan.ProgressPlanKey)
-        .setData({ProgressPlan.CreatedAtKey: DateTime.now().toUtc()});
+        .doc(ProgressPlan.ProgressPlanKey)
+        .set({ProgressPlan.CreatedAtKey: DateTime.now().toUtc()});
     _logger.fine('instructor ${instructor.id} tagged to pupil ${pupil.id}.');
   }
 
@@ -57,7 +57,7 @@ class PupilManager {
       instructorId,
     ]);
     print('Lessons path $path');
-    return Firestore.instance.collection(path).getDocuments();
+    return FirebaseFirestore.instance.collection(path).get();
   }
    Future<QuerySnapshot> getPayments({
     @required String instructorId,
@@ -68,14 +68,14 @@ class PupilManager {
       instructorId,
     ]);
     print('Payments path $path');
-    return Firestore.instance.collection(path).getDocuments();
+    return FirebaseFirestore.instance.collection(path).get();
   }
 
   Future<Instructor> getDefaultInstructor(String pupilId) async {
     var path = sprintf(FirestorePath.InstructorsOfAPupilColection, [pupilId]);
     var instructorsDoc =
-        await Firestore.instance.collection(path).getDocuments();
-    var defaultInstructorSnap = instructorsDoc.documents.first;
-    return Instructor(id: defaultInstructorSnap.documentID).getInstructor();
+        await FirebaseFirestore.instance.collection(path).get();
+    var defaultInstructorSnap = instructorsDoc.docs.first;
+    return Instructor(id: defaultInstructorSnap.id).getInstructor();
   }
 }

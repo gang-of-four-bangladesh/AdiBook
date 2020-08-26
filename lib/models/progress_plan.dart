@@ -45,7 +45,7 @@ class ProgressPlan {
   Future<DocumentSnapshot> get() async {
     var path = sprintf(FirestorePath.ProgressPlanOfAPupilCollection,
         [this.pupilId, this.instructorId]);
-    return Firestore.instance.collection(path).document(ProgressPlanKey).get();
+    return FirebaseFirestore.instance.collection(path).doc(ProgressPlanKey).get();
   }
 
   Map<String, dynamic> _toJson() {
@@ -64,10 +64,10 @@ class ProgressPlan {
       var json = this._toJson();
       this.updatedAt = DateTime.now().toUtc();
       json[UpdatedAtKey] = this.updatedAt;
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(path)
-          .document(ProgressPlanKey)
-          .updateData(json);
+          .doc(ProgressPlanKey)
+          .update(json);
       this._logger.info('$this updated successfully.');
       return true;
     } catch (e) {
@@ -80,9 +80,9 @@ class ProgressPlan {
     try {
       var path = sprintf(FirestorePath.ProgressPlanOfAPupilCollection,
           [this.pupilId, this.instructorId]);
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection(path)
-          .document(ProgressPlanKey)
+          .doc(ProgressPlanKey)
           .delete();
       this._logger.info('$this updated successfully.');
       return true;

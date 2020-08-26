@@ -40,7 +40,7 @@ dependencies:
   flutter_gradient_colors:
   progress_dialog:
   flutter_slidable:
-  
+  firebase_core :
   firebase_messaging:
   flutter_local_notifications:
   pdf_viewer_plugin:

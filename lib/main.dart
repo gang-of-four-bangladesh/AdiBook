@@ -12,9 +12,11 @@ import 'package:adibook/pages/pupil/status_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await DeviceInfo.initializeDeviceState();
   var logWriter =
       DeviceInfo.isOnPhysicalDevice ? StorageLogWriter() : ConsoleLogWriter();
