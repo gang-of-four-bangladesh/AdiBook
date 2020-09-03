@@ -1,5 +1,6 @@
 import 'package:adibook/core/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:sprintf/sprintf.dart';
@@ -49,6 +50,7 @@ class LessonEvent {
   }
 
   Future<DocumentSnapshot> get() async {
+    await Firebase.initializeApp();
     var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
         [this.instructorId, this.id]);
     return FirebaseFirestore.instance.collection(path).doc(this.id).get();
@@ -58,7 +60,10 @@ class LessonEvent {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      await FirebaseFirestore.instance.collection(path).doc(this.id).set(this._toJson());
+      await FirebaseFirestore.instance
+          .collection(path)
+          .doc(this.id)
+          .set(this._toJson());
       this._logger.info('Lesson event created successfully.');
       return this;
     } catch (e) {
@@ -71,7 +76,10 @@ class LessonEvent {
     try {
       var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
           [this.instructorId, this.id]);
-      await FirebaseFirestore.instance.collection(path).doc(this.id).update(this._toJson());
+      await FirebaseFirestore.instance
+          .collection(path)
+          .doc(this.id)
+          .update(this._toJson());
       this._logger.info('Lesson event updated successfully.');
       return this;
     } catch (e) {

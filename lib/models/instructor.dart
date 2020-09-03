@@ -54,12 +54,12 @@ class Instructor {
     this.address = snapshot.data()[Instructor.AddressKey];
     this.phoneNumber = snapshot.data()[Instructor.PhoneNumberKey];
     this.licenseNo = snapshot.data()[Instructor.LicenseKey];
-    this.dateOfBirth =
-        TypeConversion.timeStampToDateTime(snapshot.data()[Instructor.DateOfBirthKey]);
-    this.createdAt =
-        TypeConversion.timeStampToDateTime(snapshot.data()[Instructor.CreatedAtKey]);
-    this.updatedAt =
-        TypeConversion.timeStampToDateTime(snapshot.data()[Instructor.UpdatedAtKey]);
+    this.dateOfBirth = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Instructor.DateOfBirthKey]);
+    this.createdAt = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Instructor.CreatedAtKey]);
+    this.updatedAt = TypeConversion.timeStampToDateTime(
+        snapshot.data()[Instructor.UpdatedAtKey]);
   }
 
   Future<Instructor> getInstructor() async {
@@ -73,6 +73,7 @@ class Instructor {
   }
 
   Future<QuerySnapshot> getPupils() async {
+    //await Firebase.initializeApp();
     var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection, [this.id]);
     return FirebaseFirestore.instance
         .collection(path)
@@ -81,6 +82,7 @@ class Instructor {
   }
 
   Future<DocumentSnapshot> get() async {
+    //await Firebase.initializeApp();
     return FirebaseFirestore.instance
         .collection(FirestorePath.InstructorCollection)
         .doc(this.id)
@@ -124,7 +126,7 @@ class Instructor {
         .delete();
   }
 
-   Future<void> deletePupilOfAnInstructor() async {
+  Future<void> deletePupilOfAnInstructor() async {
     var path = sprintf(FirestorePath.PupilsOfAnInstructorCollection,
         [this.pupilId, this.instructorId]);
     return FirebaseFirestore.instance.collection(path).doc(this.id).delete();

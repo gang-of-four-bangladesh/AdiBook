@@ -101,7 +101,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(document.id),
-                                //getPupilInfo(document.documentID)
+                                getPupilInfo(document.id),
                                 Text(DateFormat('MMM dd, yyyy')
                                     .format(DateTime.now())),
                               ],
