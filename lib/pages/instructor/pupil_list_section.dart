@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
+import 'package:adibook/core/formatter.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
@@ -88,7 +89,7 @@ class PupilPistSectionState extends State<PupilListSection> {
                       ),
                       contentPadding: EdgeInsets.all(5),
                       title: Text(
-                        document.get([Pupil.NameKey]),
+                        document.data()[Pupil.NameKey],
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Container(
@@ -101,9 +102,13 @@ class PupilPistSectionState extends State<PupilListSection> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(document.id),
-                                getPupilInfo(document.id),
-                                Text(DateFormat('MMM dd, yyyy')
-                                    .format(DateTime.now())),
+                                //getPupilInfo(document.id),
+                                // Text(
+                                //DateFormat('MMM dd, yyyy').format(
+                                //   document
+                                //   .data()[Pupil.CreatedAtKey]
+                                //),
+                                //  )
                               ],
                             ),
                             SizedBox(

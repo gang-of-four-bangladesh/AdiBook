@@ -39,7 +39,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
   //OperationMode _operationMode;
 
   PaymentListSectionState() {
-    this._frequentWidgets = FrequentWidgets();
     this._amountController = TextEditingController();
     this._logger = Logger(this.runtimeType.toString());
   }
@@ -53,6 +52,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
       _loadPaymentsData();
       return;
     }
+    _loadPaymentsData();
     this._pupilId = appData.contextualInfo[DataSharingKeys.PupilIdKey];
     this._paymentId = appData.contextualInfo[DataSharingKeys.PaymentIdKey];
     this._logger.info('Payment in edit mode id ${this._paymentId}');
@@ -66,7 +66,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
         ? _getPupilId()
         : appData.contextualInfo[DataSharingKeys.PupilIdKey];
     if (isNullOrEmpty(this._pupilId)) return;
-    if (!mounted) return;
+    //if (!mounted) return;
     setState(() {
       _querySnapshot = PupilManager()
           .getPayments(
@@ -96,7 +96,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               var format = DateFormat("EE, MMM dd, yyyy");
               if (snapshot.connectionState == ConnectionState.waiting)
-                return FrequentWidgets().getProgressBar();
+                return this._frequentWidgets.getProgressBar();
               if (snapshot.data == null)
                 return FrequentWidgets().getProgressBar();
               if (snapshot.hasError) return Text('Error: ${snapshot.error}');
@@ -122,7 +122,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
                               Payment.PaymentDateKey
                             ])))} by ' +
                             enumValueToString(PaymentMode
-                                .values[document.get([Payment.PaymentTypeKey])]
+                                .values[document.data()[Payment.PaymentTypeKey]]
                                 .toString());
                         return Card(
                           shape: RoundedRectangleBorder(

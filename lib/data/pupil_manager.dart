@@ -59,7 +59,8 @@ class PupilManager {
     print('Lessons path $path');
     return FirebaseFirestore.instance.collection(path).get();
   }
-   Future<QuerySnapshot> getPayments({
+
+  Future<QuerySnapshot> getPayments({
     @required String instructorId,
     @required String pupilId,
   }) async {
