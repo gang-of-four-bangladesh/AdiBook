@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
+
+final kShadowColor = Color(0xFFB7B7B7).withOpacity(.16);
+const kTitleTextColor = Color(0xFF303030);
 
 class FirestorePath {
   static const String InstructorCollection = 'instructors';
@@ -77,6 +81,18 @@ class AppTheme {
   static Color appThemeColor =
       Colors.lightBlueAccent.withRed(3).withGreen(209).withBlue(191);
   static Color calendarEventPendingColor = Colors.greenAccent;
+  static LinearGradient appThemeGradienColor = LinearGradient(
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
+      colors: [appThemeColor, appThemeColor]);
+  static LinearGradient appThemeGradienGreyColor = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.grey[100], Colors.grey[300]]);
+  static LinearGradient appThemeGradienfbblueColor = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: GradientColors.facebookMessenger);
 }
 
 const Map<String, String> CountryWisePhoneCode = {
@@ -149,6 +165,10 @@ bool isNullOrEmpty<T>(T value) {
 
 bool isNotNullOrEmpty<T>(T value) {
   return !isNullOrEmpty(value);
+}
+
+String enumValueToString(String enumvalue) {
+  return enumvalue.toString().substring(enumvalue.toString().indexOf('.') + 1);
 }
 
 const TripLocationOptions = [

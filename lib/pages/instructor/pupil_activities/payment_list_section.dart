@@ -66,7 +66,7 @@ class PaymentListSectionState extends State<PaymentListSection> {
         ? _getPupilId()
         : appData.contextualInfo[DataSharingKeys.PupilIdKey];
     if (isNullOrEmpty(this._pupilId)) return;
-    //if (!mounted) return;
+    if (!mounted) return;
     setState(() {
       _querySnapshot = PupilManager()
           .getPayments(
@@ -116,14 +116,13 @@ class PaymentListSectionState extends State<PaymentListSection> {
                   return ListView(
                     children: snapshot.data.docs.map(
                       (DocumentSnapshot document) {
-                        var paymentText = 'Paid £${document.get([
-                              Payment.AmountKey
-                            ])} on ${format.format(TypeConversion.timeStampToDateTime(document.get([
-                              Payment.PaymentDateKey
-                            ])))} by ' +
-                            enumValueToString(PaymentMode
-                                .values[document.data()[Payment.PaymentTypeKey]]
-                                .toString());
+                        var paymentText =
+                            'Paid: £${document.data()[Payment.AmountKey]} \nDate: ${format.format(TypeConversion.timeStampToDateTime(document.data()[Payment.PaymentDateKey]))} \nPayment Method: ' +
+                                enumValueToString(PaymentMode.values[int.parse(
+                                        document
+                                            .data()[Payment.PaymentTypeKey]
+                                            .toString())]
+                                    .toString());
                         return Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
@@ -215,15 +214,18 @@ class PaymentListSectionState extends State<PaymentListSection> {
                                   : null,
                               contentPadding: EdgeInsets.all(13),
                               title: Center(
-                                child: Text(
-                                  paymentText,
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                  child: Column(
+                                children: [
+                                  Text(
+                                    paymentText,
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
-                              ),
+                                ],
+                              )),
                             ),
                           ),
                         );
@@ -482,12 +484,6 @@ class PaymentListSectionState extends State<PaymentListSection> {
         );
       },
     );
-  }
-
-  String enumValueToString(String enumvalue) {
-    return enumvalue
-        .toString()
-        .substring(enumvalue.toString().indexOf('.') + 1);
   }
 
   Future<void> _deleteData(String paymentId) async {

@@ -177,53 +177,38 @@ class LessonListSectionState extends State<LessonListSection> {
                                                     Column(
                                                       children: <Widget>[
                                                         Text(
-                                                          enumValueToString((format
-                                                                  .format(TypeConversion.timeStampToDateTime(
-                                                                      document.data()[
-                                                                          Lesson
-                                                                              .LessonDateKey]))
-                                                                  .toString())) +
+                                                          format.format(TypeConversion.timeStampToDateTime(document.data()[Lesson.LessonDateKey])) +
                                                               '\nDuration: ' +
                                                               document
                                                                   .data()[Lesson
-                                                                          .LessonDurationKey
-                                                                      .toString() +
-                                                                  ' minutes \n' +
-                                                                  'Pickup: ' +
-                                                                  enumValueToString(
-                                                                      TripLocation
-                                                                          .values[int.parse(document.data()[Lesson.PickUpLocationKey])]
-                                                                          .toString()) +
-                                                                  '\nDrop Off: '] +
+                                                                      .LessonDurationKey]
+                                                                  .toString() +
+                                                              ' minutes \n' +
+                                                              'Pickup: ' +
                                                               enumValueToString(
-                                                                TripLocation
-                                                                        .values[int.parse(document
-                                                                            .data()[Lesson.DropOffLocationKey]
-                                                                            .toString())]
-                                                                        .toString() +
-                                                                    '\nLesson Type: ' +
-                                                                    enumValueToString(
-                                                                      LessonType
-                                                                              .values[int.parse(document.data()[[
-                                                                            Lesson.LessonTypeKey
-                                                                          ].toString()])]
-                                                                              .toString() +
-                                                                          '\nVehicle Type: ' +
-                                                                          enumValueToString(
-                                                                            VehicleType.values[int.parse(document.data()[[
-                                                                                  Lesson.VehicleTypeKey
-                                                                                ]
-                                                                                        .toString()])]
-                                                                                    .toString() +
-                                                                                '\nNotes: ' +
-                                                                                document.data()[[
-                                                                                  Lesson.DiaryNotesKey
-                                                                                ].toString()] +
-                                                                                '\nReport: ' +
-                                                                                document.data()[Lesson.ReportCardKey].toString(),
-                                                                          ),
-                                                                    ),
-                                                              ),
+                                                                  TripLocation.values[int.parse(document.data()[Lesson.PickUpLocationKey].toString())]
+                                                                      .toString()) +
+                                                              '\nDrop Off: ' +
+                                                              enumValueToString(
+                                                                  TripLocation.values[int.parse(document.data()[Lesson.DropOffLocationKey].toString())]
+                                                                      .toString()) +
+                                                              '\nLesson Type: ' +
+                                                              enumValueToString(
+                                                                  LessonType.values[int.parse(document.data()[Lesson.LessonTypeKey].toString())]
+                                                                      .toString()) +
+                                                              '\nVehicle Type: ' +
+                                                              enumValueToString(
+                                                                  VehicleType.values[int.parse(document.data()[Lesson.VehicleTypeKey].toString())]
+                                                                      .toString()) +
+                                                              '\nNotes: ' +
+                                                              document
+                                                                  .data()[Lesson
+                                                                      .DiaryNotesKey]
+                                                                  .toString() +
+                                                              '\nReport: ' +
+                                                              document
+                                                                  .data()[Lesson.ReportCardKey]
+                                                                  .toString(),
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
@@ -420,12 +405,6 @@ class LessonListSectionState extends State<LessonListSection> {
         );
       },
     );
-  }
-
-  String enumValueToString(String enumvalue) {
-    return enumvalue
-        .toString()
-        .substring(enumvalue.toString().indexOf('.') + 1);
   }
 
   Future<void> _updateData(String lessonId) async {

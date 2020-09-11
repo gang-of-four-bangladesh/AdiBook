@@ -1,5 +1,7 @@
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/models/instructor.dart';
+import 'package:adibook/models/lesson.dart';
+import 'package:adibook/models/payment.dart';
 import 'package:adibook/models/progress_plan.dart';
 import 'package:adibook/models/pupil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,7 +59,10 @@ class PupilManager {
       instructorId,
     ]);
     print('Lessons path $path');
-    return FirebaseFirestore.instance.collection(path).get();
+    return FirebaseFirestore.instance
+        .collection(path)
+        .orderBy(Lesson.CreatedAtKey, descending: true)
+        .get();
   }
 
   Future<QuerySnapshot> getPayments({
@@ -69,7 +74,10 @@ class PupilManager {
       instructorId,
     ]);
     print('Payments path $path');
-    return FirebaseFirestore.instance.collection(path).get();
+    return FirebaseFirestore.instance
+        .collection(path)
+        .orderBy(Payment.CreatedAtKey, descending: true)
+        .get();
   }
 
   Future<Instructor> getDefaultInstructor(String pupilId) async {

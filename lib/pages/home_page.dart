@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
@@ -6,7 +8,9 @@ import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -33,9 +37,11 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   List<Tab> _tabs = [];
   List<Widget> _linkItems = [];
+  File img;
   String userName = EmptyString;
   String phoneNo = EmptyString;
   Instructor instructor;
+  final ImagePicker _imagePicker = ImagePicker();
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -127,24 +133,61 @@ class _HomePageState extends State<HomePage>
         backgroundColor: AppTheme.appThemeColor,
         elevation: 0.7,
         leading: Container(
-          padding: EdgeInsets.only(left: 15, top: 15),
-          child: CircleAvatar(
-            backgroundColor: AppTheme.appThemeColor,
-            backgroundImage: AssetImage("assets/images/logo.png"),
-            radius: 5.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(right: 2.0),
+                  child: Center(
+                    child: ButtonTheme(
+                      minWidth: 100.0,
+                      height: 60.0,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.menu,
+                          size: 35,
+                        ),
+                        onPressed: () async {
+                          _scaffoldKey.currentState.openDrawer();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         centerTitle: true,
         title: Title(
-          child: Text(
-            'AdiBook',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-            ),
-          ),
-          color: Colors.white,
-        ),
+            color: Colors.white,
+            child: Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Image.asset(
+                      "assets/images/logo.png",
+                      width: 35,
+                      height: 35,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    'AdiBook',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
+            )),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
@@ -168,21 +211,6 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(right: 2.0),
-            child: Center(
-              child: ButtonTheme(
-                minWidth: 100.0,
-                height: 60.0,
-                child: IconButton(
-                  icon: Icon(Icons.more),
-                  onPressed: () async {
-                    _scaffoldKey.currentState.openDrawer();
-                  },
-                ),
-              ),
-            ),
-          )
         ],
       ),
       drawer: Drawer(
@@ -207,34 +235,67 @@ class _HomePageState extends State<HomePage>
   void _getDrawerLinks() {
     this._linkItems.clear();
     this._linkItems.add(
-          DrawerHeader(
-            decoration: BoxDecoration(color: AppTheme.appThemeColor),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  height: 100,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.lightBlue,
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 100,
-                    ),
+          ClipPath(
+            clipper: MyClipper(),
+            clipBehavior: Clip.antiAlias,
+            child: Container(
+              padding: EdgeInsets.only(left: 5, right: 5, bottom: 15, top: 5),
+              child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.appThemeGradienColor,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 8),
+                        blurRadius: 24,
+                        color: kShadowColor,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  appData.user.userType == UserType.Instructor
-                      ? "${appData.instructor.name == null || appData.instructor.name == EmptyString ? 'Add Name' : appData.instructor.name}\n\n${appData.instructor.phoneNumber}"
-                      : "${appData.pupil.name}\n\n${appData.pupil.phoneNumber}",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text('AdiBook',
+                          style: TextStyle(fontSize: 25, color: Colors.white)),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 75,
+                            height: 75,
+                            child: GestureDetector(
+                              child: getImage(img),
+                              onTap: () {
+                                dialogBoxPicture(context);
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: appData.user.userType ==
+                                              UserType.Instructor
+                                          ? "${appData.instructor.name == null || appData.instructor.name == EmptyString ? 'Add Name' : appData.instructor.name}\n${appData.instructor.phoneNumber}"
+                                          : "${appData.pupil.name}\n${appData.pupil.phoneNumber}",
+                                      style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // SizedBox(
+                          //   width: 20,
+                          // ),
+                          //Text(phoneNo)
+                        ],
+                      ),
+                    ],
+                  )),
             ),
           ),
         );
@@ -282,8 +343,8 @@ class _HomePageState extends State<HomePage>
         );
   }
 
-  
-   ProgressDialog getLoadingProgressBar(BuildContext context,ProgressDialog pr) {
+  ProgressDialog getLoadingProgressBar(
+      BuildContext context, ProgressDialog pr) {
     ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.update(
@@ -301,5 +362,192 @@ class _HomePageState extends State<HomePage>
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
     return pr;
+  }
+
+  Future imagePickerCamera() async {
+    Navigator.of(context).pop();
+    var imagePath =
+        await this._imagePicker.getImage(source: ImageSource.camera);
+    if (imagePath != null) {
+      setState(() {
+        img = File(imagePath.path);
+        print(img);
+        getImage(img);
+      });
+      await confirmUploadProfilePicture(img);
+    }
+  }
+
+  Future imagePickerGallary() async {
+    Navigator.of(context).pop();
+    var imagePath =
+        await this._imagePicker.getImage(source: ImageSource.gallery);
+    if (imagePath != null) {
+      setState(() {
+        img = File(imagePath.path);
+        print(img);
+        getImage(img);
+      });
+      await confirmUploadProfilePicture(img);
+    }
+  }
+
+  dynamic confirmUploadProfilePicture(File image) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              contentPadding: EdgeInsets.only(top: 10.0),
+              content: Container(
+                width: 300.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[300],
+                    gradient: AppTheme.appThemeGradienGreyColor),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text("Upload profile picture ?",
+                            style: TextStyle(fontSize: 24.0),
+                            textAlign: TextAlign.center)
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 4.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(30),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 80,
+                            backgroundImage: FileImage(image),
+                          )
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        decoration: BoxDecoration(
+                          color: AppTheme.appThemeColor,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30, right: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              FloatingActionButton(
+                                backgroundColor: Colors.green.withOpacity(0.6),
+                                child: Text('Yes'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                              FloatingActionButton(
+                                backgroundColor: Colors.red.withOpacity(0.6),
+                                child: Text('No'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  Future<void> dialogBoxPicture(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: MediaQuery.of(context).size.width / 2,
+            height: MediaQuery.of(context).size.height / 6,
+            child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.camera_alt,
+                            size: 40,
+                            color: Colors.black26,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Take new photo",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      onTap: imagePickerCamera,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.photo,
+                            size: 40,
+                            color: Colors.black26,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Select from gallery",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      onTap: imagePickerGallary,
+                    )
+                  ],
+                )),
+          ),
+        );
+      },
+    );
+  }
+
+  CircleAvatar getImage(File img) {
+    return CircleAvatar(
+      backgroundColor: img == null ? Colors.grey : AppTheme.appThemeColor,
+      child: img == null
+          ? Icon(
+              Icons.person,
+              color: Colors.white,
+              size: 40,
+            )
+          : Image.file(File(img.path)),
+    );
   }
 }

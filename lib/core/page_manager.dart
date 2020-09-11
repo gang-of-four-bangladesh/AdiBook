@@ -109,7 +109,7 @@ class PageManager {
             Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
         sectionType: SectionType.PupilActivity,
         displayArea: [DisplayArea.Tab, DisplayArea.Drawer]),
-         WidgetConfiguration(
+    WidgetConfiguration(
         index: 3,
         appBarText: 'Payments',
         drawerLinkText: 'Payments',
@@ -119,7 +119,7 @@ class PageManager {
             Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
         sectionType: SectionType.PupilActivity,
         displayArea: [DisplayArea.Drawer]),
-        WidgetConfiguration(
+    WidgetConfiguration(
         index: 4,
         appBarText: 'Terms and Conditions',
         drawerLinkText: 'Terms and Conditions',
