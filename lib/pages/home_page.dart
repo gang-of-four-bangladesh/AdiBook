@@ -171,13 +171,13 @@ class _HomePageState extends State<HomePage>
                   Container(
                     child: Image.asset(
                       "assets/images/logo.png",
-                      width: 35,
-                      height: 35,
+                      width: 45,
+                      height: 45,
                     ),
                   ),
-                  SizedBox(
-                    width: 8,
-                  ),
+                  // SizedBox(
+                  //   width: 8,
+                  // ),
                   Text(
                     'AdiBook',
                     style: TextStyle(

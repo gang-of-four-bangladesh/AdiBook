@@ -21,8 +21,8 @@ class _PupilRegistrationState extends State<PupilRegistration> {
             child: Column(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(
-                      top: 20.0, left: 20.0, right: 20.0, bottom: 10.0),
+                  padding:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
                   child: Wrap(
                     children: <Widget>[
                       Column(

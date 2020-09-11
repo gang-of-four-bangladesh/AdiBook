@@ -58,8 +58,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loadPdf() async {
-    writeCounter(await fetchPost());
-    path = (await _localFile).path;
+    Future<File> file = writeCounter(await fetchPost());
+    path = (await file).path;
 
     if (!mounted) return;
 
@@ -397,7 +397,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _confirmation(BuildContext _context) async {
     if (!await _hasValidInput()) return;
-    loadPdf();
+    //loadPdf();
     showDialog<ConfirmAction>(
       context: context,
       barrierDismissible: false, // user must tap button for close dialog!
@@ -420,7 +420,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(width: 3, color: AppTheme.appThemeColor),
                   ),
-                  height: MediaQuery.of(context).size.height / 1.48,
+                  height: MediaQuery.of(context).size.height / 1.70,
                   width: MediaQuery.of(context).size.width,
                   child: PdfViewer(
                     filePath: path,
@@ -455,7 +455,8 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         if (this._showProgressBar == false) if (this._selectedUserType ==
             UserType.Pupil)
-          _confirmation(_context);
+          //_confirmation(_context);
+          _onPressSendOTPCode(_context);
         else
           _onPressSendOTPCode(_context);
       },
