@@ -20,7 +20,8 @@ import 'package:firebase_auth/firebase_auth.dart' as Firebase;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:adibook/core/frequent_widgets.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -30,40 +31,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //terms and condition start
-  String path;
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
+  bool _isLoading = true;
+  PDFDocument document;
+  loadDocument() async {
+    document = await PDFDocument.fromAsset('assets/pdf/termsandCondition.pdf');
 
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/exemplo.pdf');
-  }
-
-  Future<File> writeCounter(Uint8List stream) async {
-    final file = await _localFile;
-    // Write the file
-    return file.writeAsBytes(stream);
-  }
-
-  Future<Uint8List> fetchPost() async {
-    final response = await http.get(
-        'https://firebasestorage.googleapis.com/v0/b/gofbd-adibook.appspot.com/o/app_docs%2Fpupils%2Fpc_configuration.pdf?alt=media&token=3c4f8489-d3e7-42e2-914c-0d5a38721724');
-    final responseJson = response.bodyBytes;
-
-    return responseJson;
-  }
-
-  loadPdf() async {
-    Future<File> file = writeCounter(await fetchPost());
-    path = (await file).path;
-
-    if (!mounted) return;
-
-    setState(() {});
+    setState(() => _isLoading = false);
   }
 
   PageManager _pageManager = PageManager();
@@ -100,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.w600),
     );
-    loadPdf();
+    loadDocument();
   }
 
   @override
@@ -397,6 +370,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _confirmation(BuildContext _context) async {
     if (!await _hasValidInput()) return;
+    //loadDocument();
     //loadPdf();
     showDialog<ConfirmAction>(
       context: context,
@@ -415,17 +389,23 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(width: 3, color: AppTheme.appThemeColor),
-                  ),
-                  height: MediaQuery.of(context).size.height / 1.70,
-                  width: MediaQuery.of(context).size.width,
-                  child: PdfViewer(
-                    filePath: path,
-                  ),
-                )
+                    margin: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border:
+                          Border.all(width: 3, color: AppTheme.appThemeColor),
+                    ),
+                    height: MediaQuery.of(context).size.height / 1.55,
+                    width: MediaQuery.of(context).size.width,
+                    child: _isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                            backgroundColor: AppTheme.appThemeColor,
+                          ))
+                        : PDFViewer(
+                            document: document,
+                            showIndicator: false,
+                          ))
               ],
             ),
             //),
@@ -455,8 +435,8 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         if (this._showProgressBar == false) if (this._selectedUserType ==
             UserType.Pupil)
-          //_confirmation(_context);
-          _onPressSendOTPCode(_context);
+          _confirmation(_context);
+        // _onPressSendOTPCode(_context);
         else
           _onPressSendOTPCode(_context);
       },

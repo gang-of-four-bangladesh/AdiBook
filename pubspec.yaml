@@ -43,8 +43,7 @@ dependencies:
   firebase_core :
   firebase_messaging:
   flutter_local_notifications:
-  pdf_viewer_plugin:
-  flutter_pdf_viewer:
+  advance_pdf_viewer:
   
   flutter:
     sdk: flutter
@@ -72,7 +71,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - assets/images/logo.png
-   - assets/exemplo.pdf
+   - assets/pdf/termsandCondition.pdf
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
