@@ -390,7 +390,7 @@ class _LoginPageState extends State<LoginPage> {
     var message =
         Validations().validatePhoneNumber(this._phoneNumberController.text);
     this._logger.fine("");
-    if (message == EmptyString) return true;
+    if (message == EmptyString || message == null) return true;
     await FrequentWidgets().dialogBox(context, 'Phone number', message);
     return false;
   }
