@@ -18,7 +18,7 @@ class EventListSectionState extends State<EventListSection> {
     DateTime.now().month,
     DateTime.now().day,
   );
-  Map _events = {};
+  Map<DateTime, List<dynamic>> _events = {};
 
   @override
   void initState() {

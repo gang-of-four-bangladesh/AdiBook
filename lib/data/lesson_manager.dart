@@ -63,14 +63,13 @@ class LessonManager {
     if (snap.exists) {
       await lessonEvent.delete();
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
 
-  Future<Map> getLessonEvents({DateTime date}) async {
-    Map eventDetails = {};
+  Future<Map<DateTime, List<dynamic>>> getLessonEvents({DateTime date}) async {
+    Map<DateTime, List<dynamic>> eventDetails = {};
     var endDate = DateTime(date.year, date.month + 1, date.day);
     this._logger.info('Selected date $date, enddate $endDate');
     for (var startDate = DateTime(date.year, date.month - 1, date.day);
@@ -85,7 +84,7 @@ class LessonManager {
       var lastDayOfMonth = DateTime(year, month + 1, 0).day;
       var snap =
           await LessonEvent(id: id, instructorId: appData.instructor.id).get();
-      if (snap.data == null) continue;
+      if (snap.data() == null) continue;
       for (var i = 1; i <= lastDayOfMonth; i++) {
         List<Map> events = new List();
         var data = snap.data()[i.toString()];

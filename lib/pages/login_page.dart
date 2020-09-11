@@ -389,7 +389,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> _hasValidInput() async {
     var message =
         Validations().validatePhoneNumber(this._phoneNumberController.text);
-    if (message == null) return true;
+    this._logger.fine("");
+    if (message == EmptyString) return true;
     await FrequentWidgets().dialogBox(context, 'Phone number', message);
     return false;
   }

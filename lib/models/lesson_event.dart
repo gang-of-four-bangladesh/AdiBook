@@ -50,7 +50,6 @@ class LessonEvent {
   }
 
   Future<DocumentSnapshot> get() async {
-    await Firebase.initializeApp();
     var path = sprintf(FirestorePath.LessonEventsOfAInstructorCollection,
         [this.instructorId, this.id]);
     return FirebaseFirestore.instance.collection(path).doc(this.id).get();

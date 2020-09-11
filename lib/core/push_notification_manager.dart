@@ -31,7 +31,7 @@ class FirebaseCloudMessaging {
         _logger.info("Settings registered: $settings");
       },
     );
-    var android = AndroidInitializationSettings('@asstes/images/ic_notification.jpg');
+    var android = AndroidInitializationSettings('@asstes/images/logo.png');
     var ios = IOSInitializationSettings();
     var platform = InitializationSettings(android, ios);
     _localNotification.initialize(platform);
@@ -44,7 +44,10 @@ class FirebaseCloudMessaging {
     var body = data['body'];
     var android = new AndroidNotificationDetails(
         'com.gofbd.adibook', 'gofbd', 'default',
-        importance: Importance.Max, priority: Priority.High, enableVibration: true,ongoing: true);
+        importance: Importance.Max,
+        priority: Priority.High,
+        enableVibration: true,
+        ongoing: true);
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android, iOS);
     await _localNotification.show(0, title, body, platform);
