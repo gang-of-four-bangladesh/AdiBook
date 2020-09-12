@@ -338,11 +338,9 @@ class LessonListSectionState extends State<LessonListSection> {
                                                                             .toString() +
                                                                         '\nVehicle Type: ' +
                                                                         enumValueToString(
-                                                                          VehicleType.values[int.parse(document.data()[Lesson.VehicleTypeKey].toString())].toString() +
-                                                                              '\nNotes: ' +
-                                                                              document.data()[Lesson.DiaryNotesKey].toString() +
-                                                                              '\nReport: ' +
-                                                                              document.data()[Lesson.ReportCardKey].toString(),
+                                                                          VehicleType.values[int.parse(document.data()[Lesson.VehicleTypeKey].toString())].toString() + '\nNotes: ' + document.data()[Lesson.DiaryNotesKey] == null
+                                                                              ? EmptyString
+                                                                              : "abc" + '\nReport: ' + document.data()[Lesson.ReportCardKey],
                                                                         ),
                                                                   ),
                                                             ),

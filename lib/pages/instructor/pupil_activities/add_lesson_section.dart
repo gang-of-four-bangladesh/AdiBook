@@ -29,7 +29,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
   TextEditingController _diaryNotesController;
   TextEditingController _reportCardController;
   TextEditingController _lessonTimeController;
-  TextEditingController _uploadLicenseController;
+  //TextEditingController _uploadLicenseController;
   ProgressDialog pr;
   FrequentWidgets _frequentWidgets;
   bool _autoValidate = false;
@@ -49,7 +49,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     this._diaryNotesController = TextEditingController();
     this._reportCardController = TextEditingController();
     this._lessonTimeController = TextEditingController();
-    this._uploadLicenseController = TextEditingController();
+    //this._uploadLicenseController = TextEditingController();
     this._logger = Logger(this.runtimeType.toString());
   }
 
@@ -294,14 +294,14 @@ class _AddLessonSectionState extends State<AddLessonSection> {
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
                         ),
-                        TextFormField(
-                          controller: this._uploadLicenseController,
-                          readOnly: true,
-                          onTap: this._onUploadLicenseTap,
-                          decoration: InputDecoration(
-                              icon: Icon(FontAwesomeIcons.upload),
-                              labelText: "Upload License"),
-                        ),
+                        // TextFormField(
+                        //   controller: this._uploadLicenseController,
+                        //   readOnly: true,
+                        //   onTap: this._onUploadLicenseTap,
+                        //   decoration: InputDecoration(
+                        //       icon: Icon(FontAwesomeIcons.upload),
+                        //       labelText: "Upload License"),
+                        // ),
                       ],
                     ),
                   ),
@@ -314,19 +314,19 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     );
   }
 
-  Future<void> _onUploadLicenseTap() async {
-    this._uploadLicenseController.text = await FilePicker.getFilePath(
-        type: FileType.custom, allowedExtensions: ["pdf"]);
-  }
+  // Future<void> _onUploadLicenseTap() async {
+  //   this._uploadLicenseController.text = await FilePicker.getFilePath(
+  //       type: FileType.custom, allowedExtensions: ["pdf"]);
+  // }
 
   Future<void> _saveData() async {
     await pr.show();
-    StorageUpload storageUpload = StorageUpload();
+    //StorageUpload storageUpload = StorageUpload();
     String documentDownloadUrl = EmptyString;
-    if (this._uploadLicenseController.text != EmptyString) {
-      documentDownloadUrl = await storageUpload
-          .uploadLessonFile(this._uploadLicenseController.text);
-    }
+    // if (this._uploadLicenseController.text != EmptyString) {
+    //   documentDownloadUrl = await storageUpload
+    //       .uploadLessonFile(this._uploadLicenseController.text);
+    // }
     var _lessionDuration = int.parse(_lessonDurationController.text);
     Lesson lesson = new Lesson(
         id: this._lessionId,
@@ -364,7 +364,7 @@ class _AddLessonSectionState extends State<AddLessonSection> {
       _lessonDurationController.text = EmptyString;
       _diaryNotesController.text = EmptyString;
       _reportCardController.text = EmptyString;
-      _uploadLicenseController.text = EmptyString;
+      //_uploadLicenseController.text = EmptyString;
       _selectedPickupLocation = TripLocation.Home;
       _selectedDropOffLocation = TripLocation.Home;
       _selectedVehicleType = VehicleType.Automatic;

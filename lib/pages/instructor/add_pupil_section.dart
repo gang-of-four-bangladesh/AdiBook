@@ -260,14 +260,14 @@ class AddPupilSectionstate extends State<AddPupilSection> {
                                   : null,
                         ),
                       ),
-                      TextFormField(
-                        controller: this.drivingLicenseController,
-                        readOnly: true,
-                        onTap: _onDrivingLicenseUploadTap,
-                        decoration: InputDecoration(
-                            icon: Icon(FontAwesomeIcons.upload),
-                            labelText: "Upload License"),
-                      ),
+                      // TextFormField(
+                      //   controller: this.drivingLicenseController,
+                      //   readOnly: true,
+                      //   onTap: _onDrivingLicenseUploadTap,
+                      //   decoration: InputDecoration(
+                      //       icon: Icon(FontAwesomeIcons.upload),
+                      //       labelText: "Upload License"),
+                      // ),
                     ],
                   ),
                 ],
@@ -279,10 +279,10 @@ class AddPupilSectionstate extends State<AddPupilSection> {
     );
   }
 
-  Future<void> _onDrivingLicenseUploadTap() async {
-    this.drivingLicenseController.text = await FilePicker.getFilePath(
-        type: FileType.custom, allowedExtensions: ['pdf']);
-  }
+  // Future<void> _onDrivingLicenseUploadTap() async {
+  //   this.drivingLicenseController.text = await FilePicker.getFilePath(
+  //       type: FileType.custom, allowedExtensions: ['pdf']);
+  // }
 
   bool _validateInputs() {
     if (_formKey.currentState.validate()) {
