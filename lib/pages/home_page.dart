@@ -418,6 +418,7 @@ class _HomePageState extends State<HomePage>
     if (itemName == "TERMS AND CONDITIONS") {
       return Icons.security;
     }
+    return Icons.book;
   }
 
   ProgressDialog getLoadingProgressBar(
