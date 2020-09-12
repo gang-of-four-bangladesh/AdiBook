@@ -8,7 +8,9 @@ import 'package:adibook/data/user_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/pages/instructor/pupil_list_section.dart';
 import 'package:adibook/pages/pupil/status_section.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -167,13 +169,35 @@ class _HomePageState extends State<HomePage>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    child: Image.asset(
-                      "assets/images/logo.png",
-                      width: 45,
-                      height: 45,
+                  GestureDetector(
+                    child: Container(
+                      child: Image.asset(
+                        "assets/images/logo.png",
+                        width: 45,
+                        height: 45,
+                      ),
                     ),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(
+                            userType: appData.user.userType,
+                            sectionType:
+                                appData.user.userType == UserType.Instructor
+                                    ? SectionType.InstructorActivity
+                                    : SectionType.PupilActivity,
+                            toDisplay:
+                                appData.user.userType == UserType.Instructor
+                                    ? PupilListSection()
+                                    : StatusSection(),
+                          ),
+                        ),
+                        (r) => false,
+                      );
+                    },
                   ),
+
                   // SizedBox(
                   //   width: 8,
                   // ),
@@ -255,8 +279,11 @@ class _HomePageState extends State<HomePage>
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text('AdiBook',
-                          style: TextStyle(fontSize: 25, color: Colors.white)),
+                      Padding(
+                          padding: EdgeInsets.only(bottom: 15),
+                          child: Text('AdiBook',
+                              style: TextStyle(
+                                  fontSize: 25, color: Colors.white))),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -300,7 +327,15 @@ class _HomePageState extends State<HomePage>
         );
     this._linkItems.add(
           ListTile(
-            title: Text("HOME"),
+            title: Row(
+              children: [
+                Icon(
+                  Icons.home,
+                  color: Colors.grey[400],
+                ),
+                Text("  HOME")
+              ],
+            ),
             onTap: () {
               Navigator.pushAndRemoveUntil(
                 context,
@@ -323,7 +358,15 @@ class _HomePageState extends State<HomePage>
     this._drawerWidgetsConfig.forEach(
           (f) => this._linkItems.add(
                 ListTile(
-                  title: Text(f.drawerLinkText.toUpperCase()),
+                  title: Row(
+                    children: [
+                      Icon(
+                        getIcons(f.drawerLinkText.toUpperCase()),
+                        color: Colors.grey[400],
+                      ),
+                      Text("  ${f.drawerLinkText.toUpperCase()}")
+                    ],
+                  ),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -340,6 +383,42 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
         );
+  }
+
+  IconData getIcons(String itemName) {
+    if (itemName == "PUPILS") {
+      return Icons.group;
+    }
+    if (itemName == "NEW PUPIL") {
+      return Icons.person_add;
+    }
+    if (itemName == "DIARY") {
+      return EvaIcons.book;
+    }
+    if (itemName == "PROFILE") {
+      return Icons.person;
+    }
+    if (itemName == "LESSONS") {
+      return EvaIcons.bookOpenOutline;
+    }
+    if (itemName == "PAYMENTS") {
+      return Icons.monetization_on;
+    }
+    if (itemName == "PROGRESS") {
+      return Icons.work;
+    }
+    if (itemName == "ADD LESSON") {
+      return Icons.add_box;
+    }
+    if (itemName == "ADD PAYMENT") {
+      return Icons.add_circle;
+    }
+    if (itemName == "STATUS") {
+      return Icons.blur_on;
+    }
+    if (itemName == "TERMS AND CONDITIONS") {
+      return Icons.security;
+    }
   }
 
   ProgressDialog getLoadingProgressBar(
