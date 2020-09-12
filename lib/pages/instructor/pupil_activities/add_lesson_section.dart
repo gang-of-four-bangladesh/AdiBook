@@ -314,10 +314,8 @@ class _AddLessonSectionState extends State<AddLessonSection> {
     );
   }
 
-  Future<void> _onUploadLicenseTap() async {
-    var result = await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
-    this._uploadLicenseController.text = result.paths.first;
+  Future<void> _onUploadLicenseTap() async {    this._uploadLicenseController.text = await FilePicker.getFilePath(
+        type: FileType.custom, allowedExtensions: ['pdf']);
   }
 
   Future<void> _saveData() async {
