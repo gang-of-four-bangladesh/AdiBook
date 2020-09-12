@@ -1,4 +1,3 @@
-
 import 'package:adibook/core/app_data.dart';
 import 'package:adibook/core/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +17,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
 
@@ -375,7 +375,6 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
             "Terms and Conditions",
             style: TextStyle(color: Colors.red),
-            
           )),
           content:
               //SingleChildScrollView(
@@ -385,11 +384,6 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Container(
                     margin: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border:
-                          Border.all(width: 2, color: AppTheme.appThemeColor),
-                    ),
                     height: MediaQuery.of(context).size.height / 1.55,
                     width: MediaQuery.of(context).size.width,
                     child: _isLoading
