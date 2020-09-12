@@ -34,7 +34,7 @@ dependencies:
   flutter_rating_bar:
   smooth_star_rating:
   http:
-  file_picker:
+  file_picker: 1.6.3+2
   pull_to_refresh:
   percent_indicator:
   flutter_gradient_colors:
