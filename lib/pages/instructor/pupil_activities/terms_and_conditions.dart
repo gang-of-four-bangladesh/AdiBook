@@ -4,6 +4,8 @@ import 'package:adibook/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:adibook/core/frequent_widgets.dart';
 
 class TermsAndConditions extends StatefulWidget {
   @override
@@ -11,7 +13,8 @@ class TermsAndConditions extends StatefulWidget {
 }
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
-  String path;
+  bool _isLoading = true;
+  PDFDocument document;
 
   Future<String> get getfilePath async {
     //final filename = 'exemplo.pdf';
@@ -46,19 +49,15 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
     return responseJson;
   }
 
-  loadPdf() async {
-    // writeCounter(await fetchPost());
-    path = (await _localFile).path;
-
-    if (!mounted) return;
-
-    setState(() {});
-  }
-
   @override
   initState() {
     super.initState();
-    loadPdf();
+    loadDocument();
+  }
+
+  loadDocument() async {
+    document = await PDFDocument.fromAsset('assets/pdf/termsandCondition.pdf');
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -68,15 +67,21 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  border: Border.all(width: 3, color: AppTheme.appThemeColor)),
-              height: MediaQuery.of(context).size.height / 1.32,
-              width: MediaQuery.of(context).size.width,
-              // child: PdfViewer(
-              //   filePath: path,
-              // ),
-            )
+                margin: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border:
+                        Border.all(width: 3, color: AppTheme.appThemeColor)),
+                height: MediaQuery.of(context).size.height / 1.30,
+                width: MediaQuery.of(context).size.width,
+                child: _isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ))
+                    : PDFViewer(
+                        document: document,
+                        showPicker: false,
+                      ))
           ],
         ),
       ),

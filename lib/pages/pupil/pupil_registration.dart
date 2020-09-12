@@ -28,7 +28,7 @@ class _PupilRegistrationState extends State<PupilRegistration> {
                       Column(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.only(bottom: 5.0),
+                            //padding: EdgeInsets.only(bottom: 5.0),
                             child: TextField(
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(

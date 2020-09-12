@@ -44,7 +44,8 @@ class AddPupilSectionstate extends State<AddPupilSection> {
   TextEditingController drivingLicenseNoController = TextEditingController();
   int countryCodeIndex;
   //var _selectedCountry = CountryWisePhoneCode.keys.first;
-  String countryCode = "+44";
+  // String countryCode = "+44";
+  String countryCode = "+88";
   bool _autoValidate;
   String _attachedDocPath;
   @override
@@ -123,35 +124,34 @@ class AddPupilSectionstate extends State<AddPupilSection> {
         child: ListView(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(
-                  top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
               child: Wrap(
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      appData.user.userType == UserType.Instructor
-                          ? ToggleSwitch(
-                              minWidth: pageWidth / 2,
-                              initialLabelIndex: 0,
-                              activeBgColor: Colors.grey[100].withOpacity(0.6),
-                              activeTextColor:
-                                  Colors.grey[100].withOpacity(0.1),
-                              inactiveBgColor:
-                                  Colors.grey[100].withOpacity(0.1),
-                              inactiveTextColor:
-                                  Colors.grey[100].withOpacity(0.1),
-                              labels: ['UK', 'BD'],
-                              icons: [
-                                FontAwesomeIcons.airbnb,
-                                FontAwesomeIcons.flag
-                              ],
-                              onToggle: (index) async {
-                                this.countryCode = index == 0 ? "+44" : "+88";
-                                this._logger.info(
-                                    'Selected Country Code ${this.countryCode}');
-                              },
-                            )
-                          : Container(),
+                      // appData.user.userType == UserType.Instructor
+                      //     ? ToggleSwitch(
+                      //         minWidth: pageWidth / 2,
+                      //         initialLabelIndex: 0,
+                      //         activeBgColor: Colors.grey[100].withOpacity(0.6),
+                      //         activeTextColor:
+                      //             Colors.grey[100].withOpacity(0.1),
+                      //         inactiveBgColor:
+                      //             Colors.grey[100].withOpacity(0.1),
+                      //         inactiveTextColor:
+                      //             Colors.grey[100].withOpacity(0.1),
+                      //         labels: ['UK', 'BD'],
+                      //         icons: [
+                      //           FontAwesomeIcons.airbnb,
+                      //           FontAwesomeIcons.flag
+                      //         ],
+                      //         onToggle: (index) async {
+                      //           this.countryCode = index == 0 ? "+44" : "+88";
+                      //           this._logger.info(
+                      //               'Selected Country Code ${this.countryCode}');
+                      //         },
+                      //       )
+                      //     : Stack(),
                       TextFormField(
                         enabled: appData.user.userType == UserType.Instructor,
                         keyboardType: TextInputType.text,

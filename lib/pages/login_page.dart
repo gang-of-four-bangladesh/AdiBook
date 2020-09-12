@@ -35,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
   PDFDocument document;
   loadDocument() async {
     document = await PDFDocument.fromAsset('assets/pdf/termsandCondition.pdf');
-
     setState(() => _isLoading = false);
   }
 
@@ -381,6 +380,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
             "Terms and Conditions",
             style: TextStyle(color: Colors.red),
+            
           )),
           content:
               //SingleChildScrollView(
@@ -391,20 +391,21 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                     margin: EdgeInsets.all(2),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(15),
                       border:
-                          Border.all(width: 3, color: AppTheme.appThemeColor),
+                          Border.all(width: 2, color: AppTheme.appThemeColor),
                     ),
                     height: MediaQuery.of(context).size.height / 1.55,
                     width: MediaQuery.of(context).size.width,
                     child: _isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                            backgroundColor: AppTheme.appThemeColor,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.blue),
                           ))
                         : PDFViewer(
                             document: document,
-                            showIndicator: false,
+                            showPicker: false,
                           ))
               ],
             ),
