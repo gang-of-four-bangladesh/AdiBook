@@ -361,7 +361,7 @@ class _HomePageState extends State<HomePage>
                   title: Row(
                     children: [
                       Icon(
-                        getIcons(f.drawerLinkText.toUpperCase()),
+                        getDrawerItemIcon(f.drawerLinkText.toUpperCase()),
                         color: Colors.grey[400],
                       ),
                       Text("  ${f.drawerLinkText.toUpperCase()}")
@@ -385,7 +385,7 @@ class _HomePageState extends State<HomePage>
         );
   }
 
-  IconData getIcons(String itemName) {
+  IconData getDrawerItemIcon(String itemName) {
     if (itemName == "PUPILS") {
       return Icons.group;
     }
