@@ -3,7 +3,6 @@ import 'package:adibook/core/constants.dart';
 import 'package:adibook/core/frequent_widgets.dart';
 import 'package:adibook/core/storage_upload.dart';
 import 'package:adibook/core/formatter.dart';
-import 'package:adibook/core/widgets/toogle_switch.dart';
 import 'package:adibook/data/pupil_manager.dart';
 import 'package:adibook/models/instructor.dart';
 import 'package:adibook/models/pupil.dart';
@@ -111,9 +110,6 @@ class AddPupilSectionstate extends State<AddPupilSection> {
 
   @override
   Widget build(BuildContext context) {
-    var _screenWidth = MediaQuery.of(context).size.width;
-    var _oneSixthWidth = _screenWidth / 8;
-    var pageWidth = _screenWidth - (_oneSixthWidth * 2);
     Validations validations = new Validations();
     return Scaffold(
       floatingActionButton: getFloatButton(),

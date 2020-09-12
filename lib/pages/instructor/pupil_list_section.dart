@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gradient_colors/flutter_gradient_colors.dart';
 import 'package:logging/logging.dart';
-import 'package:intl/intl.dart';
-import 'package:adibook/core/formatter.dart';
 
 class PupilListSection extends StatefulWidget {
   @override
